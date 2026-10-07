@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "iteration": "4.11A.1-v2",
+  "purpose": "Close the six conventional-melee recipe Item identities without importing weapon records or fabricating sources.",
+  "source": {
+    "repository": "mhp3db/mhp3db.github.io",
+    "commit": "7ad3cf1c5ba07ce2e63afdaa1fa37c4671edc3bf",
+    "path": "scripts/database/sprite_data.js",
+    "sourceGitBlobSha": "1548e321a8ac2da7aa31334b919a43052f9c26dd"
+  },
+  "tmoSource": {
+    "path": "data/curated/tmo61-item-names.json",
+    "revision": "TMO PATCH PSP v6.1 r754"
+  },
+  "items": [
+    {
+      "gameItemId": 31,
+      "name": "Lifecrystals",
+      "iconKey": "atlas:PAL_0:144:32",
+      "palette": "PAL_0",
+      "spriteKey": "144,32",
+      "atlas": {"sheet": "PAL_0.png", "x": 144, "y": 32, "width": 16, "height": 16},
+      "atlasSha256": "2184A428136422720F234134823EAFF94F3FE0F214FB6B8331BF13A45C4E1EEC",
+      "pixelSha256": "C69DE230634A415D8D7A9C87BDD7DA299CA2645A4CBE9135B647F16C23D49E48",
+      "resolutionMethod": "MHP3DB_SPRITE_DATA_EXACT"
+    },
+    {
+      "gameItemId": 611,
+      "name": "Palico Ticket",
+      "sourceLabel": "Comrade Ticket",
+      "iconKey": "atlas:PAL_12:96:48",
+      "palette": "PAL_12",
+      "spriteKey": "96,48",
+      "atlas": {"sheet": "PAL_12.png", "x": 96, "y": 48, "width": 16, "height": 16},
+      "atlasSha256": "E60FDF0A5FEAA0DAF2D52D48A643146C043431FC9B04959F23903A42193D07DE",
+      "pixelSha256": "B049FA314F4326BC6F002E58967B1BB4873EE15C05B53CD80DE82EB8DA97B274",
+      "resolutionMethod": "MHP3DB_SPRITE_DATA_EXACT_PINNED_SOURCE_ALIAS"
+    },
+    {
+      "gameItemId": 617,
+      "name": "Sword Codex",
+      "iconKey": "atlas:PAL_2:48:64",
+      "palette": "PAL_2",
+      "spriteKey": "48,64",
+      "atlas": {"sheet": "PAL_2.png", "x": 48, "y": 64, "width": 16, "height": 16},
+      "atlasSha256": "5ADAAB0FAC9CF4E6F010C47FD1B0E27C378CC4BA361348117BB5FCE13BCABEBC",
+      "pixelSha256": "3BF446431E8738379D6C8C82E418F7F1F71708ABA9BCEB0F45A62A57BFE159CA",
+      "resolutionMethod": "MHP3DB_SPRITE_DATA_EXACT"
+    },
+    {
+      "gameItemId": 621,
+      "name": "Champion Proof",
+      "iconKey": "atlas:PAL_9:96:48",
+      "palette": "PAL_9",
+      "spriteKey": "96,48",
+      "atlas": {"sheet": "PAL_9.png", "x": 96, "y": 48, "width": 16, "height": 16},
+      "atlasSha256": "8ECDD5452FCD584ADB9F6B5742E2C64252FB27765A7A62679D66711513025D3B",
+      "pixelSha256": "026DE64A540B732E4EAAD3CF43E724BE01188A75FFC2E6843BC86CB0E396F26E",
+      "resolutionMethod": "MHP3DB_SPRITE_DATA_EXACT_REUSED_CELL"
+    },
+    {
+      "gameItemId": 628,
+      "name": "Treasure J Tckt",
+      "iconKey": "atlas:PAL_9:96:48",
+      "palette": "PAL_9",
+      "spriteKey": "96,48",
+      "atlas": {"sheet": "PAL_9.png", "x": 96, "y": 48, "width": 16, "height": 16},
+      "atlasSha256": "8ECDD5452FCD584ADB9F6B5742E2C64252FB27765A7A62679D66711513025D3B",
+      "pixelSha256": "026DE64A540B732E4EAAD3CF43E724BE01188A75FFC2E6843BC86CB0E396F26E",
+      "resolutionMethod": "MHP3DB_SPRITE_DATA_EXACT_REUSED_CELL"
+    },
+    {
+      "gameItemId": 632,
+      "name": "Incomplete Plans",
+      "iconKey": "atlas:PAL_12:96:48",
+      "palette": "PAL_12",
+      "spriteKey": "96,48",
+      "atlas": {"sheet": "PAL_12.png", "x": 96, "y": 48, "width": 16, "height": 16},
+      "atlasSha256": "E60FDF0A5FEAA0DAF2D52D48A643146C043431FC9B04959F23903A42193D07DE",
+      "pixelSha256": "B049FA314F4326BC6F002E58967B1BB4873EE15C05B53CD80DE82EB8DA97B274",
+      "resolutionMethod": "MHP3DB_SPRITE_DATA_EXACT_REUSED_CELL"
+    }
+  ]
+}

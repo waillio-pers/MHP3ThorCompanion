@@ -1,0 +1,5440 @@
+{
+  "registryVersion": 1,
+  "baselineSha256": "1B968D4A5FCB18C69DF4DC236F647CD9DE2F37A149B414CF81E686DF72A2A939",
+  "strategy": {
+    "preferred": "REUSE_BY_ICON_KEY",
+    "recommendedRuntime": "Either crop the 14 PAL atlas sheets at runtime/build-time, or generate one reusable drawable per UNIQUE iconKey. Never generate one drawable per item.",
+    "sourceSheets": 14,
+    "maxUniqueDerivedDrawablesIfPrecropped": 114,
+    "why": "351 target item identities collapse to 114 visual icon identities; many variants intentionally share a sprite."
+  },
+  "icons": [
+    {
+      "iconKey": "atlas:PAL_0:0:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_0.png",
+        "x": 0,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 9,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 249,
+          "name": "Wyvern Claw"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 296,
+          "name": "Bulldrome Tusk"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 336,
+          "name": "Lagombi Claw"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 337,
+          "name": "Lagombi Claw+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 464,
+          "name": "Barioth Claw"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 465,
+          "name": "Barioth Claw+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 576,
+          "name": "Ukanlos Claw"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 590,
+          "name": "Amatsu Horn"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 591,
+          "name": "Amatsu Claw"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 249,
+          "name": "Wyvern Claw"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 296,
+          "name": "Bulldrome Tusk"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 336,
+          "name": "Lagombi Claw"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 337,
+          "name": "Lagombi Claw+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 464,
+          "name": "Barioth Claw"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 465,
+          "name": "Barioth Claw+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 576,
+          "name": "Ukanlos Claw"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 590,
+          "name": "Amatsu Horn"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 591,
+          "name": "Amatsu Claw"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_0:0:80",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_0.png",
+        "x": 0,
+        "y": 80,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 5,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 425,
+          "name": "S.Rath Carapace"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 460,
+          "name": "Barioth Shell"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 461,
+          "name": "Barioth Carapace"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 573,
+          "name": "Ukanlos Shell"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 588,
+          "name": "Amatsu Shell"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 425,
+          "name": "S.Rath Carapace"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 460,
+          "name": "Barioth Shell"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 461,
+          "name": "Barioth Carapace"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 573,
+          "name": "Ukanlos Shell"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 588,
+          "name": "Amatsu Shell"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_0:144:0",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_0.png",
+        "x": 144,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 1,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 223,
+          "name": "Isisium"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 223,
+          "name": "Isisium"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_0:144:32",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_0.png",
+        "x": 144,
+        "y": 32,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 4,
+      "examples": [
+        {
+          "scope": "hunt_prep",
+          "gameItemId": 13,
+          "name": "Herbal Medicine"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 265,
+          "name": "Frost Sac"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 266,
+          "name": "Freezer Sac"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 594,
+          "name": "Tempest Sac"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "hunt_prep",
+          "gameItemId": 13,
+          "name": "Herbal Medicine"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 265,
+          "name": "Frost Sac"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 266,
+          "name": "Freezer Sac"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 594,
+          "name": "Tempest Sac"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_0:16:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_0.png",
+        "x": 16,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 10,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 294,
+          "name": "Bulldrome Hide"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 295,
+          "name": "Bulldrome Hide+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 330,
+          "name": "Lagombi Pelt"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 331,
+          "name": "Lagombi Pelt+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 395,
+          "name": "Uncanny Hide"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 396,
+          "name": "Uncanny Hide+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 433,
+          "name": "Zin Electrofur"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 434,
+          "name": "Zin Electrofur+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 462,
+          "name": "Barioth Pelt"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 463,
+          "name": "Barioth Pelt+"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 294,
+          "name": "Bulldrome Hide"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 295,
+          "name": "Bulldrome Hide+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 330,
+          "name": "Lagombi Pelt"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 331,
+          "name": "Lagombi Pelt+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 395,
+          "name": "Uncanny Hide"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 396,
+          "name": "Uncanny Hide+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 433,
+          "name": "Zin Electrofur"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 434,
+          "name": "Zin Electrofur+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 462,
+          "name": "Barioth Pelt"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 463,
+          "name": "Barioth Pelt+"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_0:32:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_0.png",
+        "x": 32,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 2,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 424,
+          "name": "S.Rath Scale+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 574,
+          "name": "Ukanlos Scale"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 424,
+          "name": "S.Rath Scale+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 574,
+          "name": "Ukanlos Scale"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_0:32:32",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_0.png",
+        "x": 32,
+        "y": 32,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 1,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 268,
+          "name": "Pale Extract"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 268,
+          "name": "Pale Extract"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_0:48:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_0.png",
+        "x": 48,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 13,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 332,
+          "name": "Lagombi Ear"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 333,
+          "name": "Lagombi Ear+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 334,
+          "name": "Lagombi Plastron"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 335,
+          "name": "Lagom Plastron+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 399,
+          "name": "Fearsome Maw"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 426,
+          "name": "S.Rathalos Tail"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 466,
+          "name": "Barioth Spike"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 467,
+          "name": "Barioth Tail"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 575,
+          "name": "Ukanlos Tail"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 577,
+          "name": "Ukanlos Jaw"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 578,
+          "name": "Ukanlos Fin"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 592,
+          "name": "Amatsu Tail"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 332,
+          "name": "Lagombi Ear"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 333,
+          "name": "Lagombi Ear+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 334,
+          "name": "Lagombi Plastron"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 335,
+          "name": "Lagom Plastron+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 399,
+          "name": "Fearsome Maw"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 426,
+          "name": "S.Rathalos Tail"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 466,
+          "name": "Barioth Spike"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 467,
+          "name": "Barioth Tail"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 575,
+          "name": "Ukanlos Tail"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 577,
+          "name": "Ukanlos Jaw"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 578,
+          "name": "Ukanlos Fin"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 592,
+          "name": "Amatsu Tail"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 593,
+          "name": "Amatsu Pleura"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_0:64:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_0.png",
+        "x": 64,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 3,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 237,
+          "name": "Bone"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 245,
+          "name": "Jumbo Bone"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 246,
+          "name": "Stoutbone"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 237,
+          "name": "Bone"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 245,
+          "name": "Jumbo Bone"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 246,
+          "name": "Stoutbone"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_0:80:0",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_0.png",
+        "x": 80,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 1,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 589,
+          "name": "Amatsu Patagium"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 589,
+          "name": "Amatsu Patagium"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_10:0:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_10.png",
+        "x": 0,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 6,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 361,
+          "name": "R.Ludroth Claw"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 362,
+          "name": "R.Ludroth Claw+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 504,
+          "name": "Tigrex Claw"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 505,
+          "name": "Tigrex Claw+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 506,
+          "name": "Tigrex Fang"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 507,
+          "name": "Tigrex Fang+"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 361,
+          "name": "R.Ludroth Claw"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 362,
+          "name": "R.Ludroth Claw+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 504,
+          "name": "Tigrex Claw"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 505,
+          "name": "Tigrex Claw+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 506,
+          "name": "Tigrex Fang"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 507,
+          "name": "Tigrex Fang+"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_10:0:80",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_10.png",
+        "x": 0,
+        "y": 80,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 5,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 414,
+          "name": "G.Rath Carapace"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 478,
+          "name": "Uragaan Shell"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 479,
+          "name": "Uragaan Carapace"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 501,
+          "name": "Tigrex Shell"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 502,
+          "name": "Tigrex Carapace"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 414,
+          "name": "G.Rath Carapace"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 478,
+          "name": "Uragaan Shell"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 479,
+          "name": "Uragaan Carapace"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 501,
+          "name": "Tigrex Shell"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 502,
+          "name": "Tigrex Carapace"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_10:112:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_10.png",
+        "x": 112,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 1,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 557,
+          "name": "Earth Dragongem"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 557,
+          "name": "Earth Dragongem"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_10:128:32",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_10.png",
+        "x": 128,
+        "y": 32,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 2,
+      "examples": [
+        {
+          "scope": "hunt_prep",
+          "gameItemId": 60,
+          "name": "Flash Bomb"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 483,
+          "name": "Uragaan Ruby"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "hunt_prep",
+          "gameItemId": 60,
+          "name": "Flash Bomb"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 483,
+          "name": "Uragaan Ruby"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_10:144:0",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_10.png",
+        "x": 144,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 1,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 353,
+          "name": "Voltstone"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 353,
+          "name": "Voltstone"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_10:144:32",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_10.png",
+        "x": 144,
+        "y": 32,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 3,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 256,
+          "name": "Paralysis Sac"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 257,
+          "name": "Omniplegia Sac"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 264,
+          "name": "Thunder Sac"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 256,
+          "name": "Paralysis Sac"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 257,
+          "name": "Omniplegia Sac"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 264,
+          "name": "Thunder Sac"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_10:16:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_10.png",
+        "x": 16,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 4,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 357,
+          "name": "Spongy Hide"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 358,
+          "name": "Spongy Hide+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 363,
+          "name": "R.Ludroth Crest"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 364,
+          "name": "R.Ludroth Crest+"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 357,
+          "name": "Spongy Hide"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 358,
+          "name": "Spongy Hide+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 363,
+          "name": "R.Ludroth Crest"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 364,
+          "name": "R.Ludroth Crest+"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_10:32:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_10.png",
+        "x": 32,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 7,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 359,
+          "name": "R.Ludroth Scale"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 360,
+          "name": "R.Ludroth Scale+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 413,
+          "name": "G.Rathian Scale+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 476,
+          "name": "Uragaan Scale"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 477,
+          "name": "Uragaan Scale+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 499,
+          "name": "Tigrex Scale"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 500,
+          "name": "Tigrex Scale+"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 359,
+          "name": "R.Ludroth Scale"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 360,
+          "name": "R.Ludroth Scale+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 413,
+          "name": "G.Rathian Scale+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 476,
+          "name": "Uragaan Scale"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 477,
+          "name": "Uragaan Scale+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 499,
+          "name": "Tigrex Scale"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 500,
+          "name": "Tigrex Scale+"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_10:32:32",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_10.png",
+        "x": 32,
+        "y": 32,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 3,
+      "examples": [
+        {
+          "scope": "hunt_prep",
+          "gameItemId": 15,
+          "name": "Energy Drink"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 267,
+          "name": "Dash Extract"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 430,
+          "name": "Rath Gleem"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "hunt_prep",
+          "gameItemId": 15,
+          "name": "Energy Drink"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 267,
+          "name": "Dash Extract"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 430,
+          "name": "Rath Gleem"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_10:48:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_10.png",
+        "x": 48,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 8,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 365,
+          "name": "R.Ludroth Tail"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 415,
+          "name": "G.Rathian Spike+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 480,
+          "name": "Uragaan Jaw"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 481,
+          "name": "Uragaan Scute"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 482,
+          "name": "Uragaan Marrow"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 503,
+          "name": "Tigrex Tail"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 508,
+          "name": "Tigrex Scalp"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 509,
+          "name": "Tigrex Jaw"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 365,
+          "name": "R.Ludroth Tail"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 415,
+          "name": "G.Rathian Spike+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 480,
+          "name": "Uragaan Jaw"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 481,
+          "name": "Uragaan Scute"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 482,
+          "name": "Uragaan Marrow"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 503,
+          "name": "Tigrex Tail"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 508,
+          "name": "Tigrex Scalp"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 509,
+          "name": "Tigrex Jaw"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_10:64:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_10.png",
+        "x": 64,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 3,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 238,
+          "name": "Monster Bone S"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 239,
+          "name": "Monster Bone M"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 240,
+          "name": "Monster Bone L"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 238,
+          "name": "Monster Bone S"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 239,
+          "name": "Monster Bone M"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 240,
+          "name": "Monster Bone L"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_11:0:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_11.png",
+        "x": 0,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 4,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 435,
+          "name": "Zinogre Horn"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 436,
+          "name": "Zinogre Horn+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 437,
+          "name": "Zinogre Claw"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 438,
+          "name": "Zinogre Claw+"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 435,
+          "name": "Zinogre Horn"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 436,
+          "name": "Zinogre Horn+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 437,
+          "name": "Zinogre Claw"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 438,
+          "name": "Zinogre Claw+"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_11:0:80",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_11.png",
+        "x": 0,
+        "y": 80,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 2,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 431,
+          "name": "Zinogre Shell"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 432,
+          "name": "Zinogre Carapace"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 431,
+          "name": "Zinogre Shell"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 432,
+          "name": "Zinogre Carapace"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_11:128:32",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_11.png",
+        "x": 128,
+        "y": 32,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 1,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 443,
+          "name": "Zinogre Jasper"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 443,
+          "name": "Zinogre Jasper"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_11:32:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_11.png",
+        "x": 32,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 1,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 442,
+          "name": "Zinogre Plate"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 442,
+          "name": "Zinogre Plate"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_11:48:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_11.png",
+        "x": 48,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 3,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 439,
+          "name": "Zinogre Tail"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 440,
+          "name": "Zinogre Shocker"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 441,
+          "name": "Zinogre Shocker+"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 439,
+          "name": "Zinogre Tail"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 440,
+          "name": "Zinogre Shocker"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 441,
+          "name": "Zinogre Shocker+"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_12:0:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_12.png",
+        "x": 0,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 4,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 403,
+          "name": "B.Giggi Claw+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 474,
+          "name": "Indigo Tusks+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 555,
+          "name": "Sturdy Fang"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 556,
+          "name": "Sturdy Fang+"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 403,
+          "name": "B.Giggi Claw+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 474,
+          "name": "Indigo Tusks+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 555,
+          "name": "Sturdy Fang"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 556,
+          "name": "Sturdy Fang+"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_12:0:80",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_12.png",
+        "x": 0,
+        "y": 80,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 5,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 326,
+          "name": "Arzuros Shell"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 327,
+          "name": "Arzuros Carapace"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 485,
+          "name": "S.Urag Carapace"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 549,
+          "name": "Mohran Shell"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 550,
+          "name": "Mohran Carapace"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 326,
+          "name": "Arzuros Shell"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 327,
+          "name": "Arzuros Carapace"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 485,
+          "name": "S.Urag Carapace"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 549,
+          "name": "Mohran Shell"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 550,
+          "name": "Mohran Carapace"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_12:112:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_12.png",
+        "x": 112,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 1,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 587,
+          "name": "Azure Dragongem"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 587,
+          "name": "Azure Dragongem"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_12:128:0",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_12.png",
+        "x": 128,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 1,
+      "examples": [
+        {
+          "scope": "hunt_prep",
+          "gameItemId": 174,
+          "name": "Nulberry"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "hunt_prep",
+          "gameItemId": 174,
+          "name": "Nulberry"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_12:128:32",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_12.png",
+        "x": 128,
+        "y": 32,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 1,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 250,
+          "name": "Bird Wyvern Gem"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 250,
+          "name": "Bird Wyvern Gem"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_12:144:32",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_12.png",
+        "x": 144,
+        "y": 32,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 2,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 258,
+          "name": "Sleep Sac"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 259,
+          "name": "Coma Sac"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 258,
+          "name": "Sleep Sac"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 259,
+          "name": "Coma Sac"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_12:16:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_12.png",
+        "x": 16,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 3,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 324,
+          "name": "Arzuros Pelt"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 325,
+          "name": "Arzuros Pelt+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 402,
+          "name": "B.Giggi Hide+"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 324,
+          "name": "Arzuros Pelt"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 325,
+          "name": "Arzuros Pelt+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 402,
+          "name": "B.Giggi Hide+"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_12:32:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_12.png",
+        "x": 32,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 3,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 484,
+          "name": "S.Uragaan Scale+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 551,
+          "name": "Mohran Scale"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 552,
+          "name": "Mohran Scale+"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 484,
+          "name": "S.Uragaan Scale+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 551,
+          "name": "Mohran Scale"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 552,
+          "name": "Mohran Scale+"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_12:32:32",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_12.png",
+        "x": 32,
+        "y": 32,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 1,
+      "examples": [
+        {
+          "scope": "hunt_prep",
+          "gameItemId": 12,
+          "name": "Antidote"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "hunt_prep",
+          "gameItemId": 12,
+          "name": "Antidote"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_12:48:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_12.png",
+        "x": 48,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 8,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 328,
+          "name": "Arzuros Brace"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 329,
+          "name": "Arzuros Brace+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 486,
+          "name": "S.Uragaan Maw"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 487,
+          "name": "S.Uragaan Scute"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 553,
+          "name": "Mohran Brace"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 554,
+          "name": "Mohran Brace+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 729,
+          "name": "Wyvern Tear"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 730,
+          "name": "Lrg Wyvern Tear"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 328,
+          "name": "Arzuros Brace"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 329,
+          "name": "Arzuros Brace+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 486,
+          "name": "S.Uragaan Maw"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 487,
+          "name": "S.Uragaan Scute"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 553,
+          "name": "Mohran Brace"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 554,
+          "name": "Mohran Brace+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 729,
+          "name": "Wyvern Tear"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 730,
+          "name": "Lrg Wyvern Tear"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_12:96:0",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_12.png",
+        "x": 96,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 1,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 212,
+          "name": "Fulgurbug"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 212,
+          "name": "Fulgurbug"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_13:0:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_13.png",
+        "x": 0,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 7,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 452,
+          "name": "Nargacuga Fang"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 453,
+          "name": "Nargacuga Fang+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 512,
+          "name": "B.Tigrex Claw+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 513,
+          "name": "B.Tigrex Fang+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 526,
+          "name": "Blackcurl Horn"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 569,
+          "name": "Akantor Claw"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 570,
+          "name": "Akantor Fang"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 452,
+          "name": "Nargacuga Fang"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 453,
+          "name": "Nargacuga Fang+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 512,
+          "name": "B.Tigrex Claw+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 513,
+          "name": "B.Tigrex Fang+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 526,
+          "name": "Blackcurl Horn"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 569,
+          "name": "Akantor Claw"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 570,
+          "name": "Akantor Fang"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_13:0:80",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_13.png",
+        "x": 0,
+        "y": 80,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 3,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 511,
+          "name": "B.Tigrex Shell+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 524,
+          "name": "B.Diab Carapace"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 567,
+          "name": "Akantor Shell"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 511,
+          "name": "B.Tigrex Shell+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 524,
+          "name": "B.Diab Carapace"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 567,
+          "name": "Akantor Shell"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_13:128:32",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_13.png",
+        "x": 128,
+        "y": 32,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 1,
+      "examples": [
+        {
+          "scope": "hunt_prep",
+          "gameItemId": 61,
+          "name": "Sonic Bomb"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "hunt_prep",
+          "gameItemId": 61,
+          "name": "Sonic Bomb"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_13:144:0",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_13.png",
+        "x": 144,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 1,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 218,
+          "name": "Iron Ore"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 218,
+          "name": "Iron Ore"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_13:144:32",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_13.png",
+        "x": 144,
+        "y": 32,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 1,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 253,
+          "name": "Screamer"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 253,
+          "name": "Screamer"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_13:16:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_13.png",
+        "x": 16,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 2,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 446,
+          "name": "Nargacuga Pelt"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 447,
+          "name": "Nargacuga Pelt+"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 446,
+          "name": "Nargacuga Pelt"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 447,
+          "name": "Nargacuga Pelt+"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_13:32:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_13.png",
+        "x": 32,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 4,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 444,
+          "name": "Nargacuga Scale"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 445,
+          "name": "Nargacuga Scale+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 510,
+          "name": "B.Tigrex Scale+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 566,
+          "name": "Akantor Scale"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 444,
+          "name": "Nargacuga Scale"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 445,
+          "name": "Nargacuga Scale+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 510,
+          "name": "B.Tigrex Scale+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 566,
+          "name": "Akantor Scale"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_13:48:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_13.png",
+        "x": 48,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 8,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 448,
+          "name": "Nargacuga Tail"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 449,
+          "name": "Narga Tailspike"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 450,
+          "name": "Nargacuga Razor"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 451,
+          "name": "Narga Razor+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 454,
+          "name": "Narga Marrow"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 525,
+          "name": "B.Diablos Ridge+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 568,
+          "name": "Akantor Tail"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 571,
+          "name": "Akantor Spike"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 448,
+          "name": "Nargacuga Tail"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 449,
+          "name": "Narga Tailspike"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 450,
+          "name": "Nargacuga Razor"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 451,
+          "name": "Narga Razor+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 454,
+          "name": "Narga Marrow"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 525,
+          "name": "B.Diablos Ridge+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 568,
+          "name": "Akantor Tail"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 571,
+          "name": "Akantor Spike"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_1:0:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_1.png",
+        "x": 0,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 2,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 560,
+          "name": "Deviljho Fang"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 561,
+          "name": "Deviljho Talon"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 560,
+          "name": "Deviljho Fang"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 561,
+          "name": "Deviljho Talon"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_1:112:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_1.png",
+        "x": 112,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 1,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 565,
+          "name": "Deviljho Gem"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 565,
+          "name": "Deviljho Gem"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_1:16:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_1.png",
+        "x": 16,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 1,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 559,
+          "name": "Deviljho Hide"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 559,
+          "name": "Deviljho Hide"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_1:32:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_1.png",
+        "x": 32,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 1,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 558,
+          "name": "Deviljho Scale"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 558,
+          "name": "Deviljho Scale"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_1:48:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_1.png",
+        "x": 48,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 2,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 562,
+          "name": "Deviljho Scalp"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 563,
+          "name": "Deviljho Tail"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 562,
+          "name": "Deviljho Scalp"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 563,
+          "name": "Deviljho Tail"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_2:0:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_2.png",
+        "x": 0,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 4,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 321,
+          "name": "G.Baggi Claw"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 322,
+          "name": "G.Baggi Claw+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 380,
+          "name": "J.Barroth Claw+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 544,
+          "name": "G.Agnak Claw+"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 321,
+          "name": "G.Baggi Claw"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 322,
+          "name": "G.Baggi Claw+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 380,
+          "name": "J.Barroth Claw+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 544,
+          "name": "G.Agnak Claw+"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_2:0:80",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_2.png",
+        "x": 0,
+        "y": 80,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 2,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 378,
+          "name": "J.Barr Carapace"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 542,
+          "name": "G.Agnak Carapace"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 378,
+          "name": "J.Barr Carapace"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 542,
+          "name": "G.Agnak Carapace"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_2:112:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_2.png",
+        "x": 112,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 1,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 595,
+          "name": "Divine Dragongem"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 595,
+          "name": "Divine Dragongem"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_2:128:32",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_2.png",
+        "x": 128,
+        "y": 32,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 2,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 251,
+          "name": "Wyvern Stone"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 579,
+          "name": "Ukanlos Jewel"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 251,
+          "name": "Wyvern Stone"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 579,
+          "name": "Ukanlos Jewel"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_2:144:0",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_2.png",
+        "x": 144,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 3,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 231,
+          "name": "Gracium"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 233,
+          "name": "Ice Crystal"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 383,
+          "name": "Frozen Glob"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 231,
+          "name": "Gracium"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 233,
+          "name": "Ice Crystal"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 383,
+          "name": "Frozen Glob"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_2:144:32",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_2.png",
+        "x": 144,
+        "y": 32,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 2,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 262,
+          "name": "Aqua Sac"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 263,
+          "name": "Torrent Sac"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 262,
+          "name": "Aqua Sac"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 263,
+          "name": "Torrent Sac"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_2:16:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_2.png",
+        "x": 16,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 4,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 319,
+          "name": "G.Baggi Hide"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 320,
+          "name": "G.Baggi Hide+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 323,
+          "name": "King's Crest"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 543,
+          "name": "G.Agnak Hide+"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 319,
+          "name": "G.Baggi Hide"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 320,
+          "name": "G.Baggi Hide+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 323,
+          "name": "King's Crest"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 543,
+          "name": "G.Agnak Hide+"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_2:32:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_2.png",
+        "x": 32,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 1,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 316,
+          "name": "Baggi Scale"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 316,
+          "name": "Baggi Scale"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_2:32:32",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_2.png",
+        "x": 32,
+        "y": 32,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 3,
+      "examples": [
+        {
+          "scope": "hunt_prep",
+          "gameItemId": 26,
+          "name": "Cleanser"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 391,
+          "name": "Vivid Fluid"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 392,
+          "name": "Brilliant Fluid"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "hunt_prep",
+          "gameItemId": 26,
+          "name": "Cleanser"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 391,
+          "name": "Vivid Fluid"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 392,
+          "name": "Brilliant Fluid"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_2:48:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_2.png",
+        "x": 48,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 8,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 379,
+          "name": "J.Barroth Ridge+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 381,
+          "name": "J.Barroth Scalp"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 382,
+          "name": "J.Barroth Tail"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 545,
+          "name": "G.Agnak Fin+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 547,
+          "name": "G.Agnak Tail"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 548,
+          "name": "Dewy Pleura+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 731,
+          "name": "Beast Tear"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 732,
+          "name": "Lrg Beast Tear"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 379,
+          "name": "J.Barroth Ridge+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 381,
+          "name": "J.Barroth Scalp"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 382,
+          "name": "J.Barroth Tail"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 545,
+          "name": "G.Agnak Fin+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 547,
+          "name": "G.Agnak Tail"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 548,
+          "name": "Dewy Pleura+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 731,
+          "name": "Beast Tear"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 732,
+          "name": "Lrg Beast Tear"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_2:64:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_2.png",
+        "x": 64,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 1,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 546,
+          "name": "G.Agnak Beak"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 546,
+          "name": "G.Agnak Beak"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_3:144:0",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_3.png",
+        "x": 144,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 1,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 229,
+          "name": "Bathycite Ore"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 229,
+          "name": "Bathycite Ore"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_3:64:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_3.png",
+        "x": 64,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 1,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 242,
+          "name": "Monster Keenbone"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 242,
+          "name": "Monster Keenbone"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_4:0:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_4.png",
+        "x": 0,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 7,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 300,
+          "name": "Bird Wyvern Fang"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 303,
+          "name": "G.Jaggi Claw"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 304,
+          "name": "G.Jaggi Claw+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 368,
+          "name": "P.Ludroth Claw+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 582,
+          "name": "Alatreon Talon"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 585,
+          "name": "Brkn Skypiercer"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 586,
+          "name": "Skypiercer"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 300,
+          "name": "Bird Wyvern Fang"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 303,
+          "name": "G.Jaggi Claw"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 304,
+          "name": "G.Jaggi Claw+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 368,
+          "name": "P.Ludroth Claw+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 582,
+          "name": "Alatreon Talon"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 585,
+          "name": "Brkn Skypiercer"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 586,
+          "name": "Skypiercer"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_4:0:80",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_4.png",
+        "x": 0,
+        "y": 80,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 1,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 580,
+          "name": "Alatreon Scute"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 580,
+          "name": "Alatreon Scute"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_4:144:32",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_4.png",
+        "x": 144,
+        "y": 32,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 2,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 254,
+          "name": "Poison Sac"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 255,
+          "name": "Toxin Sac"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 254,
+          "name": "Poison Sac"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 255,
+          "name": "Toxin Sac"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_4:16:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_4.png",
+        "x": 16,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 3,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 301,
+          "name": "G.Jaggi Hide"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 302,
+          "name": "G.Jaggi Hide+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 366,
+          "name": "Plum Spongy Hide"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 301,
+          "name": "G.Jaggi Hide"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 302,
+          "name": "G.Jaggi Hide+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 366,
+          "name": "Plum Spongy Hide"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_4:32:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_4.png",
+        "x": 32,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 3,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 297,
+          "name": "Jaggi Scale"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 367,
+          "name": "P.Ludroth Scale+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 581,
+          "name": "Alatreon Plate"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 297,
+          "name": "Jaggi Scale"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 367,
+          "name": "P.Ludroth Scale+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 581,
+          "name": "Alatreon Plate"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_4:48:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_4.png",
+        "x": 48,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 4,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 306,
+          "name": "G.Jaggi Head"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 400,
+          "name": "Venom Gland"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 401,
+          "name": "Grim Venom Gland"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 584,
+          "name": "Alatreon Tail"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 306,
+          "name": "G.Jaggi Head"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 400,
+          "name": "Venom Gland"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 401,
+          "name": "Grim Venom Gland"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 584,
+          "name": "Alatreon Tail"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_4:80:0",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_4.png",
+        "x": 80,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 2,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 305,
+          "name": "King's Frill"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 583,
+          "name": "Alatreon Webbing"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 305,
+          "name": "King's Frill"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 583,
+          "name": "Alatreon Webbing"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_5:0:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_5.png",
+        "x": 0,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 3,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 459,
+          "name": "G.Narga Fang+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 495,
+          "name": "Duramboros Horn"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 496,
+          "name": "Duramboros Horn+"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 459,
+          "name": "G.Narga Fang+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 495,
+          "name": "Duramboros Horn"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 496,
+          "name": "Duramboros Horn+"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_5:0:80",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_5.png",
+        "x": 0,
+        "y": 80,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 4,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 406,
+          "name": "Rathian Shell"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 407,
+          "name": "Rathian Carapace"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 488,
+          "name": "Duramboros Shell"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 489,
+          "name": "Duram Carapace"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 406,
+          "name": "Rathian Shell"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 407,
+          "name": "Rathian Carapace"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 488,
+          "name": "Duramboros Shell"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 489,
+          "name": "Duram Carapace"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_5:128:32",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_5.png",
+        "x": 128,
+        "y": 32,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 1,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 412,
+          "name": "Rathian Ruby"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 412,
+          "name": "Rathian Ruby"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_5:16:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_5.png",
+        "x": 16,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 3,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 457,
+          "name": "G.Narga Pelt+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 490,
+          "name": "Duram Mossplate"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 491,
+          "name": "Hard Mossplate"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 457,
+          "name": "G.Narga Pelt+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 490,
+          "name": "Duram Mossplate"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 491,
+          "name": "Hard Mossplate"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_5:32:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_5.png",
+        "x": 32,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 4,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 404,
+          "name": "Rathian Scale"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 405,
+          "name": "Rathian Scale+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 411,
+          "name": "Rathian Plate"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 456,
+          "name": "G.Narga Scale+"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 404,
+          "name": "Rathian Scale"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 405,
+          "name": "Rathian Scale+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 411,
+          "name": "Rathian Plate"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 456,
+          "name": "G.Narga Scale+"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_5:48:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_5.png",
+        "x": 48,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 6,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 409,
+          "name": "Rathian Spike"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 410,
+          "name": "Rathian Spike+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 458,
+          "name": "G.Narga Razor+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 492,
+          "name": "Duramboros Hump"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 493,
+          "name": "Duram Tailcase"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 494,
+          "name": "Duram Tailcase+"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 409,
+          "name": "Rathian Spike"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 410,
+          "name": "Rathian Spike+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 458,
+          "name": "G.Narga Razor+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 492,
+          "name": "Duramboros Hump"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 493,
+          "name": "Duram Tailcase"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 494,
+          "name": "Duram Tailcase+"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_5:64:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_5.png",
+        "x": 64,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 2,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 497,
+          "name": "Duram Tailbone"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 498,
+          "name": "Duram Sacrum"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 497,
+          "name": "Duram Tailbone"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 498,
+          "name": "Duram Sacrum"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_5:80:0",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_5.png",
+        "x": 80,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 1,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 408,
+          "name": "Rathian Webbing"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 408,
+          "name": "Rathian Webbing"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_6:0:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_6.png",
+        "x": 0,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 7,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 283,
+          "name": "Sharpened Fang"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 310,
+          "name": "Wroggi Fang"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 373,
+          "name": "Barroth Claw"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 374,
+          "name": "Barroth Claw+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 468,
+          "name": "Amber Tusks"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 469,
+          "name": "Amber Tusks+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 472,
+          "name": "S.Barioth Claw+"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 283,
+          "name": "Sharpened Fang"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 310,
+          "name": "Wroggi Fang"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 373,
+          "name": "Barroth Claw"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 374,
+          "name": "Barroth Claw+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 468,
+          "name": "Amber Tusks"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 469,
+          "name": "Amber Tusks+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 472,
+          "name": "S.Barioth Claw+"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_6:0:80",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_6.png",
+        "x": 0,
+        "y": 80,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 3,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 369,
+          "name": "Barroth Shell"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 370,
+          "name": "Barroth Carapace"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 470,
+          "name": "S.Bari Carapace"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 369,
+          "name": "Barroth Shell"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 370,
+          "name": "Barroth Carapace"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 470,
+          "name": "S.Bari Carapace"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_6:128:0",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_6.png",
+        "x": 128,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 1,
+      "examples": [
+        {
+          "scope": "hunt_prep",
+          "gameItemId": 173,
+          "name": "Adamant Seed"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "hunt_prep",
+          "gameItemId": 173,
+          "name": "Adamant Seed"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_6:144:0",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_6.png",
+        "x": 144,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 3,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 221,
+          "name": "Pelagicite Ore"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 226,
+          "name": "Lava Nugget"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 232,
+          "name": "Firecell Stone"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 221,
+          "name": "Pelagicite Ore"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 226,
+          "name": "Lava Nugget"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 232,
+          "name": "Firecell Stone"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_6:16:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_6.png",
+        "x": 16,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 3,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 311,
+          "name": "G.Wroggi Hide"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 312,
+          "name": "G.Wroggi Hide+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 471,
+          "name": "S.Barioth Pelt+"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 311,
+          "name": "G.Wroggi Hide"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 312,
+          "name": "G.Wroggi Hide+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 471,
+          "name": "S.Barioth Pelt+"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_6:32:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_6.png",
+        "x": 32,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 1,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 307,
+          "name": "Wroggi Scale"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 307,
+          "name": "Wroggi Scale"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_6:32:32",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_6.png",
+        "x": 32,
+        "y": 32,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 2,
+      "examples": [
+        {
+          "scope": "hunt_prep",
+          "gameItemId": 21,
+          "name": "Armorskin"
+        },
+        {
+          "scope": "hunt_prep",
+          "gameItemId": 22,
+          "name": "Mega Armorskin"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "hunt_prep",
+          "gameItemId": 21,
+          "name": "Armorskin"
+        },
+        {
+          "scope": "hunt_prep",
+          "gameItemId": 22,
+          "name": "Mega Armorskin"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_6:48:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_6.png",
+        "x": 48,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 8,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 293,
+          "name": "Bullfango Head"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 313,
+          "name": "G.Wroggi Brace"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 314,
+          "name": "G.Wroggi Brace+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 371,
+          "name": "Barroth Ridge"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 372,
+          "name": "Barroth Ridge+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 375,
+          "name": "Barroth Scalp"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 376,
+          "name": "Barroth Tail"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 473,
+          "name": "S.Barioth Tail"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 293,
+          "name": "Bullfango Head"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 313,
+          "name": "G.Wroggi Brace"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 314,
+          "name": "G.Wroggi Brace+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 371,
+          "name": "Barroth Ridge"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 372,
+          "name": "Barroth Ridge+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 375,
+          "name": "Barroth Scalp"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 376,
+          "name": "Barroth Tail"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 473,
+          "name": "S.Barioth Tail"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_6:64:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_6.png",
+        "x": 64,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 2,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 241,
+          "name": "Monster Bone+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 315,
+          "name": "King's Beak"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 241,
+          "name": "Monster Bone+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 315,
+          "name": "King's Beak"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_6:80:0",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_6.png",
+        "x": 80,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 1,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 475,
+          "name": "Rugged Pleura"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 475,
+          "name": "Rugged Pleura"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_7:32:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_7.png",
+        "x": 32,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 2,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 343,
+          "name": "Qurupeco Scale"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 344,
+          "name": "Qurupeco Scale+"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 343,
+          "name": "Qurupeco Scale"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 344,
+          "name": "Qurupeco Scale+"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_7:48:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_7.png",
+        "x": 48,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 3,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 345,
+          "name": "Qurupeco Feather"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 346,
+          "name": "Qurupeco Wing"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 347,
+          "name": "Vivid Feather"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 345,
+          "name": "Qurupeco Feather"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 346,
+          "name": "Qurupeco Wing"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 347,
+          "name": "Vivid Feather"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_7:64:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_7.png",
+        "x": 64,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 2,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 348,
+          "name": "Strange Beak"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 349,
+          "name": "Wonderful Beak"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 348,
+          "name": "Strange Beak"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 349,
+          "name": "Wonderful Beak"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_8:0:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_8.png",
+        "x": 0,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 5,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 388,
+          "name": "Nibelsnarf Claw"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 389,
+          "name": "Nibelsnarf Claw+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 519,
+          "name": "Diablos Fang"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 520,
+          "name": "Twisted Horn"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 521,
+          "name": "Majestic Horn"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 388,
+          "name": "Nibelsnarf Claw"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 389,
+          "name": "Nibelsnarf Claw+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 519,
+          "name": "Diablos Fang"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 520,
+          "name": "Twisted Horn"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 521,
+          "name": "Majestic Horn"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_8:0:80",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_8.png",
+        "x": 0,
+        "y": 80,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 4,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 384,
+          "name": "Nibelsnarf Shell"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 385,
+          "name": "Nibel Carapace"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 514,
+          "name": "Diablos Shell"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 515,
+          "name": "Diablos Carapace"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 384,
+          "name": "Nibelsnarf Shell"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 385,
+          "name": "Nibel Carapace"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 514,
+          "name": "Diablos Shell"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 515,
+          "name": "Diablos Carapace"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_8:16:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_8.png",
+        "x": 16,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 2,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 386,
+          "name": "Nibelsnarf Hide"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 387,
+          "name": "Nibelsnarf Hide+"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 386,
+          "name": "Nibelsnarf Hide"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 387,
+          "name": "Nibelsnarf Hide+"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_8:48:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_8.png",
+        "x": 48,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 5,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 390,
+          "name": "Nibelsnarf Scalp"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 516,
+          "name": "Diablos Ridge"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 517,
+          "name": "Diablos Ridge+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 518,
+          "name": "Diablos Tailcase"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 522,
+          "name": "Diablos Marrow"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 390,
+          "name": "Nibelsnarf Scalp"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 516,
+          "name": "Diablos Ridge"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 517,
+          "name": "Diablos Ridge+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 518,
+          "name": "Diablos Tailcase"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 522,
+          "name": "Diablos Marrow"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_9:0:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_9.png",
+        "x": 0,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 7,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 340,
+          "name": "Volvidon Claw"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 341,
+          "name": "Volvidon Claw+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 397,
+          "name": "Gigginox Claw"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 398,
+          "name": "Gigginox Claw+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 427,
+          "name": "Rath Talon"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 534,
+          "name": "Agnaktor Claw"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 535,
+          "name": "Agnaktor Claw+"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 340,
+          "name": "Volvidon Claw"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 341,
+          "name": "Volvidon Claw+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 397,
+          "name": "Gigginox Claw"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 398,
+          "name": "Gigginox Claw+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 427,
+          "name": "Rath Talon"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 534,
+          "name": "Agnaktor Claw"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 535,
+          "name": "Agnaktor Claw+"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_9:0:80",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_9.png",
+        "x": 0,
+        "y": 80,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 6,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 338,
+          "name": "Volvidon Shell"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 339,
+          "name": "Volvi Carapace"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 418,
+          "name": "Rathalos Shell"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 419,
+          "name": "Rath Carapace"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 530,
+          "name": "Agnaktor Shell"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 531,
+          "name": "Agnak Carapace"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 338,
+          "name": "Volvidon Shell"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 339,
+          "name": "Volvi Carapace"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 418,
+          "name": "Rathalos Shell"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 419,
+          "name": "Rath Carapace"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 530,
+          "name": "Agnaktor Shell"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 531,
+          "name": "Agnak Carapace"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_9:128:32",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_9.png",
+        "x": 128,
+        "y": 32,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 2,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 423,
+          "name": "Rathalos Ruby"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 572,
+          "name": "Akantor Jewel"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 423,
+          "name": "Rathalos Ruby"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 572,
+          "name": "Akantor Jewel"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_9:144:0",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_9.png",
+        "x": 144,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 2,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 227,
+          "name": "Firestone"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 350,
+          "name": "Flintstone"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 227,
+          "name": "Firestone"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 350,
+          "name": "Flintstone"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_9:144:32",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_9.png",
+        "x": 144,
+        "y": 32,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 2,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 260,
+          "name": "Flame Sac"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 261,
+          "name": "Inferno Sac"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 260,
+          "name": "Flame Sac"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 261,
+          "name": "Inferno Sac"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_9:16:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_9.png",
+        "x": 16,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 4,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 393,
+          "name": "Gigginox Hide"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 394,
+          "name": "Gigginox Hide+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 532,
+          "name": "Agnaktor Hide"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 533,
+          "name": "Agnaktor Hide+"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 393,
+          "name": "Gigginox Hide"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 394,
+          "name": "Gigginox Hide+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 532,
+          "name": "Agnaktor Hide"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 533,
+          "name": "Agnaktor Hide+"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_9:32:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_9.png",
+        "x": 32,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 5,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 351,
+          "name": "C.Peco Scale+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 416,
+          "name": "Rathalos Scale"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 417,
+          "name": "Rathalos Scale+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 422,
+          "name": "Rathalos Plate"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 529,
+          "name": "Agnaktor Scale"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 351,
+          "name": "C.Peco Scale+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 416,
+          "name": "Rathalos Scale"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 417,
+          "name": "Rathalos Scale+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 422,
+          "name": "Rathalos Plate"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 529,
+          "name": "Agnaktor Scale"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_9:32:32",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_9.png",
+        "x": 32,
+        "y": 32,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 1,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 252,
+          "name": "ElderDragonBlood"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 252,
+          "name": "ElderDragonBlood"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_9:48:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_9.png",
+        "x": 48,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 12,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 342,
+          "name": "Volvi Rickrack"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 352,
+          "name": "C.Peco Wing"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 421,
+          "name": "Rathalos Tail"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 428,
+          "name": "Rath Marrow"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 429,
+          "name": "Rath Medulla"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 455,
+          "name": "Narga Medulla"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 523,
+          "name": "Diablos Medulla"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 536,
+          "name": "Agnaktor Fin"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 537,
+          "name": "Agnaktor Fin+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 539,
+          "name": "Agnaktor Tail"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 540,
+          "name": "Scalding Pleura"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 541,
+          "name": "Scalding Pleura+"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 342,
+          "name": "Volvi Rickrack"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 352,
+          "name": "C.Peco Wing"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 421,
+          "name": "Rathalos Tail"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 428,
+          "name": "Rath Marrow"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 429,
+          "name": "Rath Medulla"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 455,
+          "name": "Narga Medulla"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 523,
+          "name": "Diablos Medulla"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 536,
+          "name": "Agnaktor Fin"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 537,
+          "name": "Agnaktor Fin+"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 539,
+          "name": "Agnaktor Tail"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 540,
+          "name": "Scalding Pleura"
+        },
+        {
+          "scope": "material",
+          "gameItemId": 541,
+          "name": "Scalding Pleura+"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_9:64:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_9.png",
+        "x": 64,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 1,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 538,
+          "name": "Agnaktor Beak"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 538,
+          "name": "Agnaktor Beak"
+        }
+      ]
+    },
+    {
+      "iconKey": "atlas:PAL_9:80:0",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_9.png",
+        "x": 80,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "sourceAsset": "mhp3db_palette_atlas",
+      "usageCount": 1,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 420,
+          "name": "Rathalos Webbing"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 420,
+          "name": "Rathalos Webbing"
+        }
+      ]
+    },
+    {
+      "iconKey": "shared:barrel_bomb:red",
+      "renderKind": "SHARED_FAMILY_COLOR",
+      "family": {
+        "shape": "barrel_bomb",
+        "color": "red"
+      },
+      "sourceAsset": "mhp3_classic_family_color_reference",
+      "productionAssetStatus": "NEEDS_AUTHENTIC_MHP3_GLYPH_EXTRACTION",
+      "usageCount": 1,
+      "examples": [
+        {
+          "scope": "hunt_prep",
+          "gameItemId": 78,
+          "name": "Barrel Bomb L"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "hunt_prep",
+          "gameItemId": 78,
+          "name": "Barrel Bomb L"
+        }
+      ]
+    },
+    {
+      "iconKey": "shared:dung:orange",
+      "renderKind": "SHARED_FAMILY_COLOR",
+      "family": {
+        "shape": "dung",
+        "color": "orange"
+      },
+      "sourceAsset": "mhp3_classic_family_color_reference",
+      "productionAssetStatus": "NEEDS_AUTHENTIC_MHP3_GLYPH_EXTRACTION",
+      "usageCount": 1,
+      "examples": [
+        {
+          "scope": "material",
+          "gameItemId": 377,
+          "name": "Fertile Mud"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "material",
+          "gameItemId": 377,
+          "name": "Fertile Mud"
+        }
+      ]
+    },
+    {
+      "iconKey": "shared:dung:yellow",
+      "renderKind": "SHARED_FAMILY_COLOR",
+      "family": {
+        "shape": "dung",
+        "color": "yellow"
+      },
+      "sourceAsset": "mhp3_classic_family_color_reference",
+      "productionAssetStatus": "NEEDS_AUTHENTIC_MHP3_GLYPH_EXTRACTION",
+      "usageCount": 1,
+      "examples": [
+        {
+          "scope": "hunt_prep",
+          "gameItemId": 64,
+          "name": "Dung Bomb"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "hunt_prep",
+          "gameItemId": 64,
+          "name": "Dung Bomb"
+        }
+      ]
+    },
+    {
+      "iconKey": "shared:meat:light_blue",
+      "renderKind": "SHARED_FAMILY_COLOR",
+      "family": {
+        "shape": "meat",
+        "color": "light_blue"
+      },
+      "sourceAsset": "mhp3_classic_family_color_reference",
+      "productionAssetStatus": "NEEDS_AUTHENTIC_MHP3_GLYPH_EXTRACTION",
+      "usageCount": 1,
+      "examples": [
+        {
+          "scope": "hunt_prep",
+          "gameItemId": 42,
+          "name": "Drugged Meat"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "hunt_prep",
+          "gameItemId": 42,
+          "name": "Drugged Meat"
+        }
+      ]
+    },
+    {
+      "iconKey": "shared:meat:purple",
+      "renderKind": "SHARED_FAMILY_COLOR",
+      "family": {
+        "shape": "meat",
+        "color": "purple"
+      },
+      "sourceAsset": "mhp3_classic_family_color_reference",
+      "productionAssetStatus": "NEEDS_AUTHENTIC_MHP3_GLYPH_EXTRACTION",
+      "usageCount": 1,
+      "examples": [
+        {
+          "scope": "hunt_prep",
+          "gameItemId": 40,
+          "name": "Poisoned Meat"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "hunt_prep",
+          "gameItemId": 40,
+          "name": "Poisoned Meat"
+        }
+      ]
+    },
+    {
+      "iconKey": "shared:meat:yellow",
+      "renderKind": "SHARED_FAMILY_COLOR",
+      "family": {
+        "shape": "meat",
+        "color": "yellow"
+      },
+      "sourceAsset": "mhp3_classic_family_color_reference",
+      "productionAssetStatus": "NEEDS_AUTHENTIC_MHP3_GLYPH_EXTRACTION",
+      "usageCount": 1,
+      "examples": [
+        {
+          "scope": "hunt_prep",
+          "gameItemId": 41,
+          "name": "Tinged Meat"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "hunt_prep",
+          "gameItemId": 41,
+          "name": "Tinged Meat"
+        }
+      ]
+    },
+    {
+      "iconKey": "shared:smoke:light_blue",
+      "renderKind": "SHARED_FAMILY_COLOR",
+      "family": {
+        "shape": "smoke",
+        "color": "light_blue"
+      },
+      "sourceAsset": "mhp3_classic_family_color_reference",
+      "productionAssetStatus": "NEEDS_AUTHENTIC_MHP3_GLYPH_EXTRACTION",
+      "usageCount": 1,
+      "examples": [
+        {
+          "scope": "hunt_prep",
+          "gameItemId": 27,
+          "name": "Deodorant"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "hunt_prep",
+          "gameItemId": 27,
+          "name": "Deodorant"
+        }
+      ]
+    },
+    {
+      "iconKey": "shared:trap:green",
+      "renderKind": "SHARED_FAMILY_COLOR",
+      "family": {
+        "shape": "trap",
+        "color": "green"
+      },
+      "sourceAsset": "mhp3_classic_family_color_reference",
+      "productionAssetStatus": "NEEDS_AUTHENTIC_MHP3_GLYPH_EXTRACTION",
+      "usageCount": 1,
+      "examples": [
+        {
+          "scope": "hunt_prep",
+          "gameItemId": 72,
+          "name": "Pitfall Trap"
+        }
+      ],
+      "allMappings": [
+        {
+          "scope": "hunt_prep",
+          "gameItemId": 72,
+          "name": "Pitfall Trap"
+        }
+      ]
+    }
+  ]
+}

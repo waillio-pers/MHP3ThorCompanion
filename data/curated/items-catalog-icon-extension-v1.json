@@ -1,0 +1,3644 @@
+{
+  "extensionVersion": 1,
+  "purpose": "Icon mapping preflight for Iteration 4.7B Items Catalog Expansion",
+  "baseline": {
+    "schemaVersion": 6,
+    "generatedJsonSha256": "8558B56A1720BBF6AB112E4B6CF0AE0F22B122137EA86F4770375A0616FF3DA4",
+    "currentItemEntities": 334,
+    "sourceBackedUniqueGameItemIds": 494,
+    "catalogExtensionIds": 160,
+    "projectedItemCatalogCount": 494,
+    "currentIconManifestRows": 351,
+    "currentUniqueIconKeys": 114
+  },
+  "counts": {
+    "targetExtensionItems": 160,
+    "alreadyMappedByGameItemId": 2,
+    "newGameItemIdsNeedingRegistryRows": 158,
+    "directMhp3dbAtlasRows": 86,
+    "familyColorExactAtlasRows": 38,
+    "sharedRowsNeedingOneTimeAtlasResolution": 36,
+    "uniqueIconKeysAcross160BeforeSharedResolution": 114,
+    "uniqueTargetIconKeysAlreadyPresentInCurrent114": 32,
+    "candidateUniqueNewIconKeysBeforeSharedResolution": 82,
+    "uniqueSharedResolutionKeys": 35
+  },
+  "sourcePolicy": {
+    "canonicalNameSource": "TMO PSP v6.1 r754, keyed by gameItemId",
+    "primaryAtlas": {
+      "repository": "mhp3db/mhp3db.github.io",
+      "commit": "7ad3cf1c5ba07ce2e63afdaa1fa37c4671edc3bf",
+      "spriteDataPath": "scripts/database/sprite_data.js",
+      "spriteSheetPath": "assets/database/spritesheets/PAL_{0..13}.png"
+    },
+    "secondaryFamilyColorReferences": [
+      "https://wikiwiki.jp/nenaiko/ゲーム用語/アイコン/アイテムアイコンの一覧",
+      "https://wikiwiki.jp/nenaiko/ゲーム用語/アイコン/アイテムアイコンの色の具体例",
+      "https://monsterhunter.fandom.com/wiki/MHP3:_Item_List"
+    ],
+    "rules": [
+      "gameItemId is authoritative; never resolve icons by UI/localized string at runtime.",
+      "Reuse iconKey/drawable across any number of items.",
+      "No modern MH4/World/Rise substitution.",
+      "No AI/vector redraws.",
+      "Shared-family entries must be resolved once to an authentic MHP3 atlas cell before the new item is exposed without fallback."
+    ]
+  },
+  "paletteSheets": {
+    "white": "PAL_0.png",
+    "dark_green": "PAL_1.png",
+    "light_blue": "PAL_2.png",
+    "pink": "PAL_3.png",
+    "purple": "PAL_4.png",
+    "green": "PAL_5.png",
+    "orange": "PAL_6.png",
+    "yellow_green": "PAL_7.png",
+    "ochre": "PAL_8.png",
+    "red": "PAL_9.png",
+    "yellow": "PAL_10.png",
+    "blue_green": "PAL_11.png",
+    "blue": "PAL_12.png",
+    "black": "PAL_13.png"
+  },
+  "knownGenericFamilyCells": {
+    "herb": {
+      "x": 48,
+      "y": 0,
+      "width": 16,
+      "height": 16
+    },
+    "mushroom": {
+      "x": 16,
+      "y": 0,
+      "width": 16,
+      "height": 16
+    },
+    "fruit": {
+      "x": 128,
+      "y": 0,
+      "width": 16,
+      "height": 16
+    },
+    "fish": {
+      "x": 32,
+      "y": 0,
+      "width": 16,
+      "height": 16
+    },
+    "bug": {
+      "x": 96,
+      "y": 0,
+      "width": 16,
+      "height": 16
+    },
+    "ore": {
+      "x": 144,
+      "y": 0,
+      "width": 16,
+      "height": 16
+    },
+    "bone": {
+      "x": 64,
+      "y": 16,
+      "width": 16,
+      "height": 16
+    },
+    "honey": {
+      "x": 80,
+      "y": 0,
+      "width": 16,
+      "height": 16
+    }
+  },
+  "items": [
+    {
+      "gameItemId": 39,
+      "name": "Raw Meat",
+      "sourceTypes": [
+        "QUEST_REWARD"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "SHARED_FAMILY_NEEDS_ATLAS_CELL_RESOLUTION",
+      "iconKey": "shared:meat:red",
+      "family": "meat",
+      "color": "red",
+      "confidence": "high",
+      "resolutionMethod": "SOURCE_BACKED_FAMILY_COLOR_OR_FAMILY_ONLY",
+      "mustResolveBeforeProduction": true
+    },
+    {
+      "gameItemId": 53,
+      "name": "Throwing Knife",
+      "sourceTypes": [
+        "GATHERING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "SHARED_FAMILY_NEEDS_ATLAS_CELL_RESOLUTION",
+      "iconKey": "shared:throwing_knife:review",
+      "family": "throwing_knife",
+      "color": "review",
+      "confidence": "medium",
+      "resolutionMethod": "SOURCE_BACKED_FAMILY_COLOR_OR_FAMILY_ONLY",
+      "mustResolveBeforeProduction": true
+    },
+    {
+      "gameItemId": 59,
+      "name": "Paintball",
+      "sourceTypes": [
+        "GATHERING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "SHARED_FAMILY_NEEDS_ATLAS_CELL_RESOLUTION",
+      "iconKey": "shared:thrown_ball:pink",
+      "family": "thrown_ball",
+      "color": "pink",
+      "confidence": "high",
+      "resolutionMethod": "SOURCE_BACKED_FAMILY_COLOR_OR_FAMILY_ONLY",
+      "mustResolveBeforeProduction": true
+    },
+    {
+      "gameItemId": 62,
+      "name": "Dung",
+      "sourceTypes": [
+        "GATHERING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "SHARED_FAMILY_NEEDS_ATLAS_CELL_RESOLUTION",
+      "iconKey": "shared:dung:yellow",
+      "family": "dung",
+      "color": "yellow",
+      "confidence": "high",
+      "resolutionMethod": "SOURCE_BACKED_FAMILY_COLOR_OR_FAMILY_ONLY",
+      "mustResolveBeforeProduction": true
+    },
+    {
+      "gameItemId": 63,
+      "name": "Wyvern Dung",
+      "sourceTypes": [
+        "GATHERING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "SHARED_FAMILY_NEEDS_ATLAS_CELL_RESOLUTION",
+      "iconKey": "shared:dung:orange",
+      "family": "dung",
+      "color": "orange",
+      "confidence": "high",
+      "resolutionMethod": "SOURCE_BACKED_FAMILY_COLOR_OR_FAMILY_ONLY",
+      "mustResolveBeforeProduction": true
+    },
+    {
+      "gameItemId": 69,
+      "name": "Spider Web",
+      "sourceTypes": [
+        "FARM",
+        "GATHERING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "SHARED_FAMILY_NEEDS_ATLAS_CELL_RESOLUTION",
+      "iconKey": "shared:web:white",
+      "family": "web",
+      "color": "white",
+      "confidence": "high",
+      "resolutionMethod": "SOURCE_BACKED_FAMILY_COLOR_OR_FAMILY_ONLY",
+      "mustResolveBeforeProduction": true
+    },
+    {
+      "gameItemId": 75,
+      "name": "Small Barrel",
+      "sourceTypes": [
+        "GATHERING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_10:80:32",
+      "atlas": {
+        "sheet": "PAL_10.png",
+        "x": 80,
+        "y": 32,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 76,
+      "name": "Large Barrel",
+      "sourceTypes": [
+        "GATHERING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "SHARED_FAMILY_NEEDS_ATLAS_CELL_RESOLUTION",
+      "iconKey": "shared:large_barrel:review",
+      "family": "large_barrel",
+      "color": "review",
+      "confidence": "medium",
+      "resolutionMethod": "SOURCE_BACKED_FAMILY_COLOR_OR_FAMILY_ONLY",
+      "mustResolveBeforeProduction": true
+    },
+    {
+      "gameItemId": 91,
+      "name": "Whetstone",
+      "sourceTypes": [
+        "FARM",
+        "GATHERING",
+        "MINING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "SHARED_FAMILY_NEEDS_ATLAS_CELL_RESOLUTION",
+      "iconKey": "shared:whetstone:yellow",
+      "family": "whetstone",
+      "color": "yellow",
+      "confidence": "high",
+      "resolutionMethod": "SOURCE_BACKED_FAMILY_COLOR_OR_FAMILY_ONLY",
+      "mustResolveBeforeProduction": true
+    },
+    {
+      "gameItemId": 92,
+      "name": "Huskberry",
+      "sourceTypes": [
+        "FARM",
+        "GATHERING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "SHARED_FAMILY_NEEDS_ATLAS_CELL_RESOLUTION",
+      "iconKey": "shared:ammo_resource:black",
+      "family": "ammo_resource",
+      "color": "black",
+      "confidence": "high",
+      "resolutionMethod": "SOURCE_BACKED_FAMILY_COLOR_OR_FAMILY_ONLY",
+      "mustResolveBeforeProduction": true
+    },
+    {
+      "gameItemId": 93,
+      "name": "Bone Husk",
+      "sourceTypes": [
+        "GATHERING",
+        "QUEST_REWARD"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "SHARED_FAMILY_NEEDS_ATLAS_CELL_RESOLUTION",
+      "iconKey": "shared:ammo_resource:review",
+      "family": "ammo_resource",
+      "color": "review",
+      "confidence": "medium",
+      "resolutionMethod": "SOURCE_BACKED_FAMILY_COLOR_OR_FAMILY_ONLY",
+      "mustResolveBeforeProduction": true
+    },
+    {
+      "gameItemId": 138,
+      "name": "Worm",
+      "sourceTypes": [
+        "FARM",
+        "GATHERING",
+        "QUEST_REWARD"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "SHARED_FAMILY_NEEDS_ATLAS_CELL_RESOLUTION",
+      "iconKey": "shared:fishing_bait:black",
+      "family": "fishing_bait",
+      "color": "black",
+      "confidence": "high",
+      "resolutionMethod": "SOURCE_BACKED_FAMILY_COLOR_OR_FAMILY_ONLY",
+      "mustResolveBeforeProduction": true
+    },
+    {
+      "gameItemId": 139,
+      "name": "Mega Fishing Fly",
+      "sourceTypes": [
+        "BUGNET",
+        "FARM",
+        "GATHERING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "SHARED_FAMILY_NEEDS_ATLAS_CELL_RESOLUTION",
+      "iconKey": "shared:fishing_bait:pink",
+      "family": "fishing_bait",
+      "color": "pink",
+      "confidence": "high",
+      "resolutionMethod": "SOURCE_BACKED_FAMILY_COLOR_OR_FAMILY_ONLY",
+      "mustResolveBeforeProduction": true
+    },
+    {
+      "gameItemId": 150,
+      "name": "Honey",
+      "sourceTypes": [
+        "FARM",
+        "GATHERING",
+        "QUEST_REWARD"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_6:80:0",
+      "atlas": {
+        "sheet": "PAL_6.png",
+        "x": 80,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 151,
+      "name": "Herb",
+      "sourceTypes": [
+        "FARM",
+        "GATHERING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_5:48:0",
+      "atlas": {
+        "sheet": "PAL_5.png",
+        "x": 48,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 152,
+      "name": "Antidote Herb",
+      "sourceTypes": [
+        "FARM",
+        "GATHERING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_12:48:0",
+      "atlas": {
+        "sheet": "PAL_12.png",
+        "x": 48,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 153,
+      "name": "Fire Herb",
+      "sourceTypes": [
+        "FARM",
+        "GATHERING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_9:48:0",
+      "atlas": {
+        "sheet": "PAL_9.png",
+        "x": 48,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 154,
+      "name": "Snow Herb",
+      "sourceTypes": [
+        "FARM",
+        "GATHERING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_12:48:0",
+      "atlas": {
+        "sheet": "PAL_12.png",
+        "x": 48,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 155,
+      "name": "Ivy",
+      "sourceTypes": [
+        "FARM",
+        "GATHERING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_5:48:0",
+      "atlas": {
+        "sheet": "PAL_5.png",
+        "x": 48,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 156,
+      "name": "Sleep Herb",
+      "sourceTypes": [
+        "GATHERING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "FAMILY_COLOR_TO_EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_2:48:0",
+      "atlas": {
+        "sheet": "PAL_2.png",
+        "x": 48,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "family": "herb",
+      "color": "light_blue",
+      "confidence": "high",
+      "resolutionMethod": "CLASSIC_MHP3_FAMILY_COLOR_BACKED"
+    },
+    {
+      "gameItemId": 157,
+      "name": "Sap Plant",
+      "sourceTypes": [
+        "FARM",
+        "GATHERING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_0:48:0",
+      "atlas": {
+        "sheet": "PAL_0.png",
+        "x": 48,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 158,
+      "name": "Felvine",
+      "sourceTypes": [
+        "FARM",
+        "GATHERING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "SHARED_FAMILY_NEEDS_ATLAS_CELL_RESOLUTION",
+      "iconKey": "shared:herb:review",
+      "family": "herb",
+      "color": "review",
+      "confidence": "medium",
+      "resolutionMethod": "SOURCE_BACKED_FAMILY_COLOR_OR_FAMILY_ONLY",
+      "mustResolveBeforeProduction": true
+    },
+    {
+      "gameItemId": 159,
+      "name": "Cactus Flower",
+      "sourceTypes": [
+        "FARM",
+        "GATHERING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "FAMILY_COLOR_TO_EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_3:48:0",
+      "atlas": {
+        "sheet": "PAL_3.png",
+        "x": 48,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "family": "herb",
+      "color": "pink",
+      "confidence": "high",
+      "resolutionMethod": "CLASSIC_MHP3_FAMILY_COLOR_BACKED"
+    },
+    {
+      "gameItemId": 160,
+      "name": "Hot Pepper",
+      "sourceTypes": [
+        "FARM",
+        "GATHERING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_9:48:0",
+      "atlas": {
+        "sheet": "PAL_9.png",
+        "x": 48,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 161,
+      "name": "Hypnotic Pollen",
+      "sourceTypes": [
+        "FARM"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "FAMILY_COLOR_TO_EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_3:48:0",
+      "atlas": {
+        "sheet": "PAL_3.png",
+        "x": 48,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "family": "herb",
+      "color": "pink",
+      "confidence": "medium_high",
+      "resolutionMethod": "CLASSIC_MHP3_FAMILY_COLOR_BACKED"
+    },
+    {
+      "gameItemId": 162,
+      "name": "Blue Mushroom",
+      "sourceTypes": [
+        "FARM",
+        "GATHERING",
+        "QUEST_REWARD"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_12:16:0",
+      "atlas": {
+        "sheet": "PAL_12.png",
+        "x": 16,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 163,
+      "name": "Nitroshroom",
+      "sourceTypes": [
+        "FARM",
+        "GATHERING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_9:16:0",
+      "atlas": {
+        "sheet": "PAL_9.png",
+        "x": 16,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 164,
+      "name": "Parashroom",
+      "sourceTypes": [
+        "FARM",
+        "GATHERING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_10:16:0",
+      "atlas": {
+        "sheet": "PAL_10.png",
+        "x": 16,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 165,
+      "name": "Toadstool",
+      "sourceTypes": [
+        "FARM",
+        "GATHERING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_4:16:0",
+      "atlas": {
+        "sheet": "PAL_4.png",
+        "x": 16,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 166,
+      "name": "Exciteshroom",
+      "sourceTypes": [
+        "FARM",
+        "GATHERING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_4:16:0",
+      "atlas": {
+        "sheet": "PAL_4.png",
+        "x": 16,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 167,
+      "name": "Wearyshroom",
+      "sourceTypes": [
+        "FARM",
+        "GATHERING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_2:16:0",
+      "atlas": {
+        "sheet": "PAL_2.png",
+        "x": 16,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 168,
+      "name": "Dragon Toadstool",
+      "sourceTypes": [
+        "GATHERING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_9:16:0",
+      "atlas": {
+        "sheet": "PAL_9.png",
+        "x": 16,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 169,
+      "name": "Bindshroom",
+      "sourceTypes": [
+        "FARM"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_10:16:0",
+      "atlas": {
+        "sheet": "PAL_10.png",
+        "x": 16,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 171,
+      "name": "Paintberry",
+      "sourceTypes": [
+        "FARM",
+        "GATHERING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "FAMILY_COLOR_TO_EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_3:128:0",
+      "atlas": {
+        "sheet": "PAL_3.png",
+        "x": 128,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "family": "fruit",
+      "color": "pink",
+      "confidence": "high",
+      "resolutionMethod": "CLASSIC_MHP3_FAMILY_COLOR_BACKED"
+    },
+    {
+      "gameItemId": 172,
+      "name": "Might Seed",
+      "sourceTypes": [
+        "GATHERING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "FAMILY_COLOR_TO_EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_9:128:0",
+      "atlas": {
+        "sheet": "PAL_9.png",
+        "x": 128,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "family": "fruit",
+      "color": "red",
+      "confidence": "high",
+      "resolutionMethod": "CLASSIC_MHP3_FAMILY_COLOR_BACKED"
+    },
+    {
+      "gameItemId": 173,
+      "name": "Adamant Seed",
+      "sourceTypes": [
+        "GATHERING"
+      ],
+      "alreadyInCurrentIconRegistry": true,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_6:128:0",
+      "atlas": {
+        "sheet": "PAL_6.png",
+        "x": 128,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 174,
+      "name": "Nulberry",
+      "sourceTypes": [
+        "FARM",
+        "GATHERING"
+      ],
+      "alreadyInCurrentIconRegistry": true,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_12:128:0",
+      "atlas": {
+        "sheet": "PAL_12.png",
+        "x": 128,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 175,
+      "name": "Dragonfell Berry",
+      "sourceTypes": [
+        "FARM",
+        "GATHERING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "FAMILY_COLOR_TO_EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_9:128:0",
+      "atlas": {
+        "sheet": "PAL_9.png",
+        "x": 128,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "family": "fruit",
+      "color": "red",
+      "confidence": "high",
+      "resolutionMethod": "CLASSIC_MHP3_FAMILY_COLOR_BACKED"
+    },
+    {
+      "gameItemId": 176,
+      "name": "Scatternut",
+      "sourceTypes": [
+        "FARM",
+        "GATHERING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "FAMILY_COLOR_TO_EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_13:128:0",
+      "atlas": {
+        "sheet": "PAL_13.png",
+        "x": 128,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "family": "fruit",
+      "color": "black",
+      "confidence": "high",
+      "resolutionMethod": "CLASSIC_MHP3_FAMILY_COLOR_BACKED"
+    },
+    {
+      "gameItemId": 177,
+      "name": "Needleberry",
+      "sourceTypes": [
+        "FARM",
+        "GATHERING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "SHARED_FAMILY_NEEDS_ATLAS_CELL_RESOLUTION",
+      "iconKey": "shared:ammo_resource:black",
+      "family": "ammo_resource",
+      "color": "black",
+      "confidence": "high",
+      "resolutionMethod": "SOURCE_BACKED_FAMILY_COLOR_OR_FAMILY_ONLY",
+      "mustResolveBeforeProduction": true
+    },
+    {
+      "gameItemId": 178,
+      "name": "Spikeberry",
+      "sourceTypes": [
+        "GATHERING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "FAMILY_COLOR_TO_EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_2:128:0",
+      "atlas": {
+        "sheet": "PAL_2.png",
+        "x": 128,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "family": "fruit",
+      "color": "light_blue",
+      "confidence": "medium_high",
+      "resolutionMethod": "CLASSIC_MHP3_FAMILY_COLOR_BACKED"
+    },
+    {
+      "gameItemId": 179,
+      "name": "Bomberry",
+      "sourceTypes": [
+        "GATHERING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "FAMILY_COLOR_TO_EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_13:128:0",
+      "atlas": {
+        "sheet": "PAL_13.png",
+        "x": 128,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "family": "fruit",
+      "color": "black",
+      "confidence": "high",
+      "resolutionMethod": "CLASSIC_MHP3_FAMILY_COLOR_BACKED"
+    },
+    {
+      "gameItemId": 180,
+      "name": "Red Seed",
+      "sourceTypes": [
+        "FARM",
+        "GATHERING",
+        "QUEST_REWARD"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "FAMILY_COLOR_TO_EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_9:128:0",
+      "atlas": {
+        "sheet": "PAL_9.png",
+        "x": 128,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "family": "fruit",
+      "color": "red",
+      "confidence": "medium_high",
+      "resolutionMethod": "CLASSIC_MHP3_FAMILY_COLOR_BACKED"
+    },
+    {
+      "gameItemId": 181,
+      "name": "Green Seed",
+      "sourceTypes": [
+        "FARM",
+        "GATHERING",
+        "QUEST_REWARD"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "FAMILY_COLOR_TO_EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_5:128:0",
+      "atlas": {
+        "sheet": "PAL_5.png",
+        "x": 128,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "family": "fruit",
+      "color": "green",
+      "confidence": "medium_high",
+      "resolutionMethod": "CLASSIC_MHP3_FAMILY_COLOR_BACKED"
+    },
+    {
+      "gameItemId": 182,
+      "name": "Bumblepumpkin",
+      "sourceTypes": [
+        "FARM"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_6:128:0",
+      "atlas": {
+        "sheet": "PAL_6.png",
+        "x": 128,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 183,
+      "name": "Yukumo Wood",
+      "sourceTypes": [
+        "GATHERING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_10:128:64",
+      "atlas": {
+        "sheet": "PAL_10.png",
+        "x": 128,
+        "y": 64,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 184,
+      "name": "Yukumo Wood+",
+      "sourceTypes": [
+        "GATHERING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_6:128:64",
+      "atlas": {
+        "sheet": "PAL_6.png",
+        "x": 128,
+        "y": 64,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 186,
+      "name": "Whetfish",
+      "sourceTypes": [
+        "FARM",
+        "FISHING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_10:32:0",
+      "atlas": {
+        "sheet": "PAL_10.png",
+        "x": 32,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 187,
+      "name": "Sushifish",
+      "sourceTypes": [
+        "FARM",
+        "FISHING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "SHARED_FAMILY_NEEDS_ATLAS_CELL_RESOLUTION",
+      "iconKey": "shared:fish:review",
+      "family": "fish",
+      "color": "review",
+      "confidence": "medium",
+      "resolutionMethod": "SOURCE_BACKED_FAMILY_COLOR_OR_FAMILY_ONLY",
+      "mustResolveBeforeProduction": true
+    },
+    {
+      "gameItemId": 188,
+      "name": "Sleepyfish",
+      "sourceTypes": [
+        "FARM",
+        "FISHING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_2:32:0",
+      "atlas": {
+        "sheet": "PAL_2.png",
+        "x": 32,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 189,
+      "name": "Pin Tuna",
+      "sourceTypes": [
+        "FARM",
+        "FISHING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_13:32:0",
+      "atlas": {
+        "sheet": "PAL_13.png",
+        "x": 32,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 190,
+      "name": "Popfish",
+      "sourceTypes": [
+        "FARM",
+        "FISHING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_13:32:0",
+      "atlas": {
+        "sheet": "PAL_13.png",
+        "x": 32,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 191,
+      "name": "Scatterfish",
+      "sourceTypes": [
+        "FARM",
+        "FISHING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_13:32:0",
+      "atlas": {
+        "sheet": "PAL_13.png",
+        "x": 32,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 192,
+      "name": "Burst Arowana",
+      "sourceTypes": [
+        "FARM",
+        "FISHING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_5:32:0",
+      "atlas": {
+        "sheet": "PAL_5.png",
+        "x": 32,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 193,
+      "name": "Bomb Arowana",
+      "sourceTypes": [
+        "FARM",
+        "FISHING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "FAMILY_COLOR_TO_EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_4:32:0",
+      "atlas": {
+        "sheet": "PAL_4.png",
+        "x": 32,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "family": "fish",
+      "color": "purple",
+      "confidence": "high",
+      "resolutionMethod": "CLASSIC_MHP3_FAMILY_COLOR_BACKED"
+    },
+    {
+      "gameItemId": 194,
+      "name": "Small Goldenfish",
+      "sourceTypes": [
+        "FARM",
+        "FISHING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_10:32:0",
+      "atlas": {
+        "sheet": "PAL_10.png",
+        "x": 32,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 195,
+      "name": "Wanchovy",
+      "sourceTypes": [
+        "FARM",
+        "FISHING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_5:32:0",
+      "atlas": {
+        "sheet": "PAL_5.png",
+        "x": 32,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 196,
+      "name": "Ancient Fish",
+      "sourceTypes": [
+        "FISHING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_13:32:0",
+      "atlas": {
+        "sheet": "PAL_13.png",
+        "x": 32,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 197,
+      "name": "Blue Cutthroat",
+      "sourceTypes": [
+        "FARM"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_2:32:0",
+      "atlas": {
+        "sheet": "PAL_2.png",
+        "x": 32,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 198,
+      "name": "Humspun Conch",
+      "sourceTypes": [
+        "FARM"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_0:32:16",
+      "atlas": {
+        "sheet": "PAL_0.png",
+        "x": 32,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 199,
+      "name": "Armored Beakfish",
+      "sourceTypes": [
+        "FARM"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "FAMILY_COLOR_TO_EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_0:32:0",
+      "atlas": {
+        "sheet": "PAL_0.png",
+        "x": 32,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "family": "fish",
+      "color": "white",
+      "confidence": "high",
+      "resolutionMethod": "CLASSIC_MHP3_FAMILY_COLOR_BACKED"
+    },
+    {
+      "gameItemId": 201,
+      "name": "Insect Husk",
+      "sourceTypes": [
+        "BUGNET",
+        "FARM",
+        "GATHERING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_13:96:0",
+      "atlas": {
+        "sheet": "PAL_13.png",
+        "x": 96,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 202,
+      "name": "Hawkmoth Larva",
+      "sourceTypes": [
+        "BUGNET",
+        "FARM"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "FAMILY_COLOR_TO_EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_5:96:0",
+      "atlas": {
+        "sheet": "PAL_5.png",
+        "x": 96,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "family": "bug",
+      "color": "green",
+      "confidence": "medium_high",
+      "resolutionMethod": "CLASSIC_MHP3_FAMILY_COLOR_BACKED"
+    },
+    {
+      "gameItemId": 203,
+      "name": "Stinkhopper",
+      "sourceTypes": [
+        "BUGNET",
+        "FARM"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_9:96:0",
+      "atlas": {
+        "sheet": "PAL_9.png",
+        "x": 96,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 204,
+      "name": "Snakebee Larva",
+      "sourceTypes": [
+        "FARM",
+        "GATHERING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "FAMILY_COLOR_TO_EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_6:96:0",
+      "atlas": {
+        "sheet": "PAL_6.png",
+        "x": 96,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "family": "bug",
+      "color": "orange",
+      "confidence": "medium_high",
+      "resolutionMethod": "CLASSIC_MHP3_FAMILY_COLOR_BACKED"
+    },
+    {
+      "gameItemId": 205,
+      "name": "Godbug",
+      "sourceTypes": [
+        "BUGNET",
+        "FARM"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_0:96:0",
+      "atlas": {
+        "sheet": "PAL_0.png",
+        "x": 96,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 206,
+      "name": "Bitterbug",
+      "sourceTypes": [
+        "BUGNET",
+        "FARM"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_12:96:0",
+      "atlas": {
+        "sheet": "PAL_12.png",
+        "x": 96,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 207,
+      "name": "Flashbug",
+      "sourceTypes": [
+        "BUGNET",
+        "FARM"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_10:96:0",
+      "atlas": {
+        "sheet": "PAL_10.png",
+        "x": 96,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 208,
+      "name": "Thunderbug",
+      "sourceTypes": [
+        "BUGNET",
+        "FARM"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_10:96:0",
+      "atlas": {
+        "sheet": "PAL_10.png",
+        "x": 96,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 209,
+      "name": "Carpenterbug",
+      "sourceTypes": [
+        "BUGNET",
+        "FARM"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_13:96:0",
+      "atlas": {
+        "sheet": "PAL_13.png",
+        "x": 96,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 210,
+      "name": "Killer Beetle",
+      "sourceTypes": [
+        "BUGNET",
+        "FARM"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_5:96:0",
+      "atlas": {
+        "sheet": "PAL_5.png",
+        "x": 96,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 211,
+      "name": "Hercudrome",
+      "sourceTypes": [
+        "BUGNET",
+        "FARM"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_9:96:0",
+      "atlas": {
+        "sheet": "PAL_9.png",
+        "x": 96,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 213,
+      "name": "King Scarab",
+      "sourceTypes": [
+        "BUGNET",
+        "FARM"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_4:96:0",
+      "atlas": {
+        "sheet": "PAL_4.png",
+        "x": 96,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 214,
+      "name": "Rare Scarab",
+      "sourceTypes": [
+        "BUGNET",
+        "FARM"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_10:96:0",
+      "atlas": {
+        "sheet": "PAL_10.png",
+        "x": 96,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 215,
+      "name": "Blossom Cricket",
+      "sourceTypes": [
+        "FARM"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_3:96:0",
+      "atlas": {
+        "sheet": "PAL_3.png",
+        "x": 96,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 216,
+      "name": "Butterfly Beetle",
+      "sourceTypes": [
+        "FARM"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_13:96:0",
+      "atlas": {
+        "sheet": "PAL_13.png",
+        "x": 96,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 217,
+      "name": "Stone",
+      "sourceTypes": [
+        "FARM",
+        "GATHERING",
+        "MINING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_13:144:0",
+      "atlas": {
+        "sheet": "PAL_13.png",
+        "x": 144,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 219,
+      "name": "Earth Crystal",
+      "sourceTypes": [
+        "FARM",
+        "GATHERING",
+        "MINING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_0:144:0",
+      "atlas": {
+        "sheet": "PAL_0.png",
+        "x": 144,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 220,
+      "name": "Machalite Ore",
+      "sourceTypes": [
+        "FARM",
+        "GATHERING",
+        "MINING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_12:144:0",
+      "atlas": {
+        "sheet": "PAL_12.png",
+        "x": 144,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 222,
+      "name": "Bealite Ore",
+      "sourceTypes": [
+        "FARM",
+        "MINING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_2:144:0",
+      "atlas": {
+        "sheet": "PAL_2.png",
+        "x": 144,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 224,
+      "name": "Lightcrystal",
+      "sourceTypes": [
+        "FARM",
+        "MINING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_13:144:0",
+      "atlas": {
+        "sheet": "PAL_13.png",
+        "x": 144,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 225,
+      "name": "Dragonite Ore",
+      "sourceTypes": [
+        "FARM",
+        "GATHERING",
+        "MINING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_5:144:0",
+      "atlas": {
+        "sheet": "PAL_5.png",
+        "x": 144,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 228,
+      "name": "Carbalite Ore",
+      "sourceTypes": [
+        "FARM",
+        "GATHERING",
+        "MINING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_4:144:0",
+      "atlas": {
+        "sheet": "PAL_4.png",
+        "x": 144,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 230,
+      "name": "Fucium Ore",
+      "sourceTypes": [
+        "FARM",
+        "MINING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_3:144:0",
+      "atlas": {
+        "sheet": "PAL_3.png",
+        "x": 144,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 235,
+      "name": "Mystery Bone",
+      "sourceTypes": [
+        "GATHERING",
+        "QUEST_REWARD"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_10:64:16",
+      "atlas": {
+        "sheet": "PAL_10.png",
+        "x": 64,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 236,
+      "name": "Unknown Skull",
+      "sourceTypes": [
+        "GATHERING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_10:64:16",
+      "atlas": {
+        "sheet": "PAL_10.png",
+        "x": 64,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 243,
+      "name": "Monster Hardbone",
+      "sourceTypes": [
+        "QUEST_REWARD"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_9:64:16",
+      "atlas": {
+        "sheet": "PAL_9.png",
+        "x": 64,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 244,
+      "name": "Avian Finebone",
+      "sourceTypes": [
+        "QUEST_REWARD"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_12:64:16",
+      "atlas": {
+        "sheet": "PAL_12.png",
+        "x": 64,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 247,
+      "name": "Dragonbone Relic",
+      "sourceTypes": [
+        "GATHERING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_0:64:16",
+      "atlas": {
+        "sheet": "PAL_0.png",
+        "x": 64,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 248,
+      "name": "Wyvern Fang",
+      "sourceTypes": [
+        "QUEST_REWARD"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_0:0:16",
+      "atlas": {
+        "sheet": "PAL_0.png",
+        "x": 0,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 269,
+      "name": "Monster Fluid",
+      "sourceTypes": [
+        "QUEST_REWARD"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_2:32:32",
+      "atlas": {
+        "sheet": "PAL_2.png",
+        "x": 32,
+        "y": 32,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 270,
+      "name": "Monster Broth",
+      "sourceTypes": [
+        "QUEST_REWARD"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_12:32:32",
+      "atlas": {
+        "sheet": "PAL_12.png",
+        "x": 32,
+        "y": 32,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 276,
+      "name": "Rhenoplos Shell",
+      "sourceTypes": [
+        "QUEST_REWARD"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_13:0:80",
+      "atlas": {
+        "sheet": "PAL_13.png",
+        "x": 0,
+        "y": 80,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 277,
+      "name": "Rheno Carapace",
+      "sourceTypes": [
+        "QUEST_REWARD"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_13:0:80",
+      "atlas": {
+        "sheet": "PAL_13.png",
+        "x": 0,
+        "y": 80,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 278,
+      "name": "Rhenoplos Scalp",
+      "sourceTypes": [
+        "QUEST_REWARD"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_13:48:16",
+      "atlas": {
+        "sheet": "PAL_13.png",
+        "x": 48,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 285,
+      "name": "Bnahabra Shell",
+      "sourceTypes": [
+        "FARM",
+        "QUEST_REWARD"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_10:0:80",
+      "atlas": {
+        "sheet": "PAL_10.png",
+        "x": 0,
+        "y": 80,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 286,
+      "name": "Bnaha Carapace",
+      "sourceTypes": [
+        "FARM",
+        "QUEST_REWARD"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_10:0:80",
+      "atlas": {
+        "sheet": "PAL_10.png",
+        "x": 0,
+        "y": 80,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 287,
+      "name": "Bnahabra Wing",
+      "sourceTypes": [
+        "FARM",
+        "QUEST_REWARD"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_10:80:0",
+      "atlas": {
+        "sheet": "PAL_10.png",
+        "x": 80,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 288,
+      "name": "Bnahabra Spine",
+      "sourceTypes": [
+        "FARM",
+        "QUEST_REWARD"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_10:0:16",
+      "atlas": {
+        "sheet": "PAL_10.png",
+        "x": 0,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 289,
+      "name": "Altaroth Jaw",
+      "sourceTypes": [
+        "FARM"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_7:0:16",
+      "atlas": {
+        "sheet": "PAL_7.png",
+        "x": 0,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 290,
+      "name": "Altaroth Stomach",
+      "sourceTypes": [
+        "FARM"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_7:144:32",
+      "atlas": {
+        "sheet": "PAL_7.png",
+        "x": 144,
+        "y": 32,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 291,
+      "name": "Quality Sac",
+      "sourceTypes": [
+        "FARM",
+        "QUEST_REWARD"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_7:144:32",
+      "atlas": {
+        "sheet": "PAL_7.png",
+        "x": 144,
+        "y": 32,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 292,
+      "name": "Bullfango Pelt",
+      "sourceTypes": [
+        "QUEST_REWARD"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_6:16:16",
+      "atlas": {
+        "sheet": "PAL_6.png",
+        "x": 16,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 298,
+      "name": "Jaggi Scale+",
+      "sourceTypes": [
+        "QUEST_REWARD"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_4:32:16",
+      "atlas": {
+        "sheet": "PAL_4.png",
+        "x": 32,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 299,
+      "name": "Jaggi Hide",
+      "sourceTypes": [
+        "QUEST_REWARD"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_4:16:16",
+      "atlas": {
+        "sheet": "PAL_4.png",
+        "x": 16,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 308,
+      "name": "Wroggi Scale+",
+      "sourceTypes": [
+        "QUEST_REWARD"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_6:32:16",
+      "atlas": {
+        "sheet": "PAL_6.png",
+        "x": 32,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 309,
+      "name": "Wroggi Hide",
+      "sourceTypes": [
+        "QUEST_REWARD"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_6:16:16",
+      "atlas": {
+        "sheet": "PAL_6.png",
+        "x": 16,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 317,
+      "name": "Baggi Scale+",
+      "sourceTypes": [
+        "QUEST_REWARD"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_2:32:16",
+      "atlas": {
+        "sheet": "PAL_2.png",
+        "x": 32,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 318,
+      "name": "Baggi Hide",
+      "sourceTypes": [
+        "QUEST_REWARD"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_2:16:16",
+      "atlas": {
+        "sheet": "PAL_2.png",
+        "x": 16,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 354,
+      "name": "Hydro Hide",
+      "sourceTypes": [
+        "QUEST_REWARD"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_7:16:16",
+      "atlas": {
+        "sheet": "PAL_7.png",
+        "x": 16,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 355,
+      "name": "Hydro Hide+",
+      "sourceTypes": [
+        "QUEST_REWARD"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_7:16:16",
+      "atlas": {
+        "sheet": "PAL_7.png",
+        "x": 16,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 356,
+      "name": "Immature Sponge",
+      "sourceTypes": [
+        "QUEST_REWARD"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_10:48:16",
+      "atlas": {
+        "sheet": "PAL_10.png",
+        "x": 48,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 527,
+      "name": "Uroktor Scale",
+      "sourceTypes": [
+        "QUEST_REWARD"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_9:32:16",
+      "atlas": {
+        "sheet": "PAL_9.png",
+        "x": 32,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 528,
+      "name": "Uroktor Scale+",
+      "sourceTypes": [
+        "QUEST_REWARD"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_9:32:16",
+      "atlas": {
+        "sheet": "PAL_9.png",
+        "x": 32,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 564,
+      "name": "Deviljho Saliva",
+      "sourceTypes": [
+        "QUEST_REWARD"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_1:32:32",
+      "atlas": {
+        "sheet": "PAL_1.png",
+        "x": 32,
+        "y": 32,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 596,
+      "name": "Rustshard",
+      "sourceTypes": [
+        "MINING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "SHARED_FAMILY_NEEDS_ATLAS_CELL_RESOLUTION",
+      "iconKey": "shared:question_mark_shard:review",
+      "family": "question_mark_shard",
+      "color": "review",
+      "confidence": "medium",
+      "resolutionMethod": "SOURCE_BACKED_FAMILY_COLOR_OR_FAMILY_ONLY",
+      "mustResolveBeforeProduction": true
+    },
+    {
+      "gameItemId": 597,
+      "name": "Ancient Shard",
+      "sourceTypes": [
+        "MINING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "SHARED_FAMILY_NEEDS_ATLAS_CELL_RESOLUTION",
+      "iconKey": "shared:question_mark_shard:review_ancient",
+      "family": "question_mark_shard",
+      "color": "review_ancient",
+      "confidence": "medium",
+      "resolutionMethod": "SOURCE_BACKED_FAMILY_COLOR_OR_FAMILY_ONLY",
+      "mustResolveBeforeProduction": true
+    },
+    {
+      "gameItemId": 605,
+      "name": "Commendation",
+      "sourceTypes": [
+        "QUEST_REWARD"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_6:96:48",
+      "atlas": {
+        "sheet": "PAL_6.png",
+        "x": 96,
+        "y": 48,
+        "width": 16,
+        "height": 16
+      },
+      "confidence": "high",
+      "resolutionMethod": "MHP3DB_DIRECT_OR_PREVIOUS_AUDIT"
+    },
+    {
+      "gameItemId": 672,
+      "name": "Ration",
+      "sourceTypes": [
+        "GATHERING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "SHARED_FAMILY_NEEDS_ATLAS_CELL_RESOLUTION",
+      "iconKey": "shared:meat:review_ration",
+      "family": "meat",
+      "color": "review_ration",
+      "confidence": "medium",
+      "resolutionMethod": "SOURCE_BACKED_FAMILY_COLOR_OR_FAMILY_ONLY",
+      "mustResolveBeforeProduction": true
+    },
+    {
+      "gameItemId": 686,
+      "name": "Royal Honey",
+      "sourceTypes": [
+        "GATHERING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "FAMILY_COLOR_TO_EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_9:80:0",
+      "atlas": {
+        "sheet": "PAL_9.png",
+        "x": 80,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "family": "honey",
+      "color": "red",
+      "confidence": "medium_high",
+      "resolutionMethod": "CLASSIC_MHP3_FAMILY_COLOR_BACKED"
+    },
+    {
+      "gameItemId": 687,
+      "name": "Special Mushroom",
+      "sourceTypes": [
+        "GATHERING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "FAMILY_COLOR_TO_EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_0:16:0",
+      "atlas": {
+        "sheet": "PAL_0.png",
+        "x": 16,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "family": "mushroom",
+      "color": "white",
+      "confidence": "high",
+      "resolutionMethod": "CLASSIC_MHP3_FAMILY_COLOR_BACKED"
+    },
+    {
+      "gameItemId": 688,
+      "name": "Select Mushroom",
+      "sourceTypes": [
+        "GATHERING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "FAMILY_COLOR_TO_EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_0:16:0",
+      "atlas": {
+        "sheet": "PAL_0.png",
+        "x": 16,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "family": "mushroom",
+      "color": "white",
+      "confidence": "high",
+      "resolutionMethod": "CLASSIC_MHP3_FAMILY_COLOR_BACKED"
+    },
+    {
+      "gameItemId": 690,
+      "name": "Great Mushroom",
+      "sourceTypes": [
+        "GATHERING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "FAMILY_COLOR_TO_EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_6:16:0",
+      "atlas": {
+        "sheet": "PAL_6.png",
+        "x": 16,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "family": "mushroom",
+      "color": "orange",
+      "confidence": "high",
+      "resolutionMethod": "CLASSIC_MHP3_FAMILY_COLOR_BACKED"
+    },
+    {
+      "gameItemId": 691,
+      "name": "Special Bamboo",
+      "sourceTypes": [
+        "GATHERING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "SHARED_FAMILY_NEEDS_ATLAS_CELL_RESOLUTION",
+      "iconKey": "shared:bamboo:review",
+      "family": "bamboo",
+      "color": "review",
+      "confidence": "medium",
+      "resolutionMethod": "SOURCE_BACKED_FAMILY_COLOR_OR_FAMILY_ONLY",
+      "mustResolveBeforeProduction": true
+    },
+    {
+      "gameItemId": 692,
+      "name": "Aurora Plant",
+      "sourceTypes": [
+        "GATHERING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "FAMILY_COLOR_TO_EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_0:48:0",
+      "atlas": {
+        "sheet": "PAL_0.png",
+        "x": 48,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "family": "herb",
+      "color": "white",
+      "confidence": "high",
+      "resolutionMethod": "CLASSIC_MHP3_FAMILY_COLOR_BACKED"
+    },
+    {
+      "gameItemId": 693,
+      "name": "Volcano Pepper",
+      "sourceTypes": [
+        "GATHERING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "FAMILY_COLOR_TO_EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_8:128:0",
+      "atlas": {
+        "sheet": "PAL_8.png",
+        "x": 128,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "family": "fruit",
+      "color": "ochre",
+      "confidence": "high",
+      "resolutionMethod": "CLASSIC_MHP3_FAMILY_COLOR_BACKED"
+    },
+    {
+      "gameItemId": 694,
+      "name": "Goldenfish",
+      "sourceTypes": [
+        "FISHING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "FAMILY_COLOR_TO_EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_10:32:0",
+      "atlas": {
+        "sheet": "PAL_10.png",
+        "x": 32,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "family": "fish",
+      "color": "yellow",
+      "confidence": "high",
+      "resolutionMethod": "CLASSIC_MHP3_FAMILY_COLOR_BACKED"
+    },
+    {
+      "gameItemId": 695,
+      "name": "Silverfish",
+      "sourceTypes": [
+        "FISHING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "FAMILY_COLOR_TO_EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_0:32:0",
+      "atlas": {
+        "sheet": "PAL_0.png",
+        "x": 32,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "family": "fish",
+      "color": "white",
+      "confidence": "high",
+      "resolutionMethod": "CLASSIC_MHP3_FAMILY_COLOR_BACKED"
+    },
+    {
+      "gameItemId": 696,
+      "name": "Brocadefish",
+      "sourceTypes": [
+        "FISHING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "FAMILY_COLOR_TO_EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_3:32:0",
+      "atlas": {
+        "sheet": "PAL_3.png",
+        "x": 32,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "family": "fish",
+      "color": "pink",
+      "confidence": "high",
+      "resolutionMethod": "CLASSIC_MHP3_FAMILY_COLOR_BACKED"
+    },
+    {
+      "gameItemId": 697,
+      "name": "Ryl Brocadefish",
+      "sourceTypes": [
+        "FISHING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "FAMILY_COLOR_TO_EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_9:32:0",
+      "atlas": {
+        "sheet": "PAL_9.png",
+        "x": 32,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "family": "fish",
+      "color": "red",
+      "confidence": "medium_high",
+      "resolutionMethod": "CLASSIC_MHP3_FAMILY_COLOR_BACKED"
+    },
+    {
+      "gameItemId": 698,
+      "name": "Royal Rhino",
+      "sourceTypes": [
+        "BUGNET"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "FAMILY_COLOR_TO_EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_2:96:0",
+      "atlas": {
+        "sheet": "PAL_2.png",
+        "x": 96,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "family": "bug",
+      "color": "light_blue",
+      "confidence": "medium",
+      "resolutionMethod": "CLASSIC_MHP3_FAMILY_COLOR_BACKED"
+    },
+    {
+      "gameItemId": 699,
+      "name": "Divine Rhino",
+      "sourceTypes": [
+        "BUGNET"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "SHARED_FAMILY_NEEDS_ATLAS_CELL_RESOLUTION",
+      "iconKey": "shared:bug:review",
+      "family": "bug",
+      "color": "review",
+      "confidence": "medium",
+      "resolutionMethod": "SOURCE_BACKED_FAMILY_COLOR_OR_FAMILY_ONLY",
+      "mustResolveBeforeProduction": true
+    },
+    {
+      "gameItemId": 700,
+      "name": "Silver Cricket",
+      "sourceTypes": [
+        "BUGNET"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "FAMILY_COLOR_TO_EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_0:96:0",
+      "atlas": {
+        "sheet": "PAL_0.png",
+        "x": 96,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "family": "bug",
+      "color": "white",
+      "confidence": "high",
+      "resolutionMethod": "CLASSIC_MHP3_FAMILY_COLOR_BACKED"
+    },
+    {
+      "gameItemId": 701,
+      "name": "Golden Cricket",
+      "sourceTypes": [
+        "BUGNET"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "FAMILY_COLOR_TO_EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_10:96:0",
+      "atlas": {
+        "sheet": "PAL_10.png",
+        "x": 96,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "family": "bug",
+      "color": "yellow",
+      "confidence": "medium_high",
+      "resolutionMethod": "CLASSIC_MHP3_FAMILY_COLOR_BACKED"
+    },
+    {
+      "gameItemId": 702,
+      "name": "Goldstone Piece",
+      "sourceTypes": [
+        "MINING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "FAMILY_COLOR_TO_EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_10:144:0",
+      "atlas": {
+        "sheet": "PAL_10.png",
+        "x": 144,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "family": "ore",
+      "color": "yellow",
+      "confidence": "high",
+      "resolutionMethod": "CLASSIC_MHP3_FAMILY_COLOR_BACKED"
+    },
+    {
+      "gameItemId": 703,
+      "name": "Goldstone Hunk",
+      "sourceTypes": [
+        "MINING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "FAMILY_COLOR_TO_EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_10:144:0",
+      "atlas": {
+        "sheet": "PAL_10.png",
+        "x": 144,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "family": "ore",
+      "color": "yellow",
+      "confidence": "high",
+      "resolutionMethod": "CLASSIC_MHP3_FAMILY_COLOR_BACKED"
+    },
+    {
+      "gameItemId": 704,
+      "name": "FlowrstonePiece",
+      "sourceTypes": [
+        "MINING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "FAMILY_COLOR_TO_EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_3:144:0",
+      "atlas": {
+        "sheet": "PAL_3.png",
+        "x": 144,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "family": "ore",
+      "color": "pink",
+      "confidence": "high",
+      "resolutionMethod": "CLASSIC_MHP3_FAMILY_COLOR_BACKED"
+    },
+    {
+      "gameItemId": 705,
+      "name": "Flowrstone Hunk",
+      "sourceTypes": [
+        "MINING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "FAMILY_COLOR_TO_EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_9:144:0",
+      "atlas": {
+        "sheet": "PAL_9.png",
+        "x": 144,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "family": "ore",
+      "color": "red",
+      "confidence": "medium_high",
+      "resolutionMethod": "CLASSIC_MHP3_FAMILY_COLOR_BACKED"
+    },
+    {
+      "gameItemId": 706,
+      "name": "Wyvern Crystal",
+      "sourceTypes": [
+        "MINING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "SHARED_FAMILY_NEEDS_ATLAS_CELL_RESOLUTION",
+      "iconKey": "shared:crystal_or_ore:review",
+      "family": "crystal_or_ore",
+      "color": "review",
+      "confidence": "medium",
+      "resolutionMethod": "SOURCE_BACKED_FAMILY_COLOR_OR_FAMILY_ONLY",
+      "mustResolveBeforeProduction": true
+    },
+    {
+      "gameItemId": 707,
+      "name": "Golden Bone",
+      "sourceTypes": [
+        "GATHERING",
+        "MINING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "FAMILY_COLOR_TO_EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_10:64:16",
+      "atlas": {
+        "sheet": "PAL_10.png",
+        "x": 64,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "family": "bone",
+      "color": "yellow",
+      "confidence": "medium_high",
+      "resolutionMethod": "CLASSIC_MHP3_FAMILY_COLOR_BACKED"
+    },
+    {
+      "gameItemId": 708,
+      "name": "Bloodstone",
+      "sourceTypes": [
+        "MINING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "FAMILY_COLOR_TO_EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_9:144:0",
+      "atlas": {
+        "sheet": "PAL_9.png",
+        "x": 144,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "family": "ore",
+      "color": "red",
+      "confidence": "high",
+      "resolutionMethod": "CLASSIC_MHP3_FAMILY_COLOR_BACKED"
+    },
+    {
+      "gameItemId": 709,
+      "name": "Dark Bloodstone",
+      "sourceTypes": [
+        "MINING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "SHARED_FAMILY_NEEDS_ATLAS_CELL_RESOLUTION",
+      "iconKey": "shared:ore:review_dark_bloodstone",
+      "family": "ore",
+      "color": "review_dark_bloodstone",
+      "confidence": "medium",
+      "resolutionMethod": "SOURCE_BACKED_FAMILY_COLOR_OR_FAMILY_ONLY",
+      "mustResolveBeforeProduction": true
+    },
+    {
+      "gameItemId": 710,
+      "name": "Coal",
+      "sourceTypes": [
+        "MINING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "FAMILY_COLOR_TO_EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_13:144:0",
+      "atlas": {
+        "sheet": "PAL_13.png",
+        "x": 144,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "family": "ore",
+      "color": "black",
+      "confidence": "high",
+      "resolutionMethod": "CLASSIC_MHP3_FAMILY_COLOR_BACKED"
+    },
+    {
+      "gameItemId": 711,
+      "name": "Saturated Coal",
+      "sourceTypes": [
+        "MINING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "FAMILY_COLOR_TO_EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_9:144:0",
+      "atlas": {
+        "sheet": "PAL_9.png",
+        "x": 144,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "family": "ore",
+      "color": "red",
+      "confidence": "high",
+      "resolutionMethod": "CLASSIC_MHP3_FAMILY_COLOR_BACKED"
+    },
+    {
+      "gameItemId": 713,
+      "name": "Wyvern Egg",
+      "sourceTypes": [
+        "GATHERING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "SHARED_FAMILY_NEEDS_ATLAS_CELL_RESOLUTION",
+      "iconKey": "shared:egg:white",
+      "family": "egg",
+      "color": "white",
+      "confidence": "high",
+      "resolutionMethod": "SOURCE_BACKED_FAMILY_COLOR_OR_FAMILY_ONLY",
+      "mustResolveBeforeProduction": true
+    },
+    {
+      "gameItemId": 714,
+      "name": "Herbivore Egg",
+      "sourceTypes": [
+        "GATHERING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "SHARED_FAMILY_NEEDS_ATLAS_CELL_RESOLUTION",
+      "iconKey": "shared:egg:ochre",
+      "family": "egg",
+      "color": "ochre",
+      "confidence": "high",
+      "resolutionMethod": "SOURCE_BACKED_FAMILY_COLOR_OR_FAMILY_ONLY",
+      "mustResolveBeforeProduction": true
+    },
+    {
+      "gameItemId": 717,
+      "name": "Sootstone Ore",
+      "sourceTypes": [
+        "MINING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "FAMILY_COLOR_TO_EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_13:144:0",
+      "atlas": {
+        "sheet": "PAL_13.png",
+        "x": 144,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "family": "ore",
+      "color": "black",
+      "confidence": "high",
+      "resolutionMethod": "CLASSIC_MHP3_FAMILY_COLOR_BACKED"
+    },
+    {
+      "gameItemId": 718,
+      "name": "Powderstone",
+      "sourceTypes": [
+        "GATHERING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "FAMILY_COLOR_TO_EXACT_ATLAS_CELL",
+      "iconKey": "atlas:PAL_9:144:0",
+      "atlas": {
+        "sheet": "PAL_9.png",
+        "x": 144,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "family": "ore",
+      "color": "red",
+      "confidence": "high",
+      "resolutionMethod": "CLASSIC_MHP3_FAMILY_COLOR_BACKED"
+    },
+    {
+      "gameItemId": 803,
+      "name": "Armor Stone",
+      "sourceTypes": [
+        "FARM"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "SHARED_FAMILY_NEEDS_ATLAS_CELL_RESOLUTION",
+      "iconKey": "shared:armor_sphere:review_armor_stone",
+      "family": "armor_sphere",
+      "color": "review_armor_stone",
+      "confidence": "medium",
+      "resolutionMethod": "SOURCE_BACKED_FAMILY_COLOR_OR_FAMILY_ONLY",
+      "mustResolveBeforeProduction": true
+    },
+    {
+      "gameItemId": 804,
+      "name": "Armor Sphere",
+      "sourceTypes": [
+        "FARM",
+        "MINING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "SHARED_FAMILY_NEEDS_ATLAS_CELL_RESOLUTION",
+      "iconKey": "shared:armor_sphere:blue",
+      "family": "armor_sphere",
+      "color": "blue",
+      "confidence": "medium_high",
+      "resolutionMethod": "SOURCE_BACKED_FAMILY_COLOR_OR_FAMILY_ONLY",
+      "mustResolveBeforeProduction": true
+    },
+    {
+      "gameItemId": 805,
+      "name": "Armor Sphere+",
+      "sourceTypes": [
+        "FARM",
+        "MINING",
+        "QUEST_REWARD"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "SHARED_FAMILY_NEEDS_ATLAS_CELL_RESOLUTION",
+      "iconKey": "shared:armor_sphere:green",
+      "family": "armor_sphere",
+      "color": "green",
+      "confidence": "medium_high",
+      "resolutionMethod": "SOURCE_BACKED_FAMILY_COLOR_OR_FAMILY_ONLY",
+      "mustResolveBeforeProduction": true
+    },
+    {
+      "gameItemId": 806,
+      "name": "Hrd Armor Sphere",
+      "sourceTypes": [
+        "FARM",
+        "MINING",
+        "QUEST_REWARD"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "SHARED_FAMILY_NEEDS_ATLAS_CELL_RESOLUTION",
+      "iconKey": "shared:armor_sphere:purple",
+      "family": "armor_sphere",
+      "color": "purple",
+      "confidence": "medium_high",
+      "resolutionMethod": "SOURCE_BACKED_FAMILY_COLOR_OR_FAMILY_ONLY",
+      "mustResolveBeforeProduction": true
+    },
+    {
+      "gameItemId": 807,
+      "name": "Hvy Armor Sphere",
+      "sourceTypes": [
+        "FARM",
+        "MINING",
+        "QUEST_REWARD"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "SHARED_FAMILY_NEEDS_ATLAS_CELL_RESOLUTION",
+      "iconKey": "shared:armor_sphere:red",
+      "family": "armor_sphere",
+      "color": "red",
+      "confidence": "medium_high",
+      "resolutionMethod": "SOURCE_BACKED_FAMILY_COLOR_OR_FAMILY_ONLY",
+      "mustResolveBeforeProduction": true
+    },
+    {
+      "gameItemId": 808,
+      "name": "Mystery Charm",
+      "sourceTypes": [
+        "MINING",
+        "QUEST_REWARD"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "SHARED_FAMILY_NEEDS_ATLAS_CELL_RESOLUTION",
+      "iconKey": "shared:charm:white",
+      "family": "charm",
+      "color": "white",
+      "confidence": "high",
+      "resolutionMethod": "SOURCE_BACKED_FAMILY_COLOR_OR_FAMILY_ONLY",
+      "mustResolveBeforeProduction": true
+    },
+    {
+      "gameItemId": 809,
+      "name": "Shining Charm",
+      "sourceTypes": [
+        "MINING",
+        "QUEST_REWARD"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "SHARED_FAMILY_NEEDS_ATLAS_CELL_RESOLUTION",
+      "iconKey": "shared:charm:yellow",
+      "family": "charm",
+      "color": "yellow",
+      "confidence": "high",
+      "resolutionMethod": "SOURCE_BACKED_FAMILY_COLOR_OR_FAMILY_ONLY",
+      "mustResolveBeforeProduction": true
+    },
+    {
+      "gameItemId": 810,
+      "name": "Timeworn Charm",
+      "sourceTypes": [
+        "MINING",
+        "QUEST_REWARD"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "SHARED_FAMILY_NEEDS_ATLAS_CELL_RESOLUTION",
+      "iconKey": "shared:charm:red",
+      "family": "charm",
+      "color": "red",
+      "confidence": "high",
+      "resolutionMethod": "SOURCE_BACKED_FAMILY_COLOR_OR_FAMILY_ONLY",
+      "mustResolveBeforeProduction": true
+    },
+    {
+      "gameItemId": 811,
+      "name": "Aquaglow Jewel",
+      "sourceTypes": [
+        "FARM",
+        "MINING",
+        "QUEST_REWARD"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "SHARED_FAMILY_NEEDS_ATLAS_CELL_RESOLUTION",
+      "iconKey": "shared:jewel:light_blue",
+      "family": "jewel",
+      "color": "light_blue",
+      "confidence": "medium_high",
+      "resolutionMethod": "SOURCE_BACKED_FAMILY_COLOR_OR_FAMILY_ONLY",
+      "mustResolveBeforeProduction": true
+    },
+    {
+      "gameItemId": 812,
+      "name": "Sunspire Jewel",
+      "sourceTypes": [
+        "FARM",
+        "MINING",
+        "QUEST_REWARD"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "SHARED_FAMILY_NEEDS_ATLAS_CELL_RESOLUTION",
+      "iconKey": "shared:jewel:yellow",
+      "family": "jewel",
+      "color": "yellow",
+      "confidence": "medium_high",
+      "resolutionMethod": "SOURCE_BACKED_FAMILY_COLOR_OR_FAMILY_ONLY",
+      "mustResolveBeforeProduction": true
+    },
+    {
+      "gameItemId": 813,
+      "name": "Bloodrun Jewel",
+      "sourceTypes": [
+        "FARM",
+        "MINING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "SHARED_FAMILY_NEEDS_ATLAS_CELL_RESOLUTION",
+      "iconKey": "shared:jewel:purple",
+      "family": "jewel",
+      "color": "purple",
+      "confidence": "medium_high",
+      "resolutionMethod": "SOURCE_BACKED_FAMILY_COLOR_OR_FAMILY_ONLY",
+      "mustResolveBeforeProduction": true
+    },
+    {
+      "gameItemId": 814,
+      "name": "Lazurite Jewel",
+      "sourceTypes": [
+        "FARM",
+        "MINING"
+      ],
+      "alreadyInCurrentIconRegistry": false,
+      "resolutionKind": "SHARED_FAMILY_NEEDS_ATLAS_CELL_RESOLUTION",
+      "iconKey": "shared:jewel:blue",
+      "family": "jewel",
+      "color": "blue",
+      "confidence": "medium_high",
+      "resolutionMethod": "SOURCE_BACKED_FAMILY_COLOR_OR_FAMILY_ONLY",
+      "mustResolveBeforeProduction": true
+    }
+  ],
+  "sharedResolutionQueue": [
+    {
+      "sharedKey": "shared:meat:red",
+      "family": "meat",
+      "color": "red",
+      "confidence": "high",
+      "items": [
+        {
+          "gameItemId": 39,
+          "name": "Raw Meat"
+        }
+      ],
+      "requiredAction": "Resolve one exact 16x16 cell from the pinned MHP3 atlas (or reuse an already-integrated iconKey if pixel-identical). Never create per-item bitmaps."
+    },
+    {
+      "sharedKey": "shared:throwing_knife:review",
+      "family": "throwing_knife",
+      "color": "review",
+      "confidence": "medium",
+      "items": [
+        {
+          "gameItemId": 53,
+          "name": "Throwing Knife"
+        }
+      ],
+      "requiredAction": "Resolve one exact 16x16 cell from the pinned MHP3 atlas (or reuse an already-integrated iconKey if pixel-identical). Never create per-item bitmaps."
+    },
+    {
+      "sharedKey": "shared:thrown_ball:pink",
+      "family": "thrown_ball",
+      "color": "pink",
+      "confidence": "high",
+      "items": [
+        {
+          "gameItemId": 59,
+          "name": "Paintball"
+        }
+      ],
+      "requiredAction": "Resolve one exact 16x16 cell from the pinned MHP3 atlas (or reuse an already-integrated iconKey if pixel-identical). Never create per-item bitmaps."
+    },
+    {
+      "sharedKey": "shared:dung:yellow",
+      "family": "dung",
+      "color": "yellow",
+      "confidence": "high",
+      "items": [
+        {
+          "gameItemId": 62,
+          "name": "Dung"
+        }
+      ],
+      "requiredAction": "Resolve one exact 16x16 cell from the pinned MHP3 atlas (or reuse an already-integrated iconKey if pixel-identical). Never create per-item bitmaps."
+    },
+    {
+      "sharedKey": "shared:dung:orange",
+      "family": "dung",
+      "color": "orange",
+      "confidence": "high",
+      "items": [
+        {
+          "gameItemId": 63,
+          "name": "Wyvern Dung"
+        }
+      ],
+      "requiredAction": "Resolve one exact 16x16 cell from the pinned MHP3 atlas (or reuse an already-integrated iconKey if pixel-identical). Never create per-item bitmaps."
+    },
+    {
+      "sharedKey": "shared:web:white",
+      "family": "web",
+      "color": "white",
+      "confidence": "high",
+      "items": [
+        {
+          "gameItemId": 69,
+          "name": "Spider Web"
+        }
+      ],
+      "requiredAction": "Resolve one exact 16x16 cell from the pinned MHP3 atlas (or reuse an already-integrated iconKey if pixel-identical). Never create per-item bitmaps."
+    },
+    {
+      "sharedKey": "shared:large_barrel:review",
+      "family": "large_barrel",
+      "color": "review",
+      "confidence": "medium",
+      "items": [
+        {
+          "gameItemId": 76,
+          "name": "Large Barrel"
+        }
+      ],
+      "requiredAction": "Resolve one exact 16x16 cell from the pinned MHP3 atlas (or reuse an already-integrated iconKey if pixel-identical). Never create per-item bitmaps."
+    },
+    {
+      "sharedKey": "shared:whetstone:yellow",
+      "family": "whetstone",
+      "color": "yellow",
+      "confidence": "high",
+      "items": [
+        {
+          "gameItemId": 91,
+          "name": "Whetstone"
+        }
+      ],
+      "requiredAction": "Resolve one exact 16x16 cell from the pinned MHP3 atlas (or reuse an already-integrated iconKey if pixel-identical). Never create per-item bitmaps."
+    },
+    {
+      "sharedKey": "shared:ammo_resource:black",
+      "family": "ammo_resource",
+      "color": "black",
+      "confidence": "high",
+      "items": [
+        {
+          "gameItemId": 92,
+          "name": "Huskberry"
+        },
+        {
+          "gameItemId": 177,
+          "name": "Needleberry"
+        }
+      ],
+      "requiredAction": "Resolve one exact 16x16 cell from the pinned MHP3 atlas (or reuse an already-integrated iconKey if pixel-identical). Never create per-item bitmaps."
+    },
+    {
+      "sharedKey": "shared:ammo_resource:review",
+      "family": "ammo_resource",
+      "color": "review",
+      "confidence": "medium",
+      "items": [
+        {
+          "gameItemId": 93,
+          "name": "Bone Husk"
+        }
+      ],
+      "requiredAction": "Resolve one exact 16x16 cell from the pinned MHP3 atlas (or reuse an already-integrated iconKey if pixel-identical). Never create per-item bitmaps."
+    },
+    {
+      "sharedKey": "shared:fishing_bait:black",
+      "family": "fishing_bait",
+      "color": "black",
+      "confidence": "high",
+      "items": [
+        {
+          "gameItemId": 138,
+          "name": "Worm"
+        }
+      ],
+      "requiredAction": "Resolve one exact 16x16 cell from the pinned MHP3 atlas (or reuse an already-integrated iconKey if pixel-identical). Never create per-item bitmaps."
+    },
+    {
+      "sharedKey": "shared:fishing_bait:pink",
+      "family": "fishing_bait",
+      "color": "pink",
+      "confidence": "high",
+      "items": [
+        {
+          "gameItemId": 139,
+          "name": "Mega Fishing Fly"
+        }
+      ],
+      "requiredAction": "Resolve one exact 16x16 cell from the pinned MHP3 atlas (or reuse an already-integrated iconKey if pixel-identical). Never create per-item bitmaps."
+    },
+    {
+      "sharedKey": "shared:herb:review",
+      "family": "herb",
+      "color": "review",
+      "confidence": "medium",
+      "items": [
+        {
+          "gameItemId": 158,
+          "name": "Felvine"
+        }
+      ],
+      "requiredAction": "Resolve one exact 16x16 cell from the pinned MHP3 atlas (or reuse an already-integrated iconKey if pixel-identical). Never create per-item bitmaps."
+    },
+    {
+      "sharedKey": "shared:fish:review",
+      "family": "fish",
+      "color": "review",
+      "confidence": "medium",
+      "items": [
+        {
+          "gameItemId": 187,
+          "name": "Sushifish"
+        }
+      ],
+      "requiredAction": "Resolve one exact 16x16 cell from the pinned MHP3 atlas (or reuse an already-integrated iconKey if pixel-identical). Never create per-item bitmaps."
+    },
+    {
+      "sharedKey": "shared:question_mark_shard:review",
+      "family": "question_mark_shard",
+      "color": "review",
+      "confidence": "medium",
+      "items": [
+        {
+          "gameItemId": 596,
+          "name": "Rustshard"
+        }
+      ],
+      "requiredAction": "Resolve one exact 16x16 cell from the pinned MHP3 atlas (or reuse an already-integrated iconKey if pixel-identical). Never create per-item bitmaps."
+    },
+    {
+      "sharedKey": "shared:question_mark_shard:review_ancient",
+      "family": "question_mark_shard",
+      "color": "review_ancient",
+      "confidence": "medium",
+      "items": [
+        {
+          "gameItemId": 597,
+          "name": "Ancient Shard"
+        }
+      ],
+      "requiredAction": "Resolve one exact 16x16 cell from the pinned MHP3 atlas (or reuse an already-integrated iconKey if pixel-identical). Never create per-item bitmaps."
+    },
+    {
+      "sharedKey": "shared:meat:review_ration",
+      "family": "meat",
+      "color": "review_ration",
+      "confidence": "medium",
+      "items": [
+        {
+          "gameItemId": 672,
+          "name": "Ration"
+        }
+      ],
+      "requiredAction": "Resolve one exact 16x16 cell from the pinned MHP3 atlas (or reuse an already-integrated iconKey if pixel-identical). Never create per-item bitmaps."
+    },
+    {
+      "sharedKey": "shared:bamboo:review",
+      "family": "bamboo",
+      "color": "review",
+      "confidence": "medium",
+      "items": [
+        {
+          "gameItemId": 691,
+          "name": "Special Bamboo"
+        }
+      ],
+      "requiredAction": "Resolve one exact 16x16 cell from the pinned MHP3 atlas (or reuse an already-integrated iconKey if pixel-identical). Never create per-item bitmaps."
+    },
+    {
+      "sharedKey": "shared:bug:review",
+      "family": "bug",
+      "color": "review",
+      "confidence": "medium",
+      "items": [
+        {
+          "gameItemId": 699,
+          "name": "Divine Rhino"
+        }
+      ],
+      "requiredAction": "Resolve one exact 16x16 cell from the pinned MHP3 atlas (or reuse an already-integrated iconKey if pixel-identical). Never create per-item bitmaps."
+    },
+    {
+      "sharedKey": "shared:crystal_or_ore:review",
+      "family": "crystal_or_ore",
+      "color": "review",
+      "confidence": "medium",
+      "items": [
+        {
+          "gameItemId": 706,
+          "name": "Wyvern Crystal"
+        }
+      ],
+      "requiredAction": "Resolve one exact 16x16 cell from the pinned MHP3 atlas (or reuse an already-integrated iconKey if pixel-identical). Never create per-item bitmaps."
+    },
+    {
+      "sharedKey": "shared:ore:review_dark_bloodstone",
+      "family": "ore",
+      "color": "review_dark_bloodstone",
+      "confidence": "medium",
+      "items": [
+        {
+          "gameItemId": 709,
+          "name": "Dark Bloodstone"
+        }
+      ],
+      "requiredAction": "Resolve one exact 16x16 cell from the pinned MHP3 atlas (or reuse an already-integrated iconKey if pixel-identical). Never create per-item bitmaps."
+    },
+    {
+      "sharedKey": "shared:egg:white",
+      "family": "egg",
+      "color": "white",
+      "confidence": "high",
+      "items": [
+        {
+          "gameItemId": 713,
+          "name": "Wyvern Egg"
+        }
+      ],
+      "requiredAction": "Resolve one exact 16x16 cell from the pinned MHP3 atlas (or reuse an already-integrated iconKey if pixel-identical). Never create per-item bitmaps."
+    },
+    {
+      "sharedKey": "shared:egg:ochre",
+      "family": "egg",
+      "color": "ochre",
+      "confidence": "high",
+      "items": [
+        {
+          "gameItemId": 714,
+          "name": "Herbivore Egg"
+        }
+      ],
+      "requiredAction": "Resolve one exact 16x16 cell from the pinned MHP3 atlas (or reuse an already-integrated iconKey if pixel-identical). Never create per-item bitmaps."
+    },
+    {
+      "sharedKey": "shared:armor_sphere:review_armor_stone",
+      "family": "armor_sphere",
+      "color": "review_armor_stone",
+      "confidence": "medium",
+      "items": [
+        {
+          "gameItemId": 803,
+          "name": "Armor Stone"
+        }
+      ],
+      "requiredAction": "Resolve one exact 16x16 cell from the pinned MHP3 atlas (or reuse an already-integrated iconKey if pixel-identical). Never create per-item bitmaps."
+    },
+    {
+      "sharedKey": "shared:armor_sphere:blue",
+      "family": "armor_sphere",
+      "color": "blue",
+      "confidence": "medium_high",
+      "items": [
+        {
+          "gameItemId": 804,
+          "name": "Armor Sphere"
+        }
+      ],
+      "requiredAction": "Resolve one exact 16x16 cell from the pinned MHP3 atlas (or reuse an already-integrated iconKey if pixel-identical). Never create per-item bitmaps."
+    },
+    {
+      "sharedKey": "shared:armor_sphere:green",
+      "family": "armor_sphere",
+      "color": "green",
+      "confidence": "medium_high",
+      "items": [
+        {
+          "gameItemId": 805,
+          "name": "Armor Sphere+"
+        }
+      ],
+      "requiredAction": "Resolve one exact 16x16 cell from the pinned MHP3 atlas (or reuse an already-integrated iconKey if pixel-identical). Never create per-item bitmaps."
+    },
+    {
+      "sharedKey": "shared:armor_sphere:purple",
+      "family": "armor_sphere",
+      "color": "purple",
+      "confidence": "medium_high",
+      "items": [
+        {
+          "gameItemId": 806,
+          "name": "Hrd Armor Sphere"
+        }
+      ],
+      "requiredAction": "Resolve one exact 16x16 cell from the pinned MHP3 atlas (or reuse an already-integrated iconKey if pixel-identical). Never create per-item bitmaps."
+    },
+    {
+      "sharedKey": "shared:armor_sphere:red",
+      "family": "armor_sphere",
+      "color": "red",
+      "confidence": "medium_high",
+      "items": [
+        {
+          "gameItemId": 807,
+          "name": "Hvy Armor Sphere"
+        }
+      ],
+      "requiredAction": "Resolve one exact 16x16 cell from the pinned MHP3 atlas (or reuse an already-integrated iconKey if pixel-identical). Never create per-item bitmaps."
+    },
+    {
+      "sharedKey": "shared:charm:white",
+      "family": "charm",
+      "color": "white",
+      "confidence": "high",
+      "items": [
+        {
+          "gameItemId": 808,
+          "name": "Mystery Charm"
+        }
+      ],
+      "requiredAction": "Resolve one exact 16x16 cell from the pinned MHP3 atlas (or reuse an already-integrated iconKey if pixel-identical). Never create per-item bitmaps."
+    },
+    {
+      "sharedKey": "shared:charm:yellow",
+      "family": "charm",
+      "color": "yellow",
+      "confidence": "high",
+      "items": [
+        {
+          "gameItemId": 809,
+          "name": "Shining Charm"
+        }
+      ],
+      "requiredAction": "Resolve one exact 16x16 cell from the pinned MHP3 atlas (or reuse an already-integrated iconKey if pixel-identical). Never create per-item bitmaps."
+    },
+    {
+      "sharedKey": "shared:charm:red",
+      "family": "charm",
+      "color": "red",
+      "confidence": "high",
+      "items": [
+        {
+          "gameItemId": 810,
+          "name": "Timeworn Charm"
+        }
+      ],
+      "requiredAction": "Resolve one exact 16x16 cell from the pinned MHP3 atlas (or reuse an already-integrated iconKey if pixel-identical). Never create per-item bitmaps."
+    },
+    {
+      "sharedKey": "shared:jewel:light_blue",
+      "family": "jewel",
+      "color": "light_blue",
+      "confidence": "medium_high",
+      "items": [
+        {
+          "gameItemId": 811,
+          "name": "Aquaglow Jewel"
+        }
+      ],
+      "requiredAction": "Resolve one exact 16x16 cell from the pinned MHP3 atlas (or reuse an already-integrated iconKey if pixel-identical). Never create per-item bitmaps."
+    },
+    {
+      "sharedKey": "shared:jewel:yellow",
+      "family": "jewel",
+      "color": "yellow",
+      "confidence": "medium_high",
+      "items": [
+        {
+          "gameItemId": 812,
+          "name": "Sunspire Jewel"
+        }
+      ],
+      "requiredAction": "Resolve one exact 16x16 cell from the pinned MHP3 atlas (or reuse an already-integrated iconKey if pixel-identical). Never create per-item bitmaps."
+    },
+    {
+      "sharedKey": "shared:jewel:purple",
+      "family": "jewel",
+      "color": "purple",
+      "confidence": "medium_high",
+      "items": [
+        {
+          "gameItemId": 813,
+          "name": "Bloodrun Jewel"
+        }
+      ],
+      "requiredAction": "Resolve one exact 16x16 cell from the pinned MHP3 atlas (or reuse an already-integrated iconKey if pixel-identical). Never create per-item bitmaps."
+    },
+    {
+      "sharedKey": "shared:jewel:blue",
+      "family": "jewel",
+      "color": "blue",
+      "confidence": "medium_high",
+      "items": [
+        {
+          "gameItemId": 814,
+          "name": "Lazurite Jewel"
+        }
+      ],
+      "requiredAction": "Resolve one exact 16x16 cell from the pinned MHP3 atlas (or reuse an already-integrated iconKey if pixel-identical). Never create per-item bitmaps."
+    }
+  ]
+}

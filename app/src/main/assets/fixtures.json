@@ -1,0 +1,47 @@
+{
+  "monsters": [
+    {
+      "id":"nargacuga","name":"Nargacuga","subtitle":"Flying Wyvern - Weakness: Fire","type":"Flying Wyvern","threatLevel":6,
+      "weaknesses":{"fire":3,"water":1,"thunder":2,"ice":1,"dragon":1},"recommendedParts":["Head","Forelegs","Tail"],
+      "breakableParts":[{"name":"Head","action":"Break"},{"name":"Wing Blades","action":"Break","count":2},{"name":"Tail","action":"Sever"}],
+      "rewards":[{"item":"Nargacuga Scale+","sourceType":"Carve","condition":"Body","chance":"28%"},{"item":"Nargacuga Marrow","sourceType":"Capture","condition":"Capture reward","chance":"4%"},{"item":"Nargacuga Fang+","sourceType":"Part Break","condition":"Head","chance":"18%"}],
+      "hitzones":[{"part":"Head","cut":50,"impact":55,"shot":45,"fire":25,"water":10,"thunder":20,"ice":10,"dragon":10},{"part":"Forelegs","cut":30,"impact":30,"shot":25,"fire":20,"water":5,"thunder":15,"ice":5,"dragon":5},{"part":"Tail","cut":40,"impact":35,"shot":30,"fire":20,"water":10,"thunder":15,"ice":10,"dragon":10}],"questIds":["shadow_dance","sudden_fang"]
+    },
+    {
+      "id":"zinogre","name":"Zinogre","subtitle":"Fanged Wyvern - Weakness: Ice","type":"Fanged Wyvern","threatLevel":6,
+      "weaknesses":{"fire":1,"water":2,"thunder":0,"ice":3,"dragon":1},"recommendedParts":["Head","Forelegs","Back"],
+      "breakableParts":[{"name":"Horns","action":"Break","count":2},{"name":"Forelegs","action":"Break","count":2},{"name":"Tail","action":"Sever"}],
+      "rewards":[{"item":"Zinogre Claw+","sourceType":"Part Break","condition":"Forelegs","chance":"22%"},{"item":"Thunderbug Jewel","sourceType":"Capture","condition":"Capture reward","chance":"15%"},{"item":"Zinogre Shell","sourceType":"Carve","condition":"Body","chance":"30%"}],
+      "hitzones":[{"part":"Head","cut":55,"impact":60,"shot":45,"fire":10,"water":20,"thunder":0,"ice":25,"dragon":5},{"part":"Forelegs","cut":40,"impact":40,"shot":35,"fire":10,"water":15,"thunder":0,"ice":20,"dragon":5},{"part":"Back","cut":45,"impact":40,"shot":35,"fire":10,"water":20,"thunder":0,"ice":25,"dragon":5}],"questIds":["thunder_call"]
+    },
+    {
+      "id":"rathalos","name":"Rathalos","subtitle":"Flying Wyvern - Weakness: Dragon","type":"Flying Wyvern","threatLevel":6,
+      "weaknesses":{"fire":0,"water":1,"thunder":2,"ice":1,"dragon":3},"recommendedParts":["Head","Wings","Tail"],
+      "breakableParts":[{"name":"Head","action":"Break"},{"name":"Wings","action":"Break","count":2},{"name":"Tail","action":"Sever"}],
+      "rewards":[{"item":"Rathalos Plate","sourceType":"Carve","condition":"Tail","chance":"3%"},{"item":"Rathalos Webbing","sourceType":"Part Break","condition":"Wings","chance":"25%"},{"item":"Rathalos Shell","sourceType":"Capture","condition":"Capture reward","chance":"24%"}],
+      "hitzones":[{"part":"Head","cut":65,"impact":70,"shot":55,"fire":0,"water":15,"thunder":20,"ice":15,"dragon":25},{"part":"Wings","cut":35,"impact":30,"shot":40,"fire":0,"water":10,"thunder":15,"ice":10,"dragon":20},{"part":"Tail","cut":45,"impact":40,"shot":35,"fire":0,"water":10,"thunder":15,"ice":10,"dragon":20}],"questIds":["sky_king"]
+    }
+  ],
+  "materials": [
+    {"id":"narga_marrow","name":"Nargacuga Marrow","rarity":5,"description":"Rare Nargacuga marrow. Demo data.","sources":[{"source":"Nargacuga","rank":"High Rank","method":"Tail Carve","chance":"12%"},{"source":"Nargacuga","rank":"High Rank","method":"Body Carve","chance":"7%"},{"source":"Nargacuga","rank":"High Rank","method":"Capture","chance":"4%"},{"source":"Quest Reward","rank":"High Rank","method":"Quest Reward","chance":"5%"}],"questIds":["shadow_dance","sudden_fang"],"uses":["Shadow Fang · Required: 5","Nargacuga Helm · Required: 2"]},
+    {"id":"narga_fang","name":"Nargacuga Fang+","rarity":6,"description":"A sharp High Rank fang.","sources":[{"source":"Nargacuga","rank":"High Rank","method":"Part Break","chance":"18%"}],"questIds":["shadow_dance"],"uses":["Predator Blades · Required: 4"]},
+    {"id":"narga_scale","name":"Nargacuga Scale+","rarity":6,"description":"A durable dark scale.","sources":[{"source":"Nargacuga","rank":"High Rank","method":"Body Carve","chance":"28%"}],"questIds":["sudden_fang"],"uses":["Nargacuga Armor · Required: 3"]},
+    {"id":"zinogre_claw","name":"Zinogre Claw+","rarity":6,"description":"A charged Zinogre claw.","sources":[{"source":"Zinogre","rank":"High Rank","method":"Part Break","chance":"22%"}],"questIds":["thunder_call"],"uses":["Thunder Sword · Required: 4"]},
+    {"id":"thunderbug_jewel","name":"Thunderbug Jewel","rarity":4,"description":"A glowing electric crystal.","sources":[{"source":"Zinogre","rank":"Low Rank","method":"Capture","chance":"15%"}],"questIds":["thunder_call"],"uses":["Thunder Charm · Required: 1"]},
+    {"id":"monster_bone","name":"Monster Bone+","rarity":4,"description":"A large bone used in High Rank equipment.","sources":[{"source":"Quest Reward","rank":"High Rank","method":"Quest Reward","chance":"20%"}],"questIds":["sky_king"],"uses":["Bone Armor · Required: 5"]},
+    {"id":"rathalos_plate","name":"Rathalos Plate","rarity":5,"description":"A rare plate from the King of the Skies.","sources":[{"source":"Rathalos","rank":"Low Rank","method":"Tail Carve","chance":"3%"}],"questIds":["sky_king"],"uses":["Rathalos Helm · Required: 1"]},
+    {"id":"rathalos_webbing","name":"Rathalos Webbing","rarity":4,"description":"Flexible Rathalos wing webbing.","sources":[{"source":"Rathalos","rank":"Low Rank","method":"Part Break","chance":"25%"}],"questIds":["sky_king"],"uses":["Fire Bow · Required: 3"]},
+    {"id":"machalite","name":"Machalite Ore","rarity":4,"description":"Durable blue-tinted ore.","sources":[{"source":"Volcano","rank":"Low Rank","method":"Gathering","chance":"18%"}],"questIds":["volcano_run"],"uses":["Weapon Upgrade · Required: 10"]},
+    {"id":"dragonite","name":"Dragonite Ore","rarity":4,"description":"Rare ore from hot mining veins.","sources":[{"source":"Volcano","rank":"High Rank","method":"Gathering","chance":"12%"}],"questIds":["volcano_run"],"uses":["Armor Upgrade · Required: 6"]},
+    {"id":"herb","name":"Herb","rarity":1,"description":"A basic healing herb.","sources":[{"source":"Mountain Stream","rank":"Low Rank","method":"Gathering","chance":"70%"}],"questIds":[],"uses":["Potion · Required: 1"]},
+    {"id":"honey","name":"Honey","rarity":2,"description":"Sweet honey used to strengthen medicine.","sources":[{"source":"Misty Peaks","rank":"Low Rank","method":"Gathering","chance":"45%"}],"questIds":[],"uses":["Mega Potion · Required: 1"]},
+    {"id":"wyvern_tear","name":"Wyvern Tear","rarity":4,"description":"A valuable glittering item.","sources":[{"source":"Large Monster","rank":"Low Rank","method":"Gathering","chance":"35%"}],"questIds":["shadow_dance"],"uses":["Sell · 500z"]}
+  ],
+  "quests": [
+    {"id":"shadow_dance","name":"Dance of the Black Shadow","subtitle":"Nargacuga - High Rank","rank":"High Rank","location":"Misty Peaks","target":"Nargacuga","relevantReward":"Nargacuga Marrow"},
+    {"id":"sudden_fang","name":"The Sudden Fang","subtitle":"Nargacuga - High Rank","rank":"High Rank","location":"Flooded Forest","target":"Nargacuga","relevantReward":"Nargacuga Marrow"},
+    {"id":"thunder_call","name":"Call of Thunder","subtitle":"Zinogre - High Rank","rank":"High Rank","location":"Misty Peaks","target":"Zinogre","relevantReward":"Zinogre Claw+"},
+    {"id":"sky_king","name":"King of the Skies","subtitle":"Rathalos - High Rank","rank":"High Rank","location":"Volcano","target":"Rathalos","relevantReward":"Rathalos Plate"},
+    {"id":"volcano_run","name":"Volcanic Heat","subtitle":"Gathering - High Rank","rank":"High Rank","location":"Volcano","target":"Gathering","relevantReward":"Machalite Ore"}
+  ]
+}

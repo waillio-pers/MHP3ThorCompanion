@@ -1,0 +1,75 @@
+{
+  "version": 1,
+  "iteration": "4.10A.1",
+  "purpose": "Close the five production Item identities required by the accepted Long Sword recipe audit before weapon integration.",
+  "source": {
+    "repository": "mhp3db/mhp3db.github.io",
+    "commit": "7ad3cf1c5ba07ce2e63afdaa1fa37c4671edc3bf",
+    "path": "scripts/database/sprite_data.js",
+    "sourceSha256": "32780629E84B72580F1FA2E3CBD5422E2212BDB2FA21254495247D420974BE9C",
+    "sourceGitBlobSha": "1548e321a8ac2da7aa31334b919a43052f9c26dd",
+    "identityRule": "exact sprite_data name to canonical TMO gameItemId"
+  },
+  "items": [
+    {
+      "gameItemId": 200,
+      "name": "Sharqskin",
+      "iconKey": "atlas:PAL_12:16:16",
+      "palette": "PAL_12",
+      "spriteKey": "16,16",
+      "atlas": { "sheet": "PAL_12.png", "x": 16, "y": 16, "width": 16, "height": 16 },
+      "atlasSha256": "E60FDF0A5FEAA0DAF2D52D48A643146C043431FC9B04959F23903A42193D07DE",
+      "pixelSha256": "AC3CDB23DE5FBC3C5CFAEDB65D61E043B9C5DF1DA9545599EC184749E35DCCB7",
+      "spriteDataName": "Sharqskin",
+      "resolutionMethod": "MHP3DB_SPRITE_DATA_EXACT_REUSED_CELL"
+    },
+    {
+      "gameItemId": 619,
+      "name": "Longsword Codex",
+      "iconKey": "atlas:PAL_12:48:64",
+      "palette": "PAL_12",
+      "spriteKey": "48,64",
+      "atlas": { "sheet": "PAL_12.png", "x": 48, "y": 64, "width": 16, "height": 16 },
+      "atlasSha256": "E60FDF0A5FEAA0DAF2D52D48A643146C043431FC9B04959F23903A42193D07DE",
+      "pixelSha256": "A05390A431C74C535285F0E674B039DB0B30E5DAACA1F47AD18689BB7E5357F0",
+      "spriteDataName": "Longsword Codex",
+      "resolutionMethod": "MHP3DB_SPRITE_DATA_EXACT"
+    },
+    {
+      "gameItemId": 623,
+      "name": "Lrg Ancient Fang",
+      "iconKey": "atlas:PAL_2:96:48",
+      "palette": "PAL_2",
+      "spriteKey": "96,48",
+      "atlas": { "sheet": "PAL_2.png", "x": 96, "y": 48, "width": 16, "height": 16 },
+      "atlasSha256": "5ADAAB0FAC9CF4E6F010C47FD1B0E27C378CC4BA361348117BB5FCE13BCABEBC",
+      "pixelSha256": "A160A60F2F94C6DA9E36410FD4DE68AD48DADE170C42087D37AC09335E5036BE",
+      "spriteDataName": "Lrg Ancient Fang",
+      "resolutionMethod": "MHP3DB_SPRITE_DATA_EXACT"
+    },
+    {
+      "gameItemId": 624,
+      "name": "Swordmaster Book",
+      "iconKey": "atlas:PAL_9:96:48",
+      "palette": "PAL_9",
+      "spriteKey": "96,48",
+      "atlas": { "sheet": "PAL_9.png", "x": 96, "y": 48, "width": 16, "height": 16 },
+      "atlasSha256": "8ECDD5452FCD584ADB9F6B5742E2C64252FB27765A7A62679D66711513025D3B",
+      "pixelSha256": "026DE64A540B732E4EAAD3CF43E724BE01188A75FFC2E6843BC86CB0E396F26E",
+      "spriteDataName": "Swordmaster Book",
+      "resolutionMethod": "MHP3DB_SPRITE_DATA_EXACT_REUSED_LONG_SWORD_CLOSURE_CELL"
+    },
+    {
+      "gameItemId": 638,
+      "name": "Dengeki+ Ticket",
+      "iconKey": "atlas:PAL_10:96:48",
+      "palette": "PAL_10",
+      "spriteKey": "96,48",
+      "atlas": { "sheet": "PAL_10.png", "x": 96, "y": 48, "width": 16, "height": 16 },
+      "atlasSha256": "DB9419090FA19ED0D9C3AC742A8D92674C48BD2CA9B7A75025BC69F66A4DBD62",
+      "pixelSha256": "85A6993051B5AC2680BAA47BFD65E337EA425D8FA2B146EA8BA974045D5880A6",
+      "spriteDataName": "Dengeki+ Ticket",
+      "resolutionMethod": "MHP3DB_SPRITE_DATA_EXACT"
+    }
+  ]
+}

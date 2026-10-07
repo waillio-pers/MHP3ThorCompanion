@@ -1,0 +1,49 @@
+{
+  "version": 1,
+  "iteration": "4.15A.1",
+  "purpose": "Close the two bowgun recipe Item icon identities before future LBG/HBG production integration.",
+  "source": {
+    "repository": "mhp3db/mhp3db.github.io",
+    "commit": "7ad3cf1c5ba07ce2e63afdaa1fa37c4671edc3bf",
+    "path": "scripts/database/sprite_data.js",
+    "sourceGitBlobSha": "1548e321a8ac2da7aa31334b919a43052f9c26dd",
+    "snapshot": "data-pipeline/inputs/great-sword-audit-v1/sprite_data.js"
+  },
+  "tmoSource": {
+    "path": "data-pipeline/inputs/great-sword-audit-v1/tmo61-item-names-v1.json",
+    "revision": "TMO PATCH PSP v6.1 r754",
+    "sha256": "582472EBD944CC01884ED9122AEE251ED1CF7077CA54923509D3FB71A98E25BD"
+  },
+  "identityRule": "Numeric gameItemId is authoritative; names are exact frozen TMO canonical strings.",
+  "resolutionRule": "Exact pinned sprite_data.js source label to atlas cell; no fuzzy or visual-similarity matching.",
+  "unresolved": 0,
+  "items": [
+    {
+      "gameItemId": 610,
+      "name": "Hot Spring Tckt",
+      "sourceLabel": "Hot Spring Tckt",
+      "iconKey": "atlas:PAL_2:96:48",
+      "resourceIconKey": "atlas:PAL_2:96:48",
+      "palette": "PAL_2",
+      "spriteKey": "96,48",
+      "atlas": {"sheet": "PAL_2.png", "x": 96, "y": 48, "width": 16, "height": 16},
+      "atlasSha256": "5ADAAB0FAC9CF4E6F010C47FD1B0E27C378CC4BA361348117BB5FCE13BCABEBC",
+      "pixelSha256": "A160A60F2F94C6DA9E36410FD4DE68AD48DADE170C42087D37AC09335E5036BE",
+      "resolutionMethod": "MHP3DB_SPRITE_DATA_EXACT_REUSED_CELL",
+      "reusedByGameItemIds": [623]
+    },
+    {
+      "gameItemId": 618,
+      "name": "Bowgun Codex",
+      "sourceLabel": "Bowgun Codex",
+      "iconKey": "atlas:PAL_5:48:64",
+      "resourceIconKey": "atlas:PAL_5:48:64",
+      "palette": "PAL_5",
+      "spriteKey": "48,64",
+      "atlas": {"sheet": "PAL_5.png", "x": 48, "y": 64, "width": 16, "height": 16},
+      "atlasSha256": "5E6E223DE97D8D395B50F1491052FE8D73DD335355A0FFA7E731F8B8F8F44F3B",
+      "pixelSha256": "2B020ED60433DD68E5B3CB37076ED3A749B4C9EECDBCED788E26616E0B9D8500",
+      "resolutionMethod": "MHP3DB_SPRITE_DATA_EXACT"
+    }
+  ]
+}

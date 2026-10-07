@@ -1,0 +1,18 @@
+* text=auto
+
+*.kt text eol=lf
+*.kts text eol=lf
+*.py text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.sh text eol=lf
+*.bat text eol=crlf
+
+*.apk binary
+*.png binary
+*.webp binary
+*.zip binary
+*.rar binary
+
+/data/generated/mhp3rd-data.json -text
+/app/src/main/assets/mhp3rd-data.json -text

@@ -1,0 +1,1008 @@
+{
+  "version": 1,
+  "iteration": "4.7F-A",
+  "baselineProductionSha256": "E7002BC159FB1AE63178503825FEE669F4392DC3BE3821570F2E3C3FE53E7E7E",
+  "currentRegistryGameItemIds": 509,
+  "newRegistryGameItemIds": 27,
+  "targetRegistryGameItemIds": 536,
+  "currentUniqueResources": 186,
+  "targetUniqueIconKeys": 22,
+  "unresolved": 0,
+  "directPinnedMhp3dbMappings": 11,
+  "legacyMhp3FamilyColorMappings": 16,
+  "knownCurrentResourceReuseKeys": [
+    "atlas:PAL_0:16:16",
+    "atlas:PAL_10:0:80",
+    "atlas:PAL_10:144:32",
+    "atlas:PAL_12:0:16",
+    "atlas:PAL_5:128:0",
+    "atlas:PAL_5:16:16",
+    "atlas:PAL_6:0:16",
+    "atlas:PAL_6:16:16",
+    "atlas:PAL_6:48:16",
+    "atlas:PAL_6:96:16",
+    "atlas:PAL_9:64:0"
+  ],
+  "knownCurrentResourceReuseCount": 11,
+  "dedupNote": "Merge all 22 target cells against the actual accepted 186-resource registry. Known reuse is 11 keys; final new-resource count may be lower than 11 if additional cells already exist in the current generated registry. Report exact merge result; never duplicate a cell.",
+  "pinnedPixelSource": {
+    "repository": "mhp3db/mhp3db.github.io",
+    "commit": "7ad3cf1c5ba07ce2e63afdaa1fa37c4671edc3bf",
+    "mapping": "scripts/database/sprite_data.js",
+    "sheets": "assets/database/spritesheets/PAL_{0..13}.png"
+  },
+  "legacyFamilyColorOracle": {
+    "repository": "mikejsavage/MHP3DB",
+    "ref": "bfbab18460d95d921d4a3492644b46bfc5ca1f3c",
+    "path": "data/temp/items/info.txt",
+    "role": "MHP3-era family/color identity only"
+  },
+  "items": [
+    {
+      "gameItemId": 271,
+      "name": "Gargwa Feather",
+      "itemId": "item_gargwa_feather",
+      "iconKey": "atlas:PAL_2:80:0",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_2.png",
+        "x": 80,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "resolutionMethod": "DIRECT_MHP3DB_NAME",
+      "confidence": "high",
+      "canonicalNameSource": "TMO PSP v6.1 r754",
+      "pixelSource": {
+        "repository": "mhp3db/mhp3db.github.io",
+        "commit": "7ad3cf1c5ba07ce2e63afdaa1fa37c4671edc3bf",
+        "path": "assets/database/spritesheets/PAL_2.png"
+      },
+      "cropReference": {
+        "file": "icon-crops/pal_2_x80_y0.png",
+        "sha256": "79CB2315278AA77ABB67F98C3C3A776B1A3897B581E49BE11037D64851EE8CE0",
+        "pixelSha256": "11001BBF069D61F0EF0B48F91F084CC5E8B31CF5CEBC7685AD42036CC79CDAB9"
+      },
+      "knownCurrentResourceReuse": false,
+      "directMappingEvidence": {
+        "sourceRepository": "mhp3db/mhp3db.github.io",
+        "commit": "7ad3cf1c5ba07ce2e63afdaa1fa37c4671edc3bf",
+        "sourcePath": "scripts/database/sprite_data.js",
+        "matchedName": "Gargwa Feather"
+      }
+    },
+    {
+      "gameItemId": 272,
+      "name": "Kelbi Horn",
+      "itemId": "item_kelbi_horn",
+      "iconKey": "atlas:PAL_12:0:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_12.png",
+        "x": 0,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "resolutionMethod": "DIRECT_MHP3DB_NAME",
+      "confidence": "high",
+      "canonicalNameSource": "TMO PSP v6.1 r754",
+      "pixelSource": {
+        "repository": "mhp3db/mhp3db.github.io",
+        "commit": "7ad3cf1c5ba07ce2e63afdaa1fa37c4671edc3bf",
+        "path": "assets/database/spritesheets/PAL_12.png"
+      },
+      "cropReference": {
+        "file": "icon-crops/pal_12_x0_y16.png",
+        "sha256": "7F180EFCF54ABA4B5322A1F7EA0FEAB3EE99DED66C1B2287F5A76E621C78418E",
+        "pixelSha256": "F8037676B7EF43CF92BE58A08EA6A9EDEDD461ACC216B400448EFCF3CD48834A"
+      },
+      "knownCurrentResourceReuse": true,
+      "directMappingEvidence": {
+        "sourceRepository": "mhp3db/mhp3db.github.io",
+        "commit": "7ad3cf1c5ba07ce2e63afdaa1fa37c4671edc3bf",
+        "sourcePath": "scripts/database/sprite_data.js",
+        "matchedName": "Kelbi Horn"
+      }
+    },
+    {
+      "gameItemId": 273,
+      "name": "Warm Pelt",
+      "itemId": "item_warm_pelt",
+      "iconKey": "atlas:PAL_5:16:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_5.png",
+        "x": 16,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "resolutionMethod": "DIRECT_MHP3DB_NAME",
+      "confidence": "high",
+      "canonicalNameSource": "TMO PSP v6.1 r754",
+      "pixelSource": {
+        "repository": "mhp3db/mhp3db.github.io",
+        "commit": "7ad3cf1c5ba07ce2e63afdaa1fa37c4671edc3bf",
+        "path": "assets/database/spritesheets/PAL_5.png"
+      },
+      "cropReference": {
+        "file": "icon-crops/pal_5_x16_y16.png",
+        "sha256": "B66A413DD3EFD378624474AD99511831469936A92120BA2786EB20CD21F7BD05",
+        "pixelSha256": "58827DA0E615257DE4D99FD22A80F0117B6E9495DA5F4E23D87A31591C7D6FD1"
+      },
+      "knownCurrentResourceReuse": true,
+      "directMappingEvidence": {
+        "sourceRepository": "mhp3db/mhp3db.github.io",
+        "commit": "7ad3cf1c5ba07ce2e63afdaa1fa37c4671edc3bf",
+        "sourcePath": "scripts/database/sprite_data.js",
+        "matchedName": "Warm Pelt"
+      }
+    },
+    {
+      "gameItemId": 274,
+      "name": "High-Qualty Pelt",
+      "itemId": "item_high_qualty_pelt",
+      "iconKey": "atlas:PAL_6:16:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_6.png",
+        "x": 16,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "resolutionMethod": "DIRECT_MHP3DB_NAME",
+      "confidence": "high",
+      "canonicalNameSource": "TMO PSP v6.1 r754",
+      "pixelSource": {
+        "repository": "mhp3db/mhp3db.github.io",
+        "commit": "7ad3cf1c5ba07ce2e63afdaa1fa37c4671edc3bf",
+        "path": "assets/database/spritesheets/PAL_6.png"
+      },
+      "cropReference": {
+        "file": "icon-crops/pal_6_x16_y16.png",
+        "sha256": "D125A2FF8728745E98ADB775CABDBF5C7014AAF66D8895836683340F7E5A7F6F",
+        "pixelSha256": "5717257809CF42CDC453F90BB81D8CF48F9BA6B4419A7EF1B2BCFB7C9B75F2B8"
+      },
+      "knownCurrentResourceReuse": true,
+      "directMappingEvidence": {
+        "sourceRepository": "mhp3db/mhp3db.github.io",
+        "commit": "7ad3cf1c5ba07ce2e63afdaa1fa37c4671edc3bf",
+        "sourcePath": "scripts/database/sprite_data.js",
+        "matchedName": "High-Qualty Pelt"
+      }
+    },
+    {
+      "gameItemId": 275,
+      "name": "Anteka Antlers",
+      "itemId": "item_anteka_antlers",
+      "iconKey": "atlas:PAL_6:0:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_6.png",
+        "x": 0,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "resolutionMethod": "DIRECT_MHP3DB_NAME",
+      "confidence": "high",
+      "canonicalNameSource": "TMO PSP v6.1 r754",
+      "pixelSource": {
+        "repository": "mhp3db/mhp3db.github.io",
+        "commit": "7ad3cf1c5ba07ce2e63afdaa1fa37c4671edc3bf",
+        "path": "assets/database/spritesheets/PAL_6.png"
+      },
+      "cropReference": {
+        "file": "icon-crops/pal_6_x0_y16.png",
+        "sha256": "69639FE6122ADF69AED4FCD8D3DC2469A4A533F5F8F356A0C4113D9F919A87F9",
+        "pixelSha256": "A5FEFF723F26A8B516DF039B263BD986D3030CE30C35B710F0CF3A76FBF49583"
+      },
+      "knownCurrentResourceReuse": true,
+      "directMappingEvidence": {
+        "sourceRepository": "mhp3db/mhp3db.github.io",
+        "commit": "7ad3cf1c5ba07ce2e63afdaa1fa37c4671edc3bf",
+        "sourcePath": "scripts/database/sprite_data.js",
+        "matchedName": "Anteka Antlers"
+      }
+    },
+    {
+      "gameItemId": 279,
+      "name": "Slagtoth Hide",
+      "itemId": "item_slagtoth_hide",
+      "iconKey": "atlas:PAL_5:16:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_5.png",
+        "x": 16,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "resolutionMethod": "DIRECT_MHP3DB_NAME",
+      "confidence": "high",
+      "canonicalNameSource": "TMO PSP v6.1 r754",
+      "pixelSource": {
+        "repository": "mhp3db/mhp3db.github.io",
+        "commit": "7ad3cf1c5ba07ce2e63afdaa1fa37c4671edc3bf",
+        "path": "assets/database/spritesheets/PAL_5.png"
+      },
+      "cropReference": {
+        "file": "icon-crops/pal_5_x16_y16.png",
+        "sha256": "B66A413DD3EFD378624474AD99511831469936A92120BA2786EB20CD21F7BD05",
+        "pixelSha256": "58827DA0E615257DE4D99FD22A80F0117B6E9495DA5F4E23D87A31591C7D6FD1"
+      },
+      "knownCurrentResourceReuse": true,
+      "directMappingEvidence": {
+        "sourceRepository": "mhp3db/mhp3db.github.io",
+        "commit": "7ad3cf1c5ba07ce2e63afdaa1fa37c4671edc3bf",
+        "sourcePath": "scripts/database/sprite_data.js",
+        "matchedName": "Slagtoth Hide"
+      }
+    },
+    {
+      "gameItemId": 280,
+      "name": "Slagtoth Hide+",
+      "itemId": "item_slagtoth_hide_plus",
+      "iconKey": "atlas:PAL_5:16:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_5.png",
+        "x": 16,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "resolutionMethod": "DIRECT_MHP3DB_NAME",
+      "confidence": "high",
+      "canonicalNameSource": "TMO PSP v6.1 r754",
+      "pixelSource": {
+        "repository": "mhp3db/mhp3db.github.io",
+        "commit": "7ad3cf1c5ba07ce2e63afdaa1fa37c4671edc3bf",
+        "path": "assets/database/spritesheets/PAL_5.png"
+      },
+      "cropReference": {
+        "file": "icon-crops/pal_5_x16_y16.png",
+        "sha256": "B66A413DD3EFD378624474AD99511831469936A92120BA2786EB20CD21F7BD05",
+        "pixelSha256": "58827DA0E615257DE4D99FD22A80F0117B6E9495DA5F4E23D87A31591C7D6FD1"
+      },
+      "knownCurrentResourceReuse": true,
+      "directMappingEvidence": {
+        "sourceRepository": "mhp3db/mhp3db.github.io",
+        "commit": "7ad3cf1c5ba07ce2e63afdaa1fa37c4671edc3bf",
+        "sourcePath": "scripts/database/sprite_data.js",
+        "matchedName": "Slagtoth Hide+"
+      }
+    },
+    {
+      "gameItemId": 281,
+      "name": "Big Fin",
+      "itemId": "item_big_fin",
+      "iconKey": "atlas:PAL_6:48:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_6.png",
+        "x": 48,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "resolutionMethod": "DIRECT_MHP3DB_NAME",
+      "confidence": "high",
+      "canonicalNameSource": "TMO PSP v6.1 r754",
+      "pixelSource": {
+        "repository": "mhp3db/mhp3db.github.io",
+        "commit": "7ad3cf1c5ba07ce2e63afdaa1fa37c4671edc3bf",
+        "path": "assets/database/spritesheets/PAL_6.png"
+      },
+      "cropReference": {
+        "file": "icon-crops/pal_6_x48_y16.png",
+        "sha256": "AF2CDF04CEE7621F2B8389D7C6B9BFFC641D70ED2BC66CBFCD61A5C2D4C84B4A",
+        "pixelSha256": "6C509C4722501E7E3072D7832F703EB70CD3FF001840F56B500A2CB4ADA8AD84"
+      },
+      "knownCurrentResourceReuse": true,
+      "directMappingEvidence": {
+        "sourceRepository": "mhp3db/mhp3db.github.io",
+        "commit": "7ad3cf1c5ba07ce2e63afdaa1fa37c4671edc3bf",
+        "sourcePath": "scripts/database/sprite_data.js",
+        "matchedName": "Big Fin"
+      }
+    },
+    {
+      "gameItemId": 282,
+      "name": "Quality Fin",
+      "itemId": "item_quality_fin",
+      "iconKey": "atlas:PAL_6:48:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_6.png",
+        "x": 48,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "resolutionMethod": "DIRECT_MHP3DB_NAME",
+      "confidence": "high",
+      "canonicalNameSource": "TMO PSP v6.1 r754",
+      "pixelSource": {
+        "repository": "mhp3db/mhp3db.github.io",
+        "commit": "7ad3cf1c5ba07ce2e63afdaa1fa37c4671edc3bf",
+        "path": "assets/database/spritesheets/PAL_6.png"
+      },
+      "cropReference": {
+        "file": "icon-crops/pal_6_x48_y16.png",
+        "sha256": "AF2CDF04CEE7621F2B8389D7C6B9BFFC641D70ED2BC66CBFCD61A5C2D4C84B4A",
+        "pixelSha256": "6C509C4722501E7E3072D7832F703EB70CD3FF001840F56B500A2CB4ADA8AD84"
+      },
+      "knownCurrentResourceReuse": true,
+      "directMappingEvidence": {
+        "sourceRepository": "mhp3db/mhp3db.github.io",
+        "commit": "7ad3cf1c5ba07ce2e63afdaa1fa37c4671edc3bf",
+        "sourcePath": "scripts/database/sprite_data.js",
+        "matchedName": "Quality Fin"
+      }
+    },
+    {
+      "gameItemId": 284,
+      "name": "Velvety Hide",
+      "itemId": "item_velvety_hide",
+      "iconKey": "atlas:PAL_0:16:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_0.png",
+        "x": 16,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "resolutionMethod": "DIRECT_MHP3DB_NAME",
+      "confidence": "high",
+      "canonicalNameSource": "TMO PSP v6.1 r754",
+      "pixelSource": {
+        "repository": "mhp3db/mhp3db.github.io",
+        "commit": "7ad3cf1c5ba07ce2e63afdaa1fa37c4671edc3bf",
+        "path": "assets/database/spritesheets/PAL_0.png"
+      },
+      "cropReference": {
+        "file": "icon-crops/pal_0_x16_y16.png",
+        "sha256": "3A23E628E13A53F6DAED6AF983882A904EC97A29721981BE1886AD95B785D35F",
+        "pixelSha256": "8406EB39E3D41A281B2B545D8E143F0DD4E22A1FB8A5D7845EC6AECF318F83E7"
+      },
+      "knownCurrentResourceReuse": true,
+      "directMappingEvidence": {
+        "sourceRepository": "mhp3db/mhp3db.github.io",
+        "commit": "7ad3cf1c5ba07ce2e63afdaa1fa37c4671edc3bf",
+        "sourcePath": "scripts/database/sprite_data.js",
+        "matchedName": "Velvety Hide"
+      }
+    },
+    {
+      "gameItemId": 607,
+      "name": "Pawprint Stamp",
+      "itemId": "item_pawprint_stamp",
+      "iconKey": "atlas:PAL_0:96:48",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_0.png",
+        "x": 96,
+        "y": 48,
+        "width": 16,
+        "height": 16
+      },
+      "resolutionMethod": "DIRECT_MHP3DB_NAME",
+      "confidence": "high",
+      "canonicalNameSource": "TMO PSP v6.1 r754",
+      "pixelSource": {
+        "repository": "mhp3db/mhp3db.github.io",
+        "commit": "7ad3cf1c5ba07ce2e63afdaa1fa37c4671edc3bf",
+        "path": "assets/database/spritesheets/PAL_0.png"
+      },
+      "cropReference": {
+        "file": "icon-crops/pal_0_x96_y48.png",
+        "sha256": "8182C51A22024E4099F2D745B16177DDE876CBEAC1B85F5113742581C7B03FCA",
+        "pixelSha256": "23BBCADF056D06C82567821C594A84849E1BF13B8373DF13E77EE9E9F16792B7"
+      },
+      "knownCurrentResourceReuse": false,
+      "directMappingEvidence": {
+        "sourceRepository": "mhp3db/mhp3db.github.io",
+        "commit": "7ad3cf1c5ba07ce2e63afdaa1fa37c4671edc3bf",
+        "sourcePath": "scripts/database/sprite_data.js",
+        "matchedName": "Pawprint Stamp"
+      }
+    },
+    {
+      "gameItemId": 671,
+      "name": "First-aid Med",
+      "itemId": "item_first_aid_med",
+      "iconKey": "atlas:PAL_5:32:32",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_5.png",
+        "x": 32,
+        "y": 32,
+        "width": 16,
+        "height": 16
+      },
+      "resolutionMethod": "LEGACY_MHP3_FAMILY_COLOR_TO_PINNED_ATLAS",
+      "confidence": "high",
+      "canonicalNameSource": "TMO PSP v6.1 r754",
+      "pixelSource": {
+        "repository": "mhp3db/mhp3db.github.io",
+        "commit": "7ad3cf1c5ba07ce2e63afdaa1fa37c4671edc3bf",
+        "path": "assets/database/spritesheets/PAL_5.png"
+      },
+      "cropReference": {
+        "file": "icon-crops/pal_5_x32_y32.png",
+        "sha256": "DCD30BE1198EAB2D1AAA466F9FA0E00C649D83C9D770C16E44981A43C5A3C600",
+        "pixelSha256": "953A2FD5902F91DEF8869351E498AC873C05134156E9E52D948C0FFDE76A492B"
+      },
+      "knownCurrentResourceReuse": false,
+      "familyColorEvidence": {
+        "family": "drink",
+        "color": "green",
+        "legacyMhp3dbName": "First-Aid Med",
+        "sourceRepository": "mikejsavage/MHP3DB",
+        "sourceRef": "bfbab18460d95d921d4a3492644b46bfc5ca1f3c",
+        "sourcePath": "data/temp/items/info.txt",
+        "usage": "MHP3-era icon family/color identity only; never canonical English and never production pixels"
+      }
+    },
+    {
+      "gameItemId": 676,
+      "name": "EZ Shock Trap",
+      "itemId": "item_ez_shock_trap",
+      "iconKey": "atlas:PAL_4:64:32",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_4.png",
+        "x": 64,
+        "y": 32,
+        "width": 16,
+        "height": 16
+      },
+      "resolutionMethod": "LEGACY_MHP3_FAMILY_COLOR_TO_PINNED_ATLAS",
+      "confidence": "high",
+      "canonicalNameSource": "TMO PSP v6.1 r754",
+      "pixelSource": {
+        "repository": "mhp3db/mhp3db.github.io",
+        "commit": "7ad3cf1c5ba07ce2e63afdaa1fa37c4671edc3bf",
+        "path": "assets/database/spritesheets/PAL_4.png"
+      },
+      "cropReference": {
+        "file": "icon-crops/pal_4_x64_y32.png",
+        "sha256": "E6317CD8611E24E76012B54CB78F17FA4C7B3F7AC0F496B47F4003C7FA0C24AE",
+        "pixelSha256": "6EA75321DABE161155BD0F1C75BA5EA072E9EF58BC476026C3AC7D334A4D7EDC"
+      },
+      "knownCurrentResourceReuse": false,
+      "familyColorEvidence": {
+        "family": "trap",
+        "color": "purple",
+        "legacyMhp3dbName": "Prtbl Shock Trap",
+        "sourceRepository": "mikejsavage/MHP3DB",
+        "sourceRef": "bfbab18460d95d921d4a3492644b46bfc5ca1f3c",
+        "sourcePath": "data/temp/items/info.txt",
+        "usage": "MHP3-era icon family/color identity only; never canonical English and never production pixels"
+      }
+    },
+    {
+      "gameItemId": 677,
+      "name": "EZ Flash Bomb",
+      "itemId": "item_ez_flash_bomb",
+      "iconKey": "atlas:PAL_12:96:32",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_12.png",
+        "x": 96,
+        "y": 32,
+        "width": 16,
+        "height": 16
+      },
+      "resolutionMethod": "LEGACY_MHP3_FAMILY_COLOR_TO_PINNED_ATLAS",
+      "confidence": "high",
+      "canonicalNameSource": "TMO PSP v6.1 r754",
+      "pixelSource": {
+        "repository": "mhp3db/mhp3db.github.io",
+        "commit": "7ad3cf1c5ba07ce2e63afdaa1fa37c4671edc3bf",
+        "path": "assets/database/spritesheets/PAL_12.png"
+      },
+      "cropReference": {
+        "file": "icon-crops/pal_12_x96_y32.png",
+        "sha256": "CA0BA87DD68A4BF9BCC290A6DE685B2DC61990CB99614F498262CD24D4E31BF6",
+        "pixelSha256": "71ACF49C66F87EC31C15EEACA63FA624BBE7EFE17315E3067200E4CE1A11FEFF"
+      },
+      "knownCurrentResourceReuse": false,
+      "familyColorEvidence": {
+        "family": "bomb",
+        "color": "blue",
+        "legacyMhp3dbName": "Supply Flash Bmb",
+        "sourceRepository": "mikejsavage/MHP3DB",
+        "sourceRef": "bfbab18460d95d921d4a3492644b46bfc5ca1f3c",
+        "sourcePath": "data/temp/items/info.txt",
+        "usage": "MHP3-era icon family/color identity only; never canonical English and never production pixels"
+      }
+    },
+    {
+      "gameItemId": 689,
+      "name": "Ripened Mushroom",
+      "itemId": "item_ripened_mushroom",
+      "iconKey": "atlas:PAL_5:16:0",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_5.png",
+        "x": 16,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "resolutionMethod": "LEGACY_MHP3_FAMILY_COLOR_TO_PINNED_ATLAS",
+      "confidence": "high",
+      "canonicalNameSource": "TMO PSP v6.1 r754",
+      "pixelSource": {
+        "repository": "mhp3db/mhp3db.github.io",
+        "commit": "7ad3cf1c5ba07ce2e63afdaa1fa37c4671edc3bf",
+        "path": "assets/database/spritesheets/PAL_5.png"
+      },
+      "cropReference": {
+        "file": "icon-crops/pal_5_x16_y0.png",
+        "sha256": "65D42384946A086DD55D919E2F32CCAC5D4D121214F37A6D79978EA999CDA612",
+        "pixelSha256": "A2F04F48028E3E6E2A65E1A8F27FC26F060D85288D6694F47D8B547CA3680D6B"
+      },
+      "knownCurrentResourceReuse": false,
+      "familyColorEvidence": {
+        "family": "mushroom",
+        "color": "green",
+        "legacyMhp3dbName": "Ripe Mushroom",
+        "sourceRepository": "mikejsavage/MHP3DB",
+        "sourceRef": "bfbab18460d95d921d4a3492644b46bfc5ca1f3c",
+        "sourcePath": "data/temp/items/info.txt",
+        "usage": "MHP3-era icon family/color identity only; never canonical English and never production pixels"
+      }
+    },
+    {
+      "gameItemId": 715,
+      "name": "Gargwa Egg",
+      "itemId": "item_gargwa_egg",
+      "iconKey": "atlas:PAL_2:80:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_2.png",
+        "x": 80,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "resolutionMethod": "LEGACY_MHP3_FAMILY_COLOR_TO_PINNED_ATLAS",
+      "confidence": "high",
+      "canonicalNameSource": "TMO PSP v6.1 r754",
+      "pixelSource": {
+        "repository": "mhp3db/mhp3db.github.io",
+        "commit": "7ad3cf1c5ba07ce2e63afdaa1fa37c4671edc3bf",
+        "path": "assets/database/spritesheets/PAL_2.png"
+      },
+      "cropReference": {
+        "file": "icon-crops/pal_2_x80_y16.png",
+        "sha256": "60AFA722861016D6CEF5B9D0D2270669AEA00433729AAEA07729927510F819F7",
+        "pixelSha256": "50E535AE5A19FC5F05B79C5665258BD1F4F21E89BB2FF3F8F40230F3B7A325D2"
+      },
+      "knownCurrentResourceReuse": false,
+      "familyColorEvidence": {
+        "family": "egg",
+        "color": "cyan",
+        "legacyMhp3dbName": "Gagua Egg",
+        "sourceRepository": "mikejsavage/MHP3DB",
+        "sourceRef": "bfbab18460d95d921d4a3492644b46bfc5ca1f3c",
+        "sourcePath": "data/temp/items/info.txt",
+        "usage": "MHP3-era icon family/color identity only; never canonical English and never production pixels"
+      }
+    },
+    {
+      "gameItemId": 716,
+      "name": "Gold Gargwa Egg",
+      "itemId": "item_gold_gargwa_egg",
+      "iconKey": "atlas:PAL_10:80:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_10.png",
+        "x": 80,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "resolutionMethod": "LEGACY_MHP3_FAMILY_COLOR_TO_PINNED_ATLAS",
+      "confidence": "high",
+      "canonicalNameSource": "TMO PSP v6.1 r754",
+      "pixelSource": {
+        "repository": "mhp3db/mhp3db.github.io",
+        "commit": "7ad3cf1c5ba07ce2e63afdaa1fa37c4671edc3bf",
+        "path": "assets/database/spritesheets/PAL_10.png"
+      },
+      "cropReference": {
+        "file": "icon-crops/pal_10_x80_y16.png",
+        "sha256": "F7991E200DD55622A1CAA06ADFD788556FA67E3C71E7F0B7495E3311A8578ABA",
+        "pixelSha256": "A324AD5975B144342F681D2E0E7B8A046C18DD4D130FDEBD47E6A7CA9F73377B"
+      },
+      "knownCurrentResourceReuse": false,
+      "familyColorEvidence": {
+        "family": "egg",
+        "color": "yellow",
+        "legacyMhp3dbName": "Gagua GoldenEgg",
+        "sourceRepository": "mikejsavage/MHP3DB",
+        "sourceRef": "bfbab18460d95d921d4a3492644b46bfc5ca1f3c",
+        "sourcePath": "data/temp/items/info.txt",
+        "usage": "MHP3-era icon family/color identity only; never canonical English and never production pixels"
+      }
+    },
+    {
+      "gameItemId": 719,
+      "name": "Gargwa Guano",
+      "itemId": "item_gargwa_guano",
+      "iconKey": "atlas:PAL_6:96:16",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_6.png",
+        "x": 96,
+        "y": 16,
+        "width": 16,
+        "height": 16
+      },
+      "resolutionMethod": "LEGACY_MHP3_FAMILY_COLOR_TO_PINNED_ATLAS",
+      "confidence": "high",
+      "canonicalNameSource": "TMO PSP v6.1 r754",
+      "pixelSource": {
+        "repository": "mhp3db/mhp3db.github.io",
+        "commit": "7ad3cf1c5ba07ce2e63afdaa1fa37c4671edc3bf",
+        "path": "assets/database/spritesheets/PAL_6.png"
+      },
+      "cropReference": {
+        "file": "icon-crops/pal_6_x96_y16.png",
+        "sha256": "E27012347AF11C9F0FF5990C7F0DE9F256F99367A100CC1FA40CC12C4DDE95DE",
+        "pixelSha256": "8E6D3C750463E7D04A7BCA8302CD0F5594BA6F5C065C5106C93AA1A0ACC9472F"
+      },
+      "knownCurrentResourceReuse": true,
+      "familyColorEvidence": {
+        "family": "dung",
+        "color": "orange",
+        "legacyMhp3dbName": "Gagua Dung",
+        "sourceRepository": "mikejsavage/MHP3DB",
+        "sourceRef": "bfbab18460d95d921d4a3492644b46bfc5ca1f3c",
+        "sourcePath": "data/temp/items/info.txt",
+        "usage": "MHP3-era icon family/color identity only; never canonical English and never production pixels"
+      }
+    },
+    {
+      "gameItemId": 720,
+      "name": "White Liver",
+      "itemId": "item_white_liver",
+      "iconKey": "atlas:PAL_0:64:0",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_0.png",
+        "x": 64,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "resolutionMethod": "LEGACY_MHP3_FAMILY_COLOR_TO_PINNED_ATLAS",
+      "confidence": "high",
+      "canonicalNameSource": "TMO PSP v6.1 r754",
+      "pixelSource": {
+        "repository": "mhp3db/mhp3db.github.io",
+        "commit": "7ad3cf1c5ba07ce2e63afdaa1fa37c4671edc3bf",
+        "path": "assets/database/spritesheets/PAL_0.png"
+      },
+      "cropReference": {
+        "file": "icon-crops/pal_0_x64_y0.png",
+        "sha256": "F6BD5BA7ADF995380A372F9FF3B7670BE3929BC99CFD5312617F2370CCA5E99E",
+        "pixelSha256": "BA091894B7D6607E4094BB4313E74737CD5885A648AC30A65181FA4317103959"
+      },
+      "knownCurrentResourceReuse": false,
+      "familyColorEvidence": {
+        "family": "meat",
+        "color": "white",
+        "legacyMhp3dbName": "White Liver",
+        "sourceRepository": "mikejsavage/MHP3DB",
+        "sourceRef": "bfbab18460d95d921d4a3492644b46bfc5ca1f3c",
+        "sourcePath": "data/temp/items/info.txt",
+        "usage": "MHP3-era icon family/color identity only; never canonical English and never production pixels"
+      }
+    },
+    {
+      "gameItemId": 721,
+      "name": "Slagtoth Skin Oil",
+      "itemId": "item_slagtoth_skin_oil",
+      "iconKey": "atlas:PAL_5:32:32",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_5.png",
+        "x": 32,
+        "y": 32,
+        "width": 16,
+        "height": 16
+      },
+      "resolutionMethod": "LEGACY_MHP3_FAMILY_COLOR_TO_PINNED_ATLAS",
+      "confidence": "high",
+      "canonicalNameSource": "TMO PSP v6.1 r754",
+      "pixelSource": {
+        "repository": "mhp3db/mhp3db.github.io",
+        "commit": "7ad3cf1c5ba07ce2e63afdaa1fa37c4671edc3bf",
+        "path": "assets/database/spritesheets/PAL_5.png"
+      },
+      "cropReference": {
+        "file": "icon-crops/pal_5_x32_y32.png",
+        "sha256": "DCD30BE1198EAB2D1AAA466F9FA0E00C649D83C9D770C16E44981A43C5A3C600",
+        "pixelSha256": "953A2FD5902F91DEF8869351E498AC873C05134156E9E52D948C0FFDE76A492B"
+      },
+      "knownCurrentResourceReuse": false,
+      "familyColorEvidence": {
+        "family": "drink",
+        "color": "green",
+        "legacyMhp3dbName": "Zuwaru Blubber",
+        "sourceRepository": "mikejsavage/MHP3DB",
+        "sourceRef": "bfbab18460d95d921d4a3492644b46bfc5ca1f3c",
+        "sourcePath": "data/temp/items/info.txt",
+        "usage": "MHP3-era icon family/color identity only; never canonical English and never production pixels"
+      }
+    },
+    {
+      "gameItemId": 722,
+      "name": "Popo Tongue",
+      "itemId": "item_popo_tongue",
+      "iconKey": "atlas:PAL_9:64:0",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_9.png",
+        "x": 64,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "resolutionMethod": "LEGACY_MHP3_FAMILY_COLOR_TO_PINNED_ATLAS",
+      "confidence": "high",
+      "canonicalNameSource": "TMO PSP v6.1 r754",
+      "pixelSource": {
+        "repository": "mhp3db/mhp3db.github.io",
+        "commit": "7ad3cf1c5ba07ce2e63afdaa1fa37c4671edc3bf",
+        "path": "assets/database/spritesheets/PAL_9.png"
+      },
+      "cropReference": {
+        "file": "icon-crops/pal_9_x64_y0.png",
+        "sha256": "C059F9508D98576307D945E9A2095CF8C5538A016C5DF4A4D053FF9566AB64F3",
+        "pixelSha256": "F13A9EECB470CF0C79059AEAE9D48F44D9AC598AF602E33B171479688DCC4AE0"
+      },
+      "knownCurrentResourceReuse": true,
+      "familyColorEvidence": {
+        "family": "meat",
+        "color": "red",
+        "legacyMhp3dbName": "Popo Tongue",
+        "sourceRepository": "mikejsavage/MHP3DB",
+        "sourceRef": "bfbab18460d95d921d4a3492644b46bfc5ca1f3c",
+        "sourcePath": "data/temp/items/info.txt",
+        "usage": "MHP3-era icon family/color identity only; never canonical English and never production pixels"
+      }
+    },
+    {
+      "gameItemId": 723,
+      "name": "Secret Stash",
+      "itemId": "item_secret_stash",
+      "iconKey": "atlas:PAL_5:128:0",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_5.png",
+        "x": 128,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "resolutionMethod": "LEGACY_MHP3_FAMILY_COLOR_TO_PINNED_ATLAS",
+      "confidence": "high",
+      "canonicalNameSource": "TMO PSP v6.1 r754",
+      "pixelSource": {
+        "repository": "mhp3db/mhp3db.github.io",
+        "commit": "7ad3cf1c5ba07ce2e63afdaa1fa37c4671edc3bf",
+        "path": "assets/database/spritesheets/PAL_5.png"
+      },
+      "cropReference": {
+        "file": "icon-crops/pal_5_x128_y0.png",
+        "sha256": "10DA84BD8E5D7130452EC1EADFF25205E0DE459D5539E651C772382BDE17FAE9",
+        "pixelSha256": "13EB34C84E83F5D5D197400F171AC4F2491FC043C8A4006210ADC788AD2E472E"
+      },
+      "knownCurrentResourceReuse": true,
+      "familyColorEvidence": {
+        "family": "seed",
+        "color": "green",
+        "legacyMhp3dbName": "Secret Pouch",
+        "sourceRepository": "mikejsavage/MHP3DB",
+        "sourceRef": "bfbab18460d95d921d4a3492644b46bfc5ca1f3c",
+        "sourcePath": "data/temp/items/info.txt",
+        "usage": "MHP3-era icon family/color identity only; never canonical English and never production pixels"
+      }
+    },
+    {
+      "gameItemId": 724,
+      "name": "Round Acorn",
+      "itemId": "item_round_acorn",
+      "iconKey": "atlas:PAL_5:128:0",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_5.png",
+        "x": 128,
+        "y": 0,
+        "width": 16,
+        "height": 16
+      },
+      "resolutionMethod": "LEGACY_MHP3_FAMILY_COLOR_TO_PINNED_ATLAS",
+      "confidence": "high",
+      "canonicalNameSource": "TMO PSP v6.1 r754",
+      "pixelSource": {
+        "repository": "mhp3db/mhp3db.github.io",
+        "commit": "7ad3cf1c5ba07ce2e63afdaa1fa37c4671edc3bf",
+        "path": "assets/database/spritesheets/PAL_5.png"
+      },
+      "cropReference": {
+        "file": "icon-crops/pal_5_x128_y0.png",
+        "sha256": "10DA84BD8E5D7130452EC1EADFF25205E0DE459D5539E651C772382BDE17FAE9",
+        "pixelSha256": "13EB34C84E83F5D5D197400F171AC4F2491FC043C8A4006210ADC788AD2E472E"
+      },
+      "knownCurrentResourceReuse": true,
+      "familyColorEvidence": {
+        "family": "seed",
+        "color": "green",
+        "legacyMhp3dbName": "Perfect Acorn",
+        "sourceRepository": "mikejsavage/MHP3DB",
+        "sourceRef": "bfbab18460d95d921d4a3492644b46bfc5ca1f3c",
+        "sourcePath": "data/temp/items/info.txt",
+        "usage": "MHP3-era icon family/color identity only; never canonical English and never production pixels"
+      }
+    },
+    {
+      "gameItemId": 725,
+      "name": "Fine Stomach",
+      "itemId": "item_fine_stomach",
+      "iconKey": "atlas:PAL_10:144:32",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_10.png",
+        "x": 144,
+        "y": 32,
+        "width": 16,
+        "height": 16
+      },
+      "resolutionMethod": "LEGACY_MHP3_FAMILY_COLOR_TO_PINNED_ATLAS",
+      "confidence": "high",
+      "canonicalNameSource": "TMO PSP v6.1 r754",
+      "pixelSource": {
+        "repository": "mhp3db/mhp3db.github.io",
+        "commit": "7ad3cf1c5ba07ce2e63afdaa1fa37c4671edc3bf",
+        "path": "assets/database/spritesheets/PAL_10.png"
+      },
+      "cropReference": {
+        "file": "icon-crops/pal_10_x144_y32.png",
+        "sha256": "021660D94A5E613F29FE67ABEDF8F54C252F3AA19413703A4F65827EE83C1102",
+        "pixelSha256": "1B087A0ECADC5BA00FA089BB295FD5A45CEA1276E23490F3058A31A836744058"
+      },
+      "knownCurrentResourceReuse": true,
+      "familyColorEvidence": {
+        "family": "sac",
+        "color": "yellow",
+        "legacyMhp3dbName": "Clean Gut",
+        "sourceRepository": "mikejsavage/MHP3DB",
+        "sourceRef": "bfbab18460d95d921d4a3492644b46bfc5ca1f3c",
+        "sourcePath": "data/temp/items/info.txt",
+        "usage": "MHP3-era icon family/color identity only; never canonical English and never production pixels"
+      }
+    },
+    {
+      "gameItemId": 726,
+      "name": "Luminous Stomach",
+      "itemId": "item_luminous_stomach",
+      "iconKey": "atlas:PAL_6:144:32",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_6.png",
+        "x": 144,
+        "y": 32,
+        "width": 16,
+        "height": 16
+      },
+      "resolutionMethod": "LEGACY_MHP3_FAMILY_COLOR_TO_PINNED_ATLAS",
+      "confidence": "high",
+      "canonicalNameSource": "TMO PSP v6.1 r754",
+      "pixelSource": {
+        "repository": "mhp3db/mhp3db.github.io",
+        "commit": "7ad3cf1c5ba07ce2e63afdaa1fa37c4671edc3bf",
+        "path": "assets/database/spritesheets/PAL_6.png"
+      },
+      "cropReference": {
+        "file": "icon-crops/pal_6_x144_y32.png",
+        "sha256": "2BB348AAFF651233A1F04D12194F699EED9F1CDC713201F08F2CDB1871CFB989",
+        "pixelSha256": "692C9D26DE8715D376F9149F078CEDE1778E1A51341CEE84753BC7CE95FC12D4"
+      },
+      "knownCurrentResourceReuse": false,
+      "familyColorEvidence": {
+        "family": "sac",
+        "color": "orange",
+        "legacyMhp3dbName": "Sparkling Gut",
+        "sourceRepository": "mikejsavage/MHP3DB",
+        "sourceRef": "bfbab18460d95d921d4a3492644b46bfc5ca1f3c",
+        "sourcePath": "data/temp/items/info.txt",
+        "usage": "MHP3-era icon family/color identity only; never canonical English and never production pixels"
+      }
+    },
+    {
+      "gameItemId": 727,
+      "name": "Giggi Essence",
+      "itemId": "item_giggi_essence",
+      "iconKey": "atlas:PAL_4:32:32",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_4.png",
+        "x": 32,
+        "y": 32,
+        "width": 16,
+        "height": 16
+      },
+      "resolutionMethod": "LEGACY_MHP3_FAMILY_COLOR_TO_PINNED_ATLAS",
+      "confidence": "high",
+      "canonicalNameSource": "TMO PSP v6.1 r754",
+      "pixelSource": {
+        "repository": "mhp3db/mhp3db.github.io",
+        "commit": "7ad3cf1c5ba07ce2e63afdaa1fa37c4671edc3bf",
+        "path": "assets/database/spritesheets/PAL_4.png"
+      },
+      "cropReference": {
+        "file": "icon-crops/pal_4_x32_y32.png",
+        "sha256": "49E3B4E9BD2DAECBBF3ECDC6663BE10BDFBB8192D3F85D57BD1B5C613CE413F4",
+        "pixelSha256": "2530E3EB5F586DCEF9F5539DF3A6E44C14C752DC5E6F86EB2E49D7BCC23631AB"
+      },
+      "knownCurrentResourceReuse": false,
+      "familyColorEvidence": {
+        "family": "drink",
+        "color": "purple",
+        "legacyMhp3dbName": "Giggi Essence",
+        "sourceRepository": "mikejsavage/MHP3DB",
+        "sourceRef": "bfbab18460d95d921d4a3492644b46bfc5ca1f3c",
+        "sourcePath": "data/temp/items/info.txt",
+        "usage": "MHP3-era icon family/color identity only; never canonical English and never production pixels"
+      }
+    },
+    {
+      "gameItemId": 728,
+      "name": "Monster Guts",
+      "itemId": "item_monster_guts",
+      "iconKey": "atlas:PAL_10:0:80",
+      "renderKind": "ATLAS_CELL",
+      "atlas": {
+        "sheet": "PAL_10.png",
+        "x": 0,
+        "y": 80,
+        "width": 16,
+        "height": 16
+      },
+      "resolutionMethod": "LEGACY_MHP3_FAMILY_COLOR_TO_PINNED_ATLAS",
+      "confidence": "high",
+      "canonicalNameSource": "TMO PSP v6.1 r754",
+      "pixelSource": {
+        "repository": "mhp3db/mhp3db.github.io",
+        "commit": "7ad3cf1c5ba07ce2e63afdaa1fa37c4671edc3bf",
+        "path": "assets/database/spritesheets/PAL_10.png"
+      },
+      "cropReference": {
+        "file": "icon-crops/pal_10_x0_y80.png",
+        "sha256": "34C146E46002FADC5FE3C8EED6C8A93B12D889C3804839060A77FFAD4CE9F1F3",
+        "pixelSha256": "8BA714471FB00E51A9D5D9F8FC0817EB7BC654CF6D43E9D7CC4AE24B69C14D18"
+      },
+      "knownCurrentResourceReuse": true,
+      "familyColorEvidence": {
+        "family": "shell",
+        "color": "yellow",
+        "legacyMhp3dbName": "Monster Liver",
+        "sourceRepository": "mikejsavage/MHP3DB",
+        "sourceRef": "bfbab18460d95d921d4a3492644b46bfc5ca1f3c",
+        "sourcePath": "data/temp/items/info.txt",
+        "usage": "MHP3-era icon family/color identity only; never canonical English and never production pixels"
+      }
+    }
+  ]
+}

@@ -1,0 +1,93 @@
+{
+  "version": 1,
+  "iteration": "4.12A.1",
+  "purpose": "Close the six frozen HH/GL/SA recipe Item identities before special-melee production integration.",
+  "source": {
+    "repository": "mhp3db/mhp3db.github.io",
+    "commit": "7ad3cf1c5ba07ce2e63afdaa1fa37c4671edc3bf",
+    "path": "scripts/database/sprite_data.js",
+    "sourceGitBlobSha": "1548e321a8ac2da7aa31334b919a43052f9c26dd",
+    "snapshot": "data-pipeline/inputs/great-sword-audit-v1/sprite_data.js"
+  },
+  "tmoSource": {
+    "path": "data/curated/tmo61-item-names.json",
+    "revision": "TMO PATCH PSP v6.1 r754"
+  },
+  "identityRule": "Numeric gameItemId is authoritative; names are exact frozen TMO canonical strings.",
+  "resolutionRule": "Exact pinned sprite_data.js source label to atlas cell; no fuzzy or visual-similarity matching.",
+  "unresolved": 0,
+  "items": [
+    {
+      "gameItemId": 74,
+      "name": "Gunpowder",
+      "sourceLabel": "Gunpowder",
+      "iconKey": "atlas:PAL_9:144:32",
+      "palette": "PAL_9",
+      "spriteKey": "144,32",
+      "atlas": {"sheet": "PAL_9.png", "x": 144, "y": 32, "width": 16, "height": 16},
+      "atlasSha256": "8ECDD5452FCD584ADB9F6B5742E2C64252FB27765A7A62679D66711513025D3B",
+      "pixelSha256": "F4C5C879A42C1CD5A0B3EF47C97F67327A24B97F6D47E1CDB3A7B43A3FCDEEE7",
+      "resolutionMethod": "MHP3DB_SPRITE_DATA_EXACT_REUSED_CELL"
+    },
+    {
+      "gameItemId": 629,
+      "name": "Pirate J Ticket",
+      "sourceLabel": "Pirate J Ticket",
+      "iconKey": "atlas:PAL_9:96:48",
+      "palette": "PAL_9",
+      "spriteKey": "96,48",
+      "atlas": {"sheet": "PAL_9.png", "x": 96, "y": 48, "width": 16, "height": 16},
+      "atlasSha256": "8ECDD5452FCD584ADB9F6B5742E2C64252FB27765A7A62679D66711513025D3B",
+      "pixelSha256": "026DE64A540B732E4EAAD3CF43E724BE01188A75FFC2E6843BC86CB0E396F26E",
+      "resolutionMethod": "MHP3DB_SPRITE_DATA_EXACT"
+    },
+    {
+      "gameItemId": 633,
+      "name": "Famitsu S Ticket",
+      "sourceLabel": "Famitsu S Ticket",
+      "iconKey": "atlas:PAL_13:96:48",
+      "palette": "PAL_13",
+      "spriteKey": "96,48",
+      "atlas": {"sheet": "PAL_13.png", "x": 96, "y": 48, "width": 16, "height": 16},
+      "atlasSha256": "DF9ED7BF8DDEF67030C8B591A3533408F5D8E28A635BBD20390148C0B7E6D858",
+      "pixelSha256": "8F105D578206AA60F116F7A9AFF6C1250C88B4EA622DA35F69024729D1A388C0",
+      "resolutionMethod": "MHP3DB_SPRITE_DATA_EXACT"
+    },
+    {
+      "gameItemId": 634,
+      "name": "Famitsu G Ticket",
+      "sourceLabel": "Famitsu G Ticket",
+      "iconKey": "atlas:PAL_10:96:48",
+      "palette": "PAL_10",
+      "spriteKey": "96,48",
+      "atlas": {"sheet": "PAL_10.png", "x": 96, "y": 48, "width": 16, "height": 16},
+      "atlasSha256": "DB9419090FA19ED0D9C3AC742A8D92674C48BD2CA9B7A75025BC69F66A4DBD62",
+      "pixelSha256": "85A6993051B5AC2680BAA47BFD65E337EA425D8FA2B146EA8BA974045D5880A6",
+      "resolutionMethod": "MHP3DB_SPRITE_DATA_EXACT"
+    },
+    {
+      "gameItemId": 635,
+      "name": "Famitsu P Ticket",
+      "sourceLabel": "Famitsu P Ticket",
+      "iconKey": "atlas:PAL_0:96:48",
+      "palette": "PAL_0",
+      "spriteKey": "96,48",
+      "atlas": {"sheet": "PAL_0.png", "x": 96, "y": 48, "width": 16, "height": 16},
+      "atlasSha256": "2184A428136422720F234134823EAFF94F3FE0F214FB6B8331BF13A45C4E1EEC",
+      "pixelSha256": "23BBCADF056D06C82567821C594A84849E1BF13B8373DF13E77EE9E9F16792B7",
+      "resolutionMethod": "MHP3DB_SPRITE_DATA_EXACT"
+    },
+    {
+      "gameItemId": 637,
+      "name": "Dengeki Ticket",
+      "sourceLabel": "Dengeki Ticket",
+      "iconKey": "atlas:PAL_10:96:48",
+      "palette": "PAL_10",
+      "spriteKey": "96,48",
+      "atlas": {"sheet": "PAL_10.png", "x": 96, "y": 48, "width": 16, "height": 16},
+      "atlasSha256": "DB9419090FA19ED0D9C3AC742A8D92674C48BD2CA9B7A75025BC69F66A4DBD62",
+      "pixelSha256": "85A6993051B5AC2680BAA47BFD65E337EA425D8FA2B146EA8BA974045D5880A6",
+      "resolutionMethod": "MHP3DB_SPRITE_DATA_EXACT_REUSED_CELL"
+    }
+  ]
+}

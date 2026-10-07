@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "iteration": "4.9C.1",
+  "source": {
+    "repository": "mhp3db/mhp3db.github.io",
+    "commit": "7ad3cf1c5ba07ce2e63afdaa1fa37c4671edc3bf",
+    "path": "scripts/database/sprite_data.js",
+    "sourceSha256": "32780629E84B72580F1FA2E3CBD5422E2212BDB2FA21254495247D420974BE9C",
+    "sourceGitBlobSha": "1548e321a8ac2da7aa31334b919a43052f9c26dd",
+    "identityRule": "exact sprite_data name to canonical TMO gameItemId"
+  },
+  "items": [
+    {
+      "gameItemId": 19,
+      "name": "Mega Demondrug",
+      "iconKey": "atlas:PAL_9:32:32",
+      "palette": "PAL_9",
+      "atlas": { "sheet": "PAL_9.png", "x": 32, "y": 32, "width": 16, "height": 16 },
+      "atlasSha256": "8ECDD5452FCD584ADB9F6B5742E2C64252FB27765A7A62679D66711513025D3B",
+      "pixelSha256": "77A3AE44429F46D0735A16A85CE795ECEAB797357CDFFAF9E248F88514659DFB",
+      "spriteDataName": "Mega Demondrug",
+      "resolutionMethod": "MHP3DB_SPRITE_DATA_EXACT"
+    },
+    {
+      "gameItemId": 21,
+      "name": "Armorskin",
+      "iconKey": "atlas:PAL_6:32:32",
+      "palette": "PAL_6",
+      "atlas": { "sheet": "PAL_6.png", "x": 32, "y": 32, "width": 16, "height": 16 },
+      "atlasSha256": "64942574D53E7D5056B45F47A0912BBCF51C13524CA0AA754A3D76F2FBC9EF28",
+      "pixelSha256": "DED9F4F9C0FA6BC0691FCA4ADABE4D90E02706F76E24E28F5BB26A86D7541538",
+      "spriteDataName": "Armorskin",
+      "resolutionMethod": "MHP3DB_SPRITE_DATA_EXACT_REUSED_HUNT_PREP"
+    },
+    {
+      "gameItemId": 22,
+      "name": "Mega Armorskin",
+      "iconKey": "atlas:PAL_6:32:32",
+      "palette": "PAL_6",
+      "atlas": { "sheet": "PAL_6.png", "x": 32, "y": 32, "width": 16, "height": 16 },
+      "atlasSha256": "64942574D53E7D5056B45F47A0912BBCF51C13524CA0AA754A3D76F2FBC9EF28",
+      "pixelSha256": "DED9F4F9C0FA6BC0691FCA4ADABE4D90E02706F76E24E28F5BB26A86D7541538",
+      "spriteDataName": "Mega Armorskin",
+      "resolutionMethod": "MHP3DB_SPRITE_DATA_EXACT_REUSED_HUNT_PREP"
+    },
+    {
+      "gameItemId": 606,
+      "name": "Commendation+",
+      "iconKey": "atlas:PAL_6:96:48",
+      "palette": "PAL_6",
+      "atlas": { "sheet": "PAL_6.png", "x": 96, "y": 48, "width": 16, "height": 16 },
+      "atlasSha256": "64942574D53E7D5056B45F47A0912BBCF51C13524CA0AA754A3D76F2FBC9EF28",
+      "pixelSha256": "8D63798EA47A5AD7525A6FE1F0A8C3FD3CC2DB8FA3EBF5EF8454FCB431BC4D70",
+      "spriteDataName": "Commendation+",
+      "resolutionMethod": "MHP3DB_SPRITE_DATA_EXACT"
+    },
+    {
+      "gameItemId": 608,
+      "name": "Yukumo Ticket",
+      "iconKey": "atlas:PAL_9:96:48",
+      "palette": "PAL_9",
+      "atlas": { "sheet": "PAL_9.png", "x": 96, "y": 48, "width": 16, "height": 16 },
+      "atlasSha256": "8ECDD5452FCD584ADB9F6B5742E2C64252FB27765A7A62679D66711513025D3B",
+      "pixelSha256": "026DE64A540B732E4EAAD3CF43E724BE01188A75FFC2E6843BC86CB0E396F26E",
+      "spriteDataName": "Yukumo Ticket",
+      "resolutionMethod": "MHP3DB_SPRITE_DATA_EXACT"
+    },
+    {
+      "gameItemId": 609,
+      "name": "Drink Ticket",
+      "iconKey": "atlas:PAL_5:96:48",
+      "palette": "PAL_5",
+      "atlas": { "sheet": "PAL_5.png", "x": 96, "y": 48, "width": 16, "height": 16 },
+      "atlasSha256": "5E6E223DE97D8D395B50F1491052FE8D73DD335355A0FFA7E731F8B8F8F44F3B",
+      "pixelSha256": "3B29F975398DDDE3A787F1E5366B3CA3C0A7B28CB1543747D33231D2A850D1C3",
+      "spriteDataName": "Drink Ticket",
+      "resolutionMethod": "MHP3DB_SPRITE_DATA_EXACT"
+    },
+    {
+      "gameItemId": 626,
+      "name": "Negima! Contract",
+      "iconKey": "atlas:PAL_3:96:48",
+      "palette": "PAL_3",
+      "atlas": { "sheet": "PAL_3.png", "x": 96, "y": 48, "width": 16, "height": 16 },
+      "atlasSha256": "F61F2476665999E347C3C9BEF0FE40A9424AA2BBB7883DB81786D52D648E6A9C",
+      "pixelSha256": "0F5D644B553681C3216941FB280541078F94B021B7F032425EAAA86BC92314BB",
+      "spriteDataName": "Negima! Contract",
+      "resolutionMethod": "MHP3DB_SPRITE_DATA_EXACT"
+    },
+    {
+      "gameItemId": 627,
+      "name": "Magazine Ticket",
+      "iconKey": "atlas:PAL_6:96:48",
+      "palette": "PAL_6",
+      "atlas": { "sheet": "PAL_6.png", "x": 96, "y": 48, "width": 16, "height": 16 },
+      "atlasSha256": "64942574D53E7D5056B45F47A0912BBCF51C13524CA0AA754A3D76F2FBC9EF28",
+      "pixelSha256": "8D63798EA47A5AD7525A6FE1F0A8C3FD3CC2DB8FA3EBF5EF8454FCB431BC4D70",
+      "spriteDataName": "Magazine Ticket",
+      "resolutionMethod": "MHP3DB_SPRITE_DATA_EXACT"
+    }
+  ]
+}

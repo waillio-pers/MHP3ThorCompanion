@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "source": {
+    "repository": "mhp3db/mhp3db.github.io",
+    "commit": "7ad3cf1c5ba07ce2e63afdaa1fa37c4671edc3bf",
+    "atlasBaseUrl": "https://raw.githubusercontent.com/mhp3db/mhp3db.github.io/7ad3cf1c5ba07ce2e63afdaa1fa37c4671edc3bf/assets/database/spritesheets/"
+  },
+  "method": "The family shape was matched against the classic item glyph referenced by the audit. The color selects the corresponding unmodified MHP3 palette sheet. Production pixels are cropped only from the pinned MHP3 atlas.",
+  "resolutions": [
+    { "iconKey": "shared:smoke:light_blue", "sheet": "PAL_2.png", "x": 112, "y": 32, "width": 16, "height": 16, "reference": "ItemIcon038b.png", "confidence": "high" },
+    { "iconKey": "shared:meat:purple", "sheet": "PAL_4.png", "x": 0, "y": 64, "width": 16, "height": 16, "reference": "ItemIcon020d.png", "confidence": "high" },
+    { "iconKey": "shared:meat:yellow", "sheet": "PAL_10.png", "x": 0, "y": 64, "width": 16, "height": 16, "reference": "ItemIcon020c.png", "confidence": "high" },
+    { "iconKey": "shared:meat:light_blue", "sheet": "PAL_2.png", "x": 0, "y": 64, "width": 16, "height": 16, "reference": "ItemIcon020b.png", "confidence": "high" },
+    { "iconKey": "shared:dung:yellow", "sheet": "PAL_10.png", "x": 96, "y": 16, "width": 16, "height": 16, "reference": "ItemIcon063b.png", "confidence": "high" },
+    { "iconKey": "shared:trap:green", "sheet": "PAL_5.png", "x": 64, "y": 32, "width": 16, "height": 16, "reference": "ItemIcon015a.png", "confidence": "high" },
+    { "iconKey": "shared:barrel_bomb:red", "sheet": "PAL_9.png", "x": 96, "y": 32, "width": 16, "height": 16, "reference": "ItemIcon050c.png", "confidence": "high" },
+    { "iconKey": "shared:dung:orange", "sheet": "PAL_6.png", "x": 96, "y": 16, "width": 16, "height": 16, "reference": "ItemIcon063a.png / Wyvern Droppings", "confidence": "medium" }
+  ]
+}

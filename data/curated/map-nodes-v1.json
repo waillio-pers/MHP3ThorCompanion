@@ -1,0 +1,1847 @@
+{
+  "formatVersion": 1,
+  "maps": [
+    {
+      "id": "misty_peaks",
+      "name": "Misty Peaks",
+      "image": "map_misty_peaks.png",
+      "nodes": [
+        {
+          "id": "mp-a7-fish",
+          "category": "FISH",
+          "x": 0.3665,
+          "y": 0.0629,
+          "area": "7",
+          "label": ""
+        },
+        {
+          "id": "mp-a7-berries",
+          "category": "BERRIES",
+          "x": 0.2635,
+          "y": 0.073,
+          "area": "7",
+          "label": ""
+        },
+        {
+          "id": "mp-a7-bugs",
+          "category": "BUGS",
+          "x": 0.3248,
+          "y": 0.0803,
+          "area": "7",
+          "label": ""
+        },
+        {
+          "id": "mp-a7-mushrooms",
+          "category": "MUSHROOMS",
+          "x": 0.3278,
+          "y": 0.1236,
+          "area": "7",
+          "label": ""
+        },
+        {
+          "id": "mp-a4-yukumo-wood",
+          "category": "MISC",
+          "x": 0.7014,
+          "y": 0.2001,
+          "area": "4",
+          "label": "Yukumo Wood"
+        },
+        {
+          "id": "mp-a4-plants",
+          "category": "PLANTS",
+          "x": 0.7337,
+          "y": 0.2124,
+          "area": "4",
+          "label": ""
+        },
+        {
+          "id": "mp-a4-mining",
+          "category": "MINING",
+          "x": 0.67,
+          "y": 0.26,
+          "area": "4",
+          "label": ""
+        },
+        {
+          "id": "mp-a4-berries",
+          "category": "BERRIES",
+          "x": 0.8097,
+          "y": 0.2687,
+          "area": "4",
+          "label": ""
+        },
+        {
+          "id": "mp-a5-yukumo-wood",
+          "category": "MISC",
+          "x": 0.4267,
+          "y": 0.2877,
+          "area": "5",
+          "label": "Yukumo Wood"
+        },
+        {
+          "id": "mp-a5-honey",
+          "category": "HONEY",
+          "x": 0.4718,
+          "y": 0.3048,
+          "area": "5",
+          "label": ""
+        },
+        {
+          "id": "mp-a5-mushrooms",
+          "category": "MUSHROOMS",
+          "x": 0.3993,
+          "y": 0.3288,
+          "area": "5",
+          "label": ""
+        },
+        {
+          "id": "mp-a5-plants",
+          "category": "PLANTS",
+          "x": 0.5341,
+          "y": 0.3396,
+          "area": "5",
+          "label": ""
+        },
+        {
+          "id": "mp-a6-fish",
+          "category": "FISH",
+          "x": 0.3444,
+          "y": 0.5161,
+          "area": "6",
+          "label": ""
+        },
+        {
+          "id": "mp-a6-plants",
+          "category": "PLANTS",
+          "x": 0.3444,
+          "y": 0.4195,
+          "area": "6",
+          "label": ""
+        },
+        {
+          "id": "mp-a6-bait",
+          "category": "MISC",
+          "x": 0.3434,
+          "y": 0.4877,
+          "area": "6",
+          "label": "Bait"
+        },
+        {
+          "id": "mp-a6-mining",
+          "category": "MINING",
+          "x": 0.3949,
+          "y": 0.4985,
+          "area": "6",
+          "label": ""
+        },
+        {
+          "id": "mp-a1-bugs",
+          "category": "BUGS",
+          "x": 0.7837,
+          "y": 0.6109,
+          "area": "1",
+          "label": ""
+        },
+        {
+          "id": "mp-a9-honey",
+          "category": "HONEY",
+          "x": 0.0939,
+          "y": 0.5548,
+          "area": "9",
+          "label": ""
+        },
+        {
+          "id": "mp-a9-yukumo-wood",
+          "category": "MISC",
+          "x": 0.1527,
+          "y": 0.5347,
+          "area": "9",
+          "label": ""
+        },
+        {
+          "id": "mp-a8-eggs",
+          "category": "MISC",
+          "x": 0.1208,
+          "y": 0.7617,
+          "area": "8",
+          "label": "Eggs"
+        },
+        {
+          "id": "mp-a8-mining",
+          "category": "MINING",
+          "x": 0.1743,
+          "y": 0.7911,
+          "area": "8",
+          "label": ""
+        },
+        {
+          "id": "mp-a3-bamboo-shoot-north",
+          "category": "MISC",
+          "x": 0.4129,
+          "y": 0.6968,
+          "area": "3",
+          "label": "Bamboo Shoot"
+        },
+        {
+          "id": "mp-a8-whetstone",
+          "category": "WHETSTONE",
+          "x": 0.1855,
+          "y": 0.7627,
+          "area": "8",
+          "label": ""
+        },
+        {
+          "id": "mp-a8-bones",
+          "category": "BONES",
+          "x": 0.14,
+          "y": 0.7504,
+          "area": "8",
+          "label": ""
+        },
+        {
+          "id": "mp-a2-mining",
+          "category": "MINING",
+          "x": 0.65,
+          "y": 0.81,
+          "area": "2",
+          "label": ""
+        },
+        {
+          "id": "mp-a1-whetstone",
+          "category": "WHETSTONE",
+          "x": 0.8076,
+          "y": 0.6293,
+          "area": "1",
+          "label": ""
+        },
+        {
+          "id": "mp-a1-berries",
+          "category": "BERRIES",
+          "x": 0.8297,
+          "y": 0.6401,
+          "area": "1",
+          "label": ""
+        },
+        {
+          "id": "mp-a1-plants",
+          "category": "PLANTS",
+          "x": 0.786,
+          "y": 0.648,
+          "area": "1",
+          "label": ""
+        },
+        {
+          "id": "mp-a6-berries",
+          "category": "BERRIES",
+          "x": 0.286,
+          "y": 0.422,
+          "area": "6",
+          "label": ""
+        },
+        {
+          "id": "mp-a9-bugs-west",
+          "category": "BUGS",
+          "x": 0.0836,
+          "y": 0.5735,
+          "area": "9",
+          "label": ""
+        },
+        {
+          "id": "mp-a9-bugs-north",
+          "category": "BUGS",
+          "x": 0.1066,
+          "y": 0.5387,
+          "area": "9",
+          "label": ""
+        },
+        {
+          "id": "mp-a9-mushrooms",
+          "category": "MUSHROOMS",
+          "x": 0.1257,
+          "y": 0.6195,
+          "area": "9",
+          "label": ""
+        },
+        {
+          "id": "mp-a8-dung",
+          "category": "MISC",
+          "x": 0.115,
+          "y": 0.7862,
+          "area": "8",
+          "label": "Dung"
+        },
+        {
+          "id": "mp-a3-bamboo-shoot-south",
+          "category": "MISC",
+          "x": 0.4374,
+          "y": 0.7196,
+          "area": "3",
+          "label": "Bamboo Shoot"
+        },
+        {
+          "id": "mp-a3-mining",
+          "category": "MINING",
+          "x": 0.3731,
+          "y": 0.7205,
+          "area": "3",
+          "label": ""
+        },
+        {
+          "id": "mp-a3-felyne",
+          "category": "MISC",
+          "x": 0.3892,
+          "y": 0.712,
+          "area": "3",
+          "label": "Felyne"
+        },
+        {
+          "id": "mp-a2-dung",
+          "category": "MISC",
+          "x": 0.5738,
+          "y": 0.7933,
+          "area": "2",
+          "label": "Dung"
+        },
+        {
+          "id": "mp-a2-mushrooms",
+          "category": "MUSHROOMS",
+          "x": 0.5823,
+          "y": 0.7578,
+          "area": "2",
+          "label": ""
+        },
+        {
+          "id": "mp-a2-bones",
+          "category": "BONES",
+          "x": 0.6678,
+          "y": 0.8026,
+          "area": "2",
+          "label": ""
+        },
+        {
+          "id": "mp-a3-spider-web",
+          "category": "SPIDER_WEB",
+          "x": 0.4544,
+          "y": 0.7076,
+          "area": "3",
+          "label": "Spider Web"
+        }
+      ]
+    },
+    {
+      "id": "sandy_plains",
+      "name": "Sandy Plains",
+      "image": "map_sandy_plains.png",
+      "nodes": [
+        {
+          "id": "sp-a9-plants-north",
+          "category": "PLANTS",
+          "x": 0.1263,
+          "y": 0.0796,
+          "area": "9",
+          "label": ""
+        },
+        {
+          "id": "sp-a9-plants-south",
+          "category": "PLANTS",
+          "x": 0.1448,
+          "y": 0.2313,
+          "area": "9",
+          "label": ""
+        },
+        {
+          "id": "sp-a9-bones",
+          "category": "BONES",
+          "x": 0.1166,
+          "y": 0.135,
+          "area": "9",
+          "label": ""
+        },
+        {
+          "id": "sp-a8-plants-west",
+          "category": "PLANTS",
+          "x": 0.3218,
+          "y": 0.2138,
+          "area": "8",
+          "label": ""
+        },
+        {
+          "id": "sp-a8-plants-east",
+          "category": "PLANTS",
+          "x": 0.388,
+          "y": 0.2634,
+          "area": "8",
+          "label": ""
+        },
+        {
+          "id": "sp-a8-bones",
+          "category": "BONES",
+          "x": 0.3238,
+          "y": 0.2537,
+          "area": "8",
+          "label": ""
+        },
+        {
+          "id": "sp-a5-dung",
+          "category": "MISC",
+          "x": 0.6233,
+          "y": 0.1768,
+          "area": "5",
+          "label": "Dung"
+        },
+        {
+          "id": "sp-a5-bones-west",
+          "category": "BONES",
+          "x": 0.5776,
+          "y": 0.1496,
+          "area": "5",
+          "label": ""
+        },
+        {
+          "id": "sp-a1-whetstone",
+          "category": "WHETSTONE",
+          "x": 0.7644,
+          "y": 0.2089,
+          "area": "1",
+          "label": ""
+        },
+        {
+          "id": "sp-a1-berries",
+          "category": "BERRIES",
+          "x": 0.8188,
+          "y": 0.1681,
+          "area": "1",
+          "label": ""
+        },
+        {
+          "id": "sp-a1-bugs",
+          "category": "BUGS",
+          "x": 0.8111,
+          "y": 0.2157,
+          "area": "1",
+          "label": ""
+        },
+        {
+          "id": "sp-a4-mining-north",
+          "category": "MINING",
+          "x": 0.6457,
+          "y": 0.3149,
+          "area": "4",
+          "label": ""
+        },
+        {
+          "id": "sp-a4-mining-south",
+          "category": "MINING",
+          "x": 0.7284,
+          "y": 0.3966,
+          "area": "4",
+          "label": ""
+        },
+        {
+          "id": "sp-a4-bugs",
+          "category": "BUGS",
+          "x": 0.6817,
+          "y": 0.3499,
+          "area": "4",
+          "label": ""
+        },
+        {
+          "id": "sp-a4-plants",
+          "category": "PLANTS",
+          "x": 0.6905,
+          "y": 0.4219,
+          "area": "4",
+          "label": ""
+        },
+        {
+          "id": "sp-a2-plants",
+          "category": "PLANTS",
+          "x": 0.7838,
+          "y": 0.5639,
+          "area": "2",
+          "label": ""
+        },
+        {
+          "id": "sp-a2-bait",
+          "category": "MISC",
+          "x": 0.7683,
+          "y": 0.6009,
+          "area": "2",
+          "label": "Bait"
+        },
+        {
+          "id": "sp-a2-bugs",
+          "category": "BUGS",
+          "x": 0.8111,
+          "y": 0.5853,
+          "area": "2",
+          "label": ""
+        },
+        {
+          "id": "sp-a3-berries",
+          "category": "BERRIES",
+          "x": 0.6214,
+          "y": 0.6009,
+          "area": "3",
+          "label": ""
+        },
+        {
+          "id": "sp-a3-plants-south",
+          "category": "PLANTS",
+          "x": 0.6136,
+          "y": 0.6622,
+          "area": "3",
+          "label": ""
+        },
+        {
+          "id": "sp-a6-mining-north",
+          "category": "MINING",
+          "x": 0.4385,
+          "y": 0.4161,
+          "area": "6",
+          "label": ""
+        },
+        {
+          "id": "sp-a6-mushrooms",
+          "category": "MUSHROOMS",
+          "x": 0.4619,
+          "y": 0.5036,
+          "area": "6",
+          "label": ""
+        },
+        {
+          "id": "sp-a6-mining-east",
+          "category": "MINING",
+          "x": 0.4891,
+          "y": 0.4394,
+          "area": "6",
+          "label": ""
+        },
+        {
+          "id": "sp-a10-bugs",
+          "category": "BUGS",
+          "x": 0.2119,
+          "y": 0.5454,
+          "area": "10",
+          "label": ""
+        },
+        {
+          "id": "sp-a10-plants",
+          "category": "PLANTS",
+          "x": 0.1857,
+          "y": 0.5163,
+          "area": "10",
+          "label": ""
+        },
+        {
+          "id": "sp-a10-whetstone",
+          "category": "WHETSTONE",
+          "x": 0.2917,
+          "y": 0.6174,
+          "area": "10",
+          "label": ""
+        },
+        {
+          "id": "sp-a11-bones",
+          "category": "BONES",
+          "x": 0.102,
+          "y": 0.7322,
+          "area": "11",
+          "label": ""
+        },
+        {
+          "id": "sp-a11-mining-east",
+          "category": "MINING",
+          "x": 0.175,
+          "y": 0.7565,
+          "area": "11",
+          "label": ""
+        },
+        {
+          "id": "sp-a7-egg",
+          "category": "MISC",
+          "x": 0.5037,
+          "y": 0.8275,
+          "area": "7",
+          "label": "Egg"
+        },
+        {
+          "id": "sp-a7-mushrooms",
+          "category": "MUSHROOMS",
+          "x": 0.492,
+          "y": 0.7915,
+          "area": "7",
+          "label": ""
+        },
+        {
+          "id": "sp-a7-plants",
+          "category": "PLANTS",
+          "x": 0.5611,
+          "y": 0.8256,
+          "area": "7",
+          "label": ""
+        },
+        {
+          "id": "sp-a7-fish",
+          "category": "FISH",
+          "x": 0.5893,
+          "y": 0.7905,
+          "area": "7",
+          "label": ""
+        },
+        {
+          "id": "sp-a5-bones-east",
+          "category": "BONES",
+          "x": 0.5961,
+          "y": 0.1593,
+          "area": "5",
+          "label": ""
+        },
+        {
+          "id": "sp-3-plants-north",
+          "category": "PLANTS",
+          "x": 0.5951,
+          "y": 0.5513,
+          "area": "3",
+          "label": ""
+        },
+        {
+          "id": "sp-6-supplies",
+          "category": "MISC",
+          "x": 0.4133,
+          "y": 0.5095,
+          "area": "6",
+          "label": "Supplies"
+        },
+        {
+          "id": "sp-6-felyne",
+          "category": "MISC",
+          "x": 0.4201,
+          "y": 0.4842,
+          "area": "6",
+          "label": "Felyne"
+        },
+        {
+          "id": "sp-11-mining-west",
+          "category": "MINING",
+          "x": 0.1438,
+          "y": 0.7643,
+          "area": "11",
+          "label": ""
+        },
+        {
+          "id": "sp-11-dung",
+          "category": "MISC",
+          "x": 0.0991,
+          "y": 0.7536,
+          "area": "11",
+          "label": "Dung"
+        }
+      ]
+    },
+    {
+      "id": "flooded_forest",
+      "name": "Flooded Forest",
+      "image": "map_flooded_forest.png",
+      "nodes": [
+        {
+          "id": "ff-a1-mining",
+          "category": "MINING",
+          "x": 0.2916,
+          "y": 0.5978,
+          "area": "1",
+          "label": ""
+        },
+        {
+          "id": "ff-a3-mining",
+          "category": "MINING",
+          "x": 0.4218,
+          "y": 0.7141,
+          "area": "3",
+          "label": ""
+        },
+        {
+          "id": "ff-a5-mining",
+          "category": "MINING",
+          "x": 0.8658,
+          "y": 0.6482,
+          "area": "5",
+          "label": ""
+        },
+        {
+          "id": "ff-a6-mining-north",
+          "category": "MINING",
+          "x": 0.7959,
+          "y": 0.4402,
+          "area": "6",
+          "label": ""
+        },
+        {
+          "id": "ff-a6-mining-south",
+          "category": "MINING",
+          "x": 0.8325,
+          "y": 0.5324,
+          "area": "6",
+          "label": ""
+        },
+        {
+          "id": "ff-a8-mining-north",
+          "category": "MINING",
+          "x": 0.2383,
+          "y": 0.2367,
+          "area": "8",
+          "label": ""
+        },
+        {
+          "id": "ff-a8-mining-south",
+          "category": "MINING",
+          "x": 0.2874,
+          "y": 0.3079,
+          "area": "8",
+          "label": ""
+        },
+        {
+          "id": "ff-a10-mining",
+          "category": "MINING",
+          "x": 0.6375,
+          "y": 0.0376,
+          "area": "10",
+          "label": ""
+        },
+        {
+          "id": "ff-a6-whetstone",
+          "category": "WHETSTONE",
+          "x": 0.8784,
+          "y": 0.4634,
+          "area": "6",
+          "label": ""
+        },
+        {
+          "id": "ff-a5-plants",
+          "category": "PLANTS",
+          "x": 0.8472,
+          "y": 0.7198,
+          "area": "5",
+          "label": ""
+        },
+        {
+          "id": "ff-a2-bugs",
+          "category": "BUGS",
+          "x": 0.2019,
+          "y": 0.7589,
+          "area": "2",
+          "label": ""
+        },
+        {
+          "id": "ff-a5-bones",
+          "category": "BONES",
+          "x": 0.8604,
+          "y": 0.6934,
+          "area": "5",
+          "label": ""
+        },
+        {
+          "id": "ff-a1-plants-west",
+          "category": "PLANTS",
+          "x": 0.2341,
+          "y": 0.5054,
+          "area": "1",
+          "label": ""
+        },
+        {
+          "id": "ff-a1-plants-east",
+          "category": "PLANTS",
+          "x": 0.2888,
+          "y": 0.5166,
+          "area": "1",
+          "label": ""
+        },
+        {
+          "id": "ff-a4-plants-west",
+          "category": "PLANTS",
+          "x": 0.6305,
+          "y": 0.7351,
+          "area": "4",
+          "label": ""
+        },
+        {
+          "id": "ff-a4-plants-east",
+          "category": "PLANTS",
+          "x": 0.7061,
+          "y": 0.7169,
+          "area": "4",
+          "label": ""
+        },
+        {
+          "id": "ff-a9-plants",
+          "category": "PLANTS",
+          "x": 0.7607,
+          "y": 0.2113,
+          "area": "9",
+          "label": ""
+        },
+        {
+          "id": "ff-a2-mushroom",
+          "category": "MUSHROOMS",
+          "x": 0.1655,
+          "y": 0.7533,
+          "area": "2",
+          "label": ""
+        },
+        {
+          "id": "ff-a4-mushroom",
+          "category": "MUSHROOMS",
+          "x": 0.5493,
+          "y": 0.6651,
+          "area": "4",
+          "label": ""
+        },
+        {
+          "id": "ff-a5-bugs",
+          "category": "BUGS",
+          "x": 0.8442,
+          "y": 0.6788,
+          "area": "5",
+          "label": ""
+        },
+        {
+          "id": "ff-a7-bugs",
+          "category": "BUGS",
+          "x": 0.471,
+          "y": 0.5031,
+          "area": "7",
+          "label": ""
+        },
+        {
+          "id": "ff-a9-mushroom",
+          "category": "MUSHROOMS",
+          "x": 0.837,
+          "y": 0.1109,
+          "area": "9",
+          "label": ""
+        },
+        {
+          "id": "ff-a7-honey",
+          "category": "HONEY",
+          "x": 0.44,
+          "y": 0.483,
+          "area": "7",
+          "label": ""
+        },
+        {
+          "id": "ff-a7-berries-south",
+          "category": "BERRIES",
+          "x": 0.5184,
+          "y": 0.5278,
+          "area": "7",
+          "label": ""
+        },
+        {
+          "id": "ff-a2-plants",
+          "category": "PLANTS",
+          "x": 0.2621,
+          "y": 0.7337,
+          "area": "2",
+          "label": ""
+        },
+        {
+          "id": "ff-a2-berries-south",
+          "category": "BERRIES",
+          "x": 0.2393,
+          "y": 0.8902,
+          "area": "2",
+          "label": ""
+        },
+        {
+          "id": "ff-a5-misc",
+          "category": "MISC",
+          "x": 0.8969,
+          "y": 0.6876,
+          "area": "5",
+          "label": "Bait"
+        },
+        {
+          "id": "ff-a3-spider-web",
+          "category": "SPIDER_WEB",
+          "x": 0.349,
+          "y": 0.6959,
+          "area": "3",
+          "label": ""
+        },
+        {
+          "id": "ff-a1-mushroom",
+          "category": "MUSHROOMS",
+          "x": 0.2031,
+          "y": 0.5412,
+          "area": "1",
+          "label": ""
+        },
+        {
+          "id": "ff-a8-mushroom",
+          "category": "MUSHROOMS",
+          "x": 0.1893,
+          "y": 0.2827,
+          "area": "8",
+          "label": ""
+        },
+        {
+          "id": "ff-a10-bugs",
+          "category": "BUGS",
+          "x": 0.5822,
+          "y": 0.1123,
+          "area": "10",
+          "label": ""
+        },
+        {
+          "id": "ff-a10-misc",
+          "category": "MISC",
+          "x": 0.5457,
+          "y": 0.0962,
+          "area": "10",
+          "label": "Egg"
+        },
+        {
+          "id": "ff-a9-bugs",
+          "category": "BUGS",
+          "x": 0.8033,
+          "y": 0.1548,
+          "area": "9",
+          "label": ""
+        },
+        {
+          "id": "ff-a3-plants-west",
+          "category": "PLANTS",
+          "x": 0.3924,
+          "y": 0.6595,
+          "area": "3",
+          "label": ""
+        },
+        {
+          "id": "ff-a3-plants-east",
+          "category": "PLANTS",
+          "x": 0.4456,
+          "y": 0.6763,
+          "area": "3",
+          "label": ""
+        },
+        {
+          "id": "ff-a2-berries-north",
+          "category": "BERRIES",
+          "x": 0.1991,
+          "y": 0.8205,
+          "area": "2",
+          "label": ""
+        },
+        {
+          "id": "ff-a4-bugs",
+          "category": "BUGS",
+          "x": 0.6151,
+          "y": 0.6721,
+          "area": "4",
+          "label": ""
+        },
+        {
+          "id": "ff-a8-misc",
+          "category": "MISC",
+          "x": 0.2954,
+          "y": 0.2411,
+          "area": "8",
+          "label": "Egg"
+        },
+        {
+          "id": "ff-a8-bones",
+          "category": "BONES",
+          "x": 0.2954,
+          "y": 0.2426,
+          "area": "8",
+          "label": ""
+        },
+        {
+          "id": "ff-c-fish",
+          "category": "FISH",
+          "x": 0.0202,
+          "y": 0.4094,
+          "area": "c",
+          "label": ""
+        },
+        {
+          "id": "ff-a10-bones",
+          "category": "BONES",
+          "x": 0.5457,
+          "y": 0.0962,
+          "area": "10",
+          "label": ""
+        },
+        {
+          "id": "ff-a7-berries-north",
+          "category": "BERRIES",
+          "x": 0.5047,
+          "y": 0.468,
+          "area": "7",
+          "label": ""
+        },
+        {
+          "id": "ff-a4-fish",
+          "category": "FISH",
+          "x": 0.663,
+          "y": 0.6353,
+          "area": "4",
+          "label": ""
+        },
+        {
+          "id": "ff-a10-dung",
+          "category": "MISC",
+          "x": 0.6091,
+          "y": 0.1015,
+          "area": "10",
+          "label": "Dung"
+        }
+      ]
+    },
+    {
+      "id": "tundra",
+      "name": "Tundra",
+      "image": "map_tundra.png",
+      "nodes": [
+        {
+          "id": "tu-a4-mining-north",
+          "category": "MINING",
+          "x": 0.2729,
+          "y": 0.1185,
+          "area": "4",
+          "label": ""
+        },
+        {
+          "id": "tu-a4-mushrooms",
+          "category": "MUSHROOMS",
+          "x": 0.3265,
+          "y": 0.1697,
+          "area": "4",
+          "label": ""
+        },
+        {
+          "id": "tu-a4-bones",
+          "category": "BONES",
+          "x": 0.3229,
+          "y": 0.1246,
+          "area": "4",
+          "label": ""
+        },
+        {
+          "id": "tu-a4-mining-south",
+          "category": "MINING",
+          "x": 0.2826,
+          "y": 0.1868,
+          "area": "4",
+          "label": ""
+        },
+        {
+          "id": "tu-a7-mining-north",
+          "category": "MINING",
+          "x": 0.6653,
+          "y": 0.1091,
+          "area": "7",
+          "label": ""
+        },
+        {
+          "id": "tu-a7-bones",
+          "category": "BONES",
+          "x": 0.6815,
+          "y": 0.1409,
+          "area": "7",
+          "label": ""
+        },
+        {
+          "id": "tu-a2-mining",
+          "category": "MINING",
+          "x": 0.5324,
+          "y": 0.389,
+          "area": "2",
+          "label": ""
+        },
+        {
+          "id": "tu-a2-berries",
+          "category": "BERRIES",
+          "x": 0.5609,
+          "y": 0.4767,
+          "area": "2",
+          "label": ""
+        },
+        {
+          "id": "tu-a2-plants",
+          "category": "PLANTS",
+          "x": 0.4619,
+          "y": 0.5027,
+          "area": "2",
+          "label": ""
+        },
+        {
+          "id": "tu-a3-bugs",
+          "category": "BUGS",
+          "x": 0.1153,
+          "y": 0.4634,
+          "area": "3",
+          "label": ""
+        },
+        {
+          "id": "tu-a3-whetstone",
+          "category": "WHETSTONE",
+          "x": 0.157,
+          "y": 0.5105,
+          "area": "3",
+          "label": ""
+        },
+        {
+          "id": "tu-a3-plants",
+          "category": "PLANTS",
+          "x": 0.2388,
+          "y": 0.5267,
+          "area": "3",
+          "label": ""
+        },
+        {
+          "id": "tu-a6-mining",
+          "category": "MINING",
+          "x": 0.7261,
+          "y": 0.6066,
+          "area": "6",
+          "label": ""
+        },
+        {
+          "id": "tu-a6-whetstone",
+          "category": "WHETSTONE",
+          "x": 0.812,
+          "y": 0.4698,
+          "area": "6",
+          "label": ""
+        },
+        {
+          "id": "tu-a6-plants",
+          "category": "PLANTS",
+          "x": 0.8369,
+          "y": 0.6105,
+          "area": "6",
+          "label": ""
+        },
+        {
+          "id": "tu-a5-bones",
+          "category": "BONES",
+          "x": 0.1959,
+          "y": 0.7187,
+          "area": "5",
+          "label": ""
+        },
+        {
+          "id": "tu-a5-mushrooms",
+          "category": "MUSHROOMS",
+          "x": 0.2373,
+          "y": 0.7446,
+          "area": "5",
+          "label": ""
+        },
+        {
+          "id": "tu-a5-mining-west",
+          "category": "MINING",
+          "x": 0.1412,
+          "y": 0.75,
+          "area": "5",
+          "label": ""
+        },
+        {
+          "id": "tu-a1-bugs",
+          "category": "BUGS",
+          "x": 0.3784,
+          "y": 0.7113,
+          "area": "1",
+          "label": ""
+        },
+        {
+          "id": "tu-a1-berries",
+          "category": "BERRIES",
+          "x": 0.3922,
+          "y": 0.7252,
+          "area": "1",
+          "label": ""
+        },
+        {
+          "id": "tu-a1-honey",
+          "category": "HONEY",
+          "x": 0.4485,
+          "y": 0.7603,
+          "area": "1",
+          "label": ""
+        },
+        {
+          "id": "tu-c-fish",
+          "category": "FISH",
+          "x": 0.1378,
+          "y": 0.8975,
+          "area": "c",
+          "label": ""
+        },
+        {
+          "id": "tu-a1-felyne",
+          "category": "MISC",
+          "x": 0.4246,
+          "y": 0.7598,
+          "area": "1",
+          "label": "Felyne"
+        },
+        {
+          "id": "tu-a5-mining-east",
+          "category": "MINING",
+          "x": 0.2866,
+          "y": 0.7238,
+          "area": "5",
+          "label": ""
+        },
+        {
+          "id": "tu-a5-mining-north",
+          "category": "MINING",
+          "x": 0.2391,
+          "y": 0.7103,
+          "area": "5",
+          "label": ""
+        },
+        {
+          "id": "tu-a7-mining-south",
+          "category": "MINING",
+          "x": 0.6873,
+          "y": 0.2301,
+          "area": "7",
+          "label": ""
+        }
+      ]
+    },
+    {
+      "id": "volcano",
+      "name": "Volcano",
+      "image": "map_volcano.png",
+      "nodes": [
+        {
+          "id": "vo-a10-mining-west",
+          "category": "MINING",
+          "x": 0.2968,
+          "y": 0.0756,
+          "area": "10",
+          "label": ""
+        },
+        {
+          "id": "vo-a10-misc",
+          "category": "MISC",
+          "x": 0.3093,
+          "y": 0.0917,
+          "area": "10",
+          "label": "Powderstone"
+        },
+        {
+          "id": "vo-a10-mining-east",
+          "category": "MINING",
+          "x": 0.3291,
+          "y": 0.1002,
+          "area": "10",
+          "label": ""
+        },
+        {
+          "id": "vo-a9-mining-west",
+          "category": "MINING",
+          "x": 0.2303,
+          "y": 0.1072,
+          "area": "9",
+          "label": ""
+        },
+        {
+          "id": "vo-a9-mining-east",
+          "category": "MINING",
+          "x": 0.2741,
+          "y": 0.146,
+          "area": "9",
+          "label": ""
+        },
+        {
+          "id": "vo-a8-mining",
+          "category": "MINING",
+          "x": 0.5066,
+          "y": 0.1597,
+          "area": "8",
+          "label": ""
+        },
+        {
+          "id": "vo-a8-berries",
+          "category": "BERRIES",
+          "x": 0.5237,
+          "y": 0.2532,
+          "area": "8",
+          "label": ""
+        },
+        {
+          "id": "vo-a8-bones",
+          "category": "BONES",
+          "x": 0.4902,
+          "y": 0.2891,
+          "area": "8",
+          "label": ""
+        },
+        {
+          "id": "vo-a7-mining",
+          "category": "MINING",
+          "x": 0.3631,
+          "y": 0.415,
+          "area": "7",
+          "label": ""
+        },
+        {
+          "id": "vo-a7-plants-south",
+          "category": "PLANTS",
+          "x": 0.299,
+          "y": 0.4426,
+          "area": "7",
+          "label": ""
+        },
+        {
+          "id": "vo-a6-plants",
+          "category": "PLANTS",
+          "x": 0.4406,
+          "y": 0.5067,
+          "area": "6",
+          "label": ""
+        },
+        {
+          "id": "vo-a6-whetstone-east",
+          "category": "WHETSTONE",
+          "x": 0.5748,
+          "y": 0.5195,
+          "area": "6",
+          "label": ""
+        },
+        {
+          "id": "vo-a5-mining-north",
+          "category": "MINING",
+          "x": 0.7442,
+          "y": 0.3246,
+          "area": "5",
+          "label": ""
+        },
+        {
+          "id": "vo-a5-mining-south",
+          "category": "MINING",
+          "x": 0.7124,
+          "y": 0.4199,
+          "area": "5",
+          "label": ""
+        },
+        {
+          "id": "vo-a5-plants",
+          "category": "PLANTS",
+          "x": 0.8204,
+          "y": 0.4432,
+          "area": "5",
+          "label": ""
+        },
+        {
+          "id": "vo-a4-plants",
+          "category": "PLANTS",
+          "x": 0.3219,
+          "y": 0.6432,
+          "area": "4",
+          "label": ""
+        },
+        {
+          "id": "vo-a4-fish",
+          "category": "FISH",
+          "x": 0.3143,
+          "y": 0.7144,
+          "area": "4",
+          "label": ""
+        },
+        {
+          "id": "vo-a4-bugs",
+          "category": "BUGS",
+          "x": 0.3625,
+          "y": 0.7126,
+          "area": "4",
+          "label": ""
+        },
+        {
+          "id": "vo-a4-misc",
+          "category": "MISC",
+          "x": 0.3666,
+          "y": 0.645,
+          "area": "4",
+          "label": ""
+        },
+        {
+          "id": "vo-a3-misc",
+          "category": "MISC",
+          "x": 0.59,
+          "y": 0.7025,
+          "area": "3",
+          "label": "Worms|Stones"
+        },
+        {
+          "id": "vo-a3-bones",
+          "category": "BONES",
+          "x": 0.5665,
+          "y": 0.7045,
+          "area": "3",
+          "label": ""
+        },
+        {
+          "id": "vo-a2-plants",
+          "category": "PLANTS",
+          "x": 0.4113,
+          "y": 0.8185,
+          "area": "2",
+          "label": ""
+        },
+        {
+          "id": "vo-a2-bugs",
+          "category": "BUGS",
+          "x": 0.3837,
+          "y": 0.852,
+          "area": "2",
+          "label": ""
+        },
+        {
+          "id": "vo-a2-whetstone",
+          "category": "WHETSTONE",
+          "x": 0.4378,
+          "y": 0.852,
+          "area": "2",
+          "label": ""
+        },
+        {
+          "id": "vo-a1-berries-west",
+          "category": "BERRIES",
+          "x": 0.6345,
+          "y": 0.8361,
+          "area": "1",
+          "label": ""
+        },
+        {
+          "id": "vo-a1-plants",
+          "category": "PLANTS",
+          "x": 0.6518,
+          "y": 0.8197,
+          "area": "1",
+          "label": ""
+        },
+        {
+          "id": "vo-a1-bugs",
+          "category": "BUGS",
+          "x": 0.717,
+          "y": 0.8442,
+          "area": "1",
+          "label": ""
+        },
+        {
+          "id": "vo-a1-berries-east",
+          "category": "BERRIES",
+          "x": 0.694,
+          "y": 0.7941,
+          "area": "1",
+          "label": ""
+        },
+        {
+          "id": "vo-a1-misc",
+          "category": "MISC",
+          "x": 0.7195,
+          "y": 0.7692,
+          "area": "1",
+          "label": "Cat Village"
+        },
+        {
+          "id": "vo-a3-mining",
+          "category": "MINING",
+          "x": 0.6038,
+          "y": 0.632,
+          "area": "3",
+          "label": ""
+        },
+        {
+          "id": "vo-a4-berries",
+          "category": "BERRIES",
+          "x": 0.3078,
+          "y": 0.6797,
+          "area": "4",
+          "label": ""
+        },
+        {
+          "id": "vo-a7-plants-north",
+          "category": "PLANTS",
+          "x": 0.2572,
+          "y": 0.2873,
+          "area": "7",
+          "label": ""
+        },
+        {
+          "id": "vo-a6-whetstone-west",
+          "category": "WHETSTONE",
+          "x": 0.4371,
+          "y": 0.5689,
+          "area": "6",
+          "label": ""
+        },
+        {
+          "id": "vo-a9-mining-north",
+          "category": "MINING",
+          "x": 0.2183,
+          "y": 0.0832,
+          "area": "9",
+          "label": ""
+        }
+      ]
+    },
+    {
+      "id": "deserted_island",
+      "name": "Deserted Island",
+      "image": "map_deserted_island.png",
+      "nodes": [
+        {
+          "id": "di-a10-egg",
+          "category": "MISC",
+          "x": 0.6503,
+          "y": 0.0611,
+          "area": "10",
+          "label": "Egg"
+        },
+        {
+          "id": "di-a10-mushrooms",
+          "category": "MUSHROOMS",
+          "x": 0.8079,
+          "y": 0.055,
+          "area": "10",
+          "label": ""
+        },
+        {
+          "id": "di-a10-bugs",
+          "category": "BUGS",
+          "x": 0.6869,
+          "y": 0.0946,
+          "area": "10",
+          "label": ""
+        },
+        {
+          "id": "di-a10-mining",
+          "category": "MINING",
+          "x": 0.8271,
+          "y": 0.0716,
+          "area": "10",
+          "label": ""
+        },
+        {
+          "id": "di-a9-berries-north",
+          "category": "BERRIES",
+          "x": 0.7835,
+          "y": 0.2349,
+          "area": "9",
+          "label": ""
+        },
+        {
+          "id": "di-a9-berries-south",
+          "category": "BERRIES",
+          "x": 0.7744,
+          "y": 0.2725,
+          "area": "9",
+          "label": ""
+        },
+        {
+          "id": "di-a9-plants",
+          "category": "PLANTS",
+          "x": 0.8109,
+          "y": 0.2857,
+          "area": "9",
+          "label": ""
+        },
+        {
+          "id": "di-a8-bones",
+          "category": "BONES",
+          "x": 0.3251,
+          "y": 0.2217,
+          "area": "8",
+          "label": ""
+        },
+        {
+          "id": "di-a8-egg",
+          "category": "MISC",
+          "x": 0.3037,
+          "y": 0.242,
+          "area": "8",
+          "label": "Egg"
+        },
+        {
+          "id": "di-a7-mining",
+          "category": "MINING",
+          "x": 0.1968,
+          "y": 0.3947,
+          "area": "7",
+          "label": ""
+        },
+        {
+          "id": "di-a7-mushrooms",
+          "category": "MUSHROOMS",
+          "x": 0.0966,
+          "y": 0.394,
+          "area": "7",
+          "label": ""
+        },
+        {
+          "id": "di-a7-plants",
+          "category": "PLANTS",
+          "x": 0.1743,
+          "y": 0.358,
+          "area": "7",
+          "label": ""
+        },
+        {
+          "id": "di-a7-whetstone",
+          "category": "WHETSTONE",
+          "x": 0.1375,
+          "y": 0.3721,
+          "area": "7",
+          "label": ""
+        },
+        {
+          "id": "di-a6-mining",
+          "category": "MINING",
+          "x": 0.47,
+          "y": 0.3855,
+          "area": "6",
+          "label": ""
+        },
+        {
+          "id": "di-a6-bones",
+          "category": "BONES",
+          "x": 0.4432,
+          "y": 0.4582,
+          "area": "6",
+          "label": ""
+        },
+        {
+          "id": "di-a6-mushrooms",
+          "category": "MUSHROOMS",
+          "x": 0.4037,
+          "y": 0.4194,
+          "area": "6",
+          "label": ""
+        },
+        {
+          "id": "di-a4-mining-south",
+          "category": "MINING",
+          "x": 0.3112,
+          "y": 0.5585,
+          "area": "4",
+          "label": ""
+        },
+        {
+          "id": "di-a4-mining-north",
+          "category": "MINING",
+          "x": 0.3133,
+          "y": 0.5189,
+          "area": "4",
+          "label": ""
+        },
+        {
+          "id": "di-a4-mushrooms",
+          "category": "MUSHROOMS",
+          "x": 0.2717,
+          "y": 0.5571,
+          "area": "4",
+          "label": ""
+        },
+        {
+          "id": "di-a4-mining-east",
+          "category": "MINING",
+          "x": 0.3345,
+          "y": 0.5437,
+          "area": "4",
+          "label": ""
+        },
+        {
+          "id": "di-a3-bugs",
+          "category": "BUGS",
+          "x": 0.3491,
+          "y": 0.653,
+          "area": "3",
+          "label": ""
+        },
+        {
+          "id": "di-a3-mushrooms-south",
+          "category": "MUSHROOMS",
+          "x": 0.3192,
+          "y": 0.6927,
+          "area": "3",
+          "label": ""
+        },
+        {
+          "id": "di-a3-honey",
+          "category": "HONEY",
+          "x": 0.4319,
+          "y": 0.6749,
+          "area": "3",
+          "label": ""
+        },
+        {
+          "id": "di-a1-whetstone",
+          "category": "WHETSTONE",
+          "x": 0.4609,
+          "y": 0.7736,
+          "area": "1",
+          "label": ""
+        },
+        {
+          "id": "di-a1-plants-west",
+          "category": "PLANTS",
+          "x": 0.4891,
+          "y": 0.7999,
+          "area": "1",
+          "label": ""
+        },
+        {
+          "id": "di-a1-plants-east",
+          "category": "PLANTS",
+          "x": 0.5143,
+          "y": 0.8099,
+          "area": "1",
+          "label": ""
+        },
+        {
+          "id": "di-a1-bugs",
+          "category": "BUGS",
+          "x": 0.5222,
+          "y": 0.8049,
+          "area": "1",
+          "label": ""
+        },
+        {
+          "id": "di-a2-mushrooms",
+          "category": "MUSHROOMS",
+          "x": 0.6344,
+          "y": 0.625,
+          "area": "2",
+          "label": ""
+        },
+        {
+          "id": "di-a2-honey",
+          "category": "HONEY",
+          "x": 0.5978,
+          "y": 0.6467,
+          "area": "2",
+          "label": ""
+        },
+        {
+          "id": "di-a2-berries",
+          "category": "BERRIES",
+          "x": 0.6295,
+          "y": 0.6716,
+          "area": "2",
+          "label": ""
+        },
+        {
+          "id": "di-a5-bones",
+          "category": "BONES",
+          "x": 0.7481,
+          "y": 0.5,
+          "area": "5",
+          "label": ""
+        },
+        {
+          "id": "di-a5-spider-web",
+          "category": "SPIDER_WEB",
+          "x": 0.7413,
+          "y": 0.4618,
+          "area": "5",
+          "label": ""
+        },
+        {
+          "id": "di-a5-berries",
+          "category": "BERRIES",
+          "x": 0.8393,
+          "y": 0.4481,
+          "area": "5",
+          "label": ""
+        },
+        {
+          "id": "di-a5-bugs",
+          "category": "BUGS",
+          "x": 0.7349,
+          "y": 0.4814,
+          "area": "5",
+          "label": ""
+        },
+        {
+          "id": "di-a3-mushrooms-north",
+          "category": "MUSHROOMS",
+          "x": 0.3034,
+          "y": 0.6651,
+          "area": "3",
+          "label": ""
+        },
+        {
+          "id": "di-a2-plants-north",
+          "category": "PLANTS",
+          "x": 0.6888,
+          "y": 0.6358,
+          "area": "2",
+          "label": ""
+        },
+        {
+          "id": "di-a4-barrel",
+          "category": "MISC",
+          "x": 0.3486,
+          "y": 0.5634,
+          "area": "4",
+          "label": "Barrel"
+        },
+        {
+          "id": "di-a4-felyne",
+          "category": "MISC",
+          "x": 0.3698,
+          "y": 0.5698,
+          "area": "4",
+          "label": "Felyne"
+        },
+        {
+          "id": "di-a4-bugs",
+          "category": "BUGS",
+          "x": 0.3634,
+          "y": 0.5479,
+          "area": "4",
+          "label": ""
+        },
+        {
+          "id": "di-a8-dung",
+          "category": "MISC",
+          "x": 0.2742,
+          "y": 0.2126,
+          "area": "8",
+          "label": "Dung"
+        },
+        {
+          "id": "di-a10-bait",
+          "category": "MISC",
+          "x": 0.8038,
+          "y": 0.117,
+          "area": "10",
+          "label": "Bait"
+        },
+        {
+          "id": "di-a2-bugs",
+          "category": "BUGS",
+          "x": 0.6702,
+          "y": 0.6246,
+          "area": "2",
+          "label": ""
+        },
+        {
+          "id": "di-a6-bones-west",
+          "category": "BONES",
+          "x": 0.4118,
+          "y": 0.4577,
+          "area": "6",
+          "label": ""
+        }
+      ]
+    }
+  ]
+}
