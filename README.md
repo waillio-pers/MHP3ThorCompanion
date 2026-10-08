@@ -2,7 +2,7 @@
 
 Offline companion for MH Portable 3rd. Designed around Ayn Thor second screen, but adaptive layouts are added for phones and such. UI and features mostly tested on Ayn Thor second screen, while phone UI been tested less thoroughly. Its not a dual screen mod, it never do anything to you device or your emulators. Just a companion app with data about the game.
 
-**THIS APP HAS BEEN VIBECODED!**
+🛑**THIS APP HAS BEEN VIBECODED!**🤖
 
 If its a deal breaker to you - you should know. Though, I was making original 1.0.0 version for roughly two months, while playing MHP3rd on a main screen, so there is been a lot of testing. 
 
