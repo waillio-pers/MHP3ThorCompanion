@@ -46,7 +46,8 @@ data class SkillTree(
     val jpName: String,
     val inGameDescription: String,
     val thresholds: List<SkillThreshold> = emptyList(),
-    val specialMechanics: List<SkillSpecialMechanic> = emptyList()
+    val specialMechanics: List<SkillSpecialMechanic> = emptyList(),
+    val categories: List<String> = emptyList()
 ) {
     /** Alias retained for callers that use the projection field name. */
     val uiDisplayName: String get() = displayName
@@ -873,7 +874,8 @@ data class DecorationCraftingRecipe(
     val jpName: String,
     val inGameDescription: String,
     val thresholds: List<GeneratedSkillThreshold> = emptyList(),
-    val specialMechanics: List<GeneratedSkillSpecialMechanic> = emptyList()
+    val specialMechanics: List<GeneratedSkillSpecialMechanic> = emptyList(),
+    val categories: List<String> = emptyList()
 )
 
 @Serializable data class GeneratedSkillThreshold(

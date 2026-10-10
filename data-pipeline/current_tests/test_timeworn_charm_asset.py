@@ -101,10 +101,10 @@ class TimewornCharmAssetTest(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "CSV SHA-256 mismatch"):
                 charms.build_asset(bad_source, charms.SKILL_CROSSWALK, charms.PRODUCTION_JSON)
 
-    def test_existing_production_payload_remains_the_accepted_unchanged_baseline(self):
+    def test_existing_production_payload_matches_the_reviewed_1_1_baseline(self):
         android = ROOT / "app" / "src" / "main" / "assets" / "mhp3rd-data.json"
-        expected_hash = "657CFA9376FC8CBE56C67E67D4D1A27C455D21021F51E21B62427C8DDBB26155"
-        self.assertEqual(9_600_571, len(self.production_bytes))
+        expected_hash = "4A11909F1D1A1C986038831DCB3C3244528F88AAC6F05F2D9A626DBB6E0CAA60"
+        self.assertEqual(9_605_968, len(self.production_bytes))
         self.assertEqual(expected_hash, hashlib.sha256(self.production_bytes).hexdigest().upper())
         self.assertEqual(self.production_bytes, android.read_bytes())
 

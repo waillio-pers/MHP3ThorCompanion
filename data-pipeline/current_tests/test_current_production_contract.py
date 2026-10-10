@@ -13,12 +13,13 @@ sys.path.insert(0, str(ROOT / "data-pipeline"))
 sys.path.insert(0, str(ROOT / "tools"))
 
 from item_icon_assets import resolved_icons  # noqa: E402
-from verify_rc1_portable import EXPECTED_SCHEMA, EXPECTED_SHA256, check_references  # noqa: E402
+from verify_rc1_portable import EXPECTED_SCHEMA, check_references  # noqa: E402
 from weapon_recipe_usage import build_usage_index  # noqa: E402
 
 
 PRODUCTION_PATH = ROOT / "data" / "generated" / "mhp3rd-data.json"
 ANDROID_PRODUCTION_PATH = ROOT / "app" / "src" / "main" / "assets" / "mhp3rd-data.json"
+EXPECTED_CURRENT_PRODUCTION_SHA256 = "4A11909F1D1A1C986038831DCB3C3244528F88AAC6F05F2D9A626DBB6E0CAA60"
 
 
 class CurrentProductionContractTest(unittest.TestCase):
@@ -28,9 +29,9 @@ class CurrentProductionContractTest(unittest.TestCase):
         cls.data = json.loads(cls.production_bytes.decode("utf-8"))
         cls.item_ids = {row["gameItemId"] for row in cls.data["items"]}
 
-    def test_schema_sha_and_android_payload_are_the_accepted_release_data(self):
+    def test_schema_sha_and_android_payload_are_the_reviewed_1_1_data(self):
         self.assertEqual(EXPECTED_SCHEMA, self.data["schemaVersion"])
-        self.assertEqual(EXPECTED_SHA256, hashlib.sha256(self.production_bytes).hexdigest().upper())
+        self.assertEqual(EXPECTED_CURRENT_PRODUCTION_SHA256, hashlib.sha256(self.production_bytes).hexdigest().upper())
         self.assertEqual(self.production_bytes, ANDROID_PRODUCTION_PATH.read_bytes())
         self.assertEqual(978, len(self.data["items"]))
         self.assertEqual(set(range(1, 979)), self.item_ids)

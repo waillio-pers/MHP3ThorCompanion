@@ -14,5 +14,5 @@
 *.zip binary
 *.rar binary
 
-/data/generated/mhp3rd-data.json -text
-/app/src/main/assets/mhp3rd-data.json -text
+/data/generated/mhp3rd-data.json -text whitespace=cr-at-eol
+/app/src/main/assets/mhp3rd-data.json -text whitespace=cr-at-eol

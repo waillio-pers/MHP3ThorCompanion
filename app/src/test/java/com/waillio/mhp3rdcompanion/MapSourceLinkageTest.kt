@@ -44,7 +44,7 @@ class MapSourceLinkageTest {
     fun productionJsonSchemaAndShaRemainStable() {
         val digest = MessageDigest.getInstance("SHA-256").digest(productionFile.readBytes())
             .joinToString("") { byte -> "%02X".format(byte) }
-        assertEquals("657CFA9376FC8CBE56C67E67D4D1A27C455D21021F51E21B62427C8DDBB26155", digest)
+        assertEquals("4A11909F1D1A1C986038831DCB3C3244528F88AAC6F05F2D9A626DBB6E0CAA60", digest)
         assertEquals(31, json.decodeFromString<com.waillio.mhp3rdcompanion.data.GeneratedDataset>(productionFile.readText()).schemaVersion)
     }
 

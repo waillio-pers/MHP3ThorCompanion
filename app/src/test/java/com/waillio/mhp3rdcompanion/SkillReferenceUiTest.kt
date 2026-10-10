@@ -57,6 +57,48 @@ class SkillReferenceUiTest {
     }
 
     @Test
+    fun categoryFilterDefaultsToAllAndSupportsBlademasterOrDefense() {
+        openSkills()
+        rule.onNodeWithTag("skills-category-filter-button").assertIsDisplayed().performClick()
+        rule.onNodeWithTag("skills-category-filter-dialog").assertIsDisplayed()
+        listOf("BLADEMASTER", "GUNNER", "DEFENSE", "UTILITY").forEach { category ->
+            rule.onNodeWithTag("skills-category-checkbox-$category").assertIsOn()
+        }
+
+        rule.onNodeWithTag("skills-category-checkbox-GUNNER").performClick()
+        rule.onNodeWithTag("skills-category-checkbox-UTILITY").performClick()
+        rule.onNodeWithTag("skills-category-filter-done").performClick()
+        rule.onNodeWithTag("global-search").performTextInput("Poison")
+        rule.onNodeWithTag("skill-row-mhp3_skill_tree_002").assertIsDisplayed()
+        rule.onNodeWithTag("global-search").performTextClearance()
+
+        rule.onNodeWithTag("skills-category-filter-button").performClick()
+        rule.onNodeWithTag("skills-category-checkbox-DEFENSE").performClick()
+        rule.onNodeWithTag("skills-category-filter-done").performClick()
+        rule.onNodeWithTag("global-search").performTextInput("Fate")
+        rule.onNodeWithText("No skills found").assertExists()
+    }
+
+    @Test
+    fun categorySelectionSurvivesActivityRecreation() {
+        openSkills()
+        rule.onNodeWithTag("skills-category-filter-button").performClick()
+        listOf("GUNNER", "DEFENSE", "UTILITY").forEach { category ->
+            rule.onNodeWithTag("skills-category-checkbox-$category").performClick()
+        }
+        rule.onNodeWithTag("skills-category-filter-done").performClick()
+
+        rule.activityRule.scenario.recreate()
+
+        rule.onNodeWithTag("skills-browser").assertIsDisplayed()
+        rule.onNodeWithTag("skills-category-filter-button").performClick()
+        rule.onNodeWithTag("skills-category-checkbox-BLADEMASTER").assertIsOn()
+        listOf("GUNNER", "DEFENSE", "UTILITY").forEach { category ->
+            rule.onNodeWithTag("skills-category-checkbox-$category").assertIsOff()
+        }
+    }
+
+    @Test
     fun jewelItemDetailShowsSkillsAndLinksBackToSkillReference() {
         rule.onNodeWithTag("nav-search").performClick()
         rule.onNodeWithTag("field-filter-material").performScrollTo().performClick()

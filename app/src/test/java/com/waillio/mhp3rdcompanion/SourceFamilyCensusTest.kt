@@ -27,7 +27,7 @@ class SourceFamilyCensusTest {
     private val prettyJson = Json { prettyPrint = true }
 
     companion object {
-        private const val BASELINE_CENSUS_SHA256 = "5449020A884E4FD97B5840308978FB45027A79E4C40DE4CD5DC5595FC07E9B9D"
+        private const val BASELINE_CENSUS_SHA256 = "8684843412658C68B5BC4C51083565FF9B65C6A35FFE49815CBF0DD9ADD788F9"
     }
 
     @Test
@@ -64,7 +64,7 @@ class SourceFamilyCensusTest {
         }
         fun bodyWithItems(items: JsonArray) = buildJsonObject {
             put("schemaVersion", 31)
-            put("sourceSha256", "657CFA9376FC8CBE56C67E67D4D1A27C455D21021F51E21B62427C8DDBB26155")
+            put("sourceSha256", "4A11909F1D1A1C986038831DCB3C3244528F88AAC6F05F2D9A626DBB6E0CAA60")
             put("itemCount", records.size)
             put("zeroSourceItemCount", zeroSourceIds.size)
             put("zeroSourceItemIds", JsonArray(zeroSourceIds.map { kotlinx.serialization.json.JsonPrimitive(it) }))
@@ -102,7 +102,7 @@ class SourceFamilyCensusTest {
         }
         val data = buildJsonObject {
             put("schemaVersion", 31)
-            put("sourceSha256", "657CFA9376FC8CBE56C67E67D4D1A27C455D21021F51E21B62427C8DDBB26155")
+            put("sourceSha256", "4A11909F1D1A1C986038831DCB3C3244528F88AAC6F05F2D9A626DBB6E0CAA60")
             put("itemCount", records.size)
             put("zeroSourceItemCount", zeroSourceIds.size)
             put("zeroSourceItemIds", JsonArray(zeroSourceIds.map { kotlinx.serialization.json.JsonPrimitive(it) }))

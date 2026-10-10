@@ -1,0 +1,1828 @@
+{
+  "schemaVersion": 1,
+  "status": "CANDIDATE_FOR_REVIEW_NOT_PRODUCTION_DATA",
+  "sourceCorpus": {
+    "path": "D:\\MHP3rd-Companion-Public-Snapshot\\1.0.0-candidate\\data\\generated\\mhp3rd-data.json",
+    "sizeBytes": 9600571,
+    "sha256": "657CFA9376FC8CBE56C67E67D4D1A27C455D21021F51E21B62427C8DDBB26155"
+  },
+  "semantics": {
+    "model": "many-to-many independent tags",
+    "filterOperator": "OR",
+    "rule": "A skill tree is included when it has at least one selected category. Selecting BLADEMASTER and GUNNER returns the union, not the intersection.",
+    "display": "Tags describe effect domains, not exclusive weapon ownership. Universal combat effects can carry both weapon tags.",
+    "overlapPolicy": "Mixed combat effects may carry combat and Utility or Defense tags when each tag reflects a material canonical effect."
+  },
+  "categories": {
+    "BLADEMASTER": "Direct benefits/penalties for blademaster weapon combat or universal combat effects that apply to blademaster attacks.",
+    "GUNNER": "Direct benefits/penalties for Bow, Light Bowgun, Heavy Bowgun, their ammo/coatings, or universal combat effects that apply to gunner attacks.",
+    "DEFENSE": "Reduces incoming damage, hostile status/control, exposure, or risk; includes survivability and defensive evasion/guard effects.",
+    "UTILITY": "Quest/build/resource, gathering, rewards, information, item/crafting, stamina-economy, or general convenience effects not primarily classified as combat offense/defense."
+  },
+  "assignments": [
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_001",
+      "japaneseName": "胴系統複製",
+      "tmoDisplayName": "Torso Up",
+      "displayName": "Torso Up",
+      "uiDisplayName": "Torso Up",
+      "categories": [
+        "UTILITY"
+      ],
+      "rationale": "Assigned UTILITY from the independently searchable taxonomy because the corpus effect is: Replicates both the positive and negative bonuses of the Torso armor. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_002",
+      "japaneseName": "毒",
+      "tmoDisplayName": "Poison",
+      "displayName": "Poison",
+      "uiDisplayName": "Poison",
+      "categories": [
+        "DEFENSE"
+      ],
+      "rationale": "Assigned DEFENSE from the independently searchable taxonomy because the corpus effect is: Poison is negated.; Poison duration is doubled. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_003",
+      "japaneseName": "麻痺",
+      "tmoDisplayName": "Paralysis",
+      "displayName": "Paralysis",
+      "uiDisplayName": "Paralysis",
+      "categories": [
+        "DEFENSE"
+      ],
+      "rationale": "Assigned DEFENSE from the independently searchable taxonomy because the corpus effect is: Paralysis is negated.; Paralysis duration is doubled. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_004",
+      "japaneseName": "睡眠",
+      "tmoDisplayName": "Sleep",
+      "displayName": "Sleep",
+      "uiDisplayName": "Sleep",
+      "categories": [
+        "DEFENSE"
+      ],
+      "rationale": "Assigned DEFENSE from the independently searchable taxonomy because the corpus effect is: Sleep is negated.; Sleep occurs immediately and lasts longer. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_005",
+      "japaneseName": "気絶",
+      "tmoDisplayName": "Stun",
+      "displayName": "Stun",
+      "uiDisplayName": "Stun",
+      "categories": [
+        "DEFENSE"
+      ],
+      "rationale": "Assigned DEFENSE from the independently searchable taxonomy because the corpus effect is: Stun is negated.; Stun chance is halved.; Stun chance is doubled. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_006",
+      "japaneseName": "耐泥耐雪",
+      "tmoDisplayName": "Mud/Snow",
+      "displayName": "Mud/Snow",
+      "uiDisplayName": "Mud/Snow",
+      "categories": [
+        "DEFENSE"
+      ],
+      "rationale": "Assigned DEFENSE from the independently searchable taxonomy because the corpus effect is: Mud and Snowman effects are negated. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_007",
+      "japaneseName": "気配",
+      "tmoDisplayName": "Sense",
+      "displayName": "Sense",
+      "uiDisplayName": "Sense",
+      "categories": [
+        "DEFENSE"
+      ],
+      "rationale": "Assigned DEFENSE from the independently searchable taxonomy because the corpus effect is: Monsters are less likely to target you.; Monsters are more likely to target you. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_008",
+      "japaneseName": "体力",
+      "tmoDisplayName": "Health",
+      "displayName": "Health",
+      "uiDisplayName": "Health",
+      "categories": [
+        "DEFENSE"
+      ],
+      "rationale": "Assigned DEFENSE from the independently searchable taxonomy because the corpus effect is: Increases maximum Health by 50.; Increases maximum Health by 20.; Decreases maximum Health by 10.; Decreases maximum Health by 30. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_009",
+      "japaneseName": "回復速度",
+      "tmoDisplayName": "Rec Speed",
+      "displayName": "Recovery Speed",
+      "uiDisplayName": "Recovery Speed",
+      "categories": [
+        "DEFENSE"
+      ],
+      "rationale": "Assigned DEFENSE from the independently searchable taxonomy because the corpus effect is: Red-health recovery is 4× faster.; Red-health recovery is 2× faster.; Red-health recovery is 1/2 as fast.; Red-health recovery is 1/4 as fast. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_010",
+      "japaneseName": "斬れ味",
+      "tmoDisplayName": "Sharpness",
+      "displayName": "Sharpness",
+      "uiDisplayName": "Sharpness",
+      "categories": [
+        "BLADEMASTER"
+      ],
+      "rationale": "Assigned BLADEMASTER from the independently searchable taxonomy because the corpus effect is: Sharpness consumption is halved; a non-deflecting attack may consume no sharpness.; Sharpness consumption is doubled. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [
+        "Blademaster only"
+      ],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_011",
+      "japaneseName": "匠",
+      "tmoDisplayName": "Handicraft",
+      "displayName": "Handicraft",
+      "uiDisplayName": "Handicraft",
+      "categories": [
+        "BLADEMASTER"
+      ],
+      "rationale": "Assigned BLADEMASTER from the independently searchable taxonomy because the corpus effect is: The sharpness gauge is +1 level longer; no change when already at maximum. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [
+        "Blademaster only"
+      ],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_012",
+      "japaneseName": "剣術",
+      "tmoDisplayName": "Fencing",
+      "displayName": "Fencing",
+      "uiDisplayName": "Fencing",
+      "categories": [
+        "BLADEMASTER"
+      ],
+      "rationale": "Assigned BLADEMASTER from the independently searchable taxonomy because the corpus effect is: Attacks do not bounce; the deflect sharpness penalty is unchanged. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [
+        "Blademaster only"
+      ],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_013",
+      "japaneseName": "達人",
+      "tmoDisplayName": "Expert",
+      "displayName": "Expert",
+      "uiDisplayName": "Expert",
+      "categories": [
+        "BLADEMASTER",
+        "GUNNER"
+      ],
+      "rationale": "Assigned BLADEMASTER, GUNNER from the independently searchable taxonomy because the corpus effect is: Increases Affinity by 30%.; Increases Affinity by 20%.; Increases Affinity by 10%.; Decreases Affinity by 5%.; Decreases Affinity by 10%.; Decreases Affinity by 15%. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_014",
+      "japaneseName": "研ぎ師",
+      "tmoDisplayName": "Sharpener",
+      "displayName": "Sharpener",
+      "uiDisplayName": "Sharpener",
+      "categories": [
+        "BLADEMASTER"
+      ],
+      "rationale": "Assigned BLADEMASTER from the independently searchable taxonomy because the corpus effect is: Sharpening motion is shorter (4→1 actions).; Sharpening takes longer (4→5 actions). OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [
+        "Blademaster only"
+      ],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_015",
+      "japaneseName": "ガード性能",
+      "tmoDisplayName": "Guard",
+      "displayName": "Guard",
+      "uiDisplayName": "Guard",
+      "categories": [
+        "BLADEMASTER"
+      ],
+      "rationale": "Assigned BLADEMASTER from the independently searchable taxonomy because the corpus effect is: Guarding greatly reduces knockback and damage.; Guarding reduces knockback and damage.; Guarding causes greater knockback and increased damage. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [
+        "Blademaster only"
+      ],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_016",
+      "japaneseName": "ガード強化",
+      "tmoDisplayName": "Guard Up",
+      "displayName": "Guard Up",
+      "uiDisplayName": "Guard Up",
+      "categories": [
+        "BLADEMASTER"
+      ],
+      "rationale": "Assigned BLADEMASTER from the independently searchable taxonomy because the corpus effect is: Allows guarding attacks that normally cannot be guarded. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [
+        "Blademaster only"
+      ],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_017",
+      "japaneseName": "自動防御",
+      "tmoDisplayName": "Auto-Guard",
+      "displayName": "Auto-Guard",
+      "uiDisplayName": "Auto-Guard",
+      "categories": [
+        "BLADEMASTER"
+      ],
+      "rationale": "Assigned BLADEMASTER from the independently searchable taxonomy because the corpus effect is: Automatically guards attacks while the weapon is drawn when guarding is possible. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [
+        "Blademaster only"
+      ],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_018",
+      "japaneseName": "装填速度",
+      "tmoDisplayName": "Reload Spd",
+      "displayName": "Reload Speed",
+      "uiDisplayName": "Reload Speed",
+      "categories": [
+        "GUNNER"
+      ],
+      "rationale": "Assigned GUNNER from the independently searchable taxonomy because the corpus effect is: Bowgun reload is 3 stages faster; bow coatings need no loading.; Bowgun reload is 2 stages faster; bow coatings need no loading.; Bowgun reload is 1 stage faster and bow-coating loading is faster.; Bowgun reload is 1 stage slower and bow-coating loading is slightly slower.; Bowgun reload is 2 stages slower and bow-coating loading is slower.; Bowgun reload is 3 stages slower and bow-coating loading is much slower. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [
+        "Gunner only"
+      ],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_019",
+      "japaneseName": "反動",
+      "tmoDisplayName": "Recoil",
+      "displayName": "Recoil",
+      "uiDisplayName": "Recoil",
+      "categories": [
+        "GUNNER"
+      ],
+      "rationale": "Assigned GUNNER from the independently searchable taxonomy because the corpus effect is: Bowgun recoil is reduced by 3 stages.; Bowgun recoil is reduced by 2 stages.; Bowgun recoil is reduced by 1 stage.; Bowgun recoil is increased by 1 stage.; Bowgun recoil is increased by 2 stages.; Bowgun recoil is increased by 3 stages. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [
+        "Bowgun only"
+      ],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_020",
+      "japaneseName": "通常弾強化",
+      "tmoDisplayName": "Normal Up",
+      "displayName": "Normal Up",
+      "uiDisplayName": "Normal Up",
+      "categories": [
+        "GUNNER"
+      ],
+      "rationale": "Assigned GUNNER from the independently searchable taxonomy because the corpus effect is: Normal ammo and Rapid arrows deal 1.1× power. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [
+        "Gunner only",
+        "Rapid arrows"
+      ],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_021",
+      "japaneseName": "貫通弾強化",
+      "tmoDisplayName": "Pierce Up",
+      "displayName": "Pierce Up",
+      "uiDisplayName": "Pierce Up",
+      "categories": [
+        "GUNNER"
+      ],
+      "rationale": "Assigned GUNNER from the independently searchable taxonomy because the corpus effect is: Pierce ammo and Pierce arrows deal 1.1× power. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [
+        "Gunner only"
+      ],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_022",
+      "japaneseName": "散弾強化",
+      "tmoDisplayName": "Pellet Up",
+      "displayName": "Pellet Up",
+      "uiDisplayName": "Pellet Up",
+      "categories": [
+        "GUNNER"
+      ],
+      "rationale": "Assigned GUNNER from the independently searchable taxonomy because the corpus effect is: Pellet ammo deals 1.2× power; Spread arrows deal 1.3× power. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [
+        "Gunner only"
+      ],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_023",
+      "japaneseName": "通常弾追加",
+      "tmoDisplayName": "Normal S+",
+      "displayName": "Normal S+",
+      "uiDisplayName": "Normal S+",
+      "categories": [
+        "GUNNER"
+      ],
+      "rationale": "Assigned GUNNER from the independently searchable taxonomy because the corpus effect is: Allows loading all levels of Normal ammo; capacity varies by weapon. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [
+        "Bowgun only"
+      ],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_024",
+      "japaneseName": "貫通弾追加",
+      "tmoDisplayName": "Pierce S+",
+      "displayName": "Pierce S+",
+      "uiDisplayName": "Pierce S+",
+      "categories": [
+        "GUNNER"
+      ],
+      "rationale": "Assigned GUNNER from the independently searchable taxonomy because the corpus effect is: Allows loading all levels of Pierce ammo; capacity varies by weapon.; Allows loading Lv1 Pierce ammo; capacity varies by weapon. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [
+        "Bowgun only"
+      ],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_025",
+      "japaneseName": "散弾追加",
+      "tmoDisplayName": "Pellet S+",
+      "displayName": "Pellet S+",
+      "uiDisplayName": "Pellet S+",
+      "categories": [
+        "GUNNER"
+      ],
+      "rationale": "Assigned GUNNER from the independently searchable taxonomy because the corpus effect is: Allows loading all levels of Pellet ammo; capacity varies by weapon.; Allows loading Lv1 Pellet ammo; capacity varies by weapon. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [
+        "Bowgun only"
+      ],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_026",
+      "japaneseName": "榴弾追加",
+      "tmoDisplayName": "Crag S+",
+      "displayName": "Crag S+",
+      "uiDisplayName": "Crag S+",
+      "categories": [
+        "GUNNER"
+      ],
+      "rationale": "Assigned GUNNER from the independently searchable taxonomy because the corpus effect is: Allows loading all levels of Crag ammo; capacity varies by weapon.; Allows loading Lv1 Crag ammo; capacity varies by weapon. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [
+        "Bowgun only"
+      ],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_027",
+      "japaneseName": "拡散弾追加",
+      "tmoDisplayName": "Clust S+",
+      "displayName": "Clust S+",
+      "uiDisplayName": "Clust S+",
+      "categories": [
+        "GUNNER"
+      ],
+      "rationale": "Assigned GUNNER from the independently searchable taxonomy because the corpus effect is: Allows loading all levels of Cluster ammo, one round each.; Allows loading Lv1 Cluster ammo, one round. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [
+        "Bowgun only"
+      ],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_028",
+      "japaneseName": "特殊攻撃",
+      "tmoDisplayName": "Status",
+      "displayName": "Status",
+      "uiDisplayName": "Status",
+      "categories": [
+        "BLADEMASTER",
+        "GUNNER"
+      ],
+      "rationale": "Assigned BLADEMASTER, GUNNER from the independently searchable taxonomy because the corpus effect is: Status buildup is 1.2× plus 1 (example 39→47); Blademaster display is approximate.; Status buildup is 1.1× plus 1 (example 39→43); Blademaster display is approximate.; Status buildup is 0.9× (example 39→35); Blademaster display is approximate and capture requires 3 Tranq Bombs. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_029",
+      "japaneseName": "属性攻撃",
+      "tmoDisplayName": "ElementAtk",
+      "displayName": "Elemental Attack",
+      "uiDisplayName": "Elemental Attack",
+      "categories": [
+        "BLADEMASTER",
+        "GUNNER"
+      ],
+      "rationale": "Assigned BLADEMASTER, GUNNER from the independently searchable taxonomy because the corpus effect is: Element values are 1.1× (1.2× for bowguns); stacks with each elemental attack skill.; Element values are 0.9×; stacks with each elemental attack skill. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_030",
+      "japaneseName": "爆弾強化",
+      "tmoDisplayName": "Bomb Boost",
+      "displayName": "Bomb Boost",
+      "uiDisplayName": "Bomb Boost",
+      "categories": [
+        "BLADEMASTER",
+        "GUNNER"
+      ],
+      "rationale": "Assigned BLADEMASTER, GUNNER from the independently searchable taxonomy because the corpus effect is: Bomb damage is 1.3× and bomb-item combination success is 100%. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_031",
+      "japaneseName": "腹減り",
+      "tmoDisplayName": "Hunger",
+      "displayName": "Hunger",
+      "uiDisplayName": "Hunger",
+      "categories": [
+        "UTILITY"
+      ],
+      "rationale": "Assigned UTILITY from the independently searchable taxonomy because the corpus effect is: Time-based stamina loss is negated, but cold still reduces stamina.; Time-based stamina loss is halved (12 min/25 points).; Maximum stamina decreases faster (4 min/25 points).; Maximum stamina decreases much faster (3 min/25 points). OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_032",
+      "japaneseName": "食いしん坊",
+      "tmoDisplayName": "Gluttony",
+      "displayName": "Gluttony",
+      "uiDisplayName": "Gluttony",
+      "categories": [
+        "UTILITY"
+      ],
+      "rationale": "Assigned UTILITY from the independently searchable taxonomy because the corpus effect is: Food items have a 1/3 chance to restore maximum stamina in addition to fullness.; Meat items restore more maximum stamina. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_033",
+      "japaneseName": "攻撃",
+      "tmoDisplayName": "Attack",
+      "displayName": "Attack",
+      "uiDisplayName": "Attack",
+      "categories": [
+        "BLADEMASTER",
+        "GUNNER"
+      ],
+      "rationale": "Assigned BLADEMASTER, GUNNER from the independently searchable taxonomy because the corpus effect is: Increases Attack by 20.; Increases Attack by 15.; Increases Attack by 10.; Decreases Attack by 5.; Decreases Attack by 10.; Decreases Attack by 15. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_034",
+      "japaneseName": "防御",
+      "tmoDisplayName": "Defense",
+      "displayName": "Defense",
+      "uiDisplayName": "Defense",
+      "categories": [
+        "DEFENSE"
+      ],
+      "rationale": "Assigned DEFENSE from the independently searchable taxonomy because the corpus effect is: Defense is 1.07× (rounded down) +25.; Defense is 1.03× (rounded down) +20.; Defense +15.; Defense -10.; Defense -15.; Defense -20. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_035",
+      "japaneseName": "加護",
+      "tmoDisplayName": "Protection",
+      "displayName": "Protection",
+      "uiDisplayName": "Protection",
+      "categories": [
+        "DEFENSE"
+      ],
+      "rationale": "Assigned DEFENSE from the independently searchable taxonomy because the corpus effect is: There is a 1/4 chance incoming damage becomes 70%.; There is a 1/4 chance incoming damage becomes 130%. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_036",
+      "japaneseName": "聴覚保護",
+      "tmoDisplayName": "Hearing",
+      "displayName": "Hearing",
+      "uiDisplayName": "Hearing",
+      "categories": [
+        "DEFENSE"
+      ],
+      "rationale": "Assigned DEFENSE from the independently searchable taxonomy because the corpus effect is: Large roars no longer stagger you.; Small roars no longer stagger you. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_037",
+      "japaneseName": "盗み無効",
+      "tmoDisplayName": "Anti-Theft",
+      "displayName": "Anti-Theft",
+      "uiDisplayName": "Anti-Theft",
+      "categories": [
+        "DEFENSE"
+      ],
+      "rationale": "Assigned DEFENSE from the independently searchable taxonomy because the corpus effect is: Items cannot be stolen. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_038",
+      "japaneseName": "広域",
+      "tmoDisplayName": "Wide-Range",
+      "displayName": "Wide-Range",
+      "uiDisplayName": "Wide-Range",
+      "categories": [
+        "DEFENSE",
+        "UTILITY"
+      ],
+      "rationale": "Assigned DEFENSE, UTILITY from the independently searchable taxonomy because the corpus effect is: Antidote, Nulberry, Potion, Herb, Might Seed, and Adamant Seed effects reach allies in the same area at full strength. Mega Potion is unaffected.; Antidote, Nulberry, Potion, Herb, Might Seed, and Adamant Seed effects reach allies in the same area at half strength. Mega Potion is unaffected. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_039",
+      "japaneseName": "運搬",
+      "tmoDisplayName": "Transportr",
+      "displayName": "Transporter",
+      "uiDisplayName": "Transporter",
+      "categories": [
+        "UTILITY"
+      ],
+      "rationale": "Assigned UTILITY from the independently searchable taxonomy because the corpus effect is: Move faster while carrying and do not drop carried items from moderately high falls. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_040",
+      "japaneseName": "火耐性",
+      "tmoDisplayName": "Fire Res",
+      "displayName": "Fire Res",
+      "uiDisplayName": "Fire Res",
+      "categories": [
+        "DEFENSE"
+      ],
+      "rationale": "Assigned DEFENSE from the independently searchable taxonomy because the corpus effect is: Fire Resistance +10; all Fireblight is negated.; Fire Resistance +5; minor Fireblight is negated.; Fire Resistance -10; minor Fireblight becomes major Fireblight. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_041",
+      "japaneseName": "水耐性",
+      "tmoDisplayName": "Water Res",
+      "displayName": "Water Res",
+      "uiDisplayName": "Water Res",
+      "categories": [
+        "DEFENSE"
+      ],
+      "rationale": "Assigned DEFENSE from the independently searchable taxonomy because the corpus effect is: Water Resistance +10; all Waterblight is negated.; Water Resistance +5; minor Waterblight is negated.; Water Resistance -10; minor Waterblight becomes major Waterblight. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_042",
+      "japaneseName": "雷耐性",
+      "tmoDisplayName": "ThunderRes",
+      "displayName": "Thunder Resistance",
+      "uiDisplayName": "Thunder Resistance",
+      "categories": [
+        "DEFENSE"
+      ],
+      "rationale": "Assigned DEFENSE from the independently searchable taxonomy because the corpus effect is: Thunder Resistance +10; all Thunderblight is negated.; Thunder Resistance +5; minor Thunderblight is negated.; Thunder Resistance -10; minor Thunderblight becomes major Thunderblight. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_043",
+      "japaneseName": "氷耐性",
+      "tmoDisplayName": "Ice Res",
+      "displayName": "Ice Res",
+      "uiDisplayName": "Ice Res",
+      "categories": [
+        "DEFENSE"
+      ],
+      "rationale": "Assigned DEFENSE from the independently searchable taxonomy because the corpus effect is: Ice Resistance +10; all Iceblight is negated.; Ice Resistance +5; minor Iceblight is negated.; Ice Resistance -10; minor Iceblight becomes major Iceblight. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_044",
+      "japaneseName": "龍耐性",
+      "tmoDisplayName": "Dragon Res",
+      "displayName": "Dragon Res",
+      "uiDisplayName": "Dragon Res",
+      "categories": [
+        "DEFENSE"
+      ],
+      "rationale": "Assigned DEFENSE from the independently searchable taxonomy because the corpus effect is: Dragon Resistance +10.; Dragon Resistance +5.; Dragon Resistance -10. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_045",
+      "japaneseName": "耐暑",
+      "tmoDisplayName": "Heat Res",
+      "displayName": "Heat Res",
+      "uiDisplayName": "Heat Res",
+      "categories": [
+        "DEFENSE"
+      ],
+      "rationale": "Assigned DEFENSE from the independently searchable taxonomy because the corpus effect is: Negates heat and lava-terrain damage; Powderstone heat damage still applies.; Heat and lava-terrain damage are doubled. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_046",
+      "japaneseName": "耐寒",
+      "tmoDisplayName": "Cold Res",
+      "displayName": "Cold Res",
+      "uiDisplayName": "Cold Res",
+      "categories": [
+        "DEFENSE"
+      ],
+      "rationale": "Assigned DEFENSE from the independently searchable taxonomy because the corpus effect is: Negates stamina loss from cold.; Cold doubles the rate of maximum-stamina loss. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_047",
+      "japaneseName": "風圧",
+      "tmoDisplayName": "Wind Res",
+      "displayName": "Wind Res",
+      "uiDisplayName": "Wind Res",
+      "categories": [
+        "DEFENSE"
+      ],
+      "rationale": "Assigned DEFENSE from the independently searchable taxonomy because the corpus effect is: All wind pressure is negated.; Wind pressure except Dragon Wind is negated. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_048",
+      "japaneseName": "採取",
+      "tmoDisplayName": "Gathering",
+      "displayName": "Gathering",
+      "uiDisplayName": "Gathering",
+      "categories": [
+        "UTILITY"
+      ],
+      "rationale": "Assigned UTILITY from the independently searchable taxonomy because the corpus effect is: Gathering attempts reach the point maximum.; Gathering attempts are more likely to increase.; Gathering attempts are more likely to decrease. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_049",
+      "japaneseName": "高速収集",
+      "tmoDisplayName": "Spd Gather",
+      "displayName": "Speed Gather",
+      "uiDisplayName": "Speed Gather",
+      "categories": [
+        "UTILITY"
+      ],
+      "rationale": "Assigned UTILITY from the independently searchable taxonomy because the corpus effect is: Carving, gathering, and mining motions are faster. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_050",
+      "japaneseName": "気まぐれ",
+      "tmoDisplayName": "Whim",
+      "displayName": "Whim",
+      "uiDisplayName": "Whim",
+      "categories": [
+        "UTILITY"
+      ],
+      "rationale": "Assigned UTILITY from the independently searchable taxonomy because the corpus effect is: Pickaxes, Bug Nets, Boomerangs, and Flutes are much less likely to break.; Pickaxes, Bug Nets, Boomerangs, and Flutes are less likely to break.; Pickaxes, Bug Nets, Boomerangs, and Flutes are more likely to break.; Pickaxes, Bug Nets, Boomerangs, and Flutes are much more likely to break. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_051",
+      "japaneseName": "運気",
+      "tmoDisplayName": "Fate",
+      "displayName": "Fate",
+      "uiDisplayName": "Fate",
+      "categories": [
+        "UTILITY"
+      ],
+      "rationale": "Assigned UTILITY from the independently searchable taxonomy because the corpus effect is: Basic quest reward slots are more likely to increase.; Basic quest reward slots are slightly more likely to increase.; Basic quest reward slots are slightly more likely to decrease.; Basic quest reward slots are more likely to decrease. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_052",
+      "japaneseName": "千里眼",
+      "tmoDisplayName": "Psychic",
+      "displayName": "Psychic",
+      "uiDisplayName": "Psychic",
+      "categories": [
+        "UTILITY"
+      ],
+      "rationale": "Assigned UTILITY from the independently searchable taxonomy because the corpus effect is: Always shows a large monster's state, position, direction, and discovery status.; Shows a large monster's state briefly at quest start, also reveals the state of Paintball-marked monsters, and repeats the initial effect after a delay. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_053",
+      "japaneseName": "回復量",
+      "tmoDisplayName": "Rec Level",
+      "displayName": "Recovery Level",
+      "uiDisplayName": "Recovery Level",
+      "categories": [
+        "DEFENSE"
+      ],
+      "rationale": "Assigned DEFENSE from the independently searchable taxonomy because the corpus effect is: Your healing received is 1.25×; Wide-Range does not change ally healing, but affects healing received from others.; Healing received is 0.75×. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_054",
+      "japaneseName": "調合成功率",
+      "tmoDisplayName": "Combo Rate",
+      "displayName": "Combo Rate",
+      "uiDisplayName": "Combo Rate",
+      "categories": [
+        "UTILITY"
+      ],
+      "rationale": "Assigned UTILITY from the independently searchable taxonomy because the corpus effect is: Combination success rate +45%.; Combination success rate +20%.; Combination success rate -10%.; Combination success rate -20%. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_055",
+      "japaneseName": "調合数",
+      "tmoDisplayName": "Combo Plus",
+      "displayName": "Combo Plus",
+      "uiDisplayName": "Combo Plus",
+      "categories": [
+        "UTILITY"
+      ],
+      "rationale": "Assigned UTILITY from the independently searchable taxonomy because the corpus effect is: Ammo and coating combinations always produce the maximum quantity. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_056",
+      "japaneseName": "回避性能",
+      "tmoDisplayName": "Evasion",
+      "displayName": "Evasion",
+      "uiDisplayName": "Evasion",
+      "categories": [
+        "DEFENSE"
+      ],
+      "rationale": "Assigned DEFENSE from the independently searchable taxonomy because the corpus effect is: Evade invulnerability is 12/30 seconds (normally 6/30).; Evade invulnerability is 10/30 seconds.; Evade invulnerability is 3/30 seconds. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_057",
+      "japaneseName": "底力",
+      "tmoDisplayName": "Potential",
+      "displayName": "Potential",
+      "uiDisplayName": "Potential",
+      "categories": [
+        "BLADEMASTER",
+        "GUNNER",
+        "DEFENSE"
+      ],
+      "rationale": "Assigned BLADEMASTER, GUNNER, DEFENSE from the independently searchable taxonomy because the corpus effect is: Includes the Adrenaline +1 effect at or below 40% Health; Attack becomes 1.3× under the same condition. Felyne Adrenaline takes priority; can coexist with Fortify.; At 40% health or less, defense bonus rises from 30 to 45.; At 40% health or less, defense bonus falls from 30 to 21 and attack is 0.7×. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_058",
+      "japaneseName": "効果持続",
+      "tmoDisplayName": "LastingPwr",
+      "displayName": "Item Duration",
+      "uiDisplayName": "Item Duration",
+      "categories": [
+        "UTILITY"
+      ],
+      "rationale": "Assigned UTILITY from the independently searchable taxonomy because the corpus effect is: Timed item effects last 1.5× longer.; Timed item effects last 2/3 as long. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_059",
+      "japaneseName": "スタミナ",
+      "tmoDisplayName": "Stamina",
+      "displayName": "Stamina",
+      "uiDisplayName": "Stamina",
+      "categories": [
+        "BLADEMASTER",
+        "GUNNER",
+        "UTILITY"
+      ],
+      "rationale": "Assigned BLADEMASTER, GUNNER, UTILITY from the independently searchable taxonomy because the corpus effect is: Stamina drains more slowly while sprinting, in Demon Mode, during charging, or during Hammer/Bow charge attacks.; Stamina drains faster while sprinting, in Demon Mode, during charging, or during Hammer/Bow charge attacks. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [
+        "Hammer",
+        "Bow charge"
+      ],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_060",
+      "japaneseName": "装填数",
+      "tmoDisplayName": "Loading",
+      "displayName": "Loading",
+      "uiDisplayName": "Loading",
+      "categories": [
+        "BLADEMASTER",
+        "GUNNER"
+      ],
+      "rationale": "Assigned BLADEMASTER, GUNNER from the independently searchable taxonomy because the corpus effect is: Increases bow charge stage, Gunlance shell capacity, and bowgun ammo capacity; crouching-fire capacity does not increase. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [
+        "Gunlance",
+        "Bow charge"
+      ],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_061",
+      "japaneseName": "精密射撃",
+      "tmoDisplayName": "Precision",
+      "displayName": "Precision",
+      "uiDisplayName": "Precision",
+      "categories": [
+        "GUNNER"
+      ],
+      "rationale": "Assigned GUNNER from the independently searchable taxonomy because the corpus effect is: Bowgun shot deviation is reduced by 2 stages.; Bowgun shot deviation is reduced by 1 stage.; Bowgun shot deviation increases by 1 stage.; Bowgun shot deviation increases by 2 stages, unless already at maximum. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [
+        "Bowgun only"
+      ],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_062",
+      "japaneseName": "食事",
+      "tmoDisplayName": "Eating",
+      "displayName": "Eating",
+      "uiDisplayName": "Eating",
+      "categories": [
+        "UTILITY"
+      ],
+      "rationale": "Assigned UTILITY from the independently searchable taxonomy because the corpus effect is: Food and item-use eating motions and food-item flinches are shorter.; Food eating motion is shorter.; Food eating motion is longer. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_063",
+      "japaneseName": "剥ぎ取り",
+      "tmoDisplayName": "Carving",
+      "displayName": "Carving",
+      "uiDisplayName": "Carving",
+      "categories": [
+        "UTILITY"
+      ],
+      "rationale": "Assigned UTILITY from the independently searchable taxonomy because the corpus effect is: Adds +1 carve and prevents flinching while carving. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_064",
+      "japaneseName": "耐震",
+      "tmoDisplayName": "Tremor Res",
+      "displayName": "Tremor Res",
+      "uiDisplayName": "Tremor Res",
+      "categories": [
+        "DEFENSE"
+      ],
+      "rationale": "Assigned DEFENSE from the independently searchable taxonomy because the corpus effect is: Immune to tremors caused by large monsters. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_065",
+      "japaneseName": "回避距離",
+      "tmoDisplayName": "Evade Dist",
+      "displayName": "Evade Distance",
+      "uiDisplayName": "Evade Distance",
+      "categories": [
+        "DEFENSE"
+      ],
+      "rationale": "Assigned DEFENSE from the independently searchable taxonomy because the corpus effect is: Evade distance is approximately 1.5×. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_066",
+      "japaneseName": "抜刀会心",
+      "tmoDisplayName": "Crit Draw",
+      "displayName": "Critical Draw",
+      "uiDisplayName": "Critical Draw",
+      "categories": [
+        "BLADEMASTER"
+      ],
+      "rationale": "Assigned BLADEMASTER from the independently searchable taxonomy because the corpus effect is: Draw attacks gain +100% affinity; negative affinity is reduced by the weapon's negative value. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [
+        "Blademaster only"
+      ],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_067",
+      "japaneseName": "高速設置",
+      "tmoDisplayName": "SpeedSetup",
+      "displayName": "Speed Setup",
+      "uiDisplayName": "Speed Setup",
+      "categories": [
+        "UTILITY"
+      ],
+      "rationale": "Assigned UTILITY from the independently searchable taxonomy because the corpus effect is: Trap combinations succeed at 100%; traps and Large Barrel Bombs are placed faster. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_068",
+      "japaneseName": "体術",
+      "tmoDisplayName": "Constitutn",
+      "displayName": "Constitution",
+      "uiDisplayName": "Constitution",
+      "categories": [
+        "BLADEMASTER",
+        "GUNNER",
+        "UTILITY"
+      ],
+      "rationale": "Assigned BLADEMASTER, GUNNER, UTILITY from the independently searchable taxonomy because the corpus effect is: Fixed stamina costs for evades, guarding, and Switch Axe swings are 1/2.; Those fixed stamina costs are 3/4.; Those fixed stamina costs increase.; Those fixed stamina costs increase greatly. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [
+        "Switch Axe"
+      ],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_069",
+      "japaneseName": "捕獲",
+      "tmoDisplayName": "Tranquilzr",
+      "displayName": "Capture",
+      "uiDisplayName": "Capture",
+      "categories": [
+        "UTILITY"
+      ],
+      "rationale": "Assigned UTILITY from the independently searchable taxonomy because the corpus effect is: Capture reward slots increase from 2–3 to 3–4.; Capture reward slots become 3 instead of the normal 2–3. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_070",
+      "japaneseName": "観察眼",
+      "tmoDisplayName": "Perception",
+      "displayName": "Perception",
+      "uiDisplayName": "Perception",
+      "categories": [
+        "UTILITY"
+      ],
+      "rationale": "Assigned UTILITY from the independently searchable taxonomy because the corpus effect is: The paintball marker blinks white when capture is possible. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_071",
+      "japaneseName": "溜め短縮",
+      "tmoDisplayName": "FastCharge",
+      "displayName": "Focus",
+      "uiDisplayName": "Focus",
+      "categories": [
+        "BLADEMASTER",
+        "GUNNER"
+      ],
+      "rationale": "Assigned BLADEMASTER, GUNNER from the independently searchable taxonomy because the corpus effect is: Switch Axe, Long Sword, and Dual Blades gauge gain is 1.2×; Great Sword, Hammer, and Bow charge time is 0.8×.; Gauge gain is 0.8×; Great Sword, Hammer, and Bow charge time is 1.2×. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [
+        "Switch Axe",
+        "Dual Blades",
+        "Hammer",
+        "Bow charge"
+      ],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_072",
+      "japaneseName": "抜刀減気",
+      "tmoDisplayName": "PunishDraw",
+      "displayName": "Punishing Draw",
+      "uiDisplayName": "Punishing Draw",
+      "categories": [
+        "BLADEMASTER"
+      ],
+      "rationale": "Assigned BLADEMASTER from the independently searchable taxonomy because the corpus effect is: Draw attacks with cutting weapons gain stun and exhaust buildup. For weapons other than Dual Blades, the stun value is 30. As with impact attacks, stun is applied only on a head hit. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [
+        "Blademaster only",
+        "Dual Blades"
+      ],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_073",
+      "japaneseName": "属性耐性",
+      "tmoDisplayName": "Blight Res",
+      "displayName": "Blight Res",
+      "uiDisplayName": "Blight Res",
+      "categories": [
+        "DEFENSE"
+      ],
+      "rationale": "Assigned DEFENSE from the independently searchable taxonomy because the corpus effect is: Fire, Water, Thunder, and Ice blights are negated. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_074",
+      "japaneseName": "逆境",
+      "tmoDisplayName": "Survivor",
+      "displayName": "Survivor",
+      "uiDisplayName": "Survivor",
+      "categories": [
+        "BLADEMASTER",
+        "GUNNER"
+      ],
+      "rationale": "Assigned BLADEMASTER, GUNNER from the independently searchable taxonomy because the corpus effect is: After 1 faint, attack becomes 1.1×; after 2 faints, 1.2×; stacks with Adrenaline +2 and Felyne Adrenaline. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_075",
+      "japaneseName": "速射",
+      "tmoDisplayName": "Rapid Fire",
+      "displayName": "Rapid Fire",
+      "uiDisplayName": "Rapid Fire",
+      "categories": [
+        "GUNNER"
+      ],
+      "rationale": "Assigned GUNNER from the independently searchable taxonomy because the corpus effect is: Rapid-fire shot count increases by 1. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [
+        "Bowgun only",
+        "Rapid-fire"
+      ],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_076",
+      "japaneseName": "こやし",
+      "tmoDisplayName": "Dungmaster",
+      "displayName": "Dungmaster",
+      "uiDisplayName": "Dungmaster",
+      "categories": [
+        "UTILITY"
+      ],
+      "rationale": "Assigned UTILITY from the independently searchable taxonomy because the corpus effect is: Dung Bomb combinations succeed at 100%; hit monsters always leave the area. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_077",
+      "japaneseName": "抗菌",
+      "tmoDisplayName": "Antiseptic",
+      "displayName": "Antiseptic",
+      "uiDisplayName": "Antiseptic",
+      "categories": [
+        "DEFENSE"
+      ],
+      "rationale": "Assigned DEFENSE from the independently searchable taxonomy because the corpus effect is: Negates the item-use-disabled state. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_078",
+      "japaneseName": "毒瓶追加",
+      "tmoDisplayName": "Poison C+",
+      "displayName": "Poison C+",
+      "uiDisplayName": "Poison C+",
+      "categories": [
+        "GUNNER"
+      ],
+      "rationale": "Assigned GUNNER from the independently searchable taxonomy because the corpus effect is: All bows can equip Poison Coating. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [
+        "Bow only"
+      ],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_079",
+      "japaneseName": "麻痺瓶追加",
+      "tmoDisplayName": "Para C+",
+      "displayName": "Para C+",
+      "uiDisplayName": "Para C+",
+      "categories": [
+        "GUNNER"
+      ],
+      "rationale": "Assigned GUNNER from the independently searchable taxonomy because the corpus effect is: All bows can equip Paralysis Coating. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [
+        "Bow only"
+      ],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_080",
+      "japaneseName": "睡眠瓶追加",
+      "tmoDisplayName": "Sleep C+",
+      "displayName": "Sleep C+",
+      "uiDisplayName": "Sleep C+",
+      "categories": [
+        "GUNNER"
+      ],
+      "rationale": "Assigned GUNNER from the independently searchable taxonomy because the corpus effect is: All bows can equip Sleep Coating. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [
+        "Bow only"
+      ],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_081",
+      "japaneseName": "強撃瓶追加",
+      "tmoDisplayName": "Power C+",
+      "displayName": "Power C+",
+      "uiDisplayName": "Power C+",
+      "categories": [
+        "GUNNER"
+      ],
+      "rationale": "Assigned GUNNER from the independently searchable taxonomy because the corpus effect is: All bows can equip Power Coating. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [
+        "Bow only"
+      ],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_082",
+      "japaneseName": "接撃瓶追加",
+      "tmoDisplayName": "C.Range C+",
+      "displayName": "C.Range C+",
+      "uiDisplayName": "C.Range C+",
+      "categories": [
+        "GUNNER"
+      ],
+      "rationale": "Assigned GUNNER from the independently searchable taxonomy because the corpus effect is: All bows can equip Close-Range Coating. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [
+        "Bow only"
+      ],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_083",
+      "japaneseName": "笛",
+      "tmoDisplayName": "Maestro",
+      "displayName": "Maestro",
+      "uiDisplayName": "Maestro",
+      "categories": [
+        "BLADEMASTER",
+        "UTILITY"
+      ],
+      "rationale": "Assigned BLADEMASTER, UTILITY from the independently searchable taxonomy because the corpus effect is: Flute items break less often and Hunting Horn melody duration increases by melody. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [
+        "Hunting Horn"
+      ],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_084",
+      "japaneseName": "砲術",
+      "tmoDisplayName": "Artillery",
+      "displayName": "Artillery",
+      "uiDisplayName": "Artillery",
+      "categories": [
+        "BLADEMASTER",
+        "GUNNER"
+      ],
+      "rationale": "Assigned BLADEMASTER, GUNNER from the independently searchable taxonomy because the corpus effect is: Ballista, Cannon, Gunlance shell/Wyvern Fire power is 1.2×; Crag power is 1.3× including element; Wyvern Fire cooldown is 90 seconds (from 120).; Ballista, Cannon, Gunlance shell/Wyvern Fire power is 1.1×; Crag power is 1.15×. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [
+        "Gunlance"
+      ],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_085",
+      "japaneseName": "本気",
+      "tmoDisplayName": "Gloves Off",
+      "displayName": "Gloves Off",
+      "uiDisplayName": "Gloves Off",
+      "categories": [
+        "BLADEMASTER",
+        "GUNNER",
+        "UTILITY"
+      ],
+      "rationale": "Assigned BLADEMASTER, GUNNER, UTILITY from the independently searchable taxonomy because the corpus effect is: When active for 90 seconds, affinity is +50% and stamina costs are 1/4; activates after 5 minutes detected or 150 damage and can retrigger.; When active for 90 seconds, affinity is +30% and stamina costs are 1/2; activates after 5 minutes detected or 150 damage and can retrigger. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_086",
+      "japaneseName": "狩人",
+      "tmoDisplayName": "Ranger",
+      "displayName": "Ranger",
+      "uiDisplayName": "Ranger",
+      "categories": [
+        "UTILITY"
+      ],
+      "rationale": "Assigned UTILITY from the independently searchable taxonomy because the corpus effect is: Fishing and cooking improve, the map is always shown without a map item, and bait combinations succeed at 100%. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_087",
+      "japaneseName": "対防御DOWN",
+      "tmoDisplayName": "Def Lock",
+      "displayName": "Defense Lock",
+      "uiDisplayName": "Defense Lock",
+      "categories": [
+        "DEFENSE"
+      ],
+      "rationale": "Assigned DEFENSE from the independently searchable taxonomy because the corpus effect is: Defense-down is negated. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_088",
+      "japaneseName": "火属性攻撃",
+      "tmoDisplayName": "Fire Atk",
+      "displayName": "Fire Atk",
+      "uiDisplayName": "Fire Atk",
+      "categories": [
+        "BLADEMASTER",
+        "GUNNER"
+      ],
+      "rationale": "Assigned BLADEMASTER, GUNNER from the independently searchable taxonomy because the corpus effect is: Fire element value is 1.2×; stacks with Elemental Attack.; Fire element value is 1.1×; stacks with Elemental Attack.; Fire element value is 0.75×; stacks with Elemental Attack. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_089",
+      "japaneseName": "水属性攻撃",
+      "tmoDisplayName": "Water Atk",
+      "displayName": "Water Atk",
+      "uiDisplayName": "Water Atk",
+      "categories": [
+        "BLADEMASTER",
+        "GUNNER"
+      ],
+      "rationale": "Assigned BLADEMASTER, GUNNER from the independently searchable taxonomy because the corpus effect is: Water element value is 1.2×; stacks with Elemental Attack.; Water element value is 1.1×; stacks with Elemental Attack.; Water element value is 0.75×; stacks with Elemental Attack. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_090",
+      "japaneseName": "雷属性攻撃",
+      "tmoDisplayName": "ThunderAtk",
+      "displayName": "Thunder Attack",
+      "uiDisplayName": "Thunder Attack",
+      "categories": [
+        "BLADEMASTER",
+        "GUNNER"
+      ],
+      "rationale": "Assigned BLADEMASTER, GUNNER from the independently searchable taxonomy because the corpus effect is: Thunder element value is 1.2×; stacks with Elemental Attack.; Thunder element value is 1.1×; stacks with Elemental Attack.; Thunder element value is 0.75×; stacks with Elemental Attack. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_091",
+      "japaneseName": "氷属性攻撃",
+      "tmoDisplayName": "Ice Atk",
+      "displayName": "Ice Atk",
+      "uiDisplayName": "Ice Atk",
+      "categories": [
+        "BLADEMASTER",
+        "GUNNER"
+      ],
+      "rationale": "Assigned BLADEMASTER, GUNNER from the independently searchable taxonomy because the corpus effect is: Ice element value is 1.2×; stacks with Elemental Attack.; Ice element value is 1.1×; stacks with Elemental Attack.; Ice element value is 0.75×; stacks with Elemental Attack. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_092",
+      "japaneseName": "龍属性攻撃",
+      "tmoDisplayName": "Dragon Atk",
+      "displayName": "Dragon Atk",
+      "uiDisplayName": "Dragon Atk",
+      "categories": [
+        "BLADEMASTER",
+        "GUNNER"
+      ],
+      "rationale": "Assigned BLADEMASTER, GUNNER from the independently searchable taxonomy because the corpus effect is: Dragon element value is 1.2×; stacks with Elemental Attack.; Dragon element value is 1.1×; stacks with Elemental Attack.; Dragon element value is 0.75×; stacks with Elemental Attack. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_093",
+      "japaneseName": "斬裂弾追加",
+      "tmoDisplayName": "Slice S+",
+      "displayName": "Slice S+",
+      "uiDisplayName": "Slice S+",
+      "categories": [
+        "GUNNER"
+      ],
+      "rationale": "Assigned GUNNER from the independently searchable taxonomy because the corpus effect is: Allows loading Slicing ammo; capacity varies by weapon. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [
+        "Bowgun only"
+      ],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_094",
+      "japaneseName": "減気瓶追加",
+      "tmoDisplayName": "Exhaust C+",
+      "displayName": "Exhaust C+",
+      "uiDisplayName": "Exhaust C+",
+      "categories": [
+        "GUNNER"
+      ],
+      "rationale": "Assigned GUNNER from the independently searchable taxonomy because the corpus effect is: All bows can equip Exhaust Coating. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [
+        "Bow only"
+      ],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_095",
+      "japaneseName": "痛撃",
+      "tmoDisplayName": "Tenderizer",
+      "displayName": "Tenderizer",
+      "uiDisplayName": "Tenderizer",
+      "categories": [
+        "BLADEMASTER",
+        "GUNNER"
+      ],
+      "rationale": "Assigned BLADEMASTER, GUNNER from the independently searchable taxonomy because the corpus effect is: Attacks on hitzones of 45 or more gain +50% affinity. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_096",
+      "japaneseName": "重撃",
+      "tmoDisplayName": "Destroyer",
+      "displayName": "Destroyer",
+      "uiDisplayName": "Destroyer",
+      "categories": [
+        "BLADEMASTER",
+        "GUNNER"
+      ],
+      "rationale": "Assigned BLADEMASTER, GUNNER from the independently searchable taxonomy because the corpus effect is: Part damage, including tail cuts, is 1.3×; it does not increase monster HP damage. It has no effect on parts that cannot be broken further, and bombs are unaffected except Anti-Dragon Bombs. The first decimal is rounded up. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_097",
+      "japaneseName": "KO",
+      "tmoDisplayName": "KO",
+      "displayName": "KO",
+      "uiDisplayName": "KO",
+      "categories": [
+        "BLADEMASTER",
+        "GUNNER"
+      ],
+      "rationale": "Assigned BLADEMASTER, GUNNER from the independently searchable taxonomy because the corpus effect is: KO value is 1.1×, rounded down at the first decimal. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_098",
+      "japaneseName": "減気攻撃",
+      "tmoDisplayName": "Stam Drain",
+      "displayName": "Stamina Drain",
+      "uiDisplayName": "Stamina Drain",
+      "categories": [
+        "BLADEMASTER",
+        "GUNNER"
+      ],
+      "rationale": "Assigned BLADEMASTER, GUNNER from the independently searchable taxonomy because the corpus effect is: Attacks that deal stamina damage deal more stamina damage. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_099",
+      "japaneseName": "納刀",
+      "tmoDisplayName": "Sheathing",
+      "displayName": "Sheathing",
+      "uiDisplayName": "Sheathing",
+      "categories": [
+        "BLADEMASTER"
+      ],
+      "rationale": "Assigned BLADEMASTER from the independently searchable taxonomy because the corpus effect is: Weapon sheathing is faster. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_100",
+      "japaneseName": "気力回復",
+      "tmoDisplayName": "Stam Recov",
+      "displayName": "Stamina Recovery",
+      "uiDisplayName": "Stamina Recovery",
+      "categories": [
+        "UTILITY"
+      ],
+      "rationale": "Assigned UTILITY from the independently searchable taxonomy because the corpus effect is: Stamina recovery is 2× faster.; Stamina recovery is slower. OR semantics means selecting multiple categories broadens results; it does not require all tags.",
+      "explicitWeaponRestrictionEvidence": [],
+      "sourceReferences": [
+        "local_corpus",
+        "atwiki_skill_index"
+      ],
+      "confidence": "MEDIUM"
+    }
+  ]
+}

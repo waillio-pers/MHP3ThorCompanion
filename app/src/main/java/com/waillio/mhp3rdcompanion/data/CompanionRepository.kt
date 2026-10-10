@@ -1035,7 +1035,8 @@ private fun GeneratedDataset.toFixtureData(): FixtureData {
                 },
                 specialMechanics = tree.specialMechanics.map { special ->
                     SkillSpecialMechanic(special.type, special.name, special.effectSummary)
-                }
+                  },
+                  categories = tree.categories
             )
         },
         decorationSkillRelations = decorationSkillRelations.map { relation ->

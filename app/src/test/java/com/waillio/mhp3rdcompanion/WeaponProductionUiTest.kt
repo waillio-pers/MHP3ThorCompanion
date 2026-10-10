@@ -30,7 +30,7 @@ class WeaponProductionUiTest {
         val sha = context.assets.open("mhp3rd-data.json").use { input ->
             MessageDigest.getInstance("SHA-256").digest(input.readBytes()).joinToString("") { "%02X".format(it) }
         }
-        assertEquals("657CFA9376FC8CBE56C67E67D4D1A27C455D21021F51E21B62427C8DDBB26155", sha)
+        assertEquals("4A11909F1D1A1C986038831DCB3C3244528F88AAC6F05F2D9A626DBB6E0CAA60", sha)
         val data = CompanionRepository(context).data
         assertEquals(978, data.materials.size)
         assertEquals(987, data.weapons.size)

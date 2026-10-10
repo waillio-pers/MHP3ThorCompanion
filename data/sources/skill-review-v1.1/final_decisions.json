@@ -1,0 +1,148 @@
+{
+  "format": "MHP3rd Companion 1.1 skill review final decisions",
+  "basis": {
+    "reviewedTrees": 100,
+    "treeStatusCounts": {
+      "ok": 91,
+      "edit": 6,
+      "bad": 3
+    },
+    "activationStatusCounts": {
+      "ok": 192,
+      "edit": 8,
+      "bad": 8,
+      "unmarked": 1
+    },
+    "policy": "All audit candidates marked OK are accepted unless overridden below. Preserve stable skill-tree IDs and Team Maverick ONE naming."
+  },
+  "categoryOverrides": [
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_037",
+      "name": "Anti-Theft",
+      "categories": [
+        "UTILITY"
+      ],
+      "reason": "Player review judged theft prevention to be utility rather than defense."
+    }
+  ],
+  "mandatoryAuditCorrections": [
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_005",
+      "name": "Stun",
+      "treeShort": "Changes resistance to being stunned: +15 prevents stun, +10 halves stun chance, and -10 doubles stun chance.",
+      "note": "Replace the old tree wording about halving/doubling stun duration."
+    }
+  ],
+  "reviewOverrides": [
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_037",
+      "name": "Anti-Theft",
+      "treeShort": "Prevents items from being stolen, including by Melynx.",
+      "treeDetailed": "Prevents items from being stolen. Melynx are the black Felyne-like enemies that commonly steal items."
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_017",
+      "name": "Auto-Guard",
+      "treeShort": "Automatically guards guardable attacks while your weapon is drawn, if the equipped weapon can guard.",
+      "treeDetailed": "Automatically guards when the equipped weapon is capable of guarding, the incoming attack can be guarded, and Auto-Guard can trigger in the current state."
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_030",
+      "name": "Bomb Boost",
+      "treeShort": "Boosts bomb damage and makes bomb-item combinations succeed 100%.",
+      "activationOverrides": {
+        "Bombardier": "Damaging bomb items deal 1.3× damage, and bomb-item combination recipes succeed 100%. For Polytan Bomb, only the physical damage portion is boosted."
+      }
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_069",
+      "name": "Capture",
+      "treeShort": "Increases the number of capture reward slots.",
+      "activationOverrides": {
+        "Capture Master": "Capture reward slots increase from the normal 2–3 to 3–4.",
+        "Capture Expert": "Capture reward slots become 3 instead of the normal 2–3."
+      }
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_054",
+      "name": "Combo Rate",
+      "treeShort": "Changes item combination success rate.",
+      "activationWordingRule": "Use 'Item combination success rate' instead of bare 'combination success rate' for every threshold."
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_068",
+      "name": "Constitution",
+      "treeShort": "Changes fixed stamina costs for evading, guarding, and some weapon actions.",
+      "activationOverrides": {
+        "Constitution +2": "Fixed stamina costs for evades, guarding, and Switch Axe swings are reduced to 1/2.",
+        "Constitution +1": "Fixed stamina costs for evades, guarding, and Switch Axe swings are reduced to 3/4.",
+        "Constitution -1": "Fixed stamina costs for evades, guarding, and Switch Axe swings increase.",
+        "Constitution -2": "Fixed stamina costs for evades, guarding, and Switch Axe swings increase substantially."
+      },
+      "note": "Do not show source/audit meta-text such as 'do not quantify without a source' to end users."
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_051",
+      "name": "Fate",
+      "treeShort": "Changes how likely the game is to add additional basic quest reward slots. It does not improve the contents of a reward slot or a specific item's drop rate.",
+      "activationOverrides": {
+        "Great Luck": "Raises the chance of receiving each next basic reward slot from 22/32 to 29/32.",
+        "Good Luck": "Raises the chance of receiving each next basic reward slot from 22/32 to 26/32.",
+        "Bad Luck": "Lowers the chance of receiving each next basic reward slot from 22/32 to 16/32.",
+        "Horrible Luck": "Lowers the chance of receiving each next basic reward slot from 22/32 to 8/32."
+      }
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_085",
+      "name": "Gloves Off",
+      "treeShort": "Temporarily boosts Affinity and reduces stamina use after fighting a large monster long enough or taking enough damage.",
+      "activationOverrides": {
+        "Latent Power +1": "Activates for 90 seconds after about 5 minutes while detected by a large monster or after accumulating about 150 damage. Grants +30% Affinity and halves stamina consumption. It can activate again after the effect ends.",
+        "Latent Power +2": "Activates for 90 seconds after about 5 minutes while detected by a large monster or after accumulating about 150 damage. Grants +50% Affinity, reduces continuous stamina drain to 1/4, and greatly reduces fixed stamina costs. It can activate again after the effect ends."
+      },
+      "note": "Do not publish an exact Latent Power +2 fixed-cost multiplier in 1.1: MHP3 sources conflict between a generic 1/4 statement and weapon-specific/tested 1/5 fixed-cost behavior."
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_015",
+      "name": "Guard",
+      "treeShort": "Changes knockback and chip damage received while guarding. (Blademaster only)",
+      "activationWordingRule": "Use 'knockback and chip damage received while guarding' rather than ambiguous 'damage'.",
+      "activationOverrides": {
+        "Guard +2": "Guarding greatly reduces knockback and chip damage received while guarding.",
+        "Guard +1": "Guarding reduces knockback and chip damage received while guarding.",
+        "Guard -1": "Guarding increases knockback and chip damage received while guarding."
+      }
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_097",
+      "name": "KO",
+      "treeShort": "Increases KO (stun) buildup. KO is mainly built by hitting a monster's head; reaching its threshold briefly stuns the monster.",
+      "activationOverrides": {
+        "Knockout King": "KO (stun) buildup is 1.1×, rounded down at the first decimal."
+      }
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_072",
+      "name": "Punishing Draw",
+      "treeShort": "Adds KO (stun) and exhaust buildup to draw attacks with cutting weapons. (Blademaster only)",
+      "treeDetailed": "Draw attacks with cutting weapons gain stun and exhaust buildup. KO/stun buildup is normally applied by hitting the monster's head; reaching the stun threshold briefly stuns it. For weapons other than Dual Blades, the added stun value is 30."
+    },
+    {
+      "stableSkillTreeId": "mhp3_skill_tree_028",
+      "name": "Status",
+      "treeShort": "Changes poison, paralysis, and sleep buildup.",
+      "activationOverrides": {
+        "Status Atk +2": "Poison, paralysis, and sleep buildup is 1.2× + 1. For Blademaster weapons, the status value shown in the equipment screen is only an approximation; the internal calculation keeps the fractional value.",
+        "Status Atk +1": "Poison, paralysis, and sleep buildup is 1.1× + 1. For Blademaster weapons, the status value shown in the equipment screen is only an approximation; the internal calculation keeps the fractional value.",
+        "Status Atk Down": "Poison, paralysis, and sleep buildup is 0.9×. For Blademaster weapons, the displayed status value is approximate. This reduction also makes capture tranquilizer buildup weak enough that 3 Tranq Bombs are required."
+      }
+    }
+  ],
+  "implementationRules": [
+    "Use OR semantics for category filters.",
+    "All four categories selected must behave the same as no category filter.",
+    "Do not expose audit/source-confidence language in player-facing descriptions unless it is intentionally part of the final copy.",
+    "Do not invent exact multipliers where the audit left evidence unresolved.",
+    "Retain all user-accepted audit candidates for skills not overridden here."
+  ]
+}

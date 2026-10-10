@@ -39,7 +39,7 @@ class ItemIconTargetedCorrectionTest {
     fun productionJsonAndIconRegistryMatchTheCurrentSchema31Baseline() {
         val bytes = context.assets.open("mhp3rd-data.json").use { it.readBytes() }
         val digest = MessageDigest.getInstance("SHA-256").digest(bytes).joinToString("") { "%02X".format(it) }
-        assertEquals("657CFA9376FC8CBE56C67E67D4D1A27C455D21021F51E21B62427C8DDBB26155", digest)
+        assertEquals("4A11909F1D1A1C986038831DCB3C3244528F88AAC6F05F2D9A626DBB6E0CAA60", digest)
         assertEquals(978, ItemIconRegistry.mappingCount)
         assertEquals(308, ItemIconRegistry.uniqueIconKeyCount)
         assertEquals(307, ItemIconRegistry.uniqueResourceCount)

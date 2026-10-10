@@ -210777,11 +210777,12 @@
   "skillTrees": [
     {
       "displayName": "Torso Up",
+      "categories": ["UTILITY"],
       "inGameDescription": "Replicates both the positive and negative bonuses of the Torso armor.",
       "jpName": "胴系統複製",
       "specialMechanics": [
         {
-          "effectSummary": "Copies the torso equipment's skill points, including decorations.",
+          "effectSummary": "The torso armor's skill-point values are duplicated, including points from decorations; this can replicate positive and negative bonuses.",
           "name": "Torso Up",
           "type": "TORSO_COPY"
         }
@@ -210793,6 +210794,7 @@
     },
     {
       "displayName": "Poison",
+      "categories": ["DEFENSE"],
       "inGameDescription": "Negates Poison or doubles duration.",
       "jpName": "毒",
       "specialMechanics": [],
@@ -210816,6 +210818,7 @@
     },
     {
       "displayName": "Paralysis",
+      "categories": ["DEFENSE"],
       "inGameDescription": "Negates Paralysis or doubles duration.",
       "jpName": "麻痺",
       "specialMechanics": [],
@@ -210839,6 +210842,7 @@
     },
     {
       "displayName": "Sleep",
+      "categories": ["DEFENSE"],
       "inGameDescription": "Negates Sleep or doubles duration.",
       "jpName": "睡眠",
       "specialMechanics": [],
@@ -210862,7 +210866,8 @@
     },
     {
       "displayName": "Stun",
-      "inGameDescription": "Negates Stun, halves or doubles duration.",
+      "categories": ["DEFENSE"],
+      "inGameDescription": "Changes resistance to being stunned: +15 prevents stun, +10 halves stun chance, and -10 doubles stun chance.",
       "jpName": "気絶",
       "specialMechanics": [],
       "stableSkillTreeId": "mhp3_skill_tree_005",
@@ -210891,6 +210896,7 @@
     },
     {
       "displayName": "Mud/Snow",
+      "categories": ["DEFENSE"],
       "inGameDescription": "Negates Mud and Snow effects.",
       "jpName": "耐泥耐雪",
       "specialMechanics": [],
@@ -210908,6 +210914,7 @@
     },
     {
       "displayName": "Sense",
+      "categories": ["DEFENSE"],
       "inGameDescription": "Reduces or increases attention from a monster when fighting in a group.",
       "jpName": "気配",
       "specialMechanics": [],
@@ -210931,6 +210938,7 @@
     },
     {
       "displayName": "Health",
+      "categories": ["DEFENSE"],
       "inGameDescription": "Increases health gauge.",
       "jpName": "体力",
       "specialMechanics": [],
@@ -210966,6 +210974,7 @@
     },
     {
       "displayName": "Recovery Speed",
+      "categories": ["DEFENSE"],
       "inGameDescription": "Increases or decreases recovery speed of the red health bar after taking damage.",
       "jpName": "回復速度",
       "specialMechanics": [],
@@ -211001,6 +211010,7 @@
     },
     {
       "displayName": "Sharpness",
+      "categories": ["BLADEMASTER"],
       "inGameDescription": "Decreases or increases rate of weapon sharpness consumption. (Blademaster only)",
       "jpName": "斬れ味",
       "specialMechanics": [],
@@ -211024,6 +211034,7 @@
     },
     {
       "displayName": "Handicraft",
+      "categories": ["BLADEMASTER"],
       "inGameDescription": "Increases overall weapon sharpness. (Blademaster only)",
       "jpName": "匠",
       "specialMechanics": [],
@@ -211041,6 +211052,7 @@
     },
     {
       "displayName": "Fencing",
+      "categories": ["BLADEMASTER"],
       "inGameDescription": "Attacks do not bounce. (Blademaster only)",
       "jpName": "剣術",
       "specialMechanics": [],
@@ -211058,6 +211070,7 @@
     },
     {
       "displayName": "Expert",
+      "categories": ["BLADEMASTER","GUNNER"],
       "inGameDescription": "Increases or decreases weapon critical chance.",
       "jpName": "達人",
       "specialMechanics": [],
@@ -211105,6 +211118,7 @@
     },
     {
       "displayName": "Sharpener",
+      "categories": ["BLADEMASTER"],
       "inGameDescription": "Increases or decreases speed of sharpening. (Blademaster only)",
       "jpName": "研ぎ師",
       "specialMechanics": [],
@@ -211128,26 +211142,27 @@
     },
     {
       "displayName": "Guard",
-      "inGameDescription": "Decreases or increases knock back and damage when guarding. (Blademaster only)",
+      "categories": ["BLADEMASTER"],
+      "inGameDescription": "Changes knockback and chip damage received while guarding. (Blademaster only)",
       "jpName": "ガード性能",
       "specialMechanics": [],
       "stableSkillTreeId": "mhp3_skill_tree_015",
       "thresholds": [
         {
           "activatedSkillName": "Guard +2",
-          "effectSummary": "Guarding greatly reduces knockback and damage.",
+          "effectSummary": "Guarding greatly reduces knockback and chip damage received while guarding.",
           "points": 15,
           "polarity": "POSITIVE"
         },
         {
           "activatedSkillName": "Guard +1",
-          "effectSummary": "Guarding reduces knockback and damage.",
+          "effectSummary": "Guarding reduces knockback and chip damage received while guarding.",
           "points": 10,
           "polarity": "POSITIVE"
         },
         {
           "activatedSkillName": "Guard -1",
-          "effectSummary": "Guarding causes greater knockback and increased damage.",
+          "effectSummary": "Guarding increases knockback and chip damage received while guarding.",
           "points": -10,
           "polarity": "NEGATIVE"
         }
@@ -211157,6 +211172,7 @@
     },
     {
       "displayName": "Guard Up",
+      "categories": ["BLADEMASTER"],
       "inGameDescription": "Allows guarding against normally unblockable attacks. (Blademaster only)",
       "jpName": "ガード強化",
       "specialMechanics": [],
@@ -211174,14 +211190,15 @@
     },
     {
       "displayName": "Auto-Guard",
-      "inGameDescription": "Automatically blocks attacks when weapon is drawn. (Blademaster only)",
+      "categories": ["BLADEMASTER"],
+      "inGameDescription": "Automatically guards guardable attacks while your weapon is drawn, if the equipped weapon can guard.",
       "jpName": "自動防御",
       "specialMechanics": [],
       "stableSkillTreeId": "mhp3_skill_tree_017",
       "thresholds": [
         {
           "activatedSkillName": "Auto-Guard",
-          "effectSummary": "Automatically guards attacks while the weapon is drawn when guarding is possible.",
+          "effectSummary": "Automatically guards when the equipped weapon is capable of guarding, the incoming attack can be guarded, and Auto-Guard can trigger in the current state.",
           "points": 10,
           "polarity": "POSITIVE"
         }
@@ -211191,6 +211208,7 @@
     },
     {
       "displayName": "Reload Speed",
+      "categories": ["GUNNER"],
       "inGameDescription": "Decreases or increases speed of reloading (Gunner only)",
       "jpName": "装填速度",
       "specialMechanics": [],
@@ -211238,6 +211256,7 @@
     },
     {
       "displayName": "Recoil",
+      "categories": ["GUNNER"],
       "inGameDescription": "Decreases or increases recoil of bowgun shots. (Bowgun only)",
       "jpName": "反動",
       "specialMechanics": [],
@@ -211285,6 +211304,7 @@
     },
     {
       "displayName": "Normal Up",
+      "categories": ["GUNNER"],
       "inGameDescription": "Increases the power of Normal S and Rapid shots (Gunner only)",
       "jpName": "通常弾強化",
       "specialMechanics": [],
@@ -211302,6 +211322,7 @@
     },
     {
       "displayName": "Pierce Up",
+      "categories": ["GUNNER"],
       "inGameDescription": "Increases the power of Pierce S and Pierce shots (Gunner only)",
       "jpName": "貫通弾強化",
       "specialMechanics": [],
@@ -211319,6 +211340,7 @@
     },
     {
       "displayName": "Pellet Up",
+      "categories": ["GUNNER"],
       "inGameDescription": "Increases the power of Pellet S and Scatter shots (Gunner only)",
       "jpName": "散弾強化",
       "specialMechanics": [],
@@ -211336,6 +211358,7 @@
     },
     {
       "displayName": "Normal S+",
+      "categories": ["GUNNER"],
       "inGameDescription": "Adds Normal S to current types of loadable ammo. (Bowgun only)",
       "jpName": "通常弾追加",
       "specialMechanics": [],
@@ -211353,6 +211376,7 @@
     },
     {
       "displayName": "Pierce S+",
+      "categories": ["GUNNER"],
       "inGameDescription": "Adds Pierce S to current types of loadable ammo. (Bowgun only)",
       "jpName": "貫通弾追加",
       "specialMechanics": [],
@@ -211376,6 +211400,7 @@
     },
     {
       "displayName": "Pellet S+",
+      "categories": ["GUNNER"],
       "inGameDescription": "Adds Pellet S to current types of loadable ammo. (Bowgun only)",
       "jpName": "散弾追加",
       "specialMechanics": [],
@@ -211399,6 +211424,7 @@
     },
     {
       "displayName": "Crag S+",
+      "categories": ["GUNNER"],
       "inGameDescription": "Adds Crag S to current types of loadable ammo. (Bowgun only)",
       "jpName": "榴弾追加",
       "specialMechanics": [],
@@ -211422,6 +211448,7 @@
     },
     {
       "displayName": "Clust S+",
+      "categories": ["GUNNER"],
       "inGameDescription": "Adds Clust S to current types of loadable ammo. (Bowgun only)",
       "jpName": "拡散弾追加",
       "specialMechanics": [],
@@ -211445,26 +211472,27 @@
     },
     {
       "displayName": "Status",
-      "inGameDescription": "Increases or decreases the power of Abnormal Status attacks.",
+      "categories": ["BLADEMASTER","GUNNER"],
+      "inGameDescription": "Changes poison, paralysis, and sleep buildup.",
       "jpName": "特殊攻撃",
       "specialMechanics": [],
       "stableSkillTreeId": "mhp3_skill_tree_028",
       "thresholds": [
         {
           "activatedSkillName": "Status Atk +2",
-          "effectSummary": "Status buildup is 1.2× plus 1 (example 39→47); Blademaster display is approximate.",
+          "effectSummary": "Poison, paralysis, and sleep buildup is 1.2× + 1. For Blademaster weapons, the status value shown in the equipment screen is only an approximation; the internal calculation keeps the fractional value.",
           "points": 15,
           "polarity": "POSITIVE"
         },
         {
           "activatedSkillName": "Status Atk +1",
-          "effectSummary": "Status buildup is 1.1× plus 1 (example 39→43); Blademaster display is approximate.",
+          "effectSummary": "Poison, paralysis, and sleep buildup is 1.1× + 1. For Blademaster weapons, the status value shown in the equipment screen is only an approximation; the internal calculation keeps the fractional value.",
           "points": 10,
           "polarity": "POSITIVE"
         },
         {
           "activatedSkillName": "Status Atk Down",
-          "effectSummary": "Status buildup is 0.9× (example 39→35); Blademaster display is approximate and capture requires 3 Tranq Bombs.",
+          "effectSummary": "Poison, paralysis, and sleep buildup is 0.9×. For Blademaster weapons, the displayed status value is approximate. This reduction also makes capture tranquilizer buildup weak enough that 3 Tranq Bombs are required.",
           "points": -10,
           "polarity": "NEGATIVE"
         }
@@ -211474,6 +211502,7 @@
     },
     {
       "displayName": "Elemental Attack",
+      "categories": ["BLADEMASTER","GUNNER"],
       "inGameDescription": "Increases or decreases the power of Elemental attacks.",
       "jpName": "属性攻撃",
       "specialMechanics": [],
@@ -211497,14 +211526,15 @@
     },
     {
       "displayName": "Bomb Boost",
-      "inGameDescription": "Increases the power and combining success rate of bombs.",
+      "categories": ["BLADEMASTER","GUNNER"],
+      "inGameDescription": "Boosts bomb damage and makes bomb-item combinations succeed 100%.",
       "jpName": "爆弾強化",
       "specialMechanics": [],
       "stableSkillTreeId": "mhp3_skill_tree_030",
       "thresholds": [
         {
           "activatedSkillName": "Bombardier",
-          "effectSummary": "Bomb damage is 1.3× and bomb-item combination success is 100%.",
+          "effectSummary": "Damaging bomb items deal 1.3× damage, and bomb-item combination recipes succeed 100%. For Polytan Bomb, only the physical damage portion is boosted.",
           "points": 10,
           "polarity": "POSITIVE"
         }
@@ -211514,6 +211544,7 @@
     },
     {
       "displayName": "Hunger",
+      "categories": ["UTILITY"],
       "inGameDescription": "Affects the rate of decrease of the Stamina Gauge.",
       "jpName": "腹減り",
       "specialMechanics": [],
@@ -211549,6 +211580,7 @@
     },
     {
       "displayName": "Gluttony",
+      "categories": ["UTILITY"],
       "inGameDescription": "Affects the amount of stamina replenished when using items.",
       "jpName": "食いしん坊",
       "specialMechanics": [],
@@ -211572,6 +211604,7 @@
     },
     {
       "displayName": "Attack",
+      "categories": ["BLADEMASTER","GUNNER"],
       "inGameDescription": "Increases or decreases Attack.",
       "jpName": "攻撃",
       "specialMechanics": [],
@@ -211619,6 +211652,7 @@
     },
     {
       "displayName": "Defense",
+      "categories": ["DEFENSE"],
       "inGameDescription": "Increases or decreases Defense.",
       "jpName": "防御",
       "specialMechanics": [],
@@ -211666,6 +211700,7 @@
     },
     {
       "displayName": "Protection",
+      "categories": ["DEFENSE"],
       "inGameDescription": "Chance of receiving more or less damage from an attack.",
       "jpName": "加護",
       "specialMechanics": [],
@@ -211689,6 +211724,7 @@
     },
     {
       "displayName": "Hearing",
+      "categories": ["DEFENSE"],
       "inGameDescription": "Diminishes the effect of monster roars.",
       "jpName": "聴覚保護",
       "specialMechanics": [],
@@ -211712,14 +211748,15 @@
     },
     {
       "displayName": "Anti-Theft",
-      "inGameDescription": "Items will not be stolen.",
+      "categories": ["UTILITY"],
+      "inGameDescription": "Prevents items from being stolen, including by Melynx.",
       "jpName": "盗み無効",
       "specialMechanics": [],
       "stableSkillTreeId": "mhp3_skill_tree_037",
       "thresholds": [
         {
           "activatedSkillName": "Anti-Theft",
-          "effectSummary": "Items cannot be stolen.",
+          "effectSummary": "Prevents items from being stolen. Melynx are the black Felyne-like enemies that commonly steal items.",
           "points": 10,
           "polarity": "POSITIVE"
         }
@@ -211729,6 +211766,7 @@
     },
     {
       "displayName": "Wide-Range",
+      "categories": ["DEFENSE","UTILITY"],
       "inGameDescription": "Some items used will also affect other hunters in the same area.",
       "jpName": "広域",
       "specialMechanics": [],
@@ -211752,6 +211790,7 @@
     },
     {
       "displayName": "Transporter",
+      "categories": ["UTILITY"],
       "inGameDescription": "Greatly aids in transporting carried items.",
       "jpName": "運搬",
       "specialMechanics": [],
@@ -211769,6 +211808,7 @@
     },
     {
       "displayName": "Fire Res",
+      "categories": ["DEFENSE"],
       "inGameDescription": "Increases or decreases Fire Resistance.",
       "jpName": "火耐性",
       "specialMechanics": [],
@@ -211798,6 +211838,7 @@
     },
     {
       "displayName": "Water Res",
+      "categories": ["DEFENSE"],
       "inGameDescription": "Increases or decreases Water Resistance.",
       "jpName": "水耐性",
       "specialMechanics": [],
@@ -211827,6 +211868,7 @@
     },
     {
       "displayName": "Thunder Resistance",
+      "categories": ["DEFENSE"],
       "inGameDescription": "Increases or decreases Thunder Resistance.",
       "jpName": "雷耐性",
       "specialMechanics": [],
@@ -211856,6 +211898,7 @@
     },
     {
       "displayName": "Ice Res",
+      "categories": ["DEFENSE"],
       "inGameDescription": "Increases or decreases Ice Resistance.",
       "jpName": "氷耐性",
       "specialMechanics": [],
@@ -211885,6 +211928,7 @@
     },
     {
       "displayName": "Dragon Res",
+      "categories": ["DEFENSE"],
       "inGameDescription": "Increases or decreases Dragon Resistance.",
       "jpName": "龍耐性",
       "specialMechanics": [],
@@ -211914,6 +211958,7 @@
     },
     {
       "displayName": "Heat Res",
+      "categories": ["DEFENSE"],
       "inGameDescription": "Negates or increases Heat effects.",
       "jpName": "耐暑",
       "specialMechanics": [],
@@ -211937,6 +211982,7 @@
     },
     {
       "displayName": "Cold Res",
+      "categories": ["DEFENSE"],
       "inGameDescription": "Negates or increases Cold effects.",
       "jpName": "耐寒",
       "specialMechanics": [],
@@ -211960,6 +212006,7 @@
     },
     {
       "displayName": "Wind Res",
+      "categories": ["DEFENSE"],
       "inGameDescription": "Negates or decreases monster wind effects.",
       "jpName": "風圧",
       "specialMechanics": [],
@@ -211983,6 +212030,7 @@
     },
     {
       "displayName": "Gathering",
+      "categories": ["UTILITY"],
       "inGameDescription": "Increases or decreases the results of gathering and mining.",
       "jpName": "採取",
       "specialMechanics": [],
@@ -212012,6 +212060,7 @@
     },
     {
       "displayName": "Speed Gather",
+      "categories": ["UTILITY"],
       "inGameDescription": "Increases the speed of gathering and mining.",
       "jpName": "高速収集",
       "specialMechanics": [],
@@ -212029,6 +212078,7 @@
     },
     {
       "displayName": "Whim",
+      "categories": ["UTILITY"],
       "inGameDescription": "Affects the chance of breaking for Pickaxes, Bug Nets, Boomerangs and Flutes.",
       "jpName": "気まぐれ",
       "specialMechanics": [],
@@ -212064,32 +212114,33 @@
     },
     {
       "displayName": "Fate",
-      "inGameDescription": "Improves or worsens the types of rewards gained after clearing a quest.",
+      "categories": ["UTILITY"],
+      "inGameDescription": "Changes how likely the game is to add additional basic quest reward slots. It does not improve the contents of a reward slot or a specific item's drop rate.",
       "jpName": "運気",
       "specialMechanics": [],
       "stableSkillTreeId": "mhp3_skill_tree_051",
       "thresholds": [
         {
           "activatedSkillName": "Great Luck",
-          "effectSummary": "Basic quest reward slots are more likely to increase.",
+          "effectSummary": "Raises the chance of receiving each next basic reward slot from 22/32 to 29/32.",
           "points": 15,
           "polarity": "POSITIVE"
         },
         {
           "activatedSkillName": "Good Luck",
-          "effectSummary": "Basic quest reward slots are slightly more likely to increase.",
+          "effectSummary": "Raises the chance of receiving each next basic reward slot from 22/32 to 26/32.",
           "points": 10,
           "polarity": "POSITIVE"
         },
         {
           "activatedSkillName": "Bad Luck",
-          "effectSummary": "Basic quest reward slots are slightly more likely to decrease.",
+          "effectSummary": "Lowers the chance of receiving each next basic reward slot from 22/32 to 16/32.",
           "points": -10,
           "polarity": "NEGATIVE"
         },
         {
           "activatedSkillName": "Horrible Luck",
-          "effectSummary": "Basic quest reward slots are more likely to decrease.",
+          "effectSummary": "Lowers the chance of receiving each next basic reward slot from 22/32 to 8/32.",
           "points": -15,
           "polarity": "NEGATIVE"
         }
@@ -212099,6 +212150,7 @@
     },
     {
       "displayName": "Psychic",
+      "categories": ["UTILITY"],
       "inGameDescription": "Displays more information about big monsters on the map.",
       "jpName": "千里眼",
       "specialMechanics": [],
@@ -212122,6 +212174,7 @@
     },
     {
       "displayName": "Recovery Level",
+      "categories": ["DEFENSE"],
       "inGameDescription": "Increases or decreases the effectiveness of recovery items.",
       "jpName": "回復量",
       "specialMechanics": [],
@@ -212145,32 +212198,33 @@
     },
     {
       "displayName": "Combo Rate",
-      "inGameDescription": "Improves or worsens the success rate of combinations.",
+      "categories": ["UTILITY"],
+      "inGameDescription": "Changes item combination success rate.",
       "jpName": "調合成功率",
       "specialMechanics": [],
       "stableSkillTreeId": "mhp3_skill_tree_054",
       "thresholds": [
         {
           "activatedSkillName": "Combo Rate +45%",
-          "effectSummary": "Combination success rate +45%.",
+          "effectSummary": "Item combination success rate +45%.",
           "points": 15,
           "polarity": "POSITIVE"
         },
         {
           "activatedSkillName": "Combo Rate +20%",
-          "effectSummary": "Combination success rate +20%.",
+          "effectSummary": "Item combination success rate +20%.",
           "points": 10,
           "polarity": "POSITIVE"
         },
         {
           "activatedSkillName": "Combo Rate -10%",
-          "effectSummary": "Combination success rate -10%.",
+          "effectSummary": "Item combination success rate -10%.",
           "points": -10,
           "polarity": "NEGATIVE"
         },
         {
           "activatedSkillName": "Combo Rate -20%",
-          "effectSummary": "Combination success rate -20%.",
+          "effectSummary": "Item combination success rate -20%.",
           "points": -15,
           "polarity": "NEGATIVE"
         }
@@ -212180,6 +212234,7 @@
     },
     {
       "displayName": "Combo Plus",
+      "categories": ["UTILITY"],
       "inGameDescription": "Maximizes the amount variable of combination results.",
       "jpName": "調合数",
       "specialMechanics": [],
@@ -212197,6 +212252,7 @@
     },
     {
       "displayName": "Evasion",
+      "categories": ["DEFENSE"],
       "inGameDescription": "Increases or decreases the duration of invulnerability when evading.",
       "jpName": "回避性能",
       "specialMechanics": [],
@@ -212226,6 +212282,7 @@
     },
     {
       "displayName": "Potential",
+      "categories": ["BLADEMASTER","GUNNER","DEFENSE"],
       "inGameDescription": "Affects Attack and Defense when the health gauge drops below a certain amount.",
       "jpName": "底力",
       "specialMechanics": [],
@@ -212255,6 +212312,7 @@
     },
     {
       "displayName": "Item Duration",
+      "categories": ["UTILITY"],
       "inGameDescription": "Extends or shortens the duration of consumed items.",
       "jpName": "効果持続",
       "specialMechanics": [],
@@ -212278,6 +212336,7 @@
     },
     {
       "displayName": "Stamina",
+      "categories": ["BLADEMASTER","GUNNER","UTILITY"],
       "inGameDescription": "Decreases or increases stamina consumption of running and climbing.",
       "jpName": "スタミナ",
       "specialMechanics": [],
@@ -212301,6 +212360,7 @@
     },
     {
       "displayName": "Loading",
+      "categories": ["BLADEMASTER","GUNNER"],
       "inGameDescription": "Adds 1 to all loadable bowgun ammo limits, bow charge levels and gunlance shots.",
       "jpName": "装填数",
       "specialMechanics": [],
@@ -212318,6 +212378,7 @@
     },
     {
       "displayName": "Precision",
+      "categories": ["GUNNER"],
       "inGameDescription": "Increases or decreases bowgun shot accuracy. (Bowgun only)",
       "jpName": "精密射撃",
       "specialMechanics": [],
@@ -212353,6 +212414,7 @@
     },
     {
       "displayName": "Eating",
+      "categories": ["UTILITY"],
       "inGameDescription": "Increases or decreases speed of consuming items.",
       "jpName": "食事",
       "specialMechanics": [],
@@ -212382,6 +212444,7 @@
     },
     {
       "displayName": "Carving",
+      "categories": ["UTILITY"],
       "inGameDescription": "Increases the number of carves.",
       "jpName": "剥ぎ取り",
       "specialMechanics": [],
@@ -212399,6 +212462,7 @@
     },
     {
       "displayName": "Tremor Res",
+      "categories": ["DEFENSE"],
       "inGameDescription": "Negates the effect of monster quake.",
       "jpName": "耐震",
       "specialMechanics": [],
@@ -212416,6 +212480,7 @@
     },
     {
       "displayName": "Evade Distance",
+      "categories": ["DEFENSE"],
       "inGameDescription": "Increases the distance of evasion moves.",
       "jpName": "回避距離",
       "specialMechanics": [],
@@ -212433,6 +212498,7 @@
     },
     {
       "displayName": "Critical Draw",
+      "categories": ["BLADEMASTER"],
       "inGameDescription": "Unsheathed attacks have a great chance of being critcal. (Blademaster only)",
       "jpName": "抜刀会心",
       "specialMechanics": [],
@@ -212450,6 +212516,7 @@
     },
     {
       "displayName": "Speed Setup",
+      "categories": ["UTILITY"],
       "inGameDescription": "Increases speed of setting traps, combining traps and tranquilzer bombs.",
       "jpName": "高速設置",
       "specialMechanics": [],
@@ -212467,32 +212534,33 @@
     },
     {
       "displayName": "Constitution",
-      "inGameDescription": "Decreases or increases stamina consumption of guarding and evading.",
+      "categories": ["BLADEMASTER","GUNNER","UTILITY"],
+      "inGameDescription": "Changes fixed stamina costs for evading, guarding, and some weapon actions.",
       "jpName": "体術",
       "specialMechanics": [],
       "stableSkillTreeId": "mhp3_skill_tree_068",
       "thresholds": [
         {
           "activatedSkillName": "Constitution +2",
-          "effectSummary": "Fixed stamina costs for evades, guarding, and Switch Axe swings are 1/2.",
+          "effectSummary": "Fixed stamina costs for evades, guarding, and Switch Axe swings are reduced to 1/2.",
           "points": 15,
           "polarity": "POSITIVE"
         },
         {
           "activatedSkillName": "Constitution +1",
-          "effectSummary": "Those fixed stamina costs are 3/4.",
+          "effectSummary": "Fixed stamina costs for evades, guarding, and Switch Axe swings are reduced to 3/4.",
           "points": 10,
           "polarity": "POSITIVE"
         },
         {
           "activatedSkillName": "Constitution -1",
-          "effectSummary": "Those fixed stamina costs increase.",
+          "effectSummary": "Fixed stamina costs for evades, guarding, and Switch Axe swings increase.",
           "points": -10,
           "polarity": "NEGATIVE"
         },
         {
           "activatedSkillName": "Constitution -2",
-          "effectSummary": "Those fixed stamina costs increase greatly.",
+          "effectSummary": "Fixed stamina costs for evades, guarding, and Switch Axe swings increase substantially.",
           "points": -15,
           "polarity": "NEGATIVE"
         }
@@ -212502,14 +212570,15 @@
     },
     {
       "displayName": "Capture",
-      "inGameDescription": "Increases the rewards for capturing a monster.",
+      "categories": ["UTILITY"],
+      "inGameDescription": "Increases the number of capture reward slots.",
       "jpName": "捕獲",
       "specialMechanics": [],
       "stableSkillTreeId": "mhp3_skill_tree_069",
       "thresholds": [
         {
           "activatedSkillName": "Capture Master",
-          "effectSummary": "Capture reward slots increase from 2–3 to 3–4.",
+          "effectSummary": "Capture reward slots increase from the normal 2–3 to 3–4.",
           "points": 15,
           "polarity": "POSITIVE"
         },
@@ -212525,6 +212594,7 @@
     },
     {
       "displayName": "Perception",
+      "categories": ["UTILITY"],
       "inGameDescription": "Indicates on the map when a monster can be captured.",
       "jpName": "観察眼",
       "specialMechanics": [],
@@ -212542,6 +212612,7 @@
     },
     {
       "displayName": "Focus",
+      "categories": ["BLADEMASTER","GUNNER"],
       "inGameDescription": "Affects the charge speed of Hammers, Great Swords, Bows, Switch Axes, Duals and Longswords.",
       "jpName": "溜め短縮",
       "specialMechanics": [],
@@ -212565,14 +212636,15 @@
     },
     {
       "displayName": "Punishing Draw",
-      "inGameDescription": "Adds KO damage to unsheathed attacks. (Blademaster only)",
+      "categories": ["BLADEMASTER"],
+      "inGameDescription": "Adds KO (stun) and exhaust buildup to draw attacks with cutting weapons. (Blademaster only)",
       "jpName": "抜刀減気",
       "specialMechanics": [],
       "stableSkillTreeId": "mhp3_skill_tree_072",
       "thresholds": [
         {
           "activatedSkillName": "Punishing Draw",
-          "effectSummary": "Draw attacks with cutting weapons gain stun and exhaust buildup. For weapons other than Dual Blades, the stun value is 30. As with impact attacks, stun is applied only on a head hit.",
+          "effectSummary": "Draw attacks with cutting weapons gain stun and exhaust buildup. KO/stun buildup is normally applied by hitting the monster's head; reaching the stun threshold briefly stuns it. For weapons other than Dual Blades, the added stun value is 30.",
           "points": 10,
           "polarity": "POSITIVE"
         }
@@ -212582,6 +212654,7 @@
     },
     {
       "displayName": "Blight Res",
+      "categories": ["DEFENSE"],
       "inGameDescription": "Negates all elemental blights.",
       "jpName": "属性耐性",
       "specialMechanics": [],
@@ -212599,6 +212672,7 @@
     },
     {
       "displayName": "Survivor",
+      "categories": ["BLADEMASTER","GUNNER"],
       "inGameDescription": "Increases Attack after fainting in battle.",
       "jpName": "逆境",
       "specialMechanics": [],
@@ -212616,6 +212690,7 @@
     },
     {
       "displayName": "Rapid Fire",
+      "categories": ["GUNNER"],
       "inGameDescription": "Increases Rapidfire shots by 1. (Bowgun only)",
       "jpName": "速射",
       "specialMechanics": [],
@@ -212633,6 +212708,7 @@
     },
     {
       "displayName": "Dungmaster",
+      "categories": ["UTILITY"],
       "inGameDescription": "Increases the effectiveness and combine success rate of dungbombs.",
       "jpName": "こやし",
       "specialMechanics": [],
@@ -212650,6 +212726,7 @@
     },
     {
       "displayName": "Antiseptic",
+      "categories": ["DEFENSE"],
       "inGameDescription": "Negates the stench effect that disables item use.",
       "jpName": "抗菌",
       "specialMechanics": [],
@@ -212667,6 +212744,7 @@
     },
     {
       "displayName": "Poison C+",
+      "categories": ["GUNNER"],
       "inGameDescription": "Allows the use of Poison Coating. (Bow only)",
       "jpName": "毒瓶追加",
       "specialMechanics": [],
@@ -212684,6 +212762,7 @@
     },
     {
       "displayName": "Para C+",
+      "categories": ["GUNNER"],
       "inGameDescription": "Allows the use of Paralysis Coating. (Bow only)",
       "jpName": "麻痺瓶追加",
       "specialMechanics": [],
@@ -212701,6 +212780,7 @@
     },
     {
       "displayName": "Sleep C+",
+      "categories": ["GUNNER"],
       "inGameDescription": "Allows the use of Sleep Coating. (Bow only)",
       "jpName": "睡眠瓶追加",
       "specialMechanics": [],
@@ -212718,6 +212798,7 @@
     },
     {
       "displayName": "Power C+",
+      "categories": ["GUNNER"],
       "inGameDescription": "Allows the use of Power Coating. (Bow only)",
       "jpName": "強撃瓶追加",
       "specialMechanics": [],
@@ -212735,6 +212816,7 @@
     },
     {
       "displayName": "C.Range C+",
+      "categories": ["GUNNER"],
       "inGameDescription": "Allows the use of Razor Coating. (Bow only)",
       "jpName": "接撃瓶追加",
       "specialMechanics": [],
@@ -212752,6 +212834,7 @@
     },
     {
       "displayName": "Maestro",
+      "categories": ["BLADEMASTER","UTILITY"],
       "inGameDescription": "Reduces chance of Flute breaking and extends Hunting Horn effect durations.",
       "jpName": "笛",
       "specialMechanics": [],
@@ -212769,6 +212852,7 @@
     },
     {
       "displayName": "Artillery",
+      "categories": ["BLADEMASTER","GUNNER"],
       "inGameDescription": "Increases the power of Ballista, Cannon, Crag, Gunlance Shots and Wyvern Fire.",
       "jpName": "砲術",
       "specialMechanics": [],
@@ -212792,20 +212876,21 @@
     },
     {
       "displayName": "Gloves Off",
-      "inGameDescription": "Great strength is bestowed for a short time if special conditions are met.",
+      "categories": ["BLADEMASTER","GUNNER","UTILITY"],
+      "inGameDescription": "Temporarily boosts Affinity and reduces stamina use after fighting a large monster long enough or taking enough damage.",
       "jpName": "本気",
       "specialMechanics": [],
       "stableSkillTreeId": "mhp3_skill_tree_085",
       "thresholds": [
         {
           "activatedSkillName": "Latent Power +2",
-          "effectSummary": "When active for 90 seconds, affinity is +50% and stamina costs are 1/4; activates after 5 minutes detected or 150 damage and can retrigger.",
+          "effectSummary": "Activates for 90 seconds after about 5 minutes while detected by a large monster or after accumulating about 150 damage. Grants +50% Affinity, reduces continuous stamina drain to 1/4, and greatly reduces fixed stamina costs. It can activate again after the effect ends.",
           "points": 15,
           "polarity": "POSITIVE"
         },
         {
           "activatedSkillName": "Latent Power +1",
-          "effectSummary": "When active for 90 seconds, affinity is +30% and stamina costs are 1/2; activates after 5 minutes detected or 150 damage and can retrigger.",
+          "effectSummary": "Activates for 90 seconds after about 5 minutes while detected by a large monster or after accumulating about 150 damage. Grants +30% Affinity and halves stamina consumption. It can activate again after the effect ends.",
           "points": 10,
           "polarity": "POSITIVE"
         }
@@ -212815,6 +212900,7 @@
     },
     {
       "displayName": "Ranger",
+      "categories": ["UTILITY"],
       "inGameDescription": "Fishing and BBQing during quests are improved and all map areas are revealed.",
       "jpName": "狩人",
       "specialMechanics": [],
@@ -212832,6 +212918,7 @@
     },
     {
       "displayName": "Defense Lock",
+      "categories": ["DEFENSE"],
       "inGameDescription": "Negates Defense Down status.",
       "jpName": "対防御DOWN",
       "specialMechanics": [],
@@ -212849,6 +212936,7 @@
     },
     {
       "displayName": "Fire Atk",
+      "categories": ["BLADEMASTER","GUNNER"],
       "inGameDescription": "Increases or decreases the power of Fire Attacks and Fire Shots.",
       "jpName": "火属性攻撃",
       "specialMechanics": [],
@@ -212878,6 +212966,7 @@
     },
     {
       "displayName": "Water Atk",
+      "categories": ["BLADEMASTER","GUNNER"],
       "inGameDescription": "Increases or decreases the power of Water Attacks and Water Shots.",
       "jpName": "水属性攻撃",
       "specialMechanics": [],
@@ -212907,6 +212996,7 @@
     },
     {
       "displayName": "Thunder Attack",
+      "categories": ["BLADEMASTER","GUNNER"],
       "inGameDescription": "Increases or decreases the power of Thunder Attacks and Thunder Shots.",
       "jpName": "雷属性攻撃",
       "specialMechanics": [],
@@ -212936,6 +213026,7 @@
     },
     {
       "displayName": "Ice Atk",
+      "categories": ["BLADEMASTER","GUNNER"],
       "inGameDescription": "Increases or decreases the power of Ice Attacks and Ice Shots.",
       "jpName": "氷属性攻撃",
       "specialMechanics": [],
@@ -212965,6 +213056,7 @@
     },
     {
       "displayName": "Dragon Atk",
+      "categories": ["BLADEMASTER","GUNNER"],
       "inGameDescription": "Increases or decreases the power of Dragon Attacks and Dragon Shots.",
       "jpName": "龍属性攻撃",
       "specialMechanics": [],
@@ -212994,6 +213086,7 @@
     },
     {
       "displayName": "Slice S+",
+      "categories": ["GUNNER"],
       "inGameDescription": "Adds Slicing S to current types of loadable ammo. (Bowgun only)",
       "jpName": "斬裂弾追加",
       "specialMechanics": [],
@@ -213011,6 +213104,7 @@
     },
     {
       "displayName": "Exhaust C+",
+      "categories": ["GUNNER"],
       "inGameDescription": "Adds Fatigue Coating to current usable coatings. (Bow only)",
       "jpName": "減気瓶追加",
       "specialMechanics": [],
@@ -213028,6 +213122,7 @@
     },
     {
       "displayName": "Tenderizer",
+      "categories": ["BLADEMASTER","GUNNER"],
       "inGameDescription": "Higher chance of criticals when hitting monsters' vulnerable points.",
       "jpName": "痛撃",
       "specialMechanics": [],
@@ -213045,6 +213140,7 @@
     },
     {
       "displayName": "Destroyer",
+      "categories": ["BLADEMASTER","GUNNER"],
       "inGameDescription": "Increases power when breaking parts.",
       "jpName": "重撃",
       "specialMechanics": [],
@@ -213062,14 +213158,15 @@
     },
     {
       "displayName": "KO",
-      "inGameDescription": "Increases KO attack power.",
+      "categories": ["BLADEMASTER","GUNNER"],
+      "inGameDescription": "Increases KO (stun) buildup. KO is mainly built by hitting a monster's head; reaching its threshold briefly stuns the monster.",
       "jpName": "KO",
       "specialMechanics": [],
       "stableSkillTreeId": "mhp3_skill_tree_097",
       "thresholds": [
         {
           "activatedSkillName": "Knockout King",
-          "effectSummary": "KO value is 1.1×, rounded down at the first decimal.",
+          "effectSummary": "KO (stun) buildup is 1.1×, rounded down at the first decimal.",
           "points": 10,
           "polarity": "POSITIVE"
         }
@@ -213079,6 +213176,7 @@
     },
     {
       "displayName": "Stamina Drain",
+      "categories": ["BLADEMASTER","GUNNER"],
       "inGameDescription": "Adds Fatigue status to attacks.",
       "jpName": "減気攻撃",
       "specialMechanics": [],
@@ -213096,6 +213194,7 @@
     },
     {
       "displayName": "Sheathing",
+      "categories": ["BLADEMASTER"],
       "inGameDescription": "Increases speed of sheathing weapon.",
       "jpName": "納刀",
       "specialMechanics": [],
@@ -213113,6 +213212,7 @@
     },
     {
       "displayName": "Stamina Recovery",
+      "categories": ["UTILITY"],
       "inGameDescription": "Increases speed of Stamina recovery.",
       "jpName": "気力回復",
       "specialMechanics": [],

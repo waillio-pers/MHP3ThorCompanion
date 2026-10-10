@@ -15,8 +15,10 @@ SOURCE = ROOT / "data" / "sources" / "key-quest-progression.json"
 PRODUCTION = ROOT / "data" / "generated" / "mhp3rd-data.json"
 CANONICAL_OUTPUT = ROOT / "data" / "generated" / "mhp3rd-quest-progression.json"
 ANDROID_OUTPUT = ROOT / "app" / "src" / "main" / "assets" / "mhp3rd-quest-progression.json"
+# Provenance of the accepted quest corpus before the additive 1.1 skill review.
 PRODUCTION_BYTES = 9_600_571
 PRODUCTION_SHA256 = "657CFA9376FC8CBE56C67E67D4D1A27C455D21021F51E21B62427C8DDBB26155"
+QUEST_CORPUS_SHA256 = "5DBD2CFB5814CBC7A6325FB29932B850C31FCAEA3CEB44151CDBAA66B30B5256"
 EXPECTED_KEY_COUNTS = {"VILLAGE": 22, "GUILD_LOW": 14, "GUILD_HIGH": 17}
 EXPECTED_BLOCKED_URGENTS = {
     "Hunt Gigginox",
@@ -46,14 +48,14 @@ def _check_source_refs(value: Any, source_ids: set[str]) -> None:
 def build_asset(source_path: Path = SOURCE, production_path: Path = PRODUCTION) -> bytes:
     source = json.loads(source_path.read_text(encoding="utf-8"))
     production_bytes = production_path.read_bytes()
-    production_sha256 = sha256(production_bytes)
-    if len(production_bytes) != PRODUCTION_BYTES or production_sha256 != PRODUCTION_SHA256:
-        raise ValueError("Canonical production JSON no longer matches the accepted 1.0 baseline")
     production = json.loads(production_bytes.decode("utf-8"))
     quests = production.get("quests", [])
     quest_ids = {quest["id"] for quest in quests}
     if len(quests) != 354 or len(quest_ids) != 354:
         raise ValueError(f"Expected the unchanged 354-quest production corpus, got {len(quests)}")
+    quest_bytes = json.dumps(quests, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
+    if sha256(quest_bytes) != QUEST_CORPUS_SHA256:
+        raise ValueError("Canonical quest corpus no longer matches its accepted source baseline")
 
     source_ids = {entry["id"] for entry in source["sources"]}
     if len(source_ids) != len(source["sources"]):
@@ -132,7 +134,7 @@ def build_asset(source_path: Path = SOURCE, production_path: Path = PRODUCTION) 
     payload = {
         "schemaVersion": 1,
         "evidenceAsOf": source["evidenceAsOf"],
-        "production": {"questCount": len(quests), "bytes": len(production_bytes), "sha256": production_sha256},
+        "production": {"questCount": len(quests), "bytes": PRODUCTION_BYTES, "sha256": PRODUCTION_SHA256},
         "sources": source["sources"],
         "steps": steps,
         "blockedUrgents": blocked,

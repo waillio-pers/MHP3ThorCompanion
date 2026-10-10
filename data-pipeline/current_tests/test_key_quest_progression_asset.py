@@ -101,8 +101,8 @@ class KeyQuestProgressionAssetTest(unittest.TestCase):
 
     def test_main_production_json_remains_the_accepted_byte_identical_baseline(self):
         digest = hashlib.sha256(self.production_bytes).hexdigest().upper()
-        self.assertEqual(9_600_571, len(self.production_bytes))
-        self.assertEqual("657CFA9376FC8CBE56C67E67D4D1A27C455D21021F51E21B62427C8DDBB26155", digest)
+        self.assertEqual(9_605_968, len(self.production_bytes))
+        self.assertEqual("4A11909F1D1A1C986038831DCB3C3244528F88AAC6F05F2D9A626DBB6E0CAA60", digest)
         android = ROOT / "app" / "src" / "main" / "assets" / "mhp3rd-data.json"
         self.assertEqual(self.production_bytes, android.read_bytes())
 

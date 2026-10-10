@@ -1539,9 +1539,17 @@ internal fun SkillsBrowser(
     onFocusConsumed: () -> Unit,
     onMaterial: (String) -> Unit
 ) {
-    val filtered = remember(skills, query) {
+    val categories = remember { SkillCategory.values().toList() }
+    val allCategoryMask = (1 shl categories.size) - 1
+    var categoryMask by rememberSaveable { mutableIntStateOf(allCategoryMask) }
+    var showCategoryFilter by rememberSaveable { mutableStateOf(false) }
+    val selectedCategories = remember(categoryMask) {
+        categories.filterIndexed { index, _ -> categoryMask and (1 shl index) != 0 }
+            .mapTo(linkedSetOf()) { it.name }
+    }
+    val filtered = remember(skills, query, selectedCategories) {
         val q = query.trim()
-        skills.filter { skill ->
+        filterSkillTreesByCategories(skills, selectedCategories).filter { skill ->
             q.isBlank() || listOf(skill.displayName, skill.tmoDisplayName, skill.jpName)
                 .plus(skill.thresholds.map { it.activatedSkillName })
                 .any { value -> value.contains(q, ignoreCase = true) }
@@ -1560,8 +1568,38 @@ internal fun SkillsBrowser(
         onFocusConsumed()
     }
     Column(Modifier.fillMaxSize().testTag("skills-browser")) {
+        Row(
+            Modifier.fillMaxWidth().padding(horizontal = 2.dp, vertical = 5.dp),
+            horizontalArrangement = Arrangement.End
+        ) {
+            OutlinedButton(
+                onClick = { showCategoryFilter = true },
+                modifier = Modifier.heightIn(min = 36.dp).testTag("skills-category-filter-button"),
+                border = BorderStroke(1.dp, AppColors.Gold.copy(alpha = .6f)),
+                colors = ButtonDefaults.outlinedButtonColors(contentColor = AppColors.Gold),
+                contentPadding = PaddingValues(horizontal = 11.dp, vertical = 5.dp),
+                shape = CutCornerShape(8.dp)
+            ) {
+                Icon(Icons.Default.FilterList, contentDescription = null, modifier = Modifier.size(18.dp))
+                Spacer(Modifier.width(5.dp))
+                Text(
+                    if (selectedCategories.size == categories.size) "Categories" else "Categories (${selectedCategories.size})",
+                    style = AppType.ButtonLabel,
+                    maxLines = 1
+                )
+            }
+        }
+        if (showCategoryFilter) {
+            SkillCategoryFilterDialog(
+                categories = categories,
+                selectedCategories = selectedCategories,
+                onToggle = { category -> categoryMask = categoryMask xor (1 shl category.ordinal) },
+                onSelectAll = { categoryMask = allCategoryMask },
+                onDismiss = { showCategoryFilter = false }
+            )
+        }
         if (filtered.isEmpty()) {
-            EmptyState(Icons.Default.SearchOff, "No skills found", "Try another query or clear search")
+            EmptyState(Icons.Default.SearchOff, "No skills found", "Try another query or change the selected categories")
         } else {
             LazyColumn(
                 modifier = Modifier.fillMaxSize().testTag("skills-list"),
@@ -1649,6 +1687,62 @@ internal fun SkillsBrowser(
             }
         }
     }
+}
+
+@Composable
+private fun SkillCategoryFilterDialog(
+    categories: List<SkillCategory>,
+    selectedCategories: Set<String>,
+    onToggle: (SkillCategory) -> Unit,
+    onSelectAll: () -> Unit,
+    onDismiss: () -> Unit
+) {
+    AlertDialog(
+        modifier = Modifier.testTag("skills-category-filter-dialog"),
+        onDismissRequest = onDismiss,
+        title = { Text("Filter skills by category", color = AppColors.Ink) },
+        text = {
+            Column(Modifier.heightIn(max = 340.dp).verticalScroll(rememberScrollState())) {
+                categories.forEach { category ->
+                    Row(
+                        Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Checkbox(
+                            checked = category.name in selectedCategories,
+                            onCheckedChange = { onToggle(category) },
+                            modifier = Modifier.testTag("skills-category-checkbox-${category.name}"),
+                            colors = CheckboxDefaults.colors(
+                                checkedColor = AppColors.Crimson,
+                                uncheckedColor = AppColors.Ink.copy(alpha = .65f),
+                                checkmarkColor = AppColors.Parchment
+                            )
+                        )
+                        Text(category.label, color = AppColors.Ink, style = AppType.Body)
+                    }
+                }
+                Text(
+                    "Skills matching any selected category are shown.",
+                    color = AppColors.Ink.copy(alpha = .72f),
+                    style = AppType.Metadata,
+                    modifier = Modifier.padding(start = 12.dp, top = 4.dp)
+                )
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = onDismiss, modifier = Modifier.testTag("skills-category-filter-done")) {
+                Text("Done", color = AppColors.Crimson)
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onSelectAll, modifier = Modifier.testTag("skills-category-filter-all")) {
+                Text("Select all", color = AppColors.Crimson)
+            }
+        },
+        containerColor = AppColors.Parchment,
+        titleContentColor = AppColors.Ink,
+        textContentColor = AppColors.Ink
+    )
 }
 
 @Composable

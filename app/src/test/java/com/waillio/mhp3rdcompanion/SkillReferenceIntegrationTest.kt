@@ -44,7 +44,7 @@ class SkillReferenceIntegrationTest {
         assertEquals(listOf(10), punishing.thresholds.map { it.points })
         assertTrue(punishing.thresholds.single().effectSummary.contains("stun", ignoreCase = true))
         assertTrue(punishing.thresholds.single().effectSummary.contains("exhaust", ignoreCase = true))
-        assertTrue(punishing.thresholds.single().effectSummary.contains("head hit", ignoreCase = true))
+        assertTrue(punishing.thresholds.single().effectSummary.contains("hitting the monster's head", ignoreCase = true))
 
         val critical = data.skillTrees.single { it.displayName == "Critical Draw" }
         assertEquals("Critical Draw", critical.thresholds.single().activatedSkillName)
