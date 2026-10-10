@@ -106,8 +106,8 @@ internal val ABOUT_SOURCE_CREDITS = listOf(
         "Open on GitHub"
     ),
     AboutSourceCredit(
-        "MHP3DB · mikejsavage",
-        "Additional reference data used to match item identities.",
+        "MHP3DB · historical Timeworn Charm tables",
+        "Community dataset for standard Timeworn Tables 1–12 and skill identity/terminology references. Its WTFPL v2 notice and provenance are retained in the repository; this is not an official CAPCOM source.",
         "https://github.com/mikejsavage/MHP3DB/tree/bfbab18460d95d921d4a3492644b46bfc5ca1f3c",
         "Open on GitHub"
     ),

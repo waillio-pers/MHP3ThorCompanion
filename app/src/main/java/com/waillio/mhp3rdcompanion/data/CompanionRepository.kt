@@ -45,11 +45,15 @@ class CompanionRepository(private val context: Context) {
 
     private val favoritesKey = stringPreferencesKey("favorites_v1")
     private val recentKey = stringPreferencesKey("recent_v1")
+    private val currentCharmTableKey = stringPreferencesKey("current_charm_table_v1")
     val favorites: Flow<List<FavoriteEntry>> = context.dataStore.data.map {
         ReferenceEntryCodec.decodeFavorites(it[favoritesKey])
     }
     val recent: Flow<List<RecentEntry>> = context.dataStore.data.map {
         ReferenceEntryCodec.decodeRecent(it[recentKey])
+    }
+    val currentCharmTable: Flow<Int?> = context.dataStore.data.map { preferences ->
+        preferences[currentCharmTableKey]?.toIntOrNull()?.takeIf { it in 1..12 }
     }
 
     suspend fun saveFavorites(entries: List<FavoriteEntry>) {
@@ -58,6 +62,14 @@ class CompanionRepository(private val context: Context) {
 
     suspend fun saveRecent(entries: List<RecentEntry>) {
         context.dataStore.edit { it[recentKey] = ReferenceEntryCodec.encodeRecent(entries) }
+    }
+
+    suspend fun saveCurrentCharmTable(table: Int?) {
+        require(table == null || table in 1..12) { "Current charm table must be Unknown or 1–12" }
+        context.dataStore.edit { preferences ->
+            if (table == null) preferences.remove(currentCharmTableKey)
+            else preferences[currentCharmTableKey] = table.toString()
+        }
     }
 
     /** Canonical TMO terminology lookup. Raw source text remains available on the models. */

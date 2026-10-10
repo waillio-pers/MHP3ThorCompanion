@@ -8,17 +8,24 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-data class AppState(
+internal data class AppState(
     val query: String = "",
     val filter: EntityType? = null,
     val favorites: List<FavoriteEntry> = emptyList(),
     val recent: List<RecentEntry> = emptyList(),
+    val currentCharmTable: Int? = null,
+    val charmIdentifyWorkingState: CharmIdentifyWorkingState = CharmIdentifyWorkingState(),
     val loaded: Boolean = false
 )
 
 class AppViewModel(application: Application) : AndroidViewModel(application) {
     private val repository = CompanionRepository(application)
     val fixture = repository.data
+    private val charmRepository = CharmTableRepository(application, fixture.skillTrees)
+    private val mutableCharmIndex = MutableStateFlow<CharmTableIndex?>(null)
+    internal val charmIndex = mutableCharmIndex.asStateFlow()
+    private val mutableCharmLoadFailed = MutableStateFlow(false)
+    internal val charmLoadFailed = mutableCharmLoadFailed.asStateFlow()
     /** Schema-11 production weapon repository, indexed once outside Compose recomposition. */
     val weaponRepository: WeaponRepository by lazy {
         WeaponRepository.fromProduction(fixture.weapons, fixture.materials, fixture.huntingHornSongCatalog)
@@ -30,16 +37,22 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     internal val weaponScreenState = WeaponScreenState()
     val fieldIndex = repository.fieldIndex
     private val mutableState = MutableStateFlow(AppState())
-    val state = mutableState.asStateFlow()
+    internal val state = mutableState.asStateFlow()
     val results: StateFlow<List<SearchResult>> = state.map { CompanionLogic.search(fixture, it.query, it.filter) }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
     init {
         viewModelScope.launch {
-            combine(repository.favorites, repository.recent) { favorites, recent -> favorites to recent }
-                .collect { (favorites, recent) ->
-                    mutableState.update { it.copy(favorites = favorites, recent = recent, loaded = true) }
+            combine(repository.favorites, repository.recent, repository.currentCharmTable) { favorites, recent, table ->
+                Triple(favorites, recent, table)
+            }.collect { (favorites, recent, table) ->
+                    mutableState.update { it.copy(favorites = favorites, recent = recent, currentCharmTable = table, loaded = true) }
                 }
+        }
+        viewModelScope.launch(Dispatchers.IO) {
+            runCatching { charmRepository.index }
+                .onSuccess { mutableCharmIndex.value = it }
+                .onFailure { mutableCharmLoadFailed.value = true }
         }
     }
 
@@ -56,5 +69,16 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         val updated = ReferenceHistoryLogic.recordRecent(state.value.recent, type, id, System.currentTimeMillis())
         mutableState.update { it.copy(recent = updated) }
         viewModelScope.launch(Dispatchers.IO) { repository.saveRecent(updated) }
+    }
+
+    fun setCurrentCharmTable(table: Int?) {
+        require(table == null || table in 1..12)
+        mutableState.update { it.copy(currentCharmTable = table) }
+        viewModelScope.launch(Dispatchers.IO) { repository.saveCurrentCharmTable(table) }
+    }
+
+    /** Keeps incomplete Identify work across Activity configuration changes only. */
+    internal fun updateCharmIdentifyWorkingState(transform: (CharmIdentifyWorkingState) -> CharmIdentifyWorkingState) {
+        mutableState.update { state -> state.copy(charmIdentifyWorkingState = transform(state.charmIdentifyWorkingState)) }
     }
 }

@@ -106,6 +106,7 @@ import kotlin.math.roundToInt
 
 internal object Routes {
     const val HOME = "home"
+    const val CHARM_TABLES = "charm-tables"
     const val SEARCH = "search"
     const val WEAPONS = "weapons"
     const val WEAPON_TYPE = "weapon-type/{type}"
@@ -324,6 +325,7 @@ internal fun CompanionApp(
                     weaponRepository = viewModel.weaponRepository,
                     recent = state.recent,
                     favorites = state.favorites,
+                    onCharmTables = { nav.navigate(Routes.CHARM_TABLES) },
                     onMaterials = {
                         viewModel.setFilter(EntityType.MATERIAL)
                         nav.navigate(Routes.SEARCH)
@@ -420,6 +422,20 @@ internal fun CompanionApp(
                     },
                     onMap = { nav.navigate(Routes.map(it.mapId)) },
                     onTraining = { nav.navigate(Routes.training(it.id)) }
+                )
+            }
+            composable(Routes.CHARM_TABLES) {
+                val charmIndex by viewModel.charmIndex.collectAsStateWithLifecycle()
+                val charmLoadFailed by viewModel.charmLoadFailed.collectAsStateWithLifecycle()
+                val identifyWorkingState = state.charmIdentifyWorkingState
+                CharmTablesScreen(
+                    index = charmIndex,
+                    skillTrees = viewModel.fixture.skillTrees,
+                    currentTable = state.currentCharmTable,
+                    loadingFailed = charmLoadFailed,
+                    identifyWorkingState = identifyWorkingState,
+                    onUpdateIdentifyWorkingState = viewModel::updateCharmIdentifyWorkingState,
+                    onSaveCurrentTable = viewModel::setCurrentCharmTable
                 )
             }
             composable(Routes.WEAPONS) {
@@ -1021,6 +1037,7 @@ private fun AppBottomBar(selectedRoute: String, onNavigate: (String) -> Unit, he
         Row(Modifier.fillMaxWidth().height(if (compactPortrait) 62.dp else height).testTag("bottom-navigation")) {
             navItems.forEach { item ->
                 val selected = selectedRoute == item.route ||
+                    (item.route == Routes.HOME && selectedRoute == Routes.CHARM_TABLES) ||
                     (item.route == Routes.SEARCH && selectedRoute in listOf(Routes.MATERIAL, Routes.MONSTER, Routes.SMALL_MONSTER, Routes.MAP, Routes.WEAPON_TYPE, Routes.TRAINING))
                 Box(
                     Modifier
@@ -1073,6 +1090,7 @@ internal fun HomeScreen(
     onMaterials: () -> Unit,
     onMonsters: () -> Unit,
     onMaps: () -> Unit,
+    onCharmTables: () -> Unit = {},
     onFavorites: () -> Unit,
     onEntity: (ReferenceEntityType, String) -> Unit
 ) {
@@ -1106,13 +1124,17 @@ internal fun HomeScreen(
                         CategoryButton(R.string.category_monsters, Icons.Default.Pets, AppColors.Steel, categoryHeight, Modifier.weight(1f).testTag("category-monsters"), onMonsters)
                         CategoryButton(R.string.category_materials, Icons.Default.Inventory2, AppColors.Moss, categoryHeight, Modifier.weight(1f).testTag("category-materials"), onMaterials)
                     }
-                    CategoryButton(R.string.category_maps, Icons.Default.Map, AppColors.Crimson, categoryHeight, Modifier.fillMaxWidth().testTag("category-maps"), onMaps)
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(7.dp)) {
+                        CategoryButton(R.string.category_maps, Icons.Default.Map, AppColors.Crimson, categoryHeight, Modifier.weight(1f).testTag("category-maps"), onMaps)
+                        CategoryButton(R.string.category_charm_tables, Icons.Default.Casino, AppColors.Crimson, categoryHeight, Modifier.weight(1f).testTag("category-charm-tables"), onCharmTables)
+                    }
                 }
             } else {
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(7.dp)) {
                     CategoryButton(R.string.category_monsters, Icons.Default.Pets, AppColors.Steel, categoryHeight, Modifier.weight(1f).testTag("category-monsters"), onMonsters)
                     CategoryButton(R.string.category_materials, Icons.Default.Inventory2, AppColors.Moss, categoryHeight, Modifier.weight(1f).testTag("category-materials"), onMaterials)
                     CategoryButton(R.string.category_maps, Icons.Default.Map, AppColors.Crimson, categoryHeight, Modifier.weight(1f).testTag("category-maps"), onMaps)
+                    CategoryButton(R.string.category_charm_tables, Icons.Default.Casino, AppColors.Crimson, categoryHeight, Modifier.weight(1f).testTag("category-charm-tables"), onCharmTables)
                 }
             }
             ReferenceSection(

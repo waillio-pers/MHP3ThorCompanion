@@ -21,6 +21,7 @@
     <string name="small_monster_index_empty_body">No small monsters are available in the production database.</string>
     <string name="category_quests">Quests</string>
     <string name="category_maps">Maps</string>
+    <string name="category_charm_tables">Charm Tables</string>
     <string name="category_skills">Skills</string>
     <string name="search_hint">Item, monster, quest, or weapon</string>
     <string name="action_clear">Clear</string>
