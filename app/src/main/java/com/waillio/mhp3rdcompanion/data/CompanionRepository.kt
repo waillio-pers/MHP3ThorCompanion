@@ -13,6 +13,10 @@ private val Context.dataStore by preferencesDataStore("companion_preferences")
 private val fixtureJson = Json { ignoreUnknownKeys = true }
 
 class CompanionRepository(private val context: Context) {
+    internal val questProgression: QuestProgressionData by lazy {
+        val json = context.assets.open("mhp3rd-quest-progression.json").bufferedReader().use { it.readText() }
+        fixtureJson.decodeFromString(json)
+    }
     private val generated: GeneratedDataset by lazy {
         val json = context.assets.open("mhp3rd-data.json").bufferedReader().use { it.readText() }
         fixtureJson.decodeFromString(json)

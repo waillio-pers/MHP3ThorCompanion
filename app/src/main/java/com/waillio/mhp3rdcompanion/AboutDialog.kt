@@ -158,6 +158,54 @@ internal val ABOUT_SOURCE_CREDITS = listOf(
         "Creator and rights holder of Monster Hunter Portable 3rd and its original game assets.",
         "https://www.capcom.com/",
         "Visit website"
+    ),
+    AboutSourceCredit(
+        "MHP3@Wiki · Village Chief Quests",
+        "Community-maintained MHP3 reference for Village Key and Urgent markers; The Last Supper is treated separately from progression.",
+        "https://w.atwiki.jp/capcommhp3rd/pages/16.html",
+        "Open source"
+    ),
+    AboutSourceCredit(
+        "MHP3@Wiki · Guild Low Rank Quests",
+        "Community-maintained MHP3 reference for Guild Low Key quests and Urgent progression.",
+        "https://w.atwiki.jp/mhp3/pages/93.html",
+        "Open source"
+    ),
+    AboutSourceCredit(
+        "MHP3@Wiki · Guild High Rank Quests",
+        "Community-maintained MHP3 reference for Guild High Key quests, prerequisites, and multiplayer progression notes.",
+        "https://w.atwiki.jp/mhp3/pages/384.html",
+        "Open source"
+    ),
+    AboutSourceCredit(
+        "Monster Hunter Wiki · MHP3 Guild Quests",
+        "Independent English cross-reference for MHP3 Guild quest objectives, Key sets, prerequisites, and the Jhen-to-Amatsu follow-up.",
+        "https://monsterhunter.fandom.com/wiki/MHP3:_Guild_Quests",
+        "Open source"
+    ),
+    AboutSourceCredit(
+        "Kouryaku-no-Tora · Guild 7★ Quests",
+        "Independent Japanese MHP3 cross-check of the Guild 7★ Key set; Jade Barroth is not marked as a Key Quest.",
+        "https://monsterhunter.jp/mhp3/quest/syukai_7.html",
+        "Open source"
+    ),
+    AboutSourceCredit(
+        "MHP3@Wiki · Frequently Asked Questions",
+        "Independent cross-check of Village urgent tiers and Key quests for stars 1–6.",
+        "https://w.atwiki.jp/mhp3/pages/80.html",
+        "Open source"
+    ),
+    AboutSourceCredit(
+        "Kouryakutsushin · Village 6★ Quests",
+        "Independent Japanese MHP3 cross-check of Village 6★ Keys, Jhen urgent, and The Last Supper unlock condition.",
+        "https://kouryakutsushin.com/mhp3rdwiki/%E6%9D%91%E3%82%AF%E3%82%A8%E3%82%B9%E3%83%88%E2%98%856.html",
+        "Open source"
+    ),
+    AboutSourceCredit(
+        "MHP3@Wiki · The Last Supper",
+        "Community-maintained MHP3 reference confirming this is an optional final Village challenge unlocked after other Village quests, not a progression urgent.",
+        "https://w.atwiki.jp/mhp3_souken/pages/85.html",
+        "Open source"
     )
 )
 

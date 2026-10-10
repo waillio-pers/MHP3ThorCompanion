@@ -1,0 +1,583 @@
+{
+  "schemaVersion": 1,
+  "evidenceAsOf": "2026-10-10",
+  "production": {
+    "questCount": 354,
+    "bytes": 9600571,
+    "sha256": "657CFA9376FC8CBE56C67E67D4D1A27C455D21021F51E21B62427C8DDBB26155"
+  },
+  "sources": [
+    {
+      "id": "MHP3-VILLAGE-ATWIKI",
+      "title": "MHP3@Wiki · Village Chief Quests",
+      "url": "https://w.atwiki.jp/capcommhp3rd/pages/16.html",
+      "use": "Village key and urgent markers for stars 1–6; The Last Supper is separate from rank progression."
+    },
+    {
+      "id": "MHP3-GUILD-LOW-ATWIKI",
+      "title": "MHP3@Wiki · Gathering Hall Low Rank Quests",
+      "url": "https://w.atwiki.jp/mhp3/pages/93.html",
+      "use": "Guild Low key/urgent tables and all-listed-keys progression rule."
+    },
+    {
+      "id": "MHP3-GUILD-HIGH-ATWIKI",
+      "title": "MHP3@Wiki · Gathering Hall High Rank Quests",
+      "url": "https://w.atwiki.jp/mhp3/pages/384.html",
+      "use": "Guild High keys, urgent progression, prerequisite markers, and multiplayer completion guidance."
+    },
+    {
+      "id": "MHP3-GUILD-FANDOM",
+      "title": "Monster Hunter Wiki · MHP3 Guild Quests",
+      "url": "https://monsterhunter.fandom.com/wiki/MHP3:_Guild_Quests",
+      "use": "Independent English cross-reference for objectives, rank/star buckets, key labels, prerequisites, and Jhen-to-Amatsu follow-up."
+    },
+    {
+      "id": "MHP3-GUILD7-KOURYAKU",
+      "title": "Kouryaku-no-Tora · Guild 7★ Quests",
+      "url": "https://monsterhunter.jp/mhp3/quest/syukai_7.html",
+      "use": "Independent Japanese check of the Guild 7★ key set; Jade Barroth is not marked Key."
+    },
+    {
+      "id": "MHP3-VILLAGE-FAQ",
+      "title": "MHP3@Wiki · Frequently Asked Questions",
+      "url": "https://w.atwiki.jp/mhp3/pages/80.html",
+      "use": "Independent cross-check of Village urgent tiers and key quests for stars 1–6."
+    },
+    {
+      "id": "MHP3-VILLAGE6-KOURYAKUTSUSHIN",
+      "title": "Kouryakutsushin · Village 6★ Quests",
+      "url": "https://kouryakutsushin.com/mhp3rdwiki/%E6%9D%91%E3%82%AF%E3%82%A8%E3%82%B9%E3%83%88%E2%98%856.html",
+      "use": "Independent check of Village 6★ keys, Jhen urgent, and The Last Supper unlock condition."
+    },
+    {
+      "id": "MHP3-LAST-SUPPER-ATWIKI",
+      "title": "MHP3@Wiki · The Last Supper",
+      "url": "https://w.atwiki.jp/mhp3_souken/pages/85.html",
+      "use": "Confirms The Last Supper appears after all Village quests and is an optional final challenge, not a progression urgent."
+    }
+  ],
+  "steps": [
+    {
+      "id": "GUILD_LOW_1_STAR",
+      "scope": "GUILD_LOW",
+      "rank": "LOW",
+      "star": 1,
+      "phase": "KEY_SET",
+      "completionRule": "NO_KEY_SET",
+      "keyQuestIds": [],
+      "urgent": null,
+      "advancesTo": null,
+      "sourceReferences": [
+        "MHP3-GUILD-LOW-ATWIKI",
+        "MHP3-GUILD-FANDOM"
+      ]
+    },
+    {
+      "id": "GUILD_LOW_2_STAR",
+      "scope": "GUILD_LOW",
+      "rank": "LOW",
+      "star": 2,
+      "phase": "KEY_SET",
+      "completionRule": "NO_KEY_SET",
+      "keyQuestIds": [],
+      "urgent": null,
+      "advancesTo": null,
+      "sourceReferences": [
+        "MHP3-GUILD-LOW-ATWIKI",
+        "MHP3-GUILD-FANDOM"
+      ]
+    },
+    {
+      "id": "VILLAGE_1_STAR",
+      "scope": "VILLAGE",
+      "rank": "LOW",
+      "star": 1,
+      "phase": "KEY_SET",
+      "completionRule": "ALL_LISTED_KEYS",
+      "keyQuestIds": [
+        "quest_village_1_star_03",
+        "quest_village_1_star_04",
+        "quest_village_1_star_05"
+      ],
+      "urgent": {
+        "id": "VILLAGE_1_STAR_URGENT",
+        "companionQuestId": "quest_village_2_star_04",
+        "objectiveSummary": "Hunt the Arzuros",
+        "sourceReferences": [
+          "MHP3-VILLAGE-ATWIKI",
+          "MHP3-VILLAGE-FAQ"
+        ]
+      },
+      "advancesTo": "Village 2★",
+      "sourceReferences": [
+        "MHP3-VILLAGE-ATWIKI",
+        "MHP3-VILLAGE-FAQ"
+      ]
+    },
+    {
+      "id": "VILLAGE_2_STAR",
+      "scope": "VILLAGE",
+      "rank": "LOW",
+      "star": 2,
+      "phase": "KEY_SET",
+      "completionRule": "ALL_LISTED_KEYS",
+      "keyQuestIds": [
+        "quest_village_2_star_05",
+        "quest_village_2_star_10",
+        "quest_village_2_star_15",
+        "quest_village_2_star_16"
+      ],
+      "urgent": {
+        "id": "VILLAGE_2_STAR_URGENT",
+        "companionQuestId": "quest_village_3_star_03",
+        "objectiveSummary": "Hunt the Qurupeco",
+        "sourceReferences": [
+          "MHP3-VILLAGE-ATWIKI",
+          "MHP3-VILLAGE-FAQ"
+        ]
+      },
+      "advancesTo": "Village 3★",
+      "sourceReferences": [
+        "MHP3-VILLAGE-ATWIKI",
+        "MHP3-VILLAGE-FAQ"
+      ]
+    },
+    {
+      "id": "VILLAGE_3_STAR",
+      "scope": "VILLAGE",
+      "rank": "LOW",
+      "star": 3,
+      "phase": "KEY_SET",
+      "completionRule": "ALL_LISTED_KEYS",
+      "keyQuestIds": [
+        "quest_village_3_star_05",
+        "quest_village_3_star_09",
+        "quest_village_3_star_13",
+        "quest_village_3_star_17"
+      ],
+      "urgent": {
+        "id": "VILLAGE_3_STAR_URGENT",
+        "companionQuestId": "quest_village_4_star_02",
+        "objectiveSummary": "Hunt the Qurupeco",
+        "sourceReferences": [
+          "MHP3-VILLAGE-ATWIKI",
+          "MHP3-VILLAGE-FAQ"
+        ]
+      },
+      "advancesTo": "Village 4★",
+      "sourceReferences": [
+        "MHP3-VILLAGE-ATWIKI",
+        "MHP3-VILLAGE-FAQ"
+      ]
+    },
+    {
+      "id": "VILLAGE_4_STAR",
+      "scope": "VILLAGE",
+      "rank": "LOW",
+      "star": 4,
+      "phase": "KEY_SET",
+      "completionRule": "ALL_LISTED_KEYS",
+      "keyQuestIds": [
+        "quest_village_4_star_04",
+        "quest_village_4_star_08",
+        "quest_village_4_star_09",
+        "quest_village_4_star_13"
+      ],
+      "urgent": {
+        "id": "VILLAGE_4_STAR_URGENT",
+        "companionQuestId": "quest_village_5_star_01",
+        "objectiveSummary": "Hunt the Rathian",
+        "sourceReferences": [
+          "MHP3-VILLAGE-ATWIKI",
+          "MHP3-VILLAGE-FAQ"
+        ]
+      },
+      "advancesTo": "Village 5★",
+      "sourceReferences": [
+        "MHP3-VILLAGE-ATWIKI",
+        "MHP3-VILLAGE-FAQ"
+      ]
+    },
+    {
+      "id": "VILLAGE_5_STAR",
+      "scope": "VILLAGE",
+      "rank": "LOW",
+      "star": 5,
+      "phase": "KEY_SET",
+      "completionRule": "ALL_LISTED_KEYS",
+      "keyQuestIds": [
+        "quest_village_5_star_03",
+        "quest_village_5_star_07",
+        "quest_village_5_star_09",
+        "quest_village_5_star_10"
+      ],
+      "urgent": {
+        "id": "VILLAGE_5_STAR_URGENT",
+        "companionQuestId": "quest_village_6_star_01",
+        "objectiveSummary": "Hunt the Rathalos",
+        "sourceReferences": [
+          "MHP3-VILLAGE-ATWIKI",
+          "MHP3-VILLAGE-FAQ"
+        ]
+      },
+      "advancesTo": "Village 6★",
+      "sourceReferences": [
+        "MHP3-VILLAGE-ATWIKI",
+        "MHP3-VILLAGE-FAQ"
+      ]
+    },
+    {
+      "id": "VILLAGE_6_STAR",
+      "scope": "VILLAGE",
+      "rank": "LOW",
+      "star": 6,
+      "phase": "KEY_SET",
+      "completionRule": "ALL_LISTED_KEYS",
+      "keyQuestIds": [
+        "quest_village_6_star_02",
+        "quest_village_6_star_03",
+        "quest_village_6_star_09"
+      ],
+      "urgent": {
+        "id": "VILLAGE_6_STAR_URGENT",
+        "companionQuestId": "quest_village_6_star_15",
+        "objectiveSummary": "Slay or repel Jhen Mohran",
+        "sourceReferences": [
+          "MHP3-VILLAGE-ATWIKI",
+          "MHP3-VILLAGE6-KOURYAKUTSUSHIN"
+        ]
+      },
+      "advancesTo": "Complete the Village campaign",
+      "sourceReferences": [
+        "MHP3-VILLAGE-ATWIKI",
+        "MHP3-VILLAGE6-KOURYAKUTSUSHIN"
+      ]
+    },
+    {
+      "id": "GUILD_LOW_3_STAR",
+      "scope": "GUILD_LOW",
+      "rank": "LOW",
+      "star": 3,
+      "phase": "KEY_SET",
+      "completionRule": "ALL_LISTED_KEYS",
+      "keyQuestIds": [
+        "quest_guild_3_star_07",
+        "quest_guild_3_star_11",
+        "quest_guild_3_star_16",
+        "quest_guild_3_star_17"
+      ],
+      "urgent": null,
+      "blockedUrgentId": "GUILD_LOW_3_URGENT",
+      "advancesTo": "Guild Low 4★ / HR 2",
+      "sourceReferences": [
+        "MHP3-GUILD-LOW-ATWIKI",
+        "MHP3-GUILD-FANDOM"
+      ]
+    },
+    {
+      "id": "GUILD_LOW_4_STAR",
+      "scope": "GUILD_LOW",
+      "rank": "LOW",
+      "star": 4,
+      "phase": "KEY_SET",
+      "completionRule": "ALL_LISTED_KEYS",
+      "keyQuestIds": [
+        "quest_guild_4_star_05",
+        "quest_guild_4_star_09",
+        "quest_guild_4_star_12",
+        "quest_guild_4_star_16",
+        "quest_guild_4_star_22"
+      ],
+      "urgent": null,
+      "blockedUrgentId": "GUILD_LOW_4_URGENT",
+      "advancesTo": "Guild Low 5★ / HR 3",
+      "sourceReferences": [
+        "MHP3-GUILD-LOW-ATWIKI",
+        "MHP3-GUILD-FANDOM"
+      ]
+    },
+    {
+      "id": "GUILD_LOW_5_STAR",
+      "scope": "GUILD_LOW",
+      "rank": "LOW",
+      "star": 5,
+      "phase": "KEY_SET",
+      "completionRule": "ALL_LISTED_KEYS",
+      "keyQuestIds": [
+        "quest_guild_5_star_03",
+        "quest_guild_5_star_07",
+        "quest_guild_5_star_10",
+        "quest_guild_5_star_12",
+        "quest_guild_5_star_14"
+      ],
+      "urgent": {
+        "id": "GUILD_LOW_5_URGENT",
+        "companionQuestId": "quest_guild_5_star_22",
+        "objectiveSummary": "Slay or repel Jhen Mohran",
+        "sourceReferences": [
+          "MHP3-GUILD-LOW-ATWIKI",
+          "MHP3-GUILD-FANDOM"
+        ]
+      },
+      "advancesTo": "Guild High 6★ / HR 4",
+      "sourceReferences": [
+        "MHP3-GUILD-LOW-ATWIKI",
+        "MHP3-GUILD-FANDOM"
+      ]
+    },
+    {
+      "id": "GUILD_HIGH_6_STAR",
+      "scope": "GUILD_HIGH",
+      "rank": "HIGH",
+      "star": 6,
+      "phase": "KEY_SET",
+      "completionRule": "ALL_LISTED_KEYS",
+      "keyQuestIds": [
+        "quest_guild_6_star_05",
+        "quest_guild_6_star_09",
+        "quest_guild_6_star_10",
+        "quest_guild_6_star_20",
+        "quest_guild_6_star_22"
+      ],
+      "urgent": null,
+      "blockedUrgentId": "GUILD_HIGH_6_URGENT",
+      "advancesTo": "Guild High 7★ / HR 5",
+      "sourceReferences": [
+        "MHP3-GUILD-HIGH-ATWIKI",
+        "MHP3-GUILD-FANDOM"
+      ]
+    },
+    {
+      "id": "GUILD_HIGH_7_STAR",
+      "scope": "GUILD_HIGH",
+      "rank": "HIGH",
+      "star": 7,
+      "phase": "KEY_SET",
+      "completionRule": "ALL_LISTED_KEYS",
+      "keyQuestIds": [
+        "quest_guild_7_star_07",
+        "quest_guild_7_star_08",
+        "quest_guild_7_star_10",
+        "quest_guild_7_star_18",
+        "quest_guild_7_star_26",
+        "quest_guild_7_star_27"
+      ],
+      "urgent": null,
+      "blockedUrgentId": "GUILD_HIGH_7_URGENT",
+      "advancesTo": "Guild High 8★ / HR 6",
+      "sourceReferences": [
+        "MHP3-GUILD-HIGH-ATWIKI",
+        "MHP3-GUILD-FANDOM",
+        "MHP3-GUILD7-KOURYAKU"
+      ]
+    },
+    {
+      "id": "GUILD_HIGH_8_STAR",
+      "scope": "GUILD_HIGH",
+      "rank": "HIGH",
+      "star": 8,
+      "phase": "KEY_SET",
+      "completionRule": "ALL_LISTED_KEYS",
+      "keyQuestIds": [
+        "quest_guild_8_star_02",
+        "quest_guild_8_star_08",
+        "quest_guild_8_star_15",
+        "quest_guild_8_star_19",
+        "quest_guild_8_star_20",
+        "quest_guild_8_star_24"
+      ],
+      "urgent": {
+        "id": "GUILD_HIGH_8_JHEN_URGENT",
+        "companionQuestId": "quest_guild_8_urgent_jhen",
+        "objectiveSummary": "Slay or repel Jhen Mohran",
+        "summaryLabel": "Jhen Mohran",
+        "sourceReferences": [
+          "MHP3-GUILD-HIGH-ATWIKI",
+          "MHP3-GUILD-FANDOM"
+        ]
+      },
+      "nextStepId": "GUILD_HIGH_8_POST_JHEN",
+      "advancesTo": "Amatsu urgent (8★ follow-up)",
+      "sourceReferences": [
+        "MHP3-GUILD-HIGH-ATWIKI",
+        "MHP3-GUILD-FANDOM"
+      ]
+    },
+    {
+      "id": "GUILD_HIGH_8_POST_JHEN",
+      "scope": "GUILD_HIGH",
+      "rank": "HIGH",
+      "star": 8,
+      "phase": "AFTER_URGENT_FOLLOW_UP",
+      "completionRule": "AFTER_PREVIOUS_URGENT",
+      "keyQuestIds": [],
+      "requiresUrgentId": "GUILD_HIGH_8_JHEN_URGENT",
+      "urgent": {
+        "id": "GUILD_HIGH_8_AMATSU_URGENT",
+        "companionQuestId": "quest_guild_8_urgent_amatsu",
+        "objectiveSummary": "Slay Amatsu",
+        "summaryLabel": "Amatsu",
+        "sourceReferences": [
+          "MHP3-GUILD-HIGH-ATWIKI",
+          "MHP3-GUILD-FANDOM"
+        ]
+      },
+      "advancesTo": null,
+      "sourceReferences": [
+        "MHP3-GUILD-HIGH-ATWIKI",
+        "MHP3-GUILD-FANDOM"
+      ]
+    }
+  ],
+  "blockedUrgents": [
+    {
+      "id": "GUILD_LOW_3_URGENT",
+      "role": "URGENT",
+      "scope": "GUILD_LOW",
+      "rank": "LOW",
+      "star": 3,
+      "phase": "KEY_SET_URGENT",
+      "companionQuestId": null,
+      "objectiveSummary": "Hunt Gigginox",
+      "stepId": "GUILD_LOW_3_STAR",
+      "advancesTo": "Guild Low 4★ / HR 2",
+      "sourceReferences": [
+        "MHP3-GUILD-LOW-ATWIKI",
+        "MHP3-GUILD-FANDOM"
+      ]
+    },
+    {
+      "id": "GUILD_LOW_4_URGENT",
+      "role": "URGENT",
+      "scope": "GUILD_LOW",
+      "rank": "LOW",
+      "star": 4,
+      "phase": "KEY_SET_URGENT",
+      "companionQuestId": null,
+      "objectiveSummary": "Hunt Zinogre",
+      "stepId": "GUILD_LOW_4_STAR",
+      "advancesTo": "Guild Low 5★ / HR 3",
+      "sourceReferences": [
+        "MHP3-GUILD-LOW-ATWIKI",
+        "MHP3-GUILD-FANDOM"
+      ]
+    },
+    {
+      "id": "GUILD_HIGH_6_URGENT",
+      "role": "URGENT",
+      "scope": "GUILD_HIGH",
+      "rank": "HIGH",
+      "star": 6,
+      "phase": "KEY_SET_URGENT",
+      "companionQuestId": null,
+      "objectiveSummary": "Hunt Nargacuga",
+      "stepId": "GUILD_HIGH_6_STAR",
+      "advancesTo": "Guild High 7★ / HR 5",
+      "sourceReferences": [
+        "MHP3-GUILD-HIGH-ATWIKI",
+        "MHP3-GUILD-FANDOM"
+      ]
+    },
+    {
+      "id": "GUILD_HIGH_7_URGENT",
+      "role": "URGENT",
+      "scope": "GUILD_HIGH",
+      "rank": "HIGH",
+      "star": 7,
+      "phase": "KEY_SET_URGENT",
+      "companionQuestId": null,
+      "objectiveSummary": "Hunt 2 Zinogre",
+      "stepId": "GUILD_HIGH_7_STAR",
+      "advancesTo": "Guild High 8★ / HR 6",
+      "sourceReferences": [
+        "MHP3-GUILD-HIGH-ATWIKI",
+        "MHP3-GUILD-FANDOM",
+        "MHP3-GUILD7-KOURYAKU"
+      ]
+    }
+  ],
+  "optionalChallenges": [
+    {
+      "questId": "quest_village_6_star_16",
+      "role": "OPTIONAL_FINAL_CHALLENGE",
+      "label": "Optional final Village challenge",
+      "unlockSummary": "Available after all other Village quests",
+      "sourceReferences": [
+        "MHP3-VILLAGE6-KOURYAKUTSUSHIN",
+        "MHP3-LAST-SUPPER-ATWIKI"
+      ]
+    }
+  ],
+  "unlockPrerequisites": [
+    {
+      "questId": "quest_guild_6_star_20",
+      "prerequisiteQuestId": "quest_guild_6_star_19",
+      "relation": "REQUIRED",
+      "sourceReferences": [
+        "MHP3-GUILD-HIGH-ATWIKI",
+        "MHP3-GUILD-FANDOM"
+      ]
+    },
+    {
+      "questId": "quest_guild_7_star_08",
+      "prerequisiteQuestId": "quest_guild_7_star_20",
+      "relation": "REQUIRED",
+      "sourceReferences": [
+        "MHP3-GUILD-HIGH-ATWIKI",
+        "MHP3-GUILD-FANDOM",
+        "MHP3-GUILD7-KOURYAKU"
+      ]
+    },
+    {
+      "questId": "quest_guild_7_star_18",
+      "prerequisiteQuestId": "quest_guild_7_star_17",
+      "relation": "REQUIRED",
+      "sourceReferences": [
+        "MHP3-GUILD-HIGH-ATWIKI",
+        "MHP3-GUILD-FANDOM",
+        "MHP3-GUILD7-KOURYAKU"
+      ]
+    },
+    {
+      "questId": "quest_guild_7_star_27",
+      "prerequisiteQuestId": "quest_guild_7_star_25",
+      "relation": "REQUIRED",
+      "sourceReferences": [
+        "MHP3-GUILD-HIGH-ATWIKI",
+        "MHP3-GUILD-FANDOM",
+        "MHP3-GUILD7-KOURYAKU"
+      ]
+    },
+    {
+      "questId": "quest_guild_8_star_08",
+      "prerequisiteQuestId": "quest_guild_8_star_07",
+      "relation": "REQUIRED",
+      "sourceReferences": [
+        "MHP3-GUILD-HIGH-ATWIKI",
+        "MHP3-GUILD-FANDOM"
+      ]
+    },
+    {
+      "questId": "quest_guild_8_star_20",
+      "prerequisiteQuestId": "quest_guild_8_star_22",
+      "relation": "REQUIRED",
+      "sourceReferences": [
+        "MHP3-GUILD-HIGH-ATWIKI",
+        "MHP3-GUILD-FANDOM"
+      ]
+    },
+    {
+      "questId": "quest_guild_8_star_24",
+      "prerequisiteQuestId": "quest_guild_8_star_18",
+      "relation": "REQUIRED",
+      "sourceReferences": [
+        "MHP3-GUILD-HIGH-ATWIKI",
+        "MHP3-GUILD-FANDOM"
+      ]
+    }
+  ],
+  "multiplayerHelp": {
+    "scope": "GUILD_HIGH",
+    "text": "If a Guild High Key quest has not appeared for you, joining another player's posted quest can count toward unlocking your Urgent. You must personally accept and clear your own Urgent."
+  }
+}

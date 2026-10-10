@@ -21,6 +21,7 @@ internal data class AppState(
 class AppViewModel(application: Application) : AndroidViewModel(application) {
     private val repository = CompanionRepository(application)
     val fixture = repository.data
+    internal val questProgression = repository.questProgression
     private val charmRepository = CharmTableRepository(application, fixture.skillTrees)
     private val mutableCharmIndex = MutableStateFlow<CharmTableIndex?>(null)
     internal val charmIndex = mutableCharmIndex.asStateFlow()

@@ -253,6 +253,7 @@ internal fun CompanionApp(
     var questRankFilterName by rememberSaveable("quest-rank-filter") { mutableStateOf(QuestRankFilter.ALL.name) }
     val questRankFilter = QuestRankFilter.entries.firstOrNull { it.name == questRankFilterName }
         ?: QuestRankFilter.ALL
+    var keyQuestsOnly by rememberSaveable("quest-key-only") { mutableStateOf(false) }
     // Persist the stable enum name rather than its ordinal so adding corpus
     // categories does not reset a saved category selection on recreation.
     var questCategoryFilterName by rememberSaveable("quest-category-filter") { mutableStateOf(QuestCategoryFilter.ALL.name) }
@@ -379,6 +380,9 @@ internal fun CompanionApp(
                     onSkillFocusConsumed = { pendingSkillFocusId = null },
                     onMaterial = { nav.navigate(Routes.material(it)) },
                     displayTerminology = viewModel.fixture.displayTerminology,
+                    questProgression = viewModel.questProgression,
+                    keyQuestsOnly = keyQuestsOnly,
+                    onKeyQuestsOnly = { keyQuestsOnly = it },
                     questRankFilter = questRankFilter,
                     questStarFilters = questStarFilters,
                     questCategoryFilter = questCategoryFilter,
@@ -1331,6 +1335,9 @@ internal fun SearchScreen(
     questListState: LazyListState = rememberLazyListState(),
     trainingListState: LazyListState = rememberLazyListState(),
     displayTerminology: DisplayTerminology = DisplayTerminology(),
+    questProgression: QuestProgressionData = QuestProgressionData.empty(),
+    keyQuestsOnly: Boolean = false,
+    onKeyQuestsOnly: (Boolean) -> Unit = {},
     questStarFilter: Int? = null,
     questRankFilter: QuestRankFilter = QuestRankFilter.ALL,
     questStarFilters: Set<Int> = emptySet(),
@@ -1436,6 +1443,9 @@ internal fun SearchScreen(
                 monsters = monsters,
                 smallMonsters = smallMonsters,
                 displayTerminology = displayTerminology,
+                progression = questProgression,
+                keyQuestsOnly = keyQuestsOnly,
+                onKeyQuestsOnly = onKeyQuestsOnly,
                 onApplyFilters = onQuestFilters
             )
             filter == EntityType.TRAINING -> TrainingBrowser(
@@ -3171,6 +3181,28 @@ internal fun filterQuests(
     )
 }
 
+internal fun questProgressionStepsForFilter(
+    progression: QuestProgressionData,
+    state: QuestFilterState
+): List<QuestProgressionStep> {
+    if (state.stars.size != 1) return emptyList()
+    val star = state.stars.single()
+    val candidates = progression.steps.filter { step ->
+        step.star == star &&
+            (state.category == QuestCategoryFilter.ALL || when (state.category) {
+                QuestCategoryFilter.VILLAGE -> step.scope == "VILLAGE"
+                QuestCategoryFilter.GUILD -> step.scope in setOf("GUILD_LOW", "GUILD_HIGH")
+                else -> false
+            }) &&
+            (state.rank == QuestRankFilter.ALL || step.rank == state.rank.name)
+    }
+    val scopes = candidates.map { it.scope }.distinct()
+    if (scopes.size != 1) return emptyList()
+    return candidates.sortedBy { if (it.phase == "KEY_SET") 0 else 1 }
+}
+
+internal fun QuestProgressionData.roleForQuest(questId: String): QuestProgressionRole? = roleFor(questId)
+
 internal fun filterQuests(
     quests: List<Quest>,
     query: String,
@@ -3265,6 +3297,30 @@ internal fun QuestBadge(quest: Quest, modifier: Modifier = Modifier) {
 }
 
 @Composable
+private fun QuestProgressionRoleBadge(role: QuestProgressionRole, questId: String, modifier: Modifier = Modifier) {
+    val label = when (role) {
+        QuestProgressionRole.KEY -> "KEY"
+        QuestProgressionRole.URGENT -> "URGENT"
+        QuestProgressionRole.OPTIONAL_FINAL_CHALLENGE -> "OPTIONAL"
+    }
+    Surface(
+        modifier = modifier.testTag("quest-role-badge-${label.lowercase()}-$questId"),
+        color = if (role == QuestProgressionRole.URGENT) AppColors.Crimson else AppColors.NightRaised,
+        contentColor = AppColors.Parchment,
+        shape = AppDimens.ButtonShape,
+        border = BorderStroke(1.dp, AppColors.Gold.copy(alpha = .8f))
+    ) {
+        Text(
+            label,
+            modifier = Modifier.padding(horizontal = 5.dp, vertical = 2.dp),
+            style = AppType.Metadata.copy(fontSize = 9.sp, lineHeight = 11.sp, fontWeight = FontWeight.Bold),
+            maxLines = 1,
+            softWrap = false
+        )
+    }
+}
+
+@Composable
 private fun QuestTargetIcons(
     quest: Quest,
     monstersById: Map<String, Monster>,
@@ -3290,18 +3346,36 @@ private fun QuestRow(
     monstersById: Map<String, Monster>,
     smallMonstersById: Map<String, SmallMonster>,
     displayTerminology: DisplayTerminology = DisplayTerminology(),
+    progression: QuestProgressionData = QuestProgressionData.empty(),
+    questNamesById: Map<String, Quest> = emptyMap(),
     modifier: Modifier = Modifier
 ) {
     val objective = displayTerminology.objectiveByStableId[quest.id]
         ?: quest.objective.takeIf { it.isNotBlank() }
+    val role = progression.roleFor(quest.id)
     ParchmentSurface(modifier.fillMaxWidth().testTag("quest-row-${quest.id}")) {
         Row(Modifier.padding(horizontal = 10.dp, vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
             QuestBadge(quest)
             Spacer(Modifier.width(10.dp))
             Column(Modifier.weight(1f)) {
-                Text(quest.name, color = AppColors.Ink, style = AppType.CardTitle, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(5.dp)) {
+                    Text(quest.name, color = AppColors.Ink, style = AppType.CardTitle, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f))
+                    role?.let { QuestProgressionRoleBadge(it, quest.id) }
+                }
                 objective?.let { Text(it, color = AppColors.Ink.copy(alpha = .78f), style = AppType.Metadata, maxLines = 2, overflow = TextOverflow.Ellipsis) }
                 Text(quest.location, color = AppColors.Crimson, style = AppType.Metadata, maxLines = 1)
+                if (role == QuestProgressionRole.OPTIONAL_FINAL_CHALLENGE) {
+                    Text("Available after all other Village quests", color = AppColors.Ink.copy(alpha = .68f), style = AppType.Metadata, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                }
+                if (progression.questIdsThatUnlockKeys.contains(quest.id)) {
+                    Text("Unlocks a Key Quest", color = AppColors.Ink.copy(alpha = .68f), style = AppType.Metadata, maxLines = 1)
+                }
+                progression.prerequisiteFor(quest.id)?.let { prerequisiteQuestId ->
+                    val prerequisiteQuest = questNamesById[prerequisiteQuestId]
+                    if (prerequisiteQuest != null) {
+                        Text("Unlock: complete ${prerequisiteQuest.name}", color = AppColors.Ink.copy(alpha = .72f), style = AppType.Metadata, maxLines = 2, overflow = TextOverflow.Ellipsis)
+                    }
+                }
             }
             if (quest.objectiveTargetMonsterIds.isNotEmpty() || quest.objectiveTargetSmallMonsterIds.isNotEmpty()) {
                 Spacer(Modifier.width(7.dp))
@@ -3334,6 +3408,7 @@ private fun QuestDetailScreen(quest: Quest, onBack: () -> Unit) {
 }
 
 @Composable
+@OptIn(ExperimentalLayoutApi::class)
 private fun QuestBrowser(
     quests: List<Quest>,
     query: String,
@@ -3344,26 +3419,34 @@ private fun QuestBrowser(
     monsters: List<Monster>,
     smallMonsters: List<SmallMonster>,
     displayTerminology: DisplayTerminology = DisplayTerminology(),
+    progression: QuestProgressionData,
+    keyQuestsOnly: Boolean,
+    onKeyQuestsOnly: (Boolean) -> Unit,
     onApplyFilters: (QuestFilterState) -> Unit
 ) {
     val monstersById = remember(monsters) { monsters.associateBy { it.id } }
     val smallMonstersById = remember(smallMonsters) { smallMonsters.associateBy { it.id } }
+    val questNamesById = remember(quests) { quests.associateBy { it.id } }
     val filterIndex = remember(quests) { QuestFilterIndex(quests) }
     val appliedState = remember(selectedCategory, selectedRank, selectedStars) {
         normalizeQuestFilter(QuestFilterState(selectedCategory, selectedRank, selectedStars), filterIndex)
     }
-    val filtered = remember(quests, query, appliedState) {
-        filterQuests(quests, query, appliedState)
+    val filtered = remember(quests, query, appliedState, progression, keyQuestsOnly) {
+        val regularResults = filterQuests(quests, query, appliedState)
+        if (keyQuestsOnly) regularResults.filter { it.id in progression.keyQuestIds } else regularResults
     }
+    val progressionSteps = remember(progression, appliedState) { questProgressionStepsForFilter(progression, appliedState) }
     var filterDialogOpen by remember { mutableStateOf(false) }
     var draftState by remember { mutableStateOf(QuestFilterState()) }
     val summary = questFilterSummary(appliedState)
     val activeDimensions = questFilterDimensionCount(appliedState)
 
     Column(Modifier.fillMaxSize().testTag("quest-browser")) {
-        Row(
-            Modifier.fillMaxWidth().heightIn(min = 42.dp).padding(vertical = 3.dp).testTag("quest-filter-controls"),
-            verticalAlignment = Alignment.CenterVertically
+        FlowRow(
+            Modifier.fillMaxWidth().padding(vertical = 3.dp).testTag("quest-filter-controls"),
+            horizontalArrangement = Arrangement.spacedBy(6.dp),
+            verticalArrangement = Arrangement.spacedBy(3.dp),
+            itemVerticalAlignment = Alignment.CenterVertically
         ) {
             FilterChip(
                 selected = activeDimensions > 0,
@@ -3392,24 +3475,37 @@ private fun QuestBrowser(
                     selectedBorderColor = AppColors.Gold
                 )
             )
-            Spacer(Modifier.width(7.dp))
-            Text(
-                summary,
-                color = AppColors.Parchment,
-                style = AppType.Metadata,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.weight(1f).testTag("quest-filter-summary")
+            FilterChip(
+                selected = keyQuestsOnly,
+                onClick = { onKeyQuestsOnly(!keyQuestsOnly) },
+                label = { Text("Key quests only", style = AppType.ButtonLabel, maxLines = 1, softWrap = false) },
+                modifier = Modifier.height(36.dp).testTag("quest-key-only-filter"),
+                shape = AppDimens.ButtonShape,
+                colors = FilterChipDefaults.filterChipColors(
+                    selectedContainerColor = AppColors.Crimson,
+                    selectedLabelColor = Color(0xFFFFE8B0),
+                    containerColor = AppColors.NightRaised,
+                    labelColor = AppColors.Parchment
+                ),
+                border = FilterChipDefaults.filterChipBorder(
+                    enabled = true,
+                    selected = keyQuestsOnly,
+                    borderColor = AppColors.ParchmentDeep.copy(alpha = .65f),
+                    selectedBorderColor = AppColors.Gold
+                )
             )
+        }
+        Row(
+            Modifier.fillMaxWidth().heightIn(min = 30.dp).padding(bottom = 3.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(summary, color = AppColors.Parchment, style = AppType.Metadata, maxLines = 1,
+                overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f).testTag("quest-filter-summary"))
             if (activeDimensions > 0) {
-                IconButton(
-                    onClick = { onApplyFilters(QuestFilterState()) },
-                    modifier = Modifier.size(34.dp).testTag("quest-filter-clear")
-                ) {
+                IconButton(onClick = { onApplyFilters(QuestFilterState()) }, modifier = Modifier.size(32.dp).testTag("quest-filter-clear")) {
                     Icon(Icons.Default.Close, "Clear quest filters", tint = AppColors.Gold, modifier = Modifier.size(18.dp))
                 }
             }
-            Spacer(Modifier.width(3.dp))
             Text(
                 questCountLabel(filtered.size),
                 color = AppColors.Gold,
@@ -3417,6 +3513,14 @@ private fun QuestBrowser(
                 maxLines = 1,
                 softWrap = false,
                 modifier = Modifier.testTag("quest-count")
+            )
+        }
+        if (progressionSteps.isNotEmpty()) {
+            QuestProgressionSummary(
+                steps = progressionSteps,
+                progression = progression,
+                questNamesById = questNamesById,
+                showGuildHighHelp = keyQuestsOnly && progressionSteps.first().scope == "GUILD_HIGH"
             )
         }
         if (filtered.isEmpty()) {
@@ -3429,7 +3533,7 @@ private fun QuestBrowser(
                 contentPadding = PaddingValues(bottom = 12.dp)
             ) {
                 items(filtered, key = { it.id }) { quest ->
-                    QuestRow(quest, monstersById, smallMonstersById, displayTerminology)
+                    QuestRow(quest, monstersById, smallMonstersById, displayTerminology, progression, questNamesById)
                 }
             }
         }
@@ -3446,6 +3550,66 @@ private fun QuestBrowser(
                 filterDialogOpen = false
             }
         )
+    }
+}
+
+@Composable
+private fun QuestProgressionSummary(
+    steps: List<QuestProgressionStep>,
+    progression: QuestProgressionData,
+    questNamesById: Map<String, Quest>,
+    showGuildHighHelp: Boolean
+) {
+    val tierStep = steps.first()
+    val tierLabel = when (tierStep.scope) {
+        "VILLAGE" -> "Village"
+        "GUILD_LOW" -> "Guild Low"
+        else -> "Guild High"
+    }
+    Surface(
+        modifier = Modifier.fillMaxWidth().padding(bottom = 5.dp).testTag("quest-progression-summary"),
+        color = AppColors.Parchment.copy(alpha = .96f),
+        contentColor = AppColors.Ink,
+        shape = AppDimens.CardShape,
+        border = BorderStroke(1.dp, AppColors.ParchmentDeep.copy(alpha = .85f))
+    ) {
+        Column(Modifier.padding(horizontal = 9.dp, vertical = 6.dp), verticalArrangement = Arrangement.spacedBy(1.dp)) {
+            Text("$tierLabel · ★${tierStep.star}", color = AppColors.Crimson,
+                style = AppType.Metadata.copy(fontWeight = FontWeight.Bold), maxLines = 1)
+            val keyCount = steps.firstOrNull { it.phase == "KEY_SET" }?.keyQuestIds?.size ?: 0
+            if (keyCount > 0) {
+                Text("Complete all $keyCount Key Quests", style = AppType.Metadata.copy(fontWeight = FontWeight.SemiBold), maxLines = 1)
+            } else {
+                Text("No Key Quest set is listed for this tier", style = AppType.Metadata, maxLines = 2, overflow = TextOverflow.Ellipsis)
+            }
+            val urgentSummaries = steps.mapNotNull { step ->
+                step.urgent?.let { urgent ->
+                    urgent.summaryLabel
+                        ?: urgent.companionQuestId?.let { questNamesById[it]?.name }
+                        ?: urgent.objectiveSummary
+                } ?: step.blockedUrgentId?.let { blockedId ->
+                    progression.blockedUrgents.firstOrNull { it.id == blockedId }?.objectiveSummary
+                }
+            }
+            urgentSummaries.takeIf { it.isNotEmpty() }?.let { names ->
+                Text(
+                    if (names.size > 1) "Urgent: ${names.joinToString(" → ")}" else "Urgent: ${names.single()}",
+                    style = AppType.Metadata,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.testTag("quest-progression-urgent-summary")
+                )
+            }
+            steps.firstOrNull { it.advancesTo != null }?.advancesTo?.let { target ->
+                Text("Advances to: $target", style = AppType.Metadata.copy(fontSize = 10.sp),
+                    color = AppColors.Ink.copy(alpha = .72f), maxLines = 1, overflow = TextOverflow.Ellipsis)
+            }
+            if (showGuildHighHelp) {
+                Text(progression.multiplayerHelp.text, color = AppColors.Ink.copy(alpha = .72f),
+                    style = AppType.Metadata.copy(fontSize = 10.sp, lineHeight = 12.sp), maxLines = 3,
+                    overflow = TextOverflow.Ellipsis, modifier = Modifier.testTag("quest-guild-high-multiplayer-help"))
+            }
+        }
     }
 }
 
