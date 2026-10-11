@@ -30,6 +30,12 @@ class MainActivity : ComponentActivity() {
                         .coerceIn(UI_SCALE_MIN_STEP, UI_SCALE_MAX_STEP)
                 )
             }
+            val fieldGuideSwipeEnabled = remember {
+                androidx.compose.runtime.mutableStateOf(
+                    getSharedPreferences(UI_SETTINGS_PREFS, MODE_PRIVATE)
+                        .getBoolean(FIELD_GUIDE_SECTION_SWIPE_KEY, false)
+                )
+            }
             val platformDensity = LocalDensity.current
             val uiScale = uiScaleFromStep(scaleStep.intValue)
             val presentationDensity = Density(
@@ -45,6 +51,14 @@ class MainActivity : ComponentActivity() {
                         CompanionApp(
                             viewModel = viewModel,
                             uiScaleStep = scaleStep.intValue,
+                            fieldGuideSwipeEnabled = fieldGuideSwipeEnabled.value,
+                            onFieldGuideSwipeEnabledChange = { enabled ->
+                                fieldGuideSwipeEnabled.value = enabled
+                                getSharedPreferences(UI_SETTINGS_PREFS, MODE_PRIVATE)
+                                    .edit()
+                                    .putBoolean(FIELD_GUIDE_SECTION_SWIPE_KEY, enabled)
+                                    .apply()
+                            },
                             onUiScaleStepChange = { step ->
                                 val safeStep = step.coerceIn(UI_SCALE_MIN_STEP, UI_SCALE_MAX_STEP)
                                 scaleStep.intValue = safeStep
@@ -75,6 +89,7 @@ class MainActivity : ComponentActivity() {
 
 internal const val UI_SETTINGS_PREFS = "ui_settings"
 internal const val UI_SCALE_STEP_KEY = "interface_scale_step"
+internal const val FIELD_GUIDE_SECTION_SWIPE_KEY = "field_guide_section_swipe"
 internal const val UI_SCALE_MIN_STEP = 0
 internal const val UI_SCALE_MAX_STEP = 6
 internal const val UI_SCALE_DEFAULT_STEP = 4

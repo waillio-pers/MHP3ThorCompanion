@@ -18,6 +18,8 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.detectVerticalDragGestures
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -30,6 +32,8 @@ import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items as gridItems
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.relocation.BringIntoViewRequester
+import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CutCornerShape
@@ -63,6 +67,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.input.pointer.PointerEventPass
+import androidx.compose.ui.input.pointer.positionChange
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalConfiguration
@@ -151,6 +157,36 @@ internal val fieldGuideCategoryOrder: List<EntityType?> = listOf(
     EntityType.TRAINING
 )
 
+internal data class FieldGuideSectionDestination(val category: EntityType?)
+
+/** Positive direction advances right in the canonical selector; negative moves left. */
+internal fun adjacentFieldGuideSection(current: EntityType?, direction: Int): FieldGuideSectionDestination? {
+    if (direction != -1 && direction != 1) return null
+    val currentIndex = fieldGuideCategoryOrder.indexOf(current)
+    if (currentIndex < 0) return null
+    val nextIndex = currentIndex + direction
+    if (nextIndex !in fieldGuideCategoryOrder.indices) return null
+    return FieldGuideSectionDestination(fieldGuideCategoryOrder[nextIndex])
+}
+
+internal fun fieldGuideSwipeAllowed(enabled: Boolean, category: EntityType?): Boolean =
+    enabled && category != EntityType.WEAPON
+
+internal fun fieldGuideSwipeDirection(deltaX: Float, deltaY: Float, thresholdPx: Float): Int? {
+    if (kotlin.math.abs(deltaX) < thresholdPx) return null
+    if (kotlin.math.abs(deltaX) <= kotlin.math.abs(deltaY) * 1.5f) return null
+    return if (deltaX < 0f) 1 else -1
+}
+
+internal fun selectFieldGuideCategory(
+    category: EntityType?,
+    hasBlankQuery: Boolean,
+    onFilter: (EntityType?) -> Unit,
+    onWeapons: () -> Unit
+) {
+    if (category == EntityType.WEAPON && hasBlankQuery) onWeapons() else onFilter(category)
+}
+
 internal fun QuestCategoryFilter.productionCategory(): String? = when (this) {
     QuestCategoryFilter.ALL -> null
     QuestCategoryFilter.VILLAGE -> "Village"
@@ -231,7 +267,9 @@ internal class QuestFilterIndex(quests: List<Quest>) {
 internal fun CompanionApp(
     viewModel: AppViewModel,
     uiScaleStep: Int = UI_SCALE_DEFAULT_STEP,
-    onUiScaleStepChange: (Int) -> Unit = {}
+    onUiScaleStepChange: (Int) -> Unit = {},
+    fieldGuideSwipeEnabled: Boolean = false,
+    onFieldGuideSwipeEnabledChange: (Boolean) -> Unit = {}
 ) {
     val nav = rememberNavController()
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -383,6 +421,7 @@ internal fun CompanionApp(
                     onSkillFocusConsumed = { pendingSkillFocusId = null },
                     onMaterial = { nav.navigate(Routes.material(it)) },
                     displayTerminology = viewModel.fixture.displayTerminology,
+                    fieldGuideSwipeEnabled = fieldGuideSwipeEnabled,
                     questProgression = viewModel.questProgression,
                     keyQuestsOnly = keyQuestsOnly,
                     onKeyQuestsOnly = { keyQuestsOnly = it },
@@ -709,6 +748,8 @@ internal fun CompanionApp(
         UiSettingsDialog(
             uiScaleStep = uiScaleStep,
             onScaleStepChange = onUiScaleStepChange,
+            fieldGuideSwipeEnabled = fieldGuideSwipeEnabled,
+            onFieldGuideSwipeEnabledChange = onFieldGuideSwipeEnabledChange,
             onDismiss = { showSettings = false },
             onAbout = {
                 showSettings = false
@@ -879,6 +920,8 @@ private fun SettingsButton(onOpenSettings: () -> Unit, modifier: Modifier = Modi
 internal fun UiSettingsDialog(
     uiScaleStep: Int,
     onScaleStepChange: (Int) -> Unit,
+    fieldGuideSwipeEnabled: Boolean,
+    onFieldGuideSwipeEnabledChange: (Boolean) -> Unit,
     onDismiss: () -> Unit,
     onAbout: () -> Unit
 ) {
@@ -973,6 +1016,28 @@ internal fun UiSettingsDialog(
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                     Text("0.80", style = AppType.Metadata, color = AppColors.Ink.copy(alpha = .72f))
                     Text("1.10", style = AppType.Metadata, color = AppColors.Ink.copy(alpha = .72f))
+                }
+                Row(
+                    Modifier.fillMaxWidth().padding(top = 10.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        stringResource(R.string.settings_field_guide_swipe),
+                        modifier = Modifier.weight(1f).padding(end = 10.dp),
+                        style = AppType.CardTitle,
+                        color = AppColors.Ink
+                    )
+                    Switch(
+                        checked = fieldGuideSwipeEnabled,
+                        onCheckedChange = onFieldGuideSwipeEnabledChange,
+                        modifier = Modifier.testTag("field-guide-swipe-toggle"),
+                        colors = SwitchDefaults.colors(
+                            checkedThumbColor = AppColors.Parchment,
+                            checkedTrackColor = AppColors.Crimson,
+                            uncheckedThumbColor = AppColors.Parchment,
+                            uncheckedTrackColor = AppColors.Ink.copy(alpha = .35f)
+                        )
+                    )
                 }
                 Row(
                     Modifier.fillMaxWidth().padding(top = 12.dp),
@@ -1172,6 +1237,37 @@ internal fun fieldGuideScrollPosition(canScrollBackward: Boolean, canScrollForwa
     else -> "no overflow"
 }
 
+internal fun Modifier.fieldGuideSectionSwipeInput(
+    enabled: Boolean,
+    onNavigate: (direction: Int) -> Unit
+): Modifier = if (!enabled) this else pointerInput(onNavigate) {
+    val thresholdPx = 56.dp.toPx()
+    awaitEachGesture {
+        val down = awaitFirstDown(requireUnconsumed = false)
+        var totalDelta = Offset.Zero
+        var childConsumedMovement = false
+        var parentClaimedGesture = false
+        while (true) {
+            val event = awaitPointerEvent(PointerEventPass.Final)
+            val change = event.changes.firstOrNull { it.id == down.id } ?: break
+            val movement = change.positionChange()
+            if (movement != Offset.Zero && change.isConsumed) childConsumedMovement = true
+            totalDelta += movement
+            val direction = fieldGuideSwipeDirection(totalDelta.x, totalDelta.y, thresholdPx)
+            if (!childConsumedMovement && direction != null) {
+                parentClaimedGesture = true
+                change.consume()
+            } else if (parentClaimedGesture && change.pressed) {
+                change.consume()
+            }
+            if (!change.pressed) break
+        }
+        if (!childConsumedMovement) {
+            fieldGuideSwipeDirection(totalDelta.x, totalDelta.y, thresholdPx)?.let(onNavigate)
+        }
+    }
+}
+
 @Composable
 internal fun FieldGuideCategorySelector(
     filter: EntityType?,
@@ -1180,7 +1276,12 @@ internal fun FieldGuideCategorySelector(
     onWeapons: () -> Unit
 ) {
     val scrollState = rememberScrollState()
+    val chipRequesters = remember { List(fieldGuideCategoryOrder.size) { BringIntoViewRequester() } }
     val edgeState = fieldGuideScrollPosition(scrollState.canScrollBackward, scrollState.canScrollForward)
+    val selectedIndex = fieldGuideCategoryOrder.indexOf(filter)
+    LaunchedEffect(filter) {
+        if (selectedIndex >= 0) chipRequesters[selectedIndex].bringIntoView()
+    }
     Box(
         Modifier.fillMaxWidth().padding(vertical = 9.dp)
             .testTag("field-guide-category-strip")
@@ -1218,16 +1319,17 @@ internal fun FieldGuideCategorySelector(
             horizontalArrangement = Arrangement.spacedBy(2.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            fieldGuideCategoryOrder.forEach { type ->
+            fieldGuideCategoryOrder.forEachIndexed { index, type ->
+                val chipModifier = Modifier.bringIntoViewRequester(chipRequesters[index])
                 if (type == null) {
-                    CompactFilter(stringResource(R.string.filter_all), filter == null, Modifier.testTag("field-filter-all")) { onFilter(null) }
+                    CompactFilter(stringResource(R.string.filter_all), filter == null, chipModifier.testTag("field-filter-all")) { onFilter(null) }
                 } else {
                     CompactFilter(
                         type.localizedTitle(),
                         filter == type,
-                        Modifier.testTag(if (type == EntityType.WEAPON) "field-filter-weapons" else "field-filter-${type.name.lowercase()}")
+                        chipModifier.testTag(if (type == EntityType.WEAPON) "field-filter-weapons" else "field-filter-${type.name.lowercase()}")
                     ) {
-                        if (type == EntityType.WEAPON && hasBlankQuery) onWeapons() else onFilter(type)
+                        selectFieldGuideCategory(type, hasBlankQuery, onFilter, onWeapons)
                     }
                 }
             }
@@ -1431,7 +1533,8 @@ internal fun SearchScreen(
     focusSkillTreeId: String? = null,
     onSkillExpanded: (String?) -> Unit = {},
     onSkillFocusConsumed: () -> Unit = {},
-    onMaterial: (String) -> Unit = {}
+    onMaterial: (String) -> Unit = {},
+    fieldGuideSwipeEnabled: Boolean = false
 ) {
     val monstersById = remember(monsters) { monsters.associateBy { it.id } }
     val smallMonstersById = remember(smallMonsters) { smallMonsters.associateBy { it.id } }
@@ -1449,122 +1552,137 @@ internal fun SearchScreen(
             results.filterNot { it.type == EntityType.SMALL_MONSTER } + smallMonsterResults
         } else results
     }
+    val swipeAllowed = fieldGuideSwipeAllowed(fieldGuideSwipeEnabled, filter)
+    val navigateBySwipe: (Int) -> Unit = remember(filter, query, onFilter, onWeapons) {
+        { direction: Int ->
+            adjacentFieldGuideSection(filter, direction)?.let { destination ->
+                selectFieldGuideCategory(destination.category, query.isBlank(), onFilter, onWeapons)
+            }
+            Unit
+        }
+    }
     Column(Modifier.fillMaxSize().padding(horizontal = AppDimens.ScreenPadding).testTag("screen-search")) {
         FieldGuideCategorySelector(filter, query.isBlank(), onFilter, onWeapons)
-        when {
-            filter == EntityType.WEAPON && query.isBlank() && weaponRepository != null -> WeaponsScreen(
-                repository = weaponRepository,
-                screenState = weaponScreenState ?: remember { WeaponScreenState() },
-                onTypeSelected = onWeaponType,
-                onItem = { material ->
-                    onResult(SearchResult(material.id, material.name, material.description, EntityType.MATERIAL, material.aliases, material.gameItemId))
-                },
-                onWeaponOpened = {}
-            )
-            filter == EntityType.MONSTER -> MonsterIndex(
-                monsters = filterMonsters(monsters, query),
-                totalCount = monsters.size,
-                query = query,
-                gridState = monsterGridState,
-                onMonster = { monster ->
-                    onResult(SearchResult(monster.id, monster.name, monster.subtitle, EntityType.MONSTER))
-                }
-            )
-            filter == EntityType.SMALL_MONSTER -> SmallMonsterIndex(
-                smallMonsters = filterSmallMonsters(smallMonsters, query),
-                totalCount = smallMonsters.size,
-                query = query,
-                gridState = smallMonsterGridState,
-                onSmallMonster = { monster ->
-                    onResult(SearchResult(monster.id, monster.name, monster.monsterClass, EntityType.SMALL_MONSTER))
-                }
-            )
-            filter == EntityType.MATERIAL -> ItemIndex(
-                itemResults = displayResults.filter { it.type == EntityType.MATERIAL },
-                totalCount = results.count { it.type == EntityType.MATERIAL },
-                query = query,
-                listState = itemListState,
-                onItem = onResult
-            )
-            filter == EntityType.QUEST -> QuestBrowser(
-                quests = quests,
-                query = query,
-                selectedRank = questRankFilter,
-                selectedStars = if (questStarFilters.isNotEmpty()) questStarFilters else questStarFilter?.let { setOf(it) }.orEmpty(),
-                selectedCategory = questCategoryFilter,
-                listState = questListState,
-                monsters = monsters,
-                smallMonsters = smallMonsters,
-                displayTerminology = displayTerminology,
-                progression = questProgression,
-                keyQuestsOnly = keyQuestsOnly,
-                onKeyQuestsOnly = onKeyQuestsOnly,
-                onApplyFilters = onQuestFilters
-            )
-            filter == EntityType.TRAINING -> TrainingBrowser(
-                trainingQuests = trainingQuests,
-                monsters = monsters,
-                smallMonsters = smallMonsters,
-                materials = materials,
-                query = query,
-                listState = trainingListState,
-                displayTerminology = displayTerminology,
-                onTraining = onTraining
-            )
-            filter == EntityType.SKILL -> SkillsBrowser(
-                skills = skills,
-                query = query,
-                listState = skillListState,
-                expandedSkillTreeId = expandedSkillTreeId,
-                focusSkillTreeId = focusSkillTreeId,
-                onExpandedChange = onSkillExpanded,
-                onFocusConsumed = onSkillFocusConsumed,
-                decorationSkillRelations = decorationSkillRelations,
-                materials = materials,
-                onMaterial = onMaterial
-            )
-            filter == EntityType.MAP -> MapsIndex(maps, onMap)
-            query.isBlank() && filter !in setOf(EntityType.MATERIAL, EntityType.WEAPON, EntityType.SKILL) -> EmptyState(Icons.Default.Search, stringResource(R.string.search_start_title), stringResource(R.string.search_start_body))
-            displayResults.isEmpty() -> EmptyState(Icons.Default.SearchOff, stringResource(R.string.search_empty_title), stringResource(R.string.search_empty_body))
-            else -> LazyColumn(
-                modifier = Modifier.testTag("search-results"),
-                state = listState,
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                contentPadding = PaddingValues(bottom = 12.dp)
-            ) {
-                val orderedTypes = listOf(
-                    EntityType.MONSTER,
-                    EntityType.SMALL_MONSTER,
-                    EntityType.MATERIAL,
-                    EntityType.QUEST,
-                    EntityType.TRAINING,
-                    EntityType.WEAPON,
-                    EntityType.SKILL
-                ).sortedBy { type ->
-                    if (displayResults.any { it.type == type && it.name.equals(query, ignoreCase = true) }) 0 else 1
-                }
-                orderedTypes.forEach { type ->
-                    val group = displayResults.filter { it.type == type }
-                    if (group.isNotEmpty()) {
-                        item(key = "header-$type") {
-                            Text(
-                                stringResource(R.string.result_group_count, type.localizedTitle(), group.size),
-                                color = AppColors.Gold,
-                                style = AppType.SectionTitle,
-                                modifier = Modifier.padding(top = 3.dp, bottom = 1.dp)
-                            )
-                        }
-                        items(group, key = { "${it.type}-${it.id}" }) { result ->
-                            SearchResultRow(
-                                result,
-                                quests.firstOrNull { it.id == result.id },
-                                monstersById[result.id],
-                                smallMonstersById[result.id],
-                                weaponsById[result.id],
-                                trainingQuests.firstOrNull { it.id == result.id },
-                                onResult,
-                                displayTerminology
-                            )
+        Box(
+            Modifier.weight(1f).fillMaxWidth()
+                .testTag("field-guide-swipe-region")
+                .fieldGuideSectionSwipeInput(swipeAllowed, navigateBySwipe)
+        ) {
+            when {
+                filter == EntityType.WEAPON && query.isBlank() && weaponRepository != null -> WeaponsScreen(
+                    repository = weaponRepository,
+                    screenState = weaponScreenState ?: remember { WeaponScreenState() },
+                    onTypeSelected = onWeaponType,
+                    onItem = { material ->
+                        onResult(SearchResult(material.id, material.name, material.description, EntityType.MATERIAL, material.aliases, material.gameItemId))
+                    },
+                    onWeaponOpened = {}
+                )
+                filter == EntityType.MONSTER -> MonsterIndex(
+                    monsters = filterMonsters(monsters, query),
+                    totalCount = monsters.size,
+                    query = query,
+                    gridState = monsterGridState,
+                    onMonster = { monster ->
+                        onResult(SearchResult(monster.id, monster.name, monster.subtitle, EntityType.MONSTER))
+                    }
+                )
+                filter == EntityType.SMALL_MONSTER -> SmallMonsterIndex(
+                    smallMonsters = filterSmallMonsters(smallMonsters, query),
+                    totalCount = smallMonsters.size,
+                    query = query,
+                    gridState = smallMonsterGridState,
+                    onSmallMonster = { monster ->
+                        onResult(SearchResult(monster.id, monster.name, monster.monsterClass, EntityType.SMALL_MONSTER))
+                    }
+                )
+                filter == EntityType.MATERIAL -> ItemIndex(
+                    itemResults = displayResults.filter { it.type == EntityType.MATERIAL },
+                    totalCount = results.count { it.type == EntityType.MATERIAL },
+                    query = query,
+                    listState = itemListState,
+                    onItem = onResult
+                )
+                filter == EntityType.QUEST -> QuestBrowser(
+                    quests = quests,
+                    query = query,
+                    selectedRank = questRankFilter,
+                    selectedStars = if (questStarFilters.isNotEmpty()) questStarFilters else questStarFilter?.let { setOf(it) }.orEmpty(),
+                    selectedCategory = questCategoryFilter,
+                    listState = questListState,
+                    monsters = monsters,
+                    smallMonsters = smallMonsters,
+                    displayTerminology = displayTerminology,
+                    progression = questProgression,
+                    keyQuestsOnly = keyQuestsOnly,
+                    onKeyQuestsOnly = onKeyQuestsOnly,
+                    onApplyFilters = onQuestFilters
+                )
+                filter == EntityType.TRAINING -> TrainingBrowser(
+                    trainingQuests = trainingQuests,
+                    monsters = monsters,
+                    smallMonsters = smallMonsters,
+                    materials = materials,
+                    query = query,
+                    listState = trainingListState,
+                    displayTerminology = displayTerminology,
+                    onTraining = onTraining
+                )
+                filter == EntityType.SKILL -> SkillsBrowser(
+                    skills = skills,
+                    query = query,
+                    listState = skillListState,
+                    expandedSkillTreeId = expandedSkillTreeId,
+                    focusSkillTreeId = focusSkillTreeId,
+                    onExpandedChange = onSkillExpanded,
+                    onFocusConsumed = onSkillFocusConsumed,
+                    decorationSkillRelations = decorationSkillRelations,
+                    materials = materials,
+                    onMaterial = onMaterial
+                )
+                filter == EntityType.MAP -> MapsIndex(maps, onMap)
+                query.isBlank() && filter !in setOf(EntityType.MATERIAL, EntityType.WEAPON, EntityType.SKILL) -> EmptyState(Icons.Default.Search, stringResource(R.string.search_start_title), stringResource(R.string.search_start_body))
+                displayResults.isEmpty() -> EmptyState(Icons.Default.SearchOff, stringResource(R.string.search_empty_title), stringResource(R.string.search_empty_body))
+                else -> LazyColumn(
+                    modifier = Modifier.testTag("search-results"),
+                    state = listState,
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    contentPadding = PaddingValues(bottom = 12.dp)
+                ) {
+                    val orderedTypes = listOf(
+                        EntityType.MONSTER,
+                        EntityType.SMALL_MONSTER,
+                        EntityType.MATERIAL,
+                        EntityType.QUEST,
+                        EntityType.TRAINING,
+                        EntityType.WEAPON,
+                        EntityType.SKILL
+                    ).sortedBy { type ->
+                        if (displayResults.any { it.type == type && it.name.equals(query, ignoreCase = true) }) 0 else 1
+                    }
+                    orderedTypes.forEach { type ->
+                        val group = displayResults.filter { it.type == type }
+                        if (group.isNotEmpty()) {
+                            item(key = "header-$type") {
+                                Text(
+                                    stringResource(R.string.result_group_count, type.localizedTitle(), group.size),
+                                    color = AppColors.Gold,
+                                    style = AppType.SectionTitle,
+                                    modifier = Modifier.padding(top = 3.dp, bottom = 1.dp)
+                                )
+                            }
+                            items(group, key = { "${it.type}-${it.id}" }) { result ->
+                                SearchResultRow(
+                                    result,
+                                    quests.firstOrNull { it.id == result.id },
+                                    monstersById[result.id],
+                                    smallMonstersById[result.id],
+                                    weaponsById[result.id],
+                                    trainingQuests.firstOrNull { it.id == result.id },
+                                    onResult,
+                                    displayTerminology
+                                )
+                            }
                         }
                     }
                 }

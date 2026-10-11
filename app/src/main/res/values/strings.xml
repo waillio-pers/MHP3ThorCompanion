@@ -6,6 +6,7 @@
     <string name="settings_title">Settings</string>
     <string name="settings_interface_scale">Interface scale</string>
     <string name="settings_scale_description">Adjust the size of controls and content across the app. Changes are saved automatically.</string>
+    <string name="settings_field_guide_swipe">Swipe between Field Guide sections</string>
     <string name="nav_home">Home</string>
     <string name="nav_field_guide">Field Guide</string>
     <string name="nav_favorites">Favorites</string>
