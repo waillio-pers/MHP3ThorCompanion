@@ -49,7 +49,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
@@ -73,6 +75,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
@@ -1162,6 +1165,76 @@ internal fun HomeScreen(
     }
 }
 
+internal fun fieldGuideScrollPosition(canScrollBackward: Boolean, canScrollForward: Boolean): String = when {
+    canScrollBackward && canScrollForward -> "middle"
+    canScrollBackward -> "rightmost"
+    canScrollForward -> "leftmost"
+    else -> "no overflow"
+}
+
+@Composable
+internal fun FieldGuideCategorySelector(
+    filter: EntityType?,
+    hasBlankQuery: Boolean,
+    onFilter: (EntityType?) -> Unit,
+    onWeapons: () -> Unit
+) {
+    val scrollState = rememberScrollState()
+    val edgeState = fieldGuideScrollPosition(scrollState.canScrollBackward, scrollState.canScrollForward)
+    Box(
+        Modifier.fillMaxWidth().padding(vertical = 9.dp)
+            .testTag("field-guide-category-strip")
+            .semantics { stateDescription = edgeState }
+            .drawWithContent {
+                drawContent()
+                val edgeWidth = 10.dp.toPx()
+                if (scrollState.canScrollBackward) {
+                    drawRect(
+                        brush = Brush.horizontalGradient(
+                            0f to Color.Transparent,
+                            1f to AppColors.Night.copy(alpha = .94f),
+                            startX = 0f,
+                            endX = edgeWidth
+                        ),
+                        size = Size(edgeWidth, size.height)
+                    )
+                }
+                if (scrollState.canScrollForward) {
+                    drawRect(
+                        brush = Brush.horizontalGradient(
+                            0f to AppColors.Night.copy(alpha = .94f),
+                            1f to Color.Transparent,
+                            startX = size.width - edgeWidth,
+                            endX = size.width
+                        ),
+                        topLeft = Offset(size.width - edgeWidth, 0f),
+                        size = Size(edgeWidth, size.height)
+                    )
+                }
+            }
+    ) {
+        Row(
+            Modifier.fillMaxWidth().horizontalScroll(scrollState).padding(horizontal = 12.dp),
+            horizontalArrangement = Arrangement.spacedBy(2.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            fieldGuideCategoryOrder.forEach { type ->
+                if (type == null) {
+                    CompactFilter(stringResource(R.string.filter_all), filter == null, Modifier.testTag("field-filter-all")) { onFilter(null) }
+                } else {
+                    CompactFilter(
+                        type.localizedTitle(),
+                        filter == type,
+                        Modifier.testTag(if (type == EntityType.WEAPON) "field-filter-weapons" else "field-filter-${type.name.lowercase()}")
+                    ) {
+                        if (type == EntityType.WEAPON && hasBlankQuery) onWeapons() else onFilter(type)
+                    }
+                }
+            }
+        }
+    }
+}
+
 @Composable
 private fun CategoryButton(
     @StringRes titleRes: Int,
@@ -1377,27 +1450,7 @@ internal fun SearchScreen(
         } else results
     }
     Column(Modifier.fillMaxSize().padding(horizontal = AppDimens.ScreenPadding).testTag("screen-search")) {
-        Row(
-            Modifier.fillMaxWidth().padding(vertical = 9.dp).horizontalScroll(rememberScrollState())
-                .testTag("field-guide-category-strip"),
-            horizontalArrangement = Arrangement.spacedBy(2.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            fieldGuideCategoryOrder.forEach { type ->
-                if (type == null) {
-                    CompactFilter(stringResource(R.string.filter_all), filter == null, Modifier.testTag("field-filter-all")) { onFilter(null) }
-                } else {
-                    CompactFilter(
-                        type.localizedTitle(),
-                        filter == type,
-                        Modifier.testTag(if (type == EntityType.WEAPON) "field-filter-weapons" else "field-filter-${type.name.lowercase()}")
-                    ) {
-                        if (type == EntityType.WEAPON && query.isBlank()) onWeapons() else onFilter(type)
-                    }
-                }
-            }
-
-        }
+        FieldGuideCategorySelector(filter, query.isBlank(), onFilter, onWeapons)
         when {
             filter == EntityType.WEAPON && query.isBlank() && weaponRepository != null -> WeaponsScreen(
                 repository = weaponRepository,

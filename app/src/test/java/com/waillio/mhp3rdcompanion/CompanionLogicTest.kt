@@ -118,11 +118,34 @@ class CompanionLogicTest {
         assertEquals(listOf("marrow", "narga"), entries.map { it.entityId })
     }
 
-    @Test fun recentIsUniqueNewestFirstAndLimitedToFive() {
+    @Test fun recentHistorySupportsEmptyThroughSixAndEvictsOnlyTheOldestOnTheSeventh() {
+        assertTrue(emptyList<RecentEntry>().isEmpty())
+        assertTrue(ReferenceHistoryLogic.recordRecent(emptyList(), ReferenceEntityType.MONSTER, "m1", 1).isNotEmpty())
         var entries = emptyList<RecentEntry>()
-        (1..6).forEach { index -> entries = ReferenceHistoryLogic.recordRecent(entries, ReferenceEntityType.MONSTER, "m$index", index.toLong()) }
+        (1..6).forEach { index ->
+            entries = ReferenceHistoryLogic.recordRecent(entries, ReferenceEntityType.MONSTER, "m$index", index.toLong())
+            assertEquals(index.coerceAtMost(RECENT_HISTORY_LIMIT), entries.size)
+        }
+        assertEquals(listOf("m6", "m5", "m4", "m3", "m2", "m1"), entries.map { it.entityId })
+        entries = ReferenceHistoryLogic.recordRecent(entries, ReferenceEntityType.MONSTER, "m7", 7)
+        assertEquals(listOf("m7", "m6", "m5", "m4", "m3", "m2"), entries.map { it.entityId })
+        assertEquals(RECENT_HISTORY_LIMIT, entries.size)
+    }
+
+    @Test fun reopeningARecentMovesItToTheFrontWithoutDuplicates() {
+        var entries = (1..6).fold(emptyList<RecentEntry>()) { acc, index ->
+            ReferenceHistoryLogic.recordRecent(acc, ReferenceEntityType.MONSTER, "m$index", index.toLong())
+        }
         entries = ReferenceHistoryLogic.recordRecent(entries, ReferenceEntityType.MONSTER, "m3", 7)
-        assertEquals(listOf("m3", "m6", "m5", "m4", "m2"), entries.map { it.entityId })
+        assertEquals(listOf("m3", "m6", "m5", "m4", "m2", "m1"), entries.map { it.entityId })
+        assertEquals(6, entries.map { it.entityId }.distinct().size)
+    }
+
+    @Test fun recentCodecKeepsExistingFiveEntryHistoryUnchangedAndRoundTripsSix() {
+        val legacy = (1..5).map { RecentEntry(ReferenceEntityType.MONSTER, "m$it", it.toLong()) }
+        assertEquals(legacy, ReferenceEntryCodec.decodeRecent(ReferenceEntryCodec.encodeRecent(legacy)))
+        val six = (1..6).map { RecentEntry(ReferenceEntityType.MONSTER, "m$it", it.toLong()) }
+        assertEquals(six, ReferenceEntryCodec.decodeRecent(ReferenceEntryCodec.encodeRecent(six)))
     }
 
     @Test fun referenceCodecsRoundTripAndTolerateLegacyGarbage() {

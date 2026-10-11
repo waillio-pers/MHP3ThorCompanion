@@ -81,8 +81,11 @@ class WeaponEcosystemIntegrationTest {
                 recent, ReferenceEntityType.WEAPON, weaponsByType.getValue(type).id, (index + 1).toLong()
             )
         }
-        assertEquals(5, recent.size)
-        assertEquals(5, recent.map { it.entityId }.distinct().size)
+        val expectedRecentWeaponIds = WeaponRepository.PRODUCTION_WEAPON_TYPES.takeLast(6).asReversed()
+            .map { weaponsByType.getValue(it).id }
+        assertEquals(6, recent.size)
+        assertEquals(expectedRecentWeaponIds, recent.map { it.entityId })
+        assertEquals(6, recent.map { it.entityId }.distinct().size)
         assertTrue(recent.all { it.type == ReferenceEntityType.WEAPON })
     }
 

@@ -51,6 +51,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import com.waillio.mhp3rdcompanion.data.Material
 import com.waillio.mhp3rdcompanion.data.BowChargeAvailability
 import com.waillio.mhp3rdcompanion.data.BowCoatingSupportLevel
@@ -238,6 +239,7 @@ internal class WeaponBrowseState {
     var minimumSlots by mutableStateOf<Int?>(null)
     var browseMode by mutableStateOf(WeaponBrowseMode.TREE)
     var descending by mutableStateOf(true)
+    var sortResetGeneration by mutableIntStateOf(0)
     var savedTreeIndex by mutableIntStateOf(0)
     var savedTreeOffset by mutableIntStateOf(0)
     var savedSearchIndex by mutableIntStateOf(0)
@@ -248,6 +250,24 @@ internal class WeaponBrowseState {
     var initialized by mutableStateOf(false)
     val weaponNavigationHistory = mutableStateListOf<String>()
     val detailStates = mutableStateMapOf<String, WeaponDetailViewState>()
+
+    fun selectBrowseMode(mode: WeaponBrowseMode) {
+        if (browseMode == mode) return
+        browseMode = mode
+        if (mode != WeaponBrowseMode.TREE) resetFlatListForSortChange()
+    }
+
+    fun toggleSortDirection() {
+        if (browseMode == WeaponBrowseMode.TREE) return
+        descending = !descending
+        resetFlatListForSortChange()
+    }
+
+    private fun resetFlatListForSortChange() {
+        savedFlatIndex = 0
+        savedFlatOffset = 0
+        sortResetGeneration++
+    }
 
     fun openFromBrowse(weaponId: String) {
         weaponNavigationHistory.clear()
@@ -399,6 +419,7 @@ private fun WeaponTree(
         else browseWeapons(catalog, state.query, filters, state.browseMode, state.descending)
     }
     val selectedWeapon = state.selectedWeaponId?.let(catalog.weaponById::get)
+    var appliedSortResetGeneration by remember(state) { mutableIntStateOf(state.sortResetGeneration) }
 
     BackHandler(enabled = selectedWeapon != null) { state.navigateBackFromDetail() }
     LaunchedEffect(treeRows) {
@@ -411,8 +432,13 @@ private fun WeaponTree(
             searchState.scrollToItem(state.savedSearchIndex.coerceAtMost(searchResults.lastIndex), state.savedSearchOffset)
         }
     }
-    LaunchedEffect(flatResults) {
-        if (flatResults.isNotEmpty() && (state.savedFlatIndex > 0 || state.savedFlatOffset > 0)) {
+    LaunchedEffect(flatResults, state.sortResetGeneration) {
+        if (appliedSortResetGeneration != state.sortResetGeneration) {
+            appliedSortResetGeneration = state.sortResetGeneration
+            state.savedFlatIndex = 0
+            state.savedFlatOffset = 0
+            flatState.scrollToItem(0)
+        } else if (flatResults.isNotEmpty() && (state.savedFlatIndex > 0 || state.savedFlatOffset > 0)) {
             flatState.scrollToItem(state.savedFlatIndex.coerceAtMost(flatResults.lastIndex), state.savedFlatOffset)
         }
     }
@@ -463,8 +489,8 @@ private fun WeaponTree(
                 descending = state.descending,
                 activeFilterCount = filters.activeCount,
                 onOpenFilters = { showFilters = true },
-                onModeSelected = { state.browseMode = it },
-                onToggleDirection = { state.descending = !state.descending }
+                onModeSelected = state::selectBrowseMode,
+                onToggleDirection = state::toggleSortDirection
             )
             if (filters.isActive) {
                 Row(
@@ -694,11 +720,11 @@ private fun WeaponBrowseControls(
     onModeSelected: (WeaponBrowseMode) -> Unit,
     onToggleDirection: () -> Unit
 ) {
-    Row(
-        Modifier.fillMaxWidth().height(43.dp).horizontalScroll(rememberScrollState())
-            .testTag("weapon-browse-controls"),
+    FlowRow(
+        Modifier.fillMaxWidth().padding(vertical = 4.dp).testTag("weapon-browse-controls"),
         horizontalArrangement = Arrangement.spacedBy(5.dp),
-        verticalAlignment = Alignment.CenterVertically
+        verticalArrangement = Arrangement.spacedBy(4.dp),
+        itemVerticalAlignment = Alignment.CenterVertically
     ) {
         WeaponBrowseChip(
             label = if (activeFilterCount == 0) "Filters" else "Filters · $activeFilterCount",
@@ -719,14 +745,18 @@ private fun WeaponBrowseControls(
             )
         }
         if (mode != WeaponBrowseMode.TREE) {
+            val sortLabel = requireNotNull(weaponSortLabel(mode, descending))
             TextButton(
                 onClick = onToggleDirection,
                 modifier = Modifier.testTag("weapon-sort-direction")
-                    .semantics { contentDescription = if (descending) "Descending order" else "Ascending order" },
+                    .semantics {
+                        contentDescription = sortLabel
+                        stateDescription = if (descending) "Descending order" else "Ascending order"
+                    },
                 contentPadding = PaddingValues(horizontal = 7.dp),
                 colors = ButtonDefaults.textButtonColors(contentColor = AppColors.Parchment)
             ) {
-                Text(if (descending) "↓" else "↑", style = AppType.CardTitle, maxLines = 1)
+                Text(sortLabel, style = AppType.ButtonLabel.copy(fontSize = 12.sp), maxLines = 1)
             }
         }
     }

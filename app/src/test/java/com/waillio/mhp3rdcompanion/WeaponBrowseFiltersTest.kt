@@ -39,6 +39,11 @@ class WeaponBrowseFiltersTest {
         )
         val search = browseWeapons(hammer, "iron", WeaponBrowseFilters(), WeaponBrowseMode.TREE)
         assertEquals(search.sortedWith(compareBy({ it.name.lowercase() }, { it.id })).map { it.id }, search.map { it.id })
+        assertEquals(null, weaponSortLabel(WeaponBrowseMode.TREE, descending = true))
+        assertEquals("Attack · High → Low", weaponSortLabel(WeaponBrowseMode.ATTACK, descending = true))
+        assertEquals("Attack · Low → High", weaponSortLabel(WeaponBrowseMode.ATTACK, descending = false))
+        assertEquals("Rarity · High → Low", weaponSortLabel(WeaponBrowseMode.RARITY, descending = true))
+        assertEquals("Rarity · Low → High", weaponSortLabel(WeaponBrowseMode.RARITY, descending = false))
     }
 
     @Test
@@ -175,6 +180,32 @@ class WeaponBrowseFiltersTest {
         assertTrue(ascending.zipWithNext().all { (left, right) -> left.rarity <= right.rarity })
         assertDeterministicTies(descending) { it.rarity }
         assertDeterministicTies(ascending) { it.rarity }
+    }
+
+    @Test
+    fun sortFieldAndDirectionChangesResetTheFlatListButFiltersDoNot() {
+        val state = WeaponBrowseState()
+        state.selectBrowseMode(WeaponBrowseMode.ATTACK)
+        assertEquals(1, state.sortResetGeneration)
+        state.savedFlatIndex = 17
+        state.savedFlatOffset = 31
+        state.toggleSortDirection()
+        assertEquals(2, state.sortResetGeneration)
+        assertEquals(0, state.savedFlatIndex)
+        assertEquals(0, state.savedFlatOffset)
+
+        state.savedFlatIndex = 9
+        state.savedFlatOffset = 13
+        state.selectBrowseMode(WeaponBrowseMode.RARITY)
+        assertEquals(3, state.sortResetGeneration)
+        assertEquals(0, state.savedFlatIndex)
+        assertEquals(0, state.savedFlatOffset)
+
+        val revision = state.sortResetGeneration
+        state.rarityFilter = 5
+        state.savedFlatIndex = 4
+        assertEquals("filter-only changes do not request a sort reset", revision, state.sortResetGeneration)
+        assertEquals(4, state.savedFlatIndex)
     }
 
     @Test

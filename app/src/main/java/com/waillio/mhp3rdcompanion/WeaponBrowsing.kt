@@ -6,6 +6,17 @@ import com.waillio.mhp3rdcompanion.data.WeaponSpecialType
 /** Tree is the existing default; the other two modes are flat, ordered lists. */
 internal enum class WeaponBrowseMode { TREE, ATTACK, RARITY }
 
+/** Explicit text for the active flat sort; Tree keeps its canonical progression order. */
+internal fun weaponSortLabel(mode: WeaponBrowseMode, descending: Boolean): String? {
+    val field = when (mode) {
+        WeaponBrowseMode.TREE -> return null
+        WeaponBrowseMode.ATTACK -> "Attack"
+        WeaponBrowseMode.RARITY -> "Rarity"
+    }
+    val direction = if (descending) "High → Low" else "Low → High"
+    return "$field · $direction"
+}
+
 internal data class WeaponBrowseFilters(
     val specialType: WeaponSpecialType? = null,
     val minimumAffinity: Int? = null,

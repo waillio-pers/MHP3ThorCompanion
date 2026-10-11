@@ -6,9 +6,11 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performImeAction
+import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.test.core.app.ApplicationProvider
 import com.waillio.mhp3rdcompanion.data.CompanionRepository
 import com.waillio.mhp3rdcompanion.data.WeaponSpecialType
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
@@ -58,7 +60,8 @@ class WeaponBrowseControlsUiTest {
         rule.onNodeWithTag("weapon-active-filter-summary").assertIsDisplayed()
         rule.onNodeWithTag("weapon-search-clear").performClick()
         rule.onNodeWithTag("weapon-sort-direction").performClick() // ascending
-        rule.onNodeWithContentDescription("Ascending order").assertExists()
+        rule.onNodeWithTag("weapon-sort-direction").assertContentDescriptionEquals("Attack · Low → High")
+        assertEquals("Ascending order", rule.onNodeWithTag("weapon-sort-direction").fetchSemanticsNode().config[SemanticsProperties.StateDescription])
 
         rule.onNodeWithTag("weapon-search").performTextInput(target.name)
         rule.onNodeWithTag("weapon-search").performImeAction()
@@ -77,7 +80,7 @@ class WeaponBrowseControlsUiTest {
         rule.onNodeWithTag("weapon-active-filter-summary").assertIsDisplayed()
         rule.onNodeWithTag("weapon-search").assertTextContains(target.name)
         rule.onNodeWithTag("weapon-flat-results").assertIsDisplayed()
-        rule.onNodeWithContentDescription("Ascending order").assertExists()
+        assertEquals("Ascending order", rule.onNodeWithTag("weapon-sort-direction").fetchSemanticsNode().config[SemanticsProperties.StateDescription])
 
         rule.onNodeWithTag("weapon-mode-tree").performClick()
         rule.onNodeWithTag("weapon-search-results").assertIsDisplayed()
@@ -92,5 +95,33 @@ class WeaponBrowseControlsUiTest {
         rule.onNodeWithTag("weapon-tree").assertIsDisplayed()
         val defaultTree = visibleTree(catalog, initialExpandedIds(catalog))
         if (defaultTree.isNotEmpty()) rule.onNodeWithTag("weapon-row-${defaultTree.first().weapon.id}").assertExists()
+    }
+
+    @Test
+    fun changingSortDirectionAndFieldReturnsFlatResultsToTheirNewBeginning() {
+        val data = CompanionRepository(ApplicationProvider.getApplicationContext<android.content.Context>()).data
+        val repository = WeaponRepository.fromProduction(data.weapons, data.materials)
+        val catalog = repository.catalog("HAMMER")
+        rule.onNodeWithTag("nav-search").performClick()
+        rule.onNodeWithTag("field-filter-weapons").performClick()
+        rule.onNodeWithTag("weapon-type-hammer").performClick()
+        rule.onNodeWithTag("weapon-mode-attack").performClick()
+
+        val descending = browseWeapons(catalog, "", WeaponBrowseFilters(), WeaponBrowseMode.ATTACK, descending = true)
+        rule.onNodeWithTag("weapon-flat-results")
+            .performScrollToNode(hasTestTag("weapon-flat-result-${descending.last().id}"))
+        rule.onNodeWithTag("weapon-flat-result-${descending.last().id}").assertIsDisplayed()
+        rule.onNodeWithTag("weapon-sort-direction").performClick()
+        rule.onNodeWithTag("weapon-sort-direction").assertContentDescriptionEquals("Attack · Low → High")
+        val ascending = browseWeapons(catalog, "", WeaponBrowseFilters(), WeaponBrowseMode.ATTACK, descending = false)
+        rule.onNodeWithTag("weapon-flat-result-${ascending.first().id}").assertIsDisplayed()
+
+        rule.onNodeWithTag("weapon-flat-results")
+            .performScrollToNode(hasTestTag("weapon-flat-result-${ascending.last().id}"))
+        rule.onNodeWithTag("weapon-flat-result-${ascending.last().id}").assertIsDisplayed()
+        rule.onNodeWithTag("weapon-mode-rarity").performClick()
+        rule.onNodeWithTag("weapon-sort-direction").assertContentDescriptionEquals("Rarity · Low → High")
+        val rarityAscending = browseWeapons(catalog, "", WeaponBrowseFilters(), WeaponBrowseMode.RARITY, descending = false)
+        rule.onNodeWithTag("weapon-flat-result-${rarityAscending.first().id}").assertIsDisplayed()
     }
 }

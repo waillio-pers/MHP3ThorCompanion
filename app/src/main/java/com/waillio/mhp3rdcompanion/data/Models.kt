@@ -1873,6 +1873,8 @@ object CompanionLogic {
 
 }
 
+const val RECENT_HISTORY_LIMIT = 6
+
 object ReferenceHistoryLogic {
     fun toggleFavorite(
         entries: List<FavoriteEntry>,
@@ -1896,7 +1898,7 @@ object ReferenceHistoryLogic {
     ): List<RecentEntry> =
         (listOf(RecentEntry(type, entityId, openedAt)) +
             entries.filterNot { it.type == type && it.entityId == entityId })
-            .take(5)
+            .take(RECENT_HISTORY_LIMIT)
 }
 
 object ReferenceEntryCodec {
