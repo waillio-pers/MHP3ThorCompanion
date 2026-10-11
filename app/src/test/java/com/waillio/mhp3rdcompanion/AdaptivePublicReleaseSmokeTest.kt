@@ -90,7 +90,7 @@ abstract class AdaptivePublicReleaseSmokeBase {
         rule.onNodeWithTag("settings-button").performClick()
         rule.onNodeWithTag("ui-scale-slider").assertIsDisplayed()
         saveScreenshot("06-settings.png")
-        rule.onNodeWithTag("settings-about").performClick()
+        rule.onNodeWithTag("settings-about").performScrollTo().performClick()
         rule.onNodeWithTag("about-dialog").assertIsDisplayed()
         rule.onNodeWithTag("about-done").assertIsDisplayed()
         rule.onNodeWithTag("about-done").performClick()

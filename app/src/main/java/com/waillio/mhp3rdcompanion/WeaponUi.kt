@@ -826,7 +826,11 @@ private fun WeaponBrowseFilterDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Weapon filters", color = AppColors.Ink, style = AppType.SectionTitle) },
+        modifier = Modifier.dialogUserActivityModifier(),
+        title = {
+            DialogWindowActivityTracker()
+            Text("Weapon filters", color = AppColors.Ink, style = AppType.SectionTitle)
+        },
         text = {
             Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {

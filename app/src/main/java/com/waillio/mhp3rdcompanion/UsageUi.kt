@@ -170,9 +170,10 @@ private fun UsageViewAllDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        modifier = Modifier.testTag("item-usage-view-all-modal"),
+        modifier = Modifier.dialogUserActivityModifier().testTag("item-usage-view-all-modal"),
         containerColor = AppColors.Parchment,
         title = {
+            DialogWindowActivityTracker()
             Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                 Icon(family.family.icon(), null, tint = AppColors.Ink, modifier = Modifier.size(29.dp))
                 Spacer(Modifier.width(8.dp))

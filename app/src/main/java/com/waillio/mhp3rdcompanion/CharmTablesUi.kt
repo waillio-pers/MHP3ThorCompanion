@@ -58,7 +58,6 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.waillio.mhp3rdcompanion.data.CharmIdentification
 import com.waillio.mhp3rdcompanion.data.CharmIdentificationState
@@ -759,7 +758,7 @@ private fun CharmSkillPicker(
     if (open) {
         var query by rememberSaveable(tag) { mutableStateOf("") }
         val matches = remember(skillTrees, query) { filterCharmSkills(skillTrees, query) }
-        Dialog(onDismissRequest = { open = false }, properties = DialogProperties(usePlatformDefaultWidth = false)) {
+        TrackedDialog(onDismissRequest = { open = false }, properties = DialogProperties(usePlatformDefaultWidth = false)) {
             Surface(color = AppColors.Parchment, shape = AppDimens.CardShape, border = BorderStroke(1.dp, AppColors.Gold), modifier = Modifier.fillMaxWidth(.94f).fillMaxHeight(.82f).widthIn(max = 560.dp)) {
                 Column(Modifier.fillMaxWidth()) {
                     Text(title, color = AppColors.Ink, style = AppType.SectionTitle)

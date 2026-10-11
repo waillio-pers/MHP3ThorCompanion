@@ -94,7 +94,6 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
-import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.window.DialogWindowProvider
 import androidx.core.view.WindowInsetsCompat
@@ -269,7 +268,9 @@ internal fun CompanionApp(
     uiScaleStep: Int = UI_SCALE_DEFAULT_STEP,
     onUiScaleStepChange: (Int) -> Unit = {},
     fieldGuideSwipeEnabled: Boolean = false,
-    onFieldGuideSwipeEnabledChange: (Boolean) -> Unit = {}
+    onFieldGuideSwipeEnabledChange: (Boolean) -> Unit = {},
+    screenSaverTimeoutMinutes: Int = 0,
+    onScreenSaverTimeoutMinutesChange: (Int) -> Unit = {}
 ) {
     val nav = rememberNavController()
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -750,6 +751,8 @@ internal fun CompanionApp(
             onScaleStepChange = onUiScaleStepChange,
             fieldGuideSwipeEnabled = fieldGuideSwipeEnabled,
             onFieldGuideSwipeEnabledChange = onFieldGuideSwipeEnabledChange,
+            screenSaverTimeoutMinutes = screenSaverTimeoutMinutes,
+            onScreenSaverTimeoutMinutesChange = onScreenSaverTimeoutMinutesChange,
             onDismiss = { showSettings = false },
             onAbout = {
                 showSettings = false
@@ -922,6 +925,8 @@ internal fun UiSettingsDialog(
     onScaleStepChange: (Int) -> Unit,
     fieldGuideSwipeEnabled: Boolean,
     onFieldGuideSwipeEnabledChange: (Boolean) -> Unit,
+    screenSaverTimeoutMinutes: Int,
+    onScreenSaverTimeoutMinutesChange: (Int) -> Unit,
     onDismiss: () -> Unit,
     onAbout: () -> Unit
 ) {
@@ -932,9 +937,10 @@ internal fun UiSettingsDialog(
     val percentage = 80 + scaleStep * 5
     val scaleLabel = "${percentage / 100}.${(percentage % 100).toString().padStart(2, '0')}"
     val compactPortrait = LocalAppWindowLayout.current.profile == AppLayoutProfile.COMPACT_PORTRAIT
+    var showScreenSaverOptions by remember { mutableStateOf(false) }
 
     BackHandler(onBack = onDismiss)
-    Box(
+    BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.Black.copy(alpha = .64f))
@@ -950,6 +956,7 @@ internal fun UiSettingsDialog(
                 .fillMaxWidth()
                 .widthIn(max = if (compactPortrait) 600.dp else 420.dp)
                 .padding(if (compactPortrait) 8.dp else 24.dp)
+                .heightIn(max = maxHeight - if (compactPortrait) 16.dp else 48.dp)
                 .clickable(
                     interactionSource = remember { androidx.compose.foundation.interaction.MutableInteractionSource() },
                     indication = null,
@@ -961,7 +968,7 @@ internal fun UiSettingsDialog(
             border = BorderStroke(2.dp, AppColors.Gold.copy(alpha = .8f)),
             shadowElevation = 12.dp
         ) {
-            Column(Modifier.padding(horizontal = 22.dp, vertical = 18.dp)) {
+            Column(Modifier.verticalScroll(rememberScrollState()).padding(horizontal = 22.dp, vertical = 18.dp)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(Icons.Default.Settings, null, tint = AppColors.Crimson)
                     Text(
@@ -1041,6 +1048,29 @@ internal fun UiSettingsDialog(
                 }
                 Row(
                     Modifier.fillMaxWidth().padding(top = 12.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column(Modifier.weight(1f).padding(end = 10.dp)) {
+                        Text(
+                            stringResource(R.string.settings_oled_screen_saver),
+                            style = AppType.CardTitle,
+                            color = AppColors.Ink
+                        )
+                        Text(
+                            stringResource(R.string.settings_oled_screen_saver_description),
+                            style = AppType.Metadata,
+                            color = AppColors.Ink.copy(alpha = .72f)
+                        )
+                    }
+                    OutlinedButton(
+                        onClick = { showScreenSaverOptions = true },
+                        modifier = Modifier.testTag("oled-screen-saver-setting")
+                    ) {
+                        Text(oledScreenSaverTimeoutLabel(screenSaverTimeoutMinutes), color = AppColors.Ink)
+                    }
+                }
+                Row(
+                    Modifier.fillMaxWidth().padding(top = 12.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -1057,6 +1087,73 @@ internal fun UiSettingsDialog(
                         shape = AppDimens.ButtonShape
                     ) {
                         Text(stringResource(R.string.action_done), style = AppType.ButtonLabel)
+                    }
+                }
+            }
+        }
+    }
+    if (showScreenSaverOptions) {
+        OledScreenSaverTimeoutDialog(
+            selectedMinutes = screenSaverTimeoutMinutes,
+            onSelect = {
+                onScreenSaverTimeoutMinutesChange(it)
+                showScreenSaverOptions = false
+            },
+            onDismiss = { showScreenSaverOptions = false }
+        )
+    }
+}
+
+@Composable
+private fun oledScreenSaverTimeoutLabel(minutes: Int): String = when (normalizeOledScreenSaverTimeoutMinutes(minutes)) {
+    1 -> stringResource(R.string.settings_oled_screen_saver_1_minute)
+    2 -> stringResource(R.string.settings_oled_screen_saver_2_minutes)
+    5 -> stringResource(R.string.settings_oled_screen_saver_5_minutes)
+    10 -> stringResource(R.string.settings_oled_screen_saver_10_minutes)
+    15 -> stringResource(R.string.settings_oled_screen_saver_15_minutes)
+    else -> stringResource(R.string.settings_oled_screen_saver_off)
+}
+
+@Composable
+private fun OledScreenSaverTimeoutDialog(
+    selectedMinutes: Int,
+    onSelect: (Int) -> Unit,
+    onDismiss: () -> Unit
+) {
+    TrackedDialog(
+        onDismissRequest = onDismiss,
+        properties = DialogProperties(usePlatformDefaultWidth = false)
+    ) {
+        Surface(
+            modifier = Modifier.fillMaxWidth(.88f).widthIn(max = 420.dp),
+            shape = AppDimens.CardShape,
+            color = AppColors.Parchment,
+            contentColor = AppColors.Ink,
+            border = BorderStroke(1.dp, AppColors.Gold)
+        ) {
+            Column(Modifier.padding(horizontal = 18.dp, vertical = 14.dp)) {
+                Text(
+                    stringResource(R.string.settings_oled_screen_saver),
+                    style = AppType.SectionTitle,
+                    color = AppColors.Ink
+                )
+                OLED_SCREEN_SAVER_TIMEOUT_OPTIONS.forEach { minutes ->
+                    val label = oledScreenSaverTimeoutLabel(minutes)
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .testTag("oled-screen-saver-option-$minutes")
+                            .clickable { onSelect(minutes) }
+                            .padding(vertical = 4.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        RadioButton(
+                            selected = normalizeOledScreenSaverTimeoutMinutes(selectedMinutes) == minutes,
+                            onClick = { onSelect(minutes) },
+                            modifier = Modifier.testTag("oled-screen-saver-radio-$minutes"),
+                            colors = RadioButtonDefaults.colors(selectedColor = AppColors.Crimson)
+                        )
+                        Text(label, style = AppType.Body, color = AppColors.Ink)
                     }
                 }
             }
@@ -1869,9 +1966,12 @@ private fun SkillCategoryFilterDialog(
     onDismiss: () -> Unit
 ) {
     AlertDialog(
-        modifier = Modifier.testTag("skills-category-filter-dialog"),
+        modifier = Modifier.dialogUserActivityModifier().testTag("skills-category-filter-dialog"),
         onDismissRequest = onDismiss,
-        title = { Text("Filter skills by category", color = AppColors.Ink) },
+        title = {
+            DialogWindowActivityTracker()
+            Text("Filter skills by category", color = AppColors.Ink)
+        },
         text = {
             Column(Modifier.heightIn(max = 340.dp).verticalScroll(rememberScrollState())) {
                 categories.forEach { category ->
@@ -2499,7 +2599,7 @@ internal fun MapDetailScreen(
     }
 
     if (fullscreen) {
-        Dialog(
+        TrackedDialog(
             onDismissRequest = { fullscreen = false },
             properties = DialogProperties(usePlatformDefaultWidth = false, decorFitsSystemWindows = false)
         ) {
@@ -3942,7 +4042,7 @@ internal fun QuestFilterDialog(
 ) {
     val ranks = index.availableRanks(draft.category)
     val stars = index.availableStars(draft.category, draft.rank)
-    Dialog(
+    TrackedDialog(
         onDismissRequest = onDismiss,
         properties = DialogProperties(usePlatformDefaultWidth = false)
     ) {
@@ -5202,7 +5302,7 @@ private fun SupplyBoxModal(
     // keystroke, including when the same modal instance is reused.
     val visible = projection.filter { it.matchesFilter(selectedFilter) && supplyQuestSearchMatches(it, query) }
     BackHandler(onBack = onDismiss)
-    Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false)) {
+    TrackedDialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false)) {
         Surface(
             Modifier.fillMaxWidth(.94f).fillMaxHeight(.88f).testTag("supply-box-modal"),
             color = AppColors.Parchment,
@@ -5416,7 +5516,7 @@ private fun RoastingSourcesViewAllDialog(
 ) {
     BackHandler(onBack = onDismiss)
     val groups = remember(routes) { roastingInputDisplayGroups(routes) }
-    Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false)) {
+    TrackedDialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false)) {
         Surface(
             Modifier.fillMaxWidth(.94f).fillMaxHeight(.88f).testTag("item-roasting-view-all-modal"),
             color = AppColors.Parchment,
@@ -5707,7 +5807,7 @@ private fun ScrapConversionSourcesViewAllDialog(
     onDismiss: () -> Unit
 ) {
     BackHandler(onBack = onDismiss)
-    Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false)) {
+    TrackedDialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false)) {
         Surface(
             Modifier.fillMaxWidth(.94f).fillMaxHeight(.88f).testTag("item-scrap-conversion-view-all-modal"),
             color = AppColors.Parchment,
@@ -6007,7 +6107,7 @@ private fun TradeSourcesViewAllDialog(
     onDismiss: () -> Unit
 ) {
     val allGroups = remember(projection) { tradeSourcesPresentation(projection.veggieElderRoutes).veggieElderInputs }
-    Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false)) {
+    TrackedDialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false)) {
         Surface(Modifier.fillMaxWidth(.94f).fillMaxHeight(.88f).testTag("item-trading-view-all-modal"), color = AppColors.Parchment, shape = AppDimens.CardShape) {
             Column(Modifier.fillMaxSize().padding(12.dp)) {
                 Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
@@ -6359,7 +6459,7 @@ private fun FarmSourceViewAllModal(
 ) {
     BackHandler(onBack = onDismiss)
     val facilities = remember(groups) { groups.groupFarmMethodsByFacility() }
-    Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false)) {
+    TrackedDialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false)) {
         Surface(
             Modifier.fillMaxWidth(.94f).fillMaxHeight(.88f).testTag("farm-method-modal"),
             color = AppColors.Parchment,
@@ -6498,7 +6598,7 @@ private fun QuestRewardModal(
             questRewardSearchMatches(it, query)
     }
     BackHandler(onBack = onDismiss)
-    Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false)) {
+    TrackedDialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false)) {
         Surface(
             Modifier.fillMaxWidth(.94f).fillMaxHeight(.88f).testTag("quest-rewards-modal"),
             color = AppColors.Parchment,
@@ -6640,7 +6740,7 @@ private fun TrainingRewardsModal(
     onDismiss: () -> Unit
 ) {
     BackHandler(onBack = onDismiss)
-    Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false)) {
+    TrackedDialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false)) {
         Surface(
             Modifier.fillMaxWidth(.94f).fillMaxHeight(.88f).testTag("item-training-rewards-modal"),
             color = AppColors.Parchment,
@@ -7888,7 +7988,7 @@ private fun SmallMonsterSourceViewAllDialog(
     onSmallMonster: (String) -> Unit
 ) {
     BackHandler(onBack = onDismiss)
-    Dialog(
+    TrackedDialog(
         onDismissRequest = onDismiss,
         properties = DialogProperties(usePlatformDefaultWidth = false)
     ) {
@@ -8029,7 +8129,7 @@ private fun MonsterSourceViewAllDialog(
     onMonster: (String) -> Unit
 ) {
     BackHandler(onBack = onDismiss)
-    Dialog(
+    TrackedDialog(
         onDismissRequest = onDismiss,
         properties = DialogProperties(usePlatformDefaultWidth = false)
     ) {

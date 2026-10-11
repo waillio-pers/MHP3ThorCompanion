@@ -37,7 +37,6 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 
 internal const val ABOUT_REPOSITORY_URL = "https://github.com/waillio-pers/MHP3ThorCompanion"
@@ -225,7 +224,7 @@ internal fun openAboutExternalLink(context: Context, url: String) {
 internal fun AboutDialog(onDismiss: () -> Unit) {
     val context = LocalContext.current
     val compactPortrait = LocalAppWindowLayout.current.profile == AppLayoutProfile.COMPACT_PORTRAIT
-    Dialog(
+    TrackedDialog(
         onDismissRequest = onDismiss,
         properties = DialogProperties(usePlatformDefaultWidth = false)
     ) {
