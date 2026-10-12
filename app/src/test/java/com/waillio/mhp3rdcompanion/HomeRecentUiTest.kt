@@ -35,10 +35,7 @@ class HomeRecentUiTest {
                         data = data,
                         recent = entries,
                         favorites = emptyList(),
-                        onMaterials = {},
-                        onMonsters = {},
-                        onMaps = {},
-                        onCharmTables = {},
+                        onShortcut = {},
                         onFavorites = {},
                         onEntity = { _, _ -> }
                     )
@@ -54,5 +51,62 @@ class HomeRecentUiTest {
             assertTrue("recent card must stay inside the phone width", bounds.left >= viewport.left && bounds.right <= viewport.right)
             assertTrue("recent card must keep its compact touch height", bounds.height > 40f)
         }
+    }
+
+    @Test
+    fun emptyShortcutSlotsHideTheShortcutGridWithoutChangingRecentlyOpened() {
+        val data = CompanionRepository(ApplicationProvider.getApplicationContext<android.content.Context>()).data
+        val entries = data.monsters.take(7).mapIndexed { index, monster ->
+            RecentEntry(ReferenceEntityType.MONSTER, monster.id, index.toLong())
+        }
+        rule.setContent {
+            CompositionLocalProvider(LocalAppWindowLayout provides appWindowLayout(360, 800)) {
+                CompanionTheme {
+                    HomeScreen(
+                        data = data,
+                        recent = entries,
+                        favorites = emptyList(),
+                        shortcutSlots = listOf(null, null, null, null),
+                        onShortcut = {},
+                        onFavorites = {},
+                        onEntity = { _, _ -> }
+                    )
+                }
+            }
+        }
+
+        rule.onNodeWithTag("home-shortcuts").assertDoesNotExist()
+        rule.onNodeWithTag("recently-opened-card").assertIsDisplayed()
+        entries.take(6).forEach { entry ->
+            rule.onNodeWithTag("reference-monster-${entry.entityId}").assertIsDisplayed()
+        }
+        rule.onNodeWithTag("reference-monster-${entries.last().entityId}").assertDoesNotExist()
+    }
+
+    @Test
+    fun homeShortcutCardsRenderOnlyInConfiguredOrder() {
+        val data = CompanionRepository(ApplicationProvider.getApplicationContext<android.content.Context>()).data
+        rule.setContent {
+            CompositionLocalProvider(LocalAppWindowLayout provides appWindowLayout(360, 800)) {
+                CompanionTheme {
+                    HomeScreen(
+                        data = data,
+                        recent = emptyList(),
+                        favorites = emptyList(),
+                        shortcutSlots = listOf("maps", "charm_tables", "quests", null),
+                        onShortcut = {},
+                        onFavorites = {},
+                        onEntity = { _, _ -> }
+                    )
+                }
+            }
+        }
+
+        val maps = rule.onNodeWithTag("home-shortcut-maps").fetchSemanticsNode().boundsInRoot
+        val charms = rule.onNodeWithTag("home-shortcut-charm_tables").fetchSemanticsNode().boundsInRoot
+        val quests = rule.onNodeWithTag("home-shortcut-quests").fetchSemanticsNode().boundsInRoot
+        assertTrue(maps.top == charms.top)
+        assertTrue(quests.top > maps.top)
+        rule.onNodeWithTag("home-shortcut-large_monsters").assertDoesNotExist()
     }
 }

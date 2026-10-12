@@ -49,6 +49,27 @@ class InactivityScreenSaverLogicTest {
     }
 
     @Test
+    fun retainedDurationMigratesLegacyStateAndActiveValueWinsOverStaleRetainedValue() {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val preferences = context.getSharedPreferences("oled-screen-saver-migration-test", Context.MODE_PRIVATE)
+        preferences.edit().clear().commit()
+
+        assertEquals(1, readOledScreenSaverLastDurationMinutes(preferences))
+        assertEquals(1, preferences.getInt(OLED_SCREEN_SAVER_LAST_DURATION_KEY, -1))
+
+        preferences.edit()
+            .putInt(OLED_SCREEN_SAVER_TIMEOUT_KEY, 5)
+            .putInt(OLED_SCREEN_SAVER_LAST_DURATION_KEY, 15)
+            .commit()
+        assertEquals(5, readOledScreenSaverLastDurationMinutes(preferences))
+        assertEquals(5, preferences.getInt(OLED_SCREEN_SAVER_LAST_DURATION_KEY, -1))
+
+        preferences.edit().putInt(OLED_SCREEN_SAVER_TIMEOUT_KEY, 0).commit()
+        assertEquals(5, readOledScreenSaverLastDurationMinutes(preferences))
+        preferences.edit().clear().commit()
+    }
+
+    @Test
     fun offNeverActivatesAndActivityRestartsOnlyOnePendingTimeout() = runTest {
         val off = newController(backgroundScope, 0)
         off.onForegroundResumed()

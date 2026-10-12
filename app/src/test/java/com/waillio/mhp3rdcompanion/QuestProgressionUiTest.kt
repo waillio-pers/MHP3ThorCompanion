@@ -6,6 +6,7 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.semantics.SemanticsActions
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Rule
 import org.junit.Test
@@ -59,7 +60,7 @@ class QuestProgressionUiTest {
         rule.onNodeWithTag("quest-progression-summary").assertIsDisplayed()
         assertFalse(rule.onNodeWithTag("quest-progression-urgent-summary").fetchSemanticsNode().config.contains(SemanticsActions.OnClick))
         rule.onNodeWithTag("quest-list").performScrollToNode(hasTestTag("quest-row-quest_guild_6_star_20"))
-        rule.onNodeWithText("Unlock: complete Water Flow Island Storm!").assertIsDisplayed()
+        rule.onNodeWithText("To unlock this quest: complete Water Flow Island Storm!").assertIsDisplayed()
     }
 
     @Test
@@ -89,6 +90,16 @@ class QuestProgressionUiTest {
         if (rank != null) rule.onNodeWithTag("quest-filter-rank-$rank").performClick()
         rule.onNodeWithTag("quest-filter-star-$star").performClick()
         rule.onNodeWithTag("quest-filter-apply").performClick()
+    }
+}
+
+class QuestOutlineStyleTest {
+    @Test
+    fun ordinaryKeyPrerequisiteAndCombinedRolesHaveStableOutlinePriority() {
+        assertEquals(QuestOutlineStyle.NONE, questOutlineStyle(isKeyQuest = false, isPrerequisiteOnly = false))
+        assertEquals(QuestOutlineStyle.KEY_SOLID, questOutlineStyle(isKeyQuest = true, isPrerequisiteOnly = false))
+        assertEquals(QuestOutlineStyle.PREREQUISITE_DASHED, questOutlineStyle(isKeyQuest = false, isPrerequisiteOnly = true))
+        assertEquals(QuestOutlineStyle.KEY_SOLID, questOutlineStyle(isKeyQuest = true, isPrerequisiteOnly = true))
     }
 }
 

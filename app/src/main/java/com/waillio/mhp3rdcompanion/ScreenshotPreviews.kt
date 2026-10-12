@@ -78,9 +78,7 @@ private fun HomeScreenshotPreview() {
                 data = previewFixture,
                 recent = listOf(RecentEntry(ReferenceEntityType.MONSTER, "zinogre", 2), RecentEntry(ReferenceEntityType.MATERIAL, "zinogre_claw", 1)),
                 favorites = listOf(FavoriteEntry(ReferenceEntityType.MONSTER, "zinogre", 1)),
-                onMaterials = {},
-                onMonsters = {},
-                onMaps = {},
+                onShortcut = {},
                 onFavorites = {},
                 onEntity = { _, _ -> },
             )

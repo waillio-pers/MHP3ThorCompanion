@@ -15,6 +15,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
@@ -33,6 +34,7 @@ class MainActivity : ComponentActivity() {
             scope = lifecycleScope,
             initialTimeoutMinutes = readOledScreenSaverTimeoutMinutes(preferences)
         )
+        readOledScreenSaverLastDurationMinutes(preferences)
         enableEdgeToEdge()
         WindowCompat.setDecorFitsSystemWindows(window, false)
         enterImmersiveMode()
@@ -53,6 +55,12 @@ class MainActivity : ComponentActivity() {
             val screenSaverTimeoutMinutes = remember {
                 mutableIntStateOf(readOledScreenSaverTimeoutMinutes(preferences))
             }
+            val screenSaverLastDurationMinutes = remember {
+                mutableIntStateOf(readOledScreenSaverLastDurationMinutes(preferences))
+            }
+            val homeShortcutSlots = remember {
+                mutableStateOf(readHomeShortcutSlots(preferences))
+            }
             val screenSaverActive by screenSaverController.saverActive.collectAsStateWithLifecycle()
             val platformDensity = LocalDensity.current
             val uiScale = uiScaleFromStep(scaleStep.intValue)
@@ -71,12 +79,20 @@ class MainActivity : ComponentActivity() {
                                 CompanionApp(
                                     viewModel = viewModel,
                                     uiScaleStep = scaleStep.intValue,
+                                    homeShortcutSlots = homeShortcutSlots.value,
+                                    screenSaverLastDurationMinutes = screenSaverLastDurationMinutes.intValue,
+                                    onHomeShortcutSlotsChange = { slots ->
+                                        val safeSlots = normalizeHomeShortcutSlots(slots)
+                                        homeShortcutSlots.value = safeSlots
+                                        persistHomeShortcutSlots(preferences, safeSlots)
+                                    },
                                     fieldGuideSwipeEnabled = fieldGuideSwipeEnabled.value,
                                     screenSaverTimeoutMinutes = screenSaverTimeoutMinutes.intValue,
                                     onScreenSaverTimeoutMinutesChange = { minutes ->
                                         val safeMinutes = normalizeOledScreenSaverTimeoutMinutes(minutes)
                                         screenSaverTimeoutMinutes.intValue = safeMinutes
                                         persistOledScreenSaverTimeoutMinutes(preferences, safeMinutes)
+                                        if (safeMinutes > 0) screenSaverLastDurationMinutes.intValue = safeMinutes
                                         screenSaverController.setTimeoutMinutes(safeMinutes)
                                     },
                                     onFieldGuideSwipeEnabledChange = { enabled ->

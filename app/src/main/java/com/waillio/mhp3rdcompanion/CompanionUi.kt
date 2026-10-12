@@ -12,14 +12,13 @@ import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.detectVerticalDragGestures
-import androidx.compose.foundation.gestures.awaitEachGesture
-import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -35,6 +34,8 @@ import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.relocation.BringIntoViewRequester
 import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -57,6 +58,12 @@ import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.CompositingStrategy
+import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.Outline
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
@@ -66,9 +73,8 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.input.pointer.PointerEventPass
-import androidx.compose.ui.input.pointer.positionChange
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalConfiguration
@@ -110,6 +116,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.waillio.mhp3rdcompanion.data.*
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.collect
 import kotlin.math.roundToInt
 
 internal object Routes {
@@ -143,23 +151,12 @@ internal object Routes {
 
 internal enum class QuestCategoryFilter { ALL, VILLAGE, GUILD, HOT_SPRING, DRINK, EVENT }
 
-/** Presentation-only Field Guide order. The All chip is rendered immediately before this list. */
-internal val fieldGuideCategoryOrder: List<EntityType?> = listOf(
-    null,
-    EntityType.MONSTER,
-    EntityType.SMALL_MONSTER,
-    EntityType.MATERIAL,
-    EntityType.MAP,
-    EntityType.WEAPON,
-    EntityType.SKILL,
-    EntityType.QUEST,
-    EntityType.TRAINING
-)
-
-internal data class FieldGuideSectionDestination(val category: EntityType?)
+internal data class FieldGuideSectionDestination(val page: FieldGuideRootPage) {
+    val category: EntityType? get() = page.entityType
+}
 
 /** Positive direction advances right in the canonical selector; negative moves left. */
-internal fun adjacentFieldGuideSection(current: EntityType?, direction: Int): FieldGuideSectionDestination? {
+internal fun adjacentFieldGuideSection(current: FieldGuideRootPage, direction: Int): FieldGuideSectionDestination? {
     if (direction != -1 && direction != 1) return null
     val currentIndex = fieldGuideCategoryOrder.indexOf(current)
     if (currentIndex < 0) return null
@@ -168,14 +165,11 @@ internal fun adjacentFieldGuideSection(current: EntityType?, direction: Int): Fi
     return FieldGuideSectionDestination(fieldGuideCategoryOrder[nextIndex])
 }
 
-internal fun fieldGuideSwipeAllowed(enabled: Boolean, category: EntityType?): Boolean =
-    enabled && category != EntityType.WEAPON
-
-internal fun fieldGuideSwipeDirection(deltaX: Float, deltaY: Float, thresholdPx: Float): Int? {
-    if (kotlin.math.abs(deltaX) < thresholdPx) return null
-    if (kotlin.math.abs(deltaX) <= kotlin.math.abs(deltaY) * 1.5f) return null
-    return if (deltaX < 0f) 1 else -1
-}
+internal fun fieldGuideSwipeAllowed(
+    enabled: Boolean,
+    page: FieldGuideRootPage,
+    childOwnsHorizontalGesture: Boolean = false
+): Boolean = enabled && !(page == FieldGuideRootPage.WEAPONS && childOwnsHorizontalGesture)
 
 internal fun selectFieldGuideCategory(
     category: EntityType?,
@@ -267,9 +261,12 @@ internal fun CompanionApp(
     viewModel: AppViewModel,
     uiScaleStep: Int = UI_SCALE_DEFAULT_STEP,
     onUiScaleStepChange: (Int) -> Unit = {},
+    homeShortcutSlots: List<String?> = DEFAULT_HOME_SHORTCUT_SLOTS,
+    onHomeShortcutSlotsChange: (List<String?>) -> Unit = {},
     fieldGuideSwipeEnabled: Boolean = false,
     onFieldGuideSwipeEnabledChange: (Boolean) -> Unit = {},
     screenSaverTimeoutMinutes: Int = 0,
+    screenSaverLastDurationMinutes: Int = 1,
     onScreenSaverTimeoutMinutesChange: (Int) -> Unit = {}
 ) {
     val nav = rememberNavController()
@@ -309,6 +306,7 @@ internal fun CompanionApp(
     val smallMonsterRewardContexts = remember { mutableStateMapOf<String, SmallMonsterRewardContext>() }
     var showSettings by rememberSaveable { mutableStateOf(false) }
     var showAbout by rememberSaveable { mutableStateOf(false) }
+    var charmTablesRootSelected by rememberSaveable { mutableStateOf(false) }
 
     Box(Modifier.fillMaxSize()) {
     AppShell(
@@ -332,6 +330,7 @@ internal fun CompanionApp(
         },
         onOpenSettings = { showSettings = true },
         onMainNavigate = { route ->
+            charmTablesRootSelected = false
             viewModel.setQuery("")
             viewModel.setFilter(if (route == Routes.SEARCH) EntityType.MONSTER else null)
             scope.launch {
@@ -368,18 +367,13 @@ internal fun CompanionApp(
                     weaponRepository = viewModel.weaponRepository,
                     recent = state.recent,
                     favorites = state.favorites,
-                    onCharmTables = { nav.navigate(Routes.CHARM_TABLES) },
-                    onMaterials = {
-                        viewModel.setFilter(EntityType.MATERIAL)
-                        nav.navigate(Routes.SEARCH)
-                    },
-                    onMonsters = {
-                        viewModel.setFilter(EntityType.MONSTER)
-                        nav.navigate(Routes.SEARCH)
-                    },
-                    onMaps = {
-                        viewModel.setFilter(EntityType.MAP)
-                        nav.navigate(Routes.SEARCH)
+                    shortcutSlots = homeShortcutSlots,
+                    onShortcut = { page ->
+                        charmTablesRootSelected = page == FieldGuideRootPage.CHARM_TABLES
+                        viewModel.setQuery("")
+                        viewModel.setFilter(page.entityType)
+                        if (page == FieldGuideRootPage.WEAPONS) viewModel.weaponScreenState.selectedType = null
+                        nav.navigate(Routes.SEARCH) { launchSingleTop = true }
                     },
                     onFavorites = { nav.navigate(Routes.FAVORITES) },
                     onEntity = { type, id ->
@@ -423,6 +417,39 @@ internal fun CompanionApp(
                     onMaterial = { nav.navigate(Routes.material(it)) },
                     displayTerminology = viewModel.fixture.displayTerminology,
                     fieldGuideSwipeEnabled = fieldGuideSwipeEnabled,
+                    selectedCharmTablesRoot = charmTablesRootSelected,
+                    onFieldGuidePageSelected = { page ->
+                        charmTablesRootSelected = page == FieldGuideRootPage.CHARM_TABLES
+                        if (page == FieldGuideRootPage.CHARM_TABLES) {
+                            viewModel.setQuery("")
+                        } else if (page == FieldGuideRootPage.ALL) {
+                            viewModel.setFilter(null)
+                        } else {
+                            selectFieldGuideCategory(
+                                page.entityType ?: return@SearchScreen,
+                                state.query.isBlank(),
+                                onFilter = viewModel::setFilter,
+                                onWeapons = {
+                                    viewModel.setQuery("")
+                                    viewModel.setFilter(EntityType.WEAPON)
+                                    viewModel.weaponScreenState.selectedType = null
+                                }
+                            )
+                        }
+                    },
+                    charmTablesContent = {
+                        val charmIndex by viewModel.charmIndex.collectAsStateWithLifecycle()
+                        val charmLoadFailed by viewModel.charmLoadFailed.collectAsStateWithLifecycle()
+                        CharmTablesScreen(
+                            index = charmIndex,
+                            skillTrees = viewModel.fixture.skillTrees,
+                            currentTable = state.currentCharmTable,
+                            loadingFailed = charmLoadFailed,
+                            identifyWorkingState = state.charmIdentifyWorkingState,
+                            onUpdateIdentifyWorkingState = viewModel::updateCharmIdentifyWorkingState,
+                            onSaveCurrentTable = viewModel::setCurrentCharmTable
+                        )
+                    },
                     questProgression = viewModel.questProgression,
                     keyQuestsOnly = keyQuestsOnly,
                     onKeyQuestsOnly = { keyQuestsOnly = it },
@@ -436,6 +463,7 @@ internal fun CompanionApp(
                         scope.launch { questListState.scrollToItem(0) }
                     },
                     onFilter = { filter ->
+                        charmTablesRootSelected = false
                         pendingSkillFocusId = null
                         expandedSkillTreeId = null
                         viewModel.setFilter(filter)
@@ -752,7 +780,10 @@ internal fun CompanionApp(
             fieldGuideSwipeEnabled = fieldGuideSwipeEnabled,
             onFieldGuideSwipeEnabledChange = onFieldGuideSwipeEnabledChange,
             screenSaverTimeoutMinutes = screenSaverTimeoutMinutes,
+            screenSaverLastDurationMinutes = screenSaverLastDurationMinutes,
             onScreenSaverTimeoutMinutesChange = onScreenSaverTimeoutMinutesChange,
+            homeShortcutSlots = homeShortcutSlots,
+            onHomeShortcutSlotsChange = onHomeShortcutSlotsChange,
             onDismiss = { showSettings = false },
             onAbout = {
                 showSettings = false
@@ -919,13 +950,17 @@ private fun SettingsButton(onOpenSettings: () -> Unit, modifier: Modifier = Modi
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 internal fun UiSettingsDialog(
     uiScaleStep: Int,
     onScaleStepChange: (Int) -> Unit,
+    homeShortcutSlots: List<String?>,
+    onHomeShortcutSlotsChange: (List<String?>) -> Unit,
     fieldGuideSwipeEnabled: Boolean,
     onFieldGuideSwipeEnabledChange: (Boolean) -> Unit,
     screenSaverTimeoutMinutes: Int,
+    screenSaverLastDurationMinutes: Int,
     onScreenSaverTimeoutMinutesChange: (Int) -> Unit,
     onDismiss: () -> Unit,
     onAbout: () -> Unit
@@ -937,7 +972,8 @@ internal fun UiSettingsDialog(
     val percentage = 80 + scaleStep * 5
     val scaleLabel = "${percentage / 100}.${(percentage % 100).toString().padStart(2, '0')}"
     val compactPortrait = LocalAppWindowLayout.current.profile == AppLayoutProfile.COMPACT_PORTRAIT
-    var showScreenSaverOptions by remember { mutableStateOf(false) }
+    var expandedShortcutSlot by remember { mutableIntStateOf(-1) }
+    val normalizedShortcutSlots = remember(homeShortcutSlots) { normalizeHomeShortcutSlots(homeShortcutSlots) }
 
     BackHandler(onBack = onDismiss)
     BoxWithConstraints(
@@ -968,7 +1004,7 @@ internal fun UiSettingsDialog(
             border = BorderStroke(2.dp, AppColors.Gold.copy(alpha = .8f)),
             shadowElevation = 12.dp
         ) {
-            Column(Modifier.verticalScroll(rememberScrollState()).padding(horizontal = 22.dp, vertical = 18.dp)) {
+            Column(Modifier.verticalScroll(rememberScrollState()).testTag("settings-content").padding(horizontal = 22.dp, vertical = 18.dp)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(Icons.Default.Settings, null, tint = AppColors.Crimson)
                     Text(
@@ -1024,6 +1060,75 @@ internal fun UiSettingsDialog(
                     Text("0.80", style = AppType.Metadata, color = AppColors.Ink.copy(alpha = .72f))
                     Text("1.10", style = AppType.Metadata, color = AppColors.Ink.copy(alpha = .72f))
                 }
+                Text(
+                    "Customize Home shortcuts",
+                    modifier = Modifier.padding(top = 14.dp),
+                    style = AppType.CardTitle,
+                    color = AppColors.Ink
+                )
+                Text(
+                    "Choose up to 4 shortcuts to show on Home.",
+                    modifier = Modifier.padding(top = 3.dp, bottom = 7.dp),
+                    style = AppType.Metadata,
+                    color = AppColors.Ink.copy(alpha = .72f)
+                )
+                repeat(HOME_SHORTCUT_SLOT_COUNT) { slotIndex ->
+                    val selectedId = normalizedShortcutSlots[slotIndex]
+                    val selectedPage = fieldGuideShortcutChoices.firstOrNull { it.id == selectedId }
+                    Row(
+                        Modifier.fillMaxWidth().padding(vertical = 3.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text("Slot ${slotIndex + 1}", Modifier.width(58.dp), style = AppType.Metadata, color = AppColors.Ink)
+                        Box(Modifier.weight(1f)) {
+                            OutlinedButton(
+                                onClick = { expandedShortcutSlot = slotIndex },
+                                modifier = Modifier.fillMaxWidth().testTag("home-shortcut-slot-${slotIndex + 1}"),
+                                shape = AppDimens.ButtonShape,
+                                border = BorderStroke(1.dp, AppColors.ParchmentDeep),
+                                contentPadding = PaddingValues(horizontal = 10.dp, vertical = 6.dp)
+                            ) {
+                                Text(selectedPage?.displayLabel() ?: "None", color = AppColors.Ink, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                                Spacer(Modifier.weight(1f))
+                                Icon(Icons.Default.ExpandMore, null, tint = AppColors.Crimson, modifier = Modifier.size(18.dp))
+                            }
+                            DropdownMenu(
+                                expanded = expandedShortcutSlot == slotIndex,
+                                onDismissRequest = { expandedShortcutSlot = -1 },
+                                modifier = Modifier.heightIn(max = 360.dp)
+                            ) {
+                                DropdownMenuItem(
+                                    text = { Text("None") },
+                                    onClick = {
+                                        onHomeShortcutSlotsChange(selectHomeShortcut(normalizedShortcutSlots, slotIndex, null))
+                                        expandedShortcutSlot = -1
+                                    },
+                                    modifier = Modifier.testTag("home-shortcut-option-${slotIndex + 1}-none")
+                                )
+                                fieldGuideShortcutChoices.forEach { page ->
+                                    val usedInOtherSlot = normalizedShortcutSlots.indices.any {
+                                        it != slotIndex && normalizedShortcutSlots[it] == page.id
+                                    }
+                                    DropdownMenuItem(
+                                        text = {
+                                            Text(
+                                                if (usedInOtherSlot) "${page.displayLabel()} · already in another slot" else page.displayLabel(),
+                                                maxLines = 1,
+                                                overflow = TextOverflow.Ellipsis
+                                            )
+                                        },
+                                        enabled = !usedInOtherSlot,
+                                        onClick = {
+                                            onHomeShortcutSlotsChange(selectHomeShortcut(normalizedShortcutSlots, slotIndex, page.id))
+                                            expandedShortcutSlot = -1
+                                        },
+                                        modifier = Modifier.testTag("home-shortcut-option-${slotIndex + 1}-${page.id}")
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
                 Row(
                     Modifier.fillMaxWidth().padding(top = 10.dp),
                     verticalAlignment = Alignment.CenterVertically
@@ -1062,11 +1167,55 @@ internal fun UiSettingsDialog(
                             color = AppColors.Ink.copy(alpha = .72f)
                         )
                     }
-                    OutlinedButton(
-                        onClick = { showScreenSaverOptions = true },
-                        modifier = Modifier.testTag("oled-screen-saver-setting")
+                    Switch(
+                        checked = screenSaverTimeoutMinutes > 0,
+                        onCheckedChange = { enabled ->
+                            onScreenSaverTimeoutMinutesChange(
+                                if (enabled) normalizeOledScreenSaverTimeoutMinutes(screenSaverLastDurationMinutes).takeIf { it > 0 } ?: 1
+                                else 0
+                            )
+                        },
+                        modifier = Modifier.testTag("oled-screen-saver-toggle"),
+                        colors = SwitchDefaults.colors(
+                            checkedThumbColor = AppColors.Parchment,
+                            checkedTrackColor = AppColors.Crimson,
+                            uncheckedThumbColor = AppColors.Parchment,
+                            uncheckedTrackColor = AppColors.Ink.copy(alpha = .35f)
+                        )
+                    )
+                }
+                if (screenSaverTimeoutMinutes > 0) {
+                    Text(
+                        "Turn off after",
+                        modifier = Modifier.padding(top = 4.dp, bottom = 4.dp),
+                        style = AppType.Metadata,
+                        color = AppColors.Ink.copy(alpha = .72f)
+                    )
+                    FlowRow(
+                        horizontalArrangement = Arrangement.spacedBy(5.dp),
+                        verticalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
-                        Text(oledScreenSaverTimeoutLabel(screenSaverTimeoutMinutes), color = AppColors.Ink)
+                        OLED_SCREEN_SAVER_TIMEOUT_OPTIONS.filter { it > 0 }.forEach { minutes ->
+                            FilterChip(
+                                selected = screenSaverTimeoutMinutes == minutes,
+                                onClick = { onScreenSaverTimeoutMinutesChange(minutes) },
+                                label = { Text(oledScreenSaverTimeoutLabel(minutes), style = AppType.Metadata, maxLines = 1) },
+                                modifier = Modifier.testTag("oled-screen-saver-duration-$minutes"),
+                                shape = AppDimens.ButtonShape,
+                                colors = FilterChipDefaults.filterChipColors(
+                                    selectedContainerColor = AppColors.Crimson,
+                                    selectedLabelColor = AppColors.Parchment,
+                                    containerColor = AppColors.ParchmentDeep.copy(alpha = .35f),
+                                    labelColor = AppColors.Ink
+                                ),
+                                border = FilterChipDefaults.filterChipBorder(
+                                    enabled = true,
+                                    selected = screenSaverTimeoutMinutes == minutes,
+                                    borderColor = AppColors.ParchmentDeep,
+                                    selectedBorderColor = AppColors.Crimson
+                                )
+                            )
+                        }
                     }
                 }
                 Row(
@@ -1092,16 +1241,6 @@ internal fun UiSettingsDialog(
             }
         }
     }
-    if (showScreenSaverOptions) {
-        OledScreenSaverTimeoutDialog(
-            selectedMinutes = screenSaverTimeoutMinutes,
-            onSelect = {
-                onScreenSaverTimeoutMinutesChange(it)
-                showScreenSaverOptions = false
-            },
-            onDismiss = { showScreenSaverOptions = false }
-        )
-    }
 }
 
 @Composable
@@ -1112,53 +1251,6 @@ private fun oledScreenSaverTimeoutLabel(minutes: Int): String = when (normalizeO
     10 -> stringResource(R.string.settings_oled_screen_saver_10_minutes)
     15 -> stringResource(R.string.settings_oled_screen_saver_15_minutes)
     else -> stringResource(R.string.settings_oled_screen_saver_off)
-}
-
-@Composable
-private fun OledScreenSaverTimeoutDialog(
-    selectedMinutes: Int,
-    onSelect: (Int) -> Unit,
-    onDismiss: () -> Unit
-) {
-    TrackedDialog(
-        onDismissRequest = onDismiss,
-        properties = DialogProperties(usePlatformDefaultWidth = false)
-    ) {
-        Surface(
-            modifier = Modifier.fillMaxWidth(.88f).widthIn(max = 420.dp),
-            shape = AppDimens.CardShape,
-            color = AppColors.Parchment,
-            contentColor = AppColors.Ink,
-            border = BorderStroke(1.dp, AppColors.Gold)
-        ) {
-            Column(Modifier.padding(horizontal = 18.dp, vertical = 14.dp)) {
-                Text(
-                    stringResource(R.string.settings_oled_screen_saver),
-                    style = AppType.SectionTitle,
-                    color = AppColors.Ink
-                )
-                OLED_SCREEN_SAVER_TIMEOUT_OPTIONS.forEach { minutes ->
-                    val label = oledScreenSaverTimeoutLabel(minutes)
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .testTag("oled-screen-saver-option-$minutes")
-                            .clickable { onSelect(minutes) }
-                            .padding(vertical = 4.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        RadioButton(
-                            selected = normalizeOledScreenSaverTimeoutMinutes(selectedMinutes) == minutes,
-                            onClick = { onSelect(minutes) },
-                            modifier = Modifier.testTag("oled-screen-saver-radio-$minutes"),
-                            colors = RadioButtonDefaults.colors(selectedColor = AppColors.Crimson)
-                        )
-                        Text(label, style = AppType.Body, color = AppColors.Ink)
-                    }
-                }
-            }
-        }
-    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -1256,10 +1348,8 @@ internal fun HomeScreen(
     weaponRepository: WeaponRepository? = null,
     recent: List<RecentEntry>,
     favorites: List<FavoriteEntry>,
-    onMaterials: () -> Unit,
-    onMonsters: () -> Unit,
-    onMaps: () -> Unit,
-    onCharmTables: () -> Unit = {},
+    shortcutSlots: List<String?> = DEFAULT_HOME_SHORTCUT_SLOTS,
+    onShortcut: (FieldGuideRootPage) -> Unit,
     onFavorites: () -> Unit,
     onEntity: (ReferenceEntityType, String) -> Unit
 ) {
@@ -1268,7 +1358,12 @@ internal fun HomeScreen(
         val configuration = LocalConfiguration.current
         val view = LocalView.current
         val compactPortrait = LocalAppWindowLayout.current.profile == AppLayoutProfile.COMPACT_PORTRAIT
-        val categoryHeight = 42.dp
+        val categoryHeight = if (compactPortrait) 48.dp else 42.dp
+        val shortcutPages = remember(shortcutSlots) {
+            normalizeHomeShortcutSlots(shortcutSlots).filterNotNull().mapNotNull { id ->
+                fieldGuideShortcutChoices.firstOrNull { it.id == id }
+            }
+        }
         LaunchedEffect(maxWidth, maxHeight, view.width, view.height) {
             if (BuildConfig.DEBUG) {
                 Log.d(
@@ -1287,23 +1382,30 @@ internal fun HomeScreen(
                 .padding(horizontal = 10.dp, vertical = 7.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            if (compactPortrait) {
-                Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(7.dp)) {
-                        CategoryButton(R.string.category_monsters, Icons.Default.Pets, AppColors.Steel, categoryHeight, Modifier.weight(1f).testTag("category-monsters"), onMonsters)
-                        CategoryButton(R.string.category_materials, Icons.Default.Inventory2, AppColors.Moss, categoryHeight, Modifier.weight(1f).testTag("category-materials"), onMaterials)
-                    }
-                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(7.dp)) {
-                        CategoryButton(R.string.category_maps, Icons.Default.Map, AppColors.Crimson, categoryHeight, Modifier.weight(1f).testTag("category-maps"), onMaps)
-                        CategoryButton(R.string.category_charm_tables, Icons.Default.Casino, AppColors.Crimson, categoryHeight, Modifier.weight(1f).testTag("category-charm-tables"), onCharmTables)
-                    }
+            if (shortcutPages.isNotEmpty()) {
+                val columns = if (compactPortrait) {
+                    if (shortcutPages.size > 1) 2 else 1
+                } else {
+                    shortcutPages.size.coerceAtLeast(1)
                 }
-            } else {
-                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(7.dp)) {
-                    CategoryButton(R.string.category_monsters, Icons.Default.Pets, AppColors.Steel, categoryHeight, Modifier.weight(1f).testTag("category-monsters"), onMonsters)
-                    CategoryButton(R.string.category_materials, Icons.Default.Inventory2, AppColors.Moss, categoryHeight, Modifier.weight(1f).testTag("category-materials"), onMaterials)
-                    CategoryButton(R.string.category_maps, Icons.Default.Map, AppColors.Crimson, categoryHeight, Modifier.weight(1f).testTag("category-maps"), onMaps)
-                    CategoryButton(R.string.category_charm_tables, Icons.Default.Casino, AppColors.Crimson, categoryHeight, Modifier.weight(1f).testTag("category-charm-tables"), onCharmTables)
+                Column(
+                    Modifier.fillMaxWidth().testTag("home-shortcuts"),
+                    verticalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
+                    shortcutPages.chunked(columns.coerceAtLeast(1)).forEach { rowPages ->
+                        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(7.dp)) {
+                            rowPages.forEach { page ->
+                                CategoryButton(
+                                    title = page.displayLabel(),
+                                    icon = page.shortcutIcon(),
+                                    color = page.accentColor(),
+                                    height = categoryHeight,
+                                    modifier = Modifier.weight(1f).testTag("home-shortcut-${page.id}"),
+                                    onClick = { onShortcut(page) }
+                                )
+                            }
+                        }
+                    }
                 }
             }
             ReferenceSection(
@@ -1317,7 +1419,7 @@ internal fun HomeScreen(
             )
             ReferenceSection(
                 title = stringResource(R.string.recently_opened),
-                entries = recent.mapNotNull { data.resolveReference(it.type, it.entityId, weaponRepository) },
+                entries = recent.take(6).mapNotNull { data.resolveReference(it.type, it.entityId, weaponRepository) },
                 emptyText = stringResource(R.string.recent_empty),
                 modifier = Modifier.testTag("recently-opened-card"),
                 accent = AppColors.Steel,
@@ -1334,79 +1436,45 @@ internal fun fieldGuideScrollPosition(canScrollBackward: Boolean, canScrollForwa
     else -> "no overflow"
 }
 
-internal fun Modifier.fieldGuideSectionSwipeInput(
-    enabled: Boolean,
-    onNavigate: (direction: Int) -> Unit
-): Modifier = if (!enabled) this else pointerInput(onNavigate) {
-    val thresholdPx = 56.dp.toPx()
-    awaitEachGesture {
-        val down = awaitFirstDown(requireUnconsumed = false)
-        var totalDelta = Offset.Zero
-        var childConsumedMovement = false
-        var parentClaimedGesture = false
-        while (true) {
-            val event = awaitPointerEvent(PointerEventPass.Final)
-            val change = event.changes.firstOrNull { it.id == down.id } ?: break
-            val movement = change.positionChange()
-            if (movement != Offset.Zero && change.isConsumed) childConsumedMovement = true
-            totalDelta += movement
-            val direction = fieldGuideSwipeDirection(totalDelta.x, totalDelta.y, thresholdPx)
-            if (!childConsumedMovement && direction != null) {
-                parentClaimedGesture = true
-                change.consume()
-            } else if (parentClaimedGesture && change.pressed) {
-                change.consume()
-            }
-            if (!change.pressed) break
-        }
-        if (!childConsumedMovement) {
-            fieldGuideSwipeDirection(totalDelta.x, totalDelta.y, thresholdPx)?.let(onNavigate)
-        }
-    }
-}
-
 @Composable
 internal fun FieldGuideCategorySelector(
-    filter: EntityType?,
-    hasBlankQuery: Boolean,
-    onFilter: (EntityType?) -> Unit,
-    onWeapons: () -> Unit
+    selectedPage: FieldGuideRootPage,
+    onSelectPage: (FieldGuideRootPage) -> Unit
 ) {
     val scrollState = rememberScrollState()
     val chipRequesters = remember { List(fieldGuideCategoryOrder.size) { BringIntoViewRequester() } }
     val edgeState = fieldGuideScrollPosition(scrollState.canScrollBackward, scrollState.canScrollForward)
-    val selectedIndex = fieldGuideCategoryOrder.indexOf(filter)
-    LaunchedEffect(filter) {
+    val selectedIndex = fieldGuideCategoryOrder.indexOf(selectedPage)
+    LaunchedEffect(selectedPage) {
         if (selectedIndex >= 0) chipRequesters[selectedIndex].bringIntoView()
     }
     Box(
         Modifier.fillMaxWidth().padding(vertical = 9.dp)
             .testTag("field-guide-category-strip")
             .semantics { stateDescription = edgeState }
+            .graphicsLayer { compositingStrategy = CompositingStrategy.Offscreen }
             .drawWithContent {
                 drawContent()
-                val edgeWidth = 10.dp.toPx()
+                val edgeWidth = 24.dp.toPx()
                 if (scrollState.canScrollBackward) {
                     drawRect(
                         brush = Brush.horizontalGradient(
                             0f to Color.Transparent,
-                            1f to AppColors.Night.copy(alpha = .94f),
-                            startX = 0f,
-                            endX = edgeWidth
+                            1f to Color.White
                         ),
-                        size = Size(edgeWidth, size.height)
+                        size = Size(edgeWidth, size.height),
+                        blendMode = BlendMode.DstIn
                     )
                 }
                 if (scrollState.canScrollForward) {
                     drawRect(
                         brush = Brush.horizontalGradient(
-                            0f to AppColors.Night.copy(alpha = .94f),
-                            1f to Color.Transparent,
-                            startX = size.width - edgeWidth,
-                            endX = size.width
+                            0f to Color.White,
+                            1f to Color.Transparent
                         ),
                         topLeft = Offset(size.width - edgeWidth, 0f),
-                        size = Size(edgeWidth, size.height)
+                        size = Size(edgeWidth, size.height),
+                        blendMode = BlendMode.DstIn
                     )
                 }
             }
@@ -1416,27 +1484,29 @@ internal fun FieldGuideCategorySelector(
             horizontalArrangement = Arrangement.spacedBy(2.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            fieldGuideCategoryOrder.forEachIndexed { index, type ->
+            fieldGuideCategoryOrder.forEachIndexed { index, page ->
                 val chipModifier = Modifier.bringIntoViewRequester(chipRequesters[index])
-                if (type == null) {
-                    CompactFilter(stringResource(R.string.filter_all), filter == null, chipModifier.testTag("field-filter-all")) { onFilter(null) }
-                } else {
-                    CompactFilter(
-                        type.localizedTitle(),
-                        filter == type,
-                        chipModifier.testTag(if (type == EntityType.WEAPON) "field-filter-weapons" else "field-filter-${type.name.lowercase()}")
-                    ) {
-                        selectFieldGuideCategory(type, hasBlankQuery, onFilter, onWeapons)
-                    }
-                }
+                CompactFilter(
+                    page.displayLabel(),
+                    page == selectedPage,
+                    chipModifier.testTag("field-filter-${page.selectorTagSuffix()}"),
+                    selectedColor = page.accentColor()
+                ) { onSelectPage(page) }
             }
         }
     }
 }
 
+private fun FieldGuideRootPage.selectorTagSuffix(): String = when (this) {
+    FieldGuideRootPage.ALL -> "all"
+    FieldGuideRootPage.CHARM_TABLES -> id
+    FieldGuideRootPage.WEAPONS -> "weapons"
+    else -> requireNotNull(entityType).name.lowercase()
+}
+
 @Composable
 private fun CategoryButton(
-    @StringRes titleRes: Int,
+    title: String,
     icon: ImageVector,
     color: Color,
     height: androidx.compose.ui.unit.Dp,
@@ -1457,9 +1527,39 @@ private fun CategoryButton(
         ) {
             Icon(icon, null, tint = AppColors.Gold, modifier = Modifier.size(22.dp))
             Spacer(Modifier.width(9.dp))
-            Text(stringResource(titleRes), color = AppColors.Parchment, style = AppType.ButtonLabel, maxLines = 1, softWrap = false)
+            Text(
+                title,
+                color = AppColors.Parchment,
+                style = AppType.ButtonLabel.copy(lineHeight = 16.sp),
+                maxLines = 2,
+                softWrap = true
+            )
         }
     }
+}
+
+@Composable
+private fun FieldGuideRootPage.displayLabel(): String =
+    entityType?.localizedTitle() ?: stringResource(requireNotNull(labelResource))
+
+private fun FieldGuideRootPage.shortcutIcon(): ImageVector = when (this) {
+    FieldGuideRootPage.ALL -> Icons.Default.Search
+    FieldGuideRootPage.LARGE_MONSTERS -> Icons.Default.Pets
+    FieldGuideRootPage.SMALL_MONSTERS -> Icons.Default.BugReport
+    FieldGuideRootPage.ITEMS -> Icons.Default.Inventory2
+    FieldGuideRootPage.MAPS -> Icons.Default.Map
+    FieldGuideRootPage.WEAPONS -> Icons.Default.Build
+    FieldGuideRootPage.SKILLS -> Icons.Default.AutoAwesome
+    FieldGuideRootPage.QUESTS -> Icons.AutoMirrored.Filled.Assignment
+    FieldGuideRootPage.CHARM_TABLES -> Icons.Default.Casino
+    FieldGuideRootPage.TRAINING -> Icons.Default.SportsMartialArts
+}
+
+internal fun FieldGuideRootPage.accentColor(): Color = when (this) {
+    FieldGuideRootPage.LARGE_MONSTERS, FieldGuideRootPage.SMALL_MONSTERS -> AppColors.Steel
+    FieldGuideRootPage.ITEMS -> AppColors.Moss
+    FieldGuideRootPage.CHARM_TABLES -> AppColors.Plum
+    else -> AppColors.Crimson
 }
 
 private data class ResolvedReference(
@@ -1586,6 +1686,7 @@ internal fun AutoFitCompactText(text: String, modifier: Modifier = Modifier) {
     )
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun SearchScreen(
     query: String,
@@ -1631,13 +1732,16 @@ internal fun SearchScreen(
     onSkillExpanded: (String?) -> Unit = {},
     onSkillFocusConsumed: () -> Unit = {},
     onMaterial: (String) -> Unit = {},
-    fieldGuideSwipeEnabled: Boolean = false
+    fieldGuideSwipeEnabled: Boolean = false,
+    selectedCharmTablesRoot: Boolean = false,
+    onFieldGuidePageSelected: ((FieldGuideRootPage) -> Unit)? = null,
+    charmTablesContent: @Composable () -> Unit = {}
 ) {
     val monstersById = remember(monsters) { monsters.associateBy { it.id } }
     val smallMonstersById = remember(smallMonsters) { smallMonsters.associateBy { it.id } }
     val weaponsById = remember(weapons) { weapons.associateBy { it.stableWeaponId } }
-    val displayResults = remember(results, smallMonsters, query, filter) {
-        if (filter == null && query.isNotBlank()) {
+    val displayResults = remember(results, smallMonsters, query) {
+        if (query.isNotBlank()) {
             val smallMonsterResults = filterSmallMonsters(smallMonsters, query).map { monster ->
                 SearchResult(
                     monster.id,
@@ -1649,24 +1753,48 @@ internal fun SearchScreen(
             results.filterNot { it.type == EntityType.SMALL_MONSTER } + smallMonsterResults
         } else results
     }
-    val swipeAllowed = fieldGuideSwipeAllowed(fieldGuideSwipeEnabled, filter)
-    val navigateBySwipe: (Int) -> Unit = remember(filter, query, onFilter, onWeapons) {
-        { direction: Int ->
-            adjacentFieldGuideSection(filter, direction)?.let { destination ->
-                selectFieldGuideCategory(destination.category, query.isBlank(), onFilter, onWeapons)
-            }
-            Unit
+    val selectedPage = if (selectedCharmTablesRoot) FieldGuideRootPage.CHARM_TABLES else fieldGuidePageForCategory(filter)
+    val selectedPageIndex = fieldGuideCategoryOrder.indexOf(selectedPage).coerceAtLeast(0)
+    val pagerState = rememberPagerState(initialPage = selectedPageIndex) { fieldGuideCategoryOrder.size }
+    val pageSelection: (FieldGuideRootPage) -> Unit = onFieldGuidePageSelected ?: { page ->
+        if (page != FieldGuideRootPage.CHARM_TABLES) {
+            selectFieldGuideCategory(
+                page.entityType,
+                query.isBlank(),
+                onFilter = onFilter,
+                onWeapons = onWeapons
+            )
         }
     }
+    val latestPageSelection by rememberUpdatedState(pageSelection)
+    LaunchedEffect(selectedPage) {
+        val targetPage = fieldGuideCategoryOrder.indexOf(selectedPage)
+        if (targetPage >= 0 && pagerState.currentPage != targetPage) pagerState.animateScrollToPage(targetPage)
+    }
+    LaunchedEffect(pagerState) {
+        snapshotFlow { pagerState.settledPage }
+            .distinctUntilChanged()
+            .collect { index -> fieldGuideCategoryOrder.getOrNull(index)?.let(latestPageSelection) }
+    }
     Column(Modifier.fillMaxSize().padding(horizontal = AppDimens.ScreenPadding).testTag("screen-search")) {
-        FieldGuideCategorySelector(filter, query.isBlank(), onFilter, onWeapons)
-        Box(
-            Modifier.weight(1f).fillMaxWidth()
-                .testTag("field-guide-swipe-region")
-                .fieldGuideSectionSwipeInput(swipeAllowed, navigateBySwipe)
-        ) {
-            when {
-                filter == EntityType.WEAPON && query.isBlank() && weaponRepository != null -> WeaponsScreen(
+        FieldGuideCategorySelector(selectedPage, pageSelection)
+        HorizontalPager(
+            state = pagerState,
+            modifier = Modifier.weight(1f).fillMaxWidth().testTag("field-guide-pager"),
+            userScrollEnabled = fieldGuideSwipeAllowed(
+                enabled = fieldGuideSwipeEnabled,
+                page = selectedPage,
+                childOwnsHorizontalGesture = selectedPage == FieldGuideRootPage.WEAPONS && weaponScreenState?.selectedType != null
+            ),
+            key = { fieldGuideCategoryOrder[it].id }
+        ) { pageIndex ->
+            val page = fieldGuideCategoryOrder[pageIndex]
+            val pageFilter = page.entityType
+            Box(Modifier.fillMaxSize().testTag("field-guide-page-${page.id}")) {
+                if (page == FieldGuideRootPage.CHARM_TABLES) {
+                    charmTablesContent()
+                } else when {
+                pageFilter == EntityType.WEAPON && query.isBlank() && weaponRepository != null -> WeaponsScreen(
                     repository = weaponRepository,
                     screenState = weaponScreenState ?: remember { WeaponScreenState() },
                     onTypeSelected = onWeaponType,
@@ -1675,7 +1803,7 @@ internal fun SearchScreen(
                     },
                     onWeaponOpened = {}
                 )
-                filter == EntityType.MONSTER -> MonsterIndex(
+                pageFilter == EntityType.MONSTER -> MonsterIndex(
                     monsters = filterMonsters(monsters, query),
                     totalCount = monsters.size,
                     query = query,
@@ -1684,7 +1812,7 @@ internal fun SearchScreen(
                         onResult(SearchResult(monster.id, monster.name, monster.subtitle, EntityType.MONSTER))
                     }
                 )
-                filter == EntityType.SMALL_MONSTER -> SmallMonsterIndex(
+                pageFilter == EntityType.SMALL_MONSTER -> SmallMonsterIndex(
                     smallMonsters = filterSmallMonsters(smallMonsters, query),
                     totalCount = smallMonsters.size,
                     query = query,
@@ -1693,14 +1821,14 @@ internal fun SearchScreen(
                         onResult(SearchResult(monster.id, monster.name, monster.monsterClass, EntityType.SMALL_MONSTER))
                     }
                 )
-                filter == EntityType.MATERIAL -> ItemIndex(
+                pageFilter == EntityType.MATERIAL -> ItemIndex(
                     itemResults = displayResults.filter { it.type == EntityType.MATERIAL },
                     totalCount = results.count { it.type == EntityType.MATERIAL },
                     query = query,
                     listState = itemListState,
                     onItem = onResult
                 )
-                filter == EntityType.QUEST -> QuestBrowser(
+                pageFilter == EntityType.QUEST -> QuestBrowser(
                     quests = quests,
                     query = query,
                     selectedRank = questRankFilter,
@@ -1715,7 +1843,7 @@ internal fun SearchScreen(
                     onKeyQuestsOnly = onKeyQuestsOnly,
                     onApplyFilters = onQuestFilters
                 )
-                filter == EntityType.TRAINING -> TrainingBrowser(
+                pageFilter == EntityType.TRAINING -> TrainingBrowser(
                     trainingQuests = trainingQuests,
                     monsters = monsters,
                     smallMonsters = smallMonsters,
@@ -1725,7 +1853,7 @@ internal fun SearchScreen(
                     displayTerminology = displayTerminology,
                     onTraining = onTraining
                 )
-                filter == EntityType.SKILL -> SkillsBrowser(
+                pageFilter == EntityType.SKILL -> SkillsBrowser(
                     skills = skills,
                     query = query,
                     listState = skillListState,
@@ -1737,8 +1865,8 @@ internal fun SearchScreen(
                     materials = materials,
                     onMaterial = onMaterial
                 )
-                filter == EntityType.MAP -> MapsIndex(maps, onMap)
-                query.isBlank() && filter !in setOf(EntityType.MATERIAL, EntityType.WEAPON, EntityType.SKILL) -> EmptyState(Icons.Default.Search, stringResource(R.string.search_start_title), stringResource(R.string.search_start_body))
+                pageFilter == EntityType.MAP -> MapsIndex(maps, onMap)
+                query.isBlank() && page == FieldGuideRootPage.ALL -> EmptyState(Icons.Default.Search, stringResource(R.string.search_start_title), stringResource(R.string.search_start_body))
                 displayResults.isEmpty() -> EmptyState(Icons.Default.SearchOff, stringResource(R.string.search_empty_title), stringResource(R.string.search_empty_body))
                 else -> LazyColumn(
                     modifier = Modifier.testTag("search-results"),
@@ -1784,6 +1912,7 @@ internal fun SearchScreen(
                     }
                 }
             }
+            }
         }
     }
 }
@@ -1793,6 +1922,16 @@ private fun SkillThreshold.displayPoints(): String = if (points > 0) "+$points" 
 private fun orderedSkillThresholds(skill: SkillTree): List<SkillThreshold> =
     skill.thresholds.filter { it.points > 0 }.sortedByDescending { it.points } +
         skill.thresholds.filter { it.points < 0 }.sortedByDescending { it.points }
+
+internal fun skillsFilterVisibilityAfterScroll(
+    currentlyVisible: Boolean,
+    accumulatedDeltaPx: Float,
+    thresholdPx: Float
+): Boolean = when {
+    currentlyVisible && accumulatedDeltaPx >= thresholdPx -> false
+    !currentlyVisible && accumulatedDeltaPx <= -thresholdPx -> true
+    else -> currentlyVisible
+}
 
 @Composable
 internal fun SkillsBrowser(
@@ -1808,9 +1947,42 @@ internal fun SkillsBrowser(
     onMaterial: (String) -> Unit
 ) {
     val categories = remember { SkillCategory.values().toList() }
-    val allCategoryMask = (1 shl categories.size) - 1
-    var categoryMask by rememberSaveable { mutableIntStateOf(allCategoryMask) }
+    var categoryMask by rememberSaveable { mutableIntStateOf(0) }
     var showCategoryFilter by rememberSaveable { mutableStateOf(false) }
+    var categoryFilterVisible by rememberSaveable { mutableStateOf(true) }
+    val compactPortrait = LocalAppWindowLayout.current.profile == AppLayoutProfile.COMPACT_PORTRAIT
+    val directionThresholdPx = with(LocalDensity.current) { 56.dp.toPx() }
+    LaunchedEffect(listState, compactPortrait, directionThresholdPx) {
+        if (!compactPortrait) {
+            categoryFilterVisible = true
+            return@LaunchedEffect
+        }
+        var lastIndex = listState.firstVisibleItemIndex
+        var lastOffset = listState.firstVisibleItemScrollOffset
+        var accumulated = 0f
+        var lastDirection = 0
+        var visible = categoryFilterVisible
+        snapshotFlow { listState.firstVisibleItemIndex to listState.firstVisibleItemScrollOffset }
+            .collect { (index, offset) ->
+                val delta = when {
+                    index == lastIndex -> (offset - lastOffset).toFloat()
+                    index > lastIndex -> directionThresholdPx
+                    else -> -directionThresholdPx
+                }
+                val direction = delta.compareTo(0f)
+                if (direction != 0 && lastDirection != 0 && direction != lastDirection) accumulated = 0f
+                if (direction != 0) lastDirection = direction
+                accumulated += delta
+                val nextVisible = skillsFilterVisibilityAfterScroll(visible, accumulated, directionThresholdPx)
+                if (nextVisible != visible) {
+                    visible = nextVisible
+                    categoryFilterVisible = nextVisible
+                    accumulated = 0f
+                }
+                lastIndex = index
+                lastOffset = offset
+            }
+    }
     val selectedCategories = remember(categoryMask) {
         categories.filterIndexed { index, _ -> categoryMask and (1 shl index) != 0 }
             .mapTo(linkedSetOf()) { it.name }
@@ -1822,6 +1994,10 @@ internal fun SkillsBrowser(
                 .plus(skill.thresholds.map { it.activatedSkillName })
                 .any { value -> value.contains(q, ignoreCase = true) }
         }.sortedBy { it.displayName.lowercase() }
+    }
+    val categorySummary = remember(selectedCategories) {
+        categories.filter { it.name in selectedCategories }.joinToString(", ") { it.label }
+            .ifBlank { "Categories" }
     }
     val materialsById = remember(materials) { materials.associateBy { it.id } }
     val skillsById = remember(skills) { skills.associateBy { it.stableSkillTreeId } }
@@ -1836,10 +2012,16 @@ internal fun SkillsBrowser(
         onFocusConsumed()
     }
     Column(Modifier.fillMaxSize().testTag("skills-browser")) {
-        Row(
-            Modifier.fillMaxWidth().padding(horizontal = 2.dp, vertical = 5.dp),
-            horizontalArrangement = Arrangement.End
+        AnimatedVisibility(
+            visible = !compactPortrait || categoryFilterVisible,
+            enter = expandVertically(),
+            exit = shrinkVertically(),
+            modifier = Modifier.testTag("skills-category-filter-row")
         ) {
+            Row(
+                Modifier.fillMaxWidth().padding(horizontal = 2.dp, vertical = 5.dp),
+                horizontalArrangement = Arrangement.End
+            ) {
             OutlinedButton(
                 onClick = { showCategoryFilter = true },
                 modifier = Modifier.heightIn(min = 36.dp).testTag("skills-category-filter-button"),
@@ -1851,10 +2033,13 @@ internal fun SkillsBrowser(
                 Icon(Icons.Default.FilterList, contentDescription = null, modifier = Modifier.size(18.dp))
                 Spacer(Modifier.width(5.dp))
                 Text(
-                    if (selectedCategories.size == categories.size) "Categories" else "Categories (${selectedCategories.size})",
+                    categorySummary,
                     style = AppType.ButtonLabel,
-                    maxLines = 1
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.testTag("skills-active-categories")
                 )
+            }
             }
         }
         if (showCategoryFilter) {
@@ -1862,7 +2047,7 @@ internal fun SkillsBrowser(
                 categories = categories,
                 selectedCategories = selectedCategories,
                 onToggle = { category -> categoryMask = categoryMask xor (1 shl category.ordinal) },
-                onSelectAll = { categoryMask = allCategoryMask },
+                onClearFilters = { categoryMask = 0 },
                 onDismiss = { showCategoryFilter = false }
             )
         }
@@ -1962,7 +2147,7 @@ private fun SkillCategoryFilterDialog(
     categories: List<SkillCategory>,
     selectedCategories: Set<String>,
     onToggle: (SkillCategory) -> Unit,
-    onSelectAll: () -> Unit,
+    onClearFilters: () -> Unit,
     onDismiss: () -> Unit
 ) {
     AlertDialog(
@@ -2006,8 +2191,8 @@ private fun SkillCategoryFilterDialog(
             }
         },
         dismissButton = {
-            TextButton(onClick = onSelectAll, modifier = Modifier.testTag("skills-category-filter-all")) {
-                Text("Select all", color = AppColors.Crimson)
+            TextButton(onClick = onClearFilters, modifier = Modifier.testTag("skills-category-filter-clear")) {
+                Text("Clear filters", color = AppColors.Crimson)
             }
         },
         containerColor = AppColors.Parchment,
@@ -3508,7 +3693,13 @@ private fun EntityType.localizedTitle(): String = when (this) {
 }
 
 @Composable
-private fun CompactFilter(text: String, selected: Boolean, modifier: Modifier = Modifier, onClick: () -> Unit) {
+private fun CompactFilter(
+    text: String,
+    selected: Boolean,
+    modifier: Modifier = Modifier,
+    selectedColor: Color = AppColors.Crimson,
+    onClick: () -> Unit
+) {
     FilterChip(
         selected = selected,
         onClick = onClick,
@@ -3516,7 +3707,7 @@ private fun CompactFilter(text: String, selected: Boolean, modifier: Modifier = 
         modifier = modifier.height(36.dp),
         shape = AppDimens.ButtonShape,
         colors = FilterChipDefaults.filterChipColors(
-            selectedContainerColor = AppColors.Crimson,
+            selectedContainerColor = selectedColor,
             selectedLabelColor = Color(0xFFFFE8B0),
             containerColor = AppColors.NightRaised,
             labelColor = AppColors.Parchment
@@ -3670,7 +3861,7 @@ private fun QuestProgressionRoleBadge(role: QuestProgressionRole, questId: Strin
     }
     Surface(
         modifier = modifier.testTag("quest-role-badge-${label.lowercase()}-$questId"),
-        color = if (role == QuestProgressionRole.URGENT) AppColors.Crimson else AppColors.NightRaised,
+        color = if (role in setOf(QuestProgressionRole.KEY, QuestProgressionRole.URGENT)) AppColors.Crimson else AppColors.NightRaised,
         contentColor = AppColors.Parchment,
         shape = AppDimens.ButtonShape,
         border = BorderStroke(1.dp, AppColors.Gold.copy(alpha = .8f))
@@ -3684,6 +3875,29 @@ private fun QuestProgressionRoleBadge(role: QuestProgressionRole, questId: Strin
         )
     }
 }
+
+internal enum class QuestOutlineStyle { NONE, KEY_SOLID, PREREQUISITE_DASHED }
+
+internal fun questOutlineStyle(isKeyQuest: Boolean, isPrerequisiteOnly: Boolean): QuestOutlineStyle = when {
+    isKeyQuest -> QuestOutlineStyle.KEY_SOLID
+    isPrerequisiteOnly -> QuestOutlineStyle.PREREQUISITE_DASHED
+    else -> QuestOutlineStyle.NONE
+}
+
+private fun Modifier.questProgressionOutline(style: QuestOutlineStyle): Modifier =
+    if (style == QuestOutlineStyle.NONE) this else drawWithContent {
+        drawContent()
+        val pathEffect = if (style == QuestOutlineStyle.PREREQUISITE_DASHED) {
+            PathEffect.dashPathEffect(floatArrayOf(7.dp.toPx(), 4.dp.toPx()))
+        } else null
+        val outline = AppDimens.CardShape.createOutline(size, layoutDirection, this)
+        val path = when (outline) {
+            is Outline.Generic -> outline.path
+            is Outline.Rectangle -> Path().apply { addRect(outline.rect) }
+            is Outline.Rounded -> Path().apply { addRoundRect(outline.roundRect) }
+        }
+        drawPath(path, AppColors.Crimson, style = Stroke(width = 1.6.dp.toPx(), pathEffect = pathEffect))
+    }
 
 @Composable
 private fun QuestTargetIcons(
@@ -3718,14 +3932,31 @@ private fun QuestRow(
     val objective = displayTerminology.objectiveByStableId[quest.id]
         ?: quest.objective.takeIf { it.isNotBlank() }
     val role = progression.roleFor(quest.id)
-    ParchmentSurface(modifier.fillMaxWidth().testTag("quest-row-${quest.id}")) {
+    val isKey = quest.id in progression.keyQuestIds
+    val isPrerequisite = quest.id in progression.questIdsThatUnlockKeys
+    val outlineStyle = questOutlineStyle(isKey, isPrerequisite && !isKey)
+    ParchmentSurface(
+        modifier.fillMaxWidth()
+            .questProgressionOutline(outlineStyle)
+            .semantics { stateDescription = outlineStyle.name }
+            .testTag("quest-row-${quest.id}")
+    ) {
         Row(Modifier.padding(horizontal = 10.dp, vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
             QuestBadge(quest)
             Spacer(Modifier.width(10.dp))
             Column(Modifier.weight(1f)) {
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(5.dp)) {
-                    Text(quest.name, color = AppColors.Ink, style = AppType.CardTitle, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f))
+                    Text(
+                        quest.name,
+                        color = AppColors.Ink,
+                        style = AppType.CardTitle,
+                        maxLines = 1,
+                        softWrap = false,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = if (role == null) Modifier.weight(1f) else Modifier.widthIn(max = 240.dp)
+                    )
                     role?.let { QuestProgressionRoleBadge(it, quest.id) }
+                    if (role != null) Spacer(Modifier.weight(1f))
                 }
                 objective?.let { Text(it, color = AppColors.Ink.copy(alpha = .78f), style = AppType.Metadata, maxLines = 2, overflow = TextOverflow.Ellipsis) }
                 Text(quest.location, color = AppColors.Crimson, style = AppType.Metadata, maxLines = 1)
@@ -3738,7 +3969,8 @@ private fun QuestRow(
                 progression.prerequisiteFor(quest.id)?.let { prerequisiteQuestId ->
                     val prerequisiteQuest = questNamesById[prerequisiteQuestId]
                     if (prerequisiteQuest != null) {
-                        Text("Unlock: complete ${prerequisiteQuest.name}", color = AppColors.Ink.copy(alpha = .72f), style = AppType.Metadata, maxLines = 2, overflow = TextOverflow.Ellipsis)
+                        val ending = if (prerequisiteQuest.name.lastOrNull() in setOf('.', '!', '?')) "" else "."
+                        Text("To unlock this quest: complete ${prerequisiteQuest.name}$ending", color = AppColors.Ink.copy(alpha = .72f), style = AppType.Metadata, maxLines = 2, overflow = TextOverflow.Ellipsis)
                     }
                 }
             }
@@ -3884,8 +4116,7 @@ private fun QuestBrowser(
             QuestProgressionSummary(
                 steps = progressionSteps,
                 progression = progression,
-                questNamesById = questNamesById,
-                showGuildHighHelp = keyQuestsOnly && progressionSteps.first().scope == "GUILD_HIGH"
+                questNamesById = questNamesById
             )
         }
         if (filtered.isEmpty()) {
@@ -3922,8 +4153,7 @@ private fun QuestBrowser(
 private fun QuestProgressionSummary(
     steps: List<QuestProgressionStep>,
     progression: QuestProgressionData,
-    questNamesById: Map<String, Quest>,
-    showGuildHighHelp: Boolean
+    questNamesById: Map<String, Quest>
 ) {
     val tierStep = steps.first()
     val tierLabel = when (tierStep.scope) {
@@ -3968,11 +4198,6 @@ private fun QuestProgressionSummary(
             steps.firstOrNull { it.advancesTo != null }?.advancesTo?.let { target ->
                 Text("Advances to: $target", style = AppType.Metadata.copy(fontSize = 10.sp),
                     color = AppColors.Ink.copy(alpha = .72f), maxLines = 1, overflow = TextOverflow.Ellipsis)
-            }
-            if (showGuildHighHelp) {
-                Text(progression.multiplayerHelp.text, color = AppColors.Ink.copy(alpha = .72f),
-                    style = AppType.Metadata.copy(fontSize = 10.sp, lineHeight = 12.sp), maxLines = 3,
-                    overflow = TextOverflow.Ellipsis, modifier = Modifier.testTag("quest-guild-high-multiplayer-help"))
             }
         }
     }

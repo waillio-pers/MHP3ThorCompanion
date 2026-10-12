@@ -13,6 +13,6 @@ internal fun filterSkillTreesByCategories(
     skills: List<SkillTree>,
     selectedCategories: Set<String>
 ): List<SkillTree> {
-    if (selectedCategories.containsAll(AllSkillCategoryIds)) return skills
+    if (selectedCategories.isEmpty() || selectedCategories.containsAll(AllSkillCategoryIds)) return skills
     return skills.filter { skill -> skill.categories.any(selectedCategories::contains) }
 }

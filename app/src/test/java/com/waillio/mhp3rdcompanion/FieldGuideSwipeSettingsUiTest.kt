@@ -41,7 +41,7 @@ class FieldGuideSwipeSettingsUiTest {
 
             rule.onNodeWithTag("nav-search").performClick()
             rule.onNodeWithTag("monster-index").assertIsDisplayed()
-            rule.onNodeWithTag("field-guide-swipe-region").performTouchInput { swipeLeft() }
+            rule.onNodeWithTag("field-guide-pager").performTouchInput { swipeLeft() }
             rule.waitForIdle()
             rule.onNodeWithTag("monster-index").assertIsDisplayed()
 
@@ -50,7 +50,7 @@ class FieldGuideSwipeSettingsUiTest {
             rule.onNodeWithTag("field-guide-swipe-toggle").performClick()
             assertTrue(preferences.getBoolean(FIELD_GUIDE_SECTION_SWIPE_KEY, false))
             rule.onNodeWithTag("settings-done").performClick()
-            rule.onNodeWithTag("field-guide-swipe-region").performTouchInput { swipeLeft() }
+            rule.onNodeWithTag("field-guide-pager").performTouchInput { swipeLeft() }
             rule.waitForIdle()
             rule.onNodeWithTag("small-monster-index").assertIsDisplayed()
             rule.onNodeWithTag("field-filter-small_monster").assertIsDisplayed()
@@ -60,7 +60,7 @@ class FieldGuideSwipeSettingsUiTest {
             rule.onNodeWithTag("field-guide-swipe-toggle").performClick()
             rule.onNodeWithTag("field-guide-swipe-toggle").assertIsOff()
             rule.onNodeWithTag("settings-done").performClick()
-            rule.onNodeWithTag("field-guide-swipe-region").performTouchInput { swipeLeft() }
+            rule.onNodeWithTag("field-guide-pager").performTouchInput { swipeLeft() }
             rule.waitForIdle()
             rule.onNodeWithTag("small-monster-index").assertIsDisplayed()
 
@@ -78,7 +78,7 @@ class FieldGuideSwipeSettingsUiTest {
             rule.onNodeWithTag("nav-search").performClick()
             rule.onNodeWithText("Agnaktor").performClick()
             rule.onNodeWithTag("monster-tabs").assertIsDisplayed()
-            rule.onNodeWithTag("field-guide-swipe-region").assertDoesNotExist()
+            rule.onNodeWithTag("field-guide-pager").assertDoesNotExist()
         } finally {
             val editor = preferences.edit()
             if (originalHadValue) editor.putBoolean(FIELD_GUIDE_SECTION_SWIPE_KEY, originalValue)

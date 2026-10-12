@@ -30,7 +30,7 @@ class NavigationRegressionTest {
     }
 
     @Test fun homeMapsTileOpensMapsIndexAndFieldGuideBottomNavRemainsIntact() {
-        rule.onNodeWithTag("category-maps").assertIsDisplayed().performClick()
+        rule.onNodeWithTag("home-shortcut-maps").assertIsDisplayed().performClick()
         rule.onNodeWithTag("maps-index").assertIsDisplayed()
         rule.onNodeWithText("Hunting Maps").assertDoesNotExist()
 
@@ -61,10 +61,27 @@ class NavigationRegressionTest {
         rule.onNodeWithTag("map-focus-rank-static").assertDoesNotExist()
     }
 
+    @Test fun mapDetailGestureStaysOutsideTheRootSectionPager() {
+        rule.onNodeWithTag("nav-search").performClick()
+        rule.onNodeWithTag("field-filter-map").performClick()
+        rule.onNodeWithTag("maps-index").assertIsDisplayed()
+        rule.onNodeWithTag("map-card-flooded_forest").performClick()
+        val map = rule.onNodeWithTag("map-detail-flooded_forest")
+        map.assertIsDisplayed().performTouchInput { swipeLeft() }
+        map.assertIsDisplayed()
+        rule.onNodeWithTag("map-back").performClick()
+        rule.onNodeWithTag("maps-index").assertIsDisplayed()
+        rule.onNodeWithTag("field-filter-map").assertIsSelected()
+    }
+
     @Test fun favoriteMonsterAddsOpensRemovesAndPersists() {
         openMonster("Zinogre", "monster_zinogre")
         ensureNotFavorite()
         rule.onNodeWithContentDescription("Add to favorites").performClick()
+        rule.waitForIdle()
+        // Leave the original detail route before opening the same monster from Favorites.
+        // Otherwise its retained back-stack semantics can shadow the new detail button.
+        rule.onNodeWithTag("nav-home").performClick()
         rule.waitForIdle()
         rule.activityRule.scenario.recreate()
         rule.onNodeWithTag("nav-favorites").performClick()
@@ -74,9 +91,14 @@ class NavigationRegressionTest {
         rule.onNodeWithContentDescription("Remove from favorites").assertIsDisplayed()
         rule.onNodeWithTag("monster-favorite").performClick()
         rule.waitUntil(timeoutMillis = 5_000) {
-            rule.onAllNodesWithContentDescription("Add to favorites").fetchSemanticsNodes().isNotEmpty()
+            rule.onAllNodesWithTag("monster-favorite").fetchSemanticsNodes().any { node ->
+                node.config.contains(SemanticsProperties.ContentDescription) &&
+                    node.config[SemanticsProperties.ContentDescription].contains("Add to favorites")
+            }
         }
-        rule.onNodeWithContentDescription("Add to favorites").assertIsDisplayed()
+        rule.onNodeWithTag("monster-favorite")
+            .assertIsDisplayed()
+            .assertContentDescriptionEquals("Add to favorites")
         rule.onNodeWithTag("nav-favorites").performClick()
         rule.waitUntil(timeoutMillis = 5_000) {
             rule.onAllNodesWithTag("favorite-monster-monster_zinogre").fetchSemanticsNodes().isEmpty()
@@ -100,7 +122,7 @@ class NavigationRegressionTest {
     @Test fun realRecentIsDeduplicatedNewestFirstAndPersists() {
         openMonster("Zinogre", "monster_zinogre")
         rule.onNodeWithTag("nav-home").performClick()
-        rule.onNodeWithTag("category-materials").performClick()
+        rule.onNodeWithTag("home-shortcut-items").performClick()
         rule.onNodeWithTag("global-search").performTextInput("Ice Crystal")
         rule.onNodeWithTag("result-material-item_ice_crystal").performClick()
         rule.onNodeWithTag("nav-search").performClick()

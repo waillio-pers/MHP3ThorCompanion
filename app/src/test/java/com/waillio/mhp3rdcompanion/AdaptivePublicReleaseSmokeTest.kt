@@ -30,7 +30,7 @@ abstract class AdaptivePublicReleaseSmokeBase {
             .assertExists()
         saveScreenshot("01-home.png")
 
-        rule.onNodeWithTag("category-maps").performClick()
+        rule.onNodeWithTag("home-shortcut-maps").performClick()
         rule.onNodeWithTag("maps-index").assertIsDisplayed()
         rule.onNodeWithTag("map-card-misty_peaks").performClick()
         rule.onNodeWithTag("map-node-mp-a3-bamboo-shoot-north", useUnmergedTree = true)

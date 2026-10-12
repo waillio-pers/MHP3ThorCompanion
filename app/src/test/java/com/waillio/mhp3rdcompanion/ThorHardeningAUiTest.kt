@@ -42,15 +42,16 @@ class ThorHardeningAUiTest {
     fun fieldGuideOrderIsExactIncludingAll() {
         assertEquals(
             listOf(
-                null,
-                EntityType.MONSTER,
-                EntityType.SMALL_MONSTER,
-                EntityType.MATERIAL,
-                EntityType.MAP,
-                EntityType.WEAPON,
-                EntityType.SKILL,
-                EntityType.QUEST,
-                EntityType.TRAINING
+                FieldGuideRootPage.ALL,
+                FieldGuideRootPage.LARGE_MONSTERS,
+                FieldGuideRootPage.SMALL_MONSTERS,
+                FieldGuideRootPage.ITEMS,
+                FieldGuideRootPage.MAPS,
+                FieldGuideRootPage.WEAPONS,
+                FieldGuideRootPage.SKILLS,
+                FieldGuideRootPage.QUESTS,
+                FieldGuideRootPage.CHARM_TABLES,
+                FieldGuideRootPage.TRAINING
             ),
             fieldGuideCategoryOrder
         )

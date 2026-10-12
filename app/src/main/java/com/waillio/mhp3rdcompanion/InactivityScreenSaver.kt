@@ -41,6 +41,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 internal const val OLED_SCREEN_SAVER_TIMEOUT_KEY = "oled_screen_saver_timeout_minutes"
+internal const val OLED_SCREEN_SAVER_LAST_DURATION_KEY = "oled_screen_saver_last_duration_minutes"
 internal val OLED_SCREEN_SAVER_TIMEOUT_OPTIONS = listOf(0, 1, 2, 5, 10, 15)
 
 internal fun normalizeOledScreenSaverTimeoutMinutes(minutes: Int): Int =
@@ -52,12 +53,28 @@ internal fun oledScreenSaverTimeoutMillis(minutes: Int): Long =
 internal fun readOledScreenSaverTimeoutMinutes(preferences: android.content.SharedPreferences): Int =
     normalizeOledScreenSaverTimeoutMinutes(preferences.getInt(OLED_SCREEN_SAVER_TIMEOUT_KEY, 0))
 
+/** Migrates the legacy active timeout into a retained duration without changing enabled state. */
+internal fun readOledScreenSaverLastDurationMinutes(preferences: android.content.SharedPreferences): Int {
+    val activeDuration = readOledScreenSaverTimeoutMinutes(preferences)
+    if (activeDuration > 0) {
+        preferences.edit { putInt(OLED_SCREEN_SAVER_LAST_DURATION_KEY, activeDuration) }
+        return activeDuration
+    }
+    val saved = normalizeOledScreenSaverTimeoutMinutes(preferences.getInt(OLED_SCREEN_SAVER_LAST_DURATION_KEY, 0))
+    if (saved > 0) return saved
+    val migrated = 1
+    preferences.edit { putInt(OLED_SCREEN_SAVER_LAST_DURATION_KEY, migrated) }
+    return migrated
+}
+
 internal fun persistOledScreenSaverTimeoutMinutes(
     preferences: android.content.SharedPreferences,
     minutes: Int
 ) {
     preferences.edit {
-        putInt(OLED_SCREEN_SAVER_TIMEOUT_KEY, normalizeOledScreenSaverTimeoutMinutes(minutes))
+        val normalized = normalizeOledScreenSaverTimeoutMinutes(minutes)
+        putInt(OLED_SCREEN_SAVER_TIMEOUT_KEY, normalized)
+        if (normalized > 0) putInt(OLED_SCREEN_SAVER_LAST_DURATION_KEY, normalized)
     }
 }
 

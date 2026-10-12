@@ -9,35 +9,51 @@ import org.junit.Test
 
 class FieldGuideSwipeLogicTest {
     @Test
-    fun adjacentNavigationUsesSelectorOrderAndDoesNotWrap() {
-        fieldGuideCategoryOrder.forEachIndexed { index, category ->
+    fun pagerOrderIsCanonicalAndCharmTablesFollowsQuests() {
+        assertEquals(
+            listOf(
+                FieldGuideRootPage.ALL,
+                FieldGuideRootPage.LARGE_MONSTERS,
+                FieldGuideRootPage.SMALL_MONSTERS,
+                FieldGuideRootPage.ITEMS,
+                FieldGuideRootPage.MAPS,
+                FieldGuideRootPage.WEAPONS,
+                FieldGuideRootPage.SKILLS,
+                FieldGuideRootPage.QUESTS,
+                FieldGuideRootPage.CHARM_TABLES,
+                FieldGuideRootPage.TRAINING
+            ),
+            fieldGuideCategoryOrder
+        )
+        assertEquals(
+            fieldGuideCategoryOrder.indexOf(FieldGuideRootPage.QUESTS) + 1,
+            fieldGuideCategoryOrder.indexOf(FieldGuideRootPage.CHARM_TABLES)
+        )
+        assertFalse(fieldGuideShortcutChoices.contains(FieldGuideRootPage.ALL))
+    }
+
+    @Test
+    fun adjacentPagesUseCanonicalOrderAndNeverWrap() {
+        fieldGuideCategoryOrder.forEachIndexed { index, page ->
             val previous = if (index == 0) null else FieldGuideSectionDestination(fieldGuideCategoryOrder[index - 1])
             val next = if (index == fieldGuideCategoryOrder.lastIndex) null else FieldGuideSectionDestination(fieldGuideCategoryOrder[index + 1])
-            assertEquals(previous, adjacentFieldGuideSection(category, -1))
-            assertEquals(next, adjacentFieldGuideSection(category, 1))
+            assertEquals(previous, adjacentFieldGuideSection(page, -1))
+            assertEquals(next, adjacentFieldGuideSection(page, 1))
         }
-        assertNull(adjacentFieldGuideSection(null, 0))
+        assertNull(adjacentFieldGuideSection(FieldGuideRootPage.ALL, 0))
     }
 
     @Test
-    fun gestureRequiresThresholdAndHorizontalDominanceAndMapsNaturalDirection() {
-        val thresholdPx = 56f
-        assertNull(fieldGuideSwipeDirection(-55f, 0f, thresholdPx))
-        assertNull(fieldGuideSwipeDirection(-120f, 90f, thresholdPx))
-        assertEquals(1, fieldGuideSwipeDirection(-120f, 60f, thresholdPx))
-        assertEquals(-1, fieldGuideSwipeDirection(120f, 60f, thresholdPx))
+    fun pageSwipeSettingAndDeeperGestureOwnersControlPager() {
+        assertFalse(fieldGuideSwipeAllowed(enabled = false, page = FieldGuideRootPage.LARGE_MONSTERS))
+        assertTrue(fieldGuideSwipeAllowed(enabled = true, page = FieldGuideRootPage.ALL))
+        assertTrue(fieldGuideSwipeAllowed(enabled = true, page = FieldGuideRootPage.WEAPONS))
+        assertTrue(fieldGuideSwipeAllowed(enabled = true, page = FieldGuideRootPage.MAPS))
+        assertFalse(fieldGuideSwipeAllowed(enabled = true, page = FieldGuideRootPage.WEAPONS, childOwnsHorizontalGesture = true))
     }
 
     @Test
-    fun settingAndCurrentWeaponScreenControlActivationScope() {
-        assertFalse(fieldGuideSwipeAllowed(enabled = false, category = EntityType.MONSTER))
-        assertTrue(fieldGuideSwipeAllowed(enabled = true, category = null))
-        assertTrue(fieldGuideSwipeAllowed(enabled = true, category = EntityType.MAP))
-        assertFalse(fieldGuideSwipeAllowed(enabled = true, category = EntityType.WEAPON))
-    }
-
-    @Test
-    fun weaponCategoryUsesTheSameSelectionRuleAsTheTopChip() {
+    fun rootWeaponSelectionStillOpensTheWeaponBrowser() {
         var filtered: EntityType? = null
         var openedWeapons = 0
         selectFieldGuideCategory(

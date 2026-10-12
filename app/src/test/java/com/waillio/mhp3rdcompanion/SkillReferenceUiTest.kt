@@ -57,22 +57,25 @@ class SkillReferenceUiTest {
     }
 
     @Test
-    fun categoryFilterDefaultsToAllAndSupportsBlademasterOrDefense() {
+    fun categoryFilterDefaultsToNoneAndSupportsVisibleGunnerOrUtilityLabel() {
         openSkills()
         rule.onNodeWithTag("skills-category-filter-button").assertIsDisplayed().performClick()
         rule.onNodeWithTag("skills-category-filter-dialog").assertIsDisplayed()
         listOf("BLADEMASTER", "GUNNER", "DEFENSE", "UTILITY").forEach { category ->
-            rule.onNodeWithTag("skills-category-checkbox-$category").assertIsOn()
+            rule.onNodeWithTag("skills-category-checkbox-$category").assertIsOff()
         }
 
         rule.onNodeWithTag("skills-category-checkbox-GUNNER").performClick()
         rule.onNodeWithTag("skills-category-checkbox-UTILITY").performClick()
         rule.onNodeWithTag("skills-category-filter-done").performClick()
-        rule.onNodeWithTag("global-search").performTextInput("Poison")
-        rule.onNodeWithTag("skill-row-mhp3_skill_tree_002").assertIsDisplayed()
+        rule.onNodeWithText("Gunner, Utility").assertExists()
+        rule.onNodeWithTag("global-search").performTextInput("Attack")
+        rule.onNodeWithTag("skill-row-mhp3_skill_tree_033").assertIsDisplayed()
         rule.onNodeWithTag("global-search").performTextClearance()
 
         rule.onNodeWithTag("skills-category-filter-button").performClick()
+        rule.onNodeWithTag("skills-category-checkbox-GUNNER").performClick()
+        rule.onNodeWithTag("skills-category-checkbox-UTILITY").performClick()
         rule.onNodeWithTag("skills-category-checkbox-DEFENSE").performClick()
         rule.onNodeWithTag("skills-category-filter-done").performClick()
         rule.onNodeWithTag("global-search").performTextInput("Fate")
@@ -92,9 +95,9 @@ class SkillReferenceUiTest {
 
         rule.onNodeWithTag("skills-browser").assertIsDisplayed()
         rule.onNodeWithTag("skills-category-filter-button").performClick()
-        rule.onNodeWithTag("skills-category-checkbox-BLADEMASTER").assertIsOn()
+        rule.onNodeWithTag("skills-category-checkbox-BLADEMASTER").assertIsOff()
         listOf("GUNNER", "DEFENSE", "UTILITY").forEach { category ->
-            rule.onNodeWithTag("skills-category-checkbox-$category").assertIsOff()
+            rule.onNodeWithTag("skills-category-checkbox-$category").assertIsOn()
         }
     }
 

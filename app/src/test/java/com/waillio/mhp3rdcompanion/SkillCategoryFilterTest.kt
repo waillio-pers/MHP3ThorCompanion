@@ -11,7 +11,7 @@ class SkillCategoryFilterTest {
         SkillTree(id, id, id, "", "", categories = categories.toList())
 
     @Test
-    fun selectedCategoriesUseOrSemantics() {
+    fun noSelectionIsUnfilteredAndSelectedCategoriesUseOrSemantics() {
         val universal = skill("universal", "BLADEMASTER", "GUNNER")
         val blademaster = skill("blademaster", "BLADEMASTER")
         val defense = skill("defense", "DEFENSE")
@@ -22,7 +22,8 @@ class SkillCategoryFilterTest {
             listOf(universal, blademaster, defense),
             filterSkillTreesByCategories(skills, setOf("BLADEMASTER", "DEFENSE"))
         )
-        assertEquals(emptyList<SkillTree>(), filterSkillTreesByCategories(skills, emptySet()))
+        assertEquals(skills, filterSkillTreesByCategories(skills, emptySet()))
+        assertEquals(listOf(universal, gunner), filterSkillTreesByCategories(skills, setOf("GUNNER")))
     }
 
     @Test
@@ -34,5 +35,13 @@ class SkillCategoryFilterTest {
         )
 
         assertEquals(skills, filterSkillTreesByCategories(skills, AllSkillCategoryIds))
+    }
+
+    @Test
+    fun portraitFilterRowUsesHysteresisForHideAndReveal() {
+        assertEquals(true, skillsFilterVisibilityAfterScroll(currentlyVisible = true, accumulatedDeltaPx = 55f, thresholdPx = 56f))
+        assertEquals(false, skillsFilterVisibilityAfterScroll(currentlyVisible = true, accumulatedDeltaPx = 56f, thresholdPx = 56f))
+        assertEquals(false, skillsFilterVisibilityAfterScroll(currentlyVisible = false, accumulatedDeltaPx = -40f, thresholdPx = 56f))
+        assertEquals(true, skillsFilterVisibilityAfterScroll(currentlyVisible = false, accumulatedDeltaPx = -56f, thresholdPx = 56f))
     }
 }

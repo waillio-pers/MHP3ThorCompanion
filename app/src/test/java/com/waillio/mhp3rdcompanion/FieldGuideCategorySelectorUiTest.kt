@@ -8,6 +8,7 @@ import androidx.compose.ui.test.swipeRight
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.unit.dp
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotEquals
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -25,7 +26,7 @@ class FieldGuideCategorySelectorUiTest {
     fun affordanceTracksLeftMiddleAndRightEdgesDuringHorizontalScroll() {
         rule.setContent {
             CompanionTheme {
-                FieldGuideCategorySelector(filter = null, hasBlankQuery = true, onFilter = {}, onWeapons = {})
+                FieldGuideCategorySelector(selectedPage = FieldGuideRootPage.ALL, onSelectPage = {})
             }
         }
         val strip = rule.onNodeWithTag("field-guide-category-strip")
@@ -38,15 +39,17 @@ class FieldGuideCategorySelectorUiTest {
         rule.waitForIdle()
         assertEquals("middle", strip.fetchSemanticsNode().config[SemanticsProperties.StateDescription])
 
-        strip.performTouchInput { swipeLeft(durationMillis = 900) }
+        repeat(6) {
+            strip.performTouchInput { swipeLeft(durationMillis = 700) }
+            rule.waitForIdle()
+        }
         rule.waitForIdle()
         assertEquals("rightmost", strip.fetchSemanticsNode().config[SemanticsProperties.StateDescription])
 
-        strip.performTouchInput { swipeRight(durationMillis = 900) }
-        rule.waitForIdle()
-        assertEquals("middle", strip.fetchSemanticsNode().config[SemanticsProperties.StateDescription])
-
-        strip.performTouchInput { swipeRight(durationMillis = 900) }
+        repeat(6) {
+            strip.performTouchInput { swipeRight(durationMillis = 700) }
+            rule.waitForIdle()
+        }
         rule.waitForIdle()
         assertEquals("leftmost", strip.fetchSemanticsNode().config[SemanticsProperties.StateDescription])
     }
@@ -57,5 +60,12 @@ class FieldGuideCategorySelectorUiTest {
         assertEquals("middle", fieldGuideScrollPosition(canScrollBackward = true, canScrollForward = true))
         assertEquals("rightmost", fieldGuideScrollPosition(canScrollBackward = true, canScrollForward = false))
         assertEquals("no overflow", fieldGuideScrollPosition(canScrollBackward = false, canScrollForward = false))
+    }
+
+    @Test
+    fun charmCategoryUsesItsOwnAccentInsteadOfMapsRed() {
+        assertEquals(AppColors.Crimson, FieldGuideRootPage.MAPS.accentColor())
+        assertEquals(AppColors.Plum, FieldGuideRootPage.CHARM_TABLES.accentColor())
+        assertNotEquals(FieldGuideRootPage.MAPS.accentColor(), FieldGuideRootPage.CHARM_TABLES.accentColor())
     }
 }
