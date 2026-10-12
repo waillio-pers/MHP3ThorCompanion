@@ -26,6 +26,20 @@ class CharmTableAssetIntegrationTest {
         assertTrue((1..12).all { table -> index.states.count { it.table == table } == 5_400 })
         assertEquals(64_800, index.states.map { it.sourceId }.distinct().size)
         assertTrue(index.skillTreeIds.all { stableId -> fixture.skillTrees.any { it.stableSkillTreeId == stableId } })
+        assertEquals(listOf(TalismanClass.QUEEN, TalismanClass.KING, TalismanClass.DRAGON), index.availableClasses())
+        assertEquals(
+            mapOf(TalismanClass.QUEEN to 25_227, TalismanClass.KING to 28_864, TalismanClass.DRAGON to 10_709),
+            index.classDistribution()
+        )
+        assertEquals(
+            index.states.map { index.skillTreeId(it.skill1Index) }.toSet(),
+            index.skillIdsAtPosition(1)
+        )
+        assertEquals(
+            index.states.mapNotNull { index.skillTreeId(it.skill2Index) }.toSet(),
+            index.skillIdsAtPosition(2)
+        )
+        assertTrue(index.availableClasses().all { index.classDistribution()[it] ?: 0 > 0 })
 
         val source = index.states.first()
         val observation = CharmObservation(

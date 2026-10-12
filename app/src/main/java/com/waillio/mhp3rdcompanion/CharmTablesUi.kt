@@ -1,10 +1,14 @@
 package com.waillio.mhp3rdcompanion
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,8 +20,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -50,6 +56,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
@@ -63,14 +71,22 @@ import com.waillio.mhp3rdcompanion.data.CharmIdentification
 import com.waillio.mhp3rdcompanion.data.CharmIdentificationState
 import com.waillio.mhp3rdcompanion.data.CharmIdentifyWorkingState
 import com.waillio.mhp3rdcompanion.data.CharmObservation
-import com.waillio.mhp3rdcompanion.data.CharmPointMode
+import com.waillio.mhp3rdcompanion.data.CharmPointOperator
 import com.waillio.mhp3rdcompanion.data.CharmResultGroup
+import com.waillio.mhp3rdcompanion.data.CharmSavedSearch
+import com.waillio.mhp3rdcompanion.data.CharmSlotFilterChoice
 import com.waillio.mhp3rdcompanion.data.CharmSearchCriteria
 import com.waillio.mhp3rdcompanion.data.CharmSlotMode
 import com.waillio.mhp3rdcompanion.data.CharmTableIndex
 import com.waillio.mhp3rdcompanion.data.CharmTableMode
 import com.waillio.mhp3rdcompanion.data.SkillTree
 import com.waillio.mhp3rdcompanion.data.TalismanClass
+import com.waillio.mhp3rdcompanion.data.CHARM_SEARCH_PREVIEW_LIMIT
+import com.waillio.mhp3rdcompanion.data.charmSearchPage
+import com.waillio.mhp3rdcompanion.data.charmSearchPageCount
+import com.waillio.mhp3rdcompanion.data.charmSearchPreview
+import com.waillio.mhp3rdcompanion.data.charmSlotNotation
+import com.waillio.mhp3rdcompanion.data.charmSlotFilterChoices
 
 private enum class CharmTablesPage { SEARCH, IDENTIFY }
 
@@ -81,15 +97,14 @@ internal fun CharmTablesScreen(
     currentTable: Int?,
     loadingFailed: Boolean,
     identifyWorkingState: CharmIdentifyWorkingState,
+    savedSearches: List<CharmSavedSearch> = emptyList(),
     onUpdateIdentifyWorkingState: ((CharmIdentifyWorkingState) -> CharmIdentifyWorkingState) -> Unit,
-    onSaveCurrentTable: (Int?) -> Unit
+    onSaveCurrentTable: (Int?) -> Unit,
+    onSaveSearch: (String, CharmSearchCriteria) -> Unit = { _, _ -> },
+    onDeleteSearch: (String) -> Unit = {}
 ) {
     if (index == null) {
-        Column(
-            Modifier.fillMaxSize().padding(24.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+        Column(Modifier.fillMaxSize().padding(24.dp), verticalArrangement = Arrangement.spacedBy(12.dp), horizontalAlignment = Alignment.CenterHorizontally) {
             if (loadingFailed) {
                 Text("Charm table data could not be loaded.", color = AppColors.Parchment, style = AppType.SectionTitle)
                 Text("The production game-reference database was not changed.", color = AppColors.ParchmentDeep, style = AppType.Body)
@@ -104,28 +119,36 @@ internal fun CharmTablesScreen(
     var page by rememberSaveable { mutableStateOf(CharmTablesPage.SEARCH.name) }
     val selectedPage = CharmTablesPage.entries.firstOrNull { it.name == page } ?: CharmTablesPage.SEARCH
     val skillsById = remember(skillTrees) { skillTrees.associateBy { it.stableSkillTreeId } }
+    val skill1Choices = remember(index) { index.skillIdsAtPosition(1) }
+    val skill2Choices = remember(index) { index.skillIdsAtPosition(2) }
+    val availableClasses = remember(index) { index.availableClasses() }
 
     var skill1Id by rememberSaveable { mutableStateOf<String?>(null) }
     var skill1Points by rememberSaveable { mutableStateOf("") }
-    var skill1Exact by rememberSaveable { mutableStateOf(false) }
+    var skill1OperatorName by rememberSaveable { mutableStateOf(CharmPointOperator.GREATER_OR_EQUAL.name) }
     var skill2Id by rememberSaveable { mutableStateOf<String?>(null) }
     var skill2Points by rememberSaveable { mutableStateOf("") }
-    var skill2Exact by rememberSaveable { mutableStateOf(false) }
+    var skill2OperatorName by rememberSaveable { mutableStateOf(CharmPointOperator.GREATER_OR_EQUAL.name) }
     var slots by rememberSaveable { mutableStateOf<Int?>(null) }
     var slotsExact by rememberSaveable { mutableStateOf(false) }
     var tableModeName by rememberSaveable { mutableStateOf(CharmTableMode.ANY.name) }
     var explicitTable by rememberSaveable { mutableIntStateOf(1) }
     var className by rememberSaveable { mutableStateOf("") }
+    var showHelp by rememberSaveable { mutableStateOf(false) }
+    var showAllResults by rememberSaveable { mutableStateOf(false) }
+    var resultPage by rememberSaveable { mutableIntStateOf(0) }
     val tableMode = CharmTableMode.entries.firstOrNull { it.name == tableModeName } ?: CharmTableMode.ANY
-    val talismanClass = TalismanClass.entries.firstOrNull { it.name == className }
-    val criteria = remember(skill1Id, skill1Points, skill1Exact, skill2Id, skill2Points, skill2Exact, slots, slotsExact, tableMode, explicitTable, talismanClass) {
+    val skill1Operator = CharmPointOperator.entries.firstOrNull { it.name == skill1OperatorName } ?: CharmPointOperator.GREATER_OR_EQUAL
+    val skill2Operator = CharmPointOperator.entries.firstOrNull { it.name == skill2OperatorName } ?: CharmPointOperator.GREATER_OR_EQUAL
+    val talismanClass = availableClasses.firstOrNull { it.name == className }
+    val criteria = remember(skill1Id, skill1Points, skill1Operator, skill2Id, skill2Points, skill2Operator, slots, slotsExact, tableMode, explicitTable, talismanClass) {
         CharmSearchCriteria(
             skill1Id = skill1Id,
             skill1Points = skill1Points.toIntOrNull(),
-            skill1Mode = if (skill1Exact) CharmPointMode.EXACT else CharmPointMode.MINIMUM,
+            skill1Mode = skill1Operator,
             skill2Id = skill2Id,
             skill2Points = skill2Points.toIntOrNull(),
-            skill2Mode = if (skill2Exact) CharmPointMode.EXACT else CharmPointMode.MINIMUM,
+            skill2Mode = skill2Operator,
             slots = slots,
             slotMode = if (slotsExact) CharmSlotMode.EXACT else CharmSlotMode.MINIMUM,
             tableMode = tableMode,
@@ -134,65 +157,50 @@ internal fun CharmTablesScreen(
         )
     }
     val searchResults = remember(index, criteria, currentTable) { index.search(criteria, currentTable) }
-
-    val observations = identifyWorkingState.observations
-    val editingObservation = identifyWorkingState.editingObservation
-    val identification = remember(index, observations) { index.identify(observations) }
+    val identifyObservations = identifyWorkingState.observations
+    val identifyResult = remember(index, identifyObservations) { index.identify(identifyObservations) }
+    val listState = rememberLazyListState()
+    androidx.compose.runtime.LaunchedEffect(criteria, currentTable) { resultPage = 0 }
 
     LazyColumn(
-        Modifier.fillMaxSize().testTag("screen-charm-tables"),
-        verticalArrangement = Arrangement.spacedBy(9.dp),
-        contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 10.dp, vertical = 10.dp)
+        state = listState,
+        modifier = Modifier.fillMaxSize().testTag("screen-charm-tables"),
+        verticalArrangement = Arrangement.spacedBy(6.dp),
+        contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 10.dp, vertical = 7.dp)
     ) {
         item {
-            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text("Charm Tables", color = AppColors.Parchment, style = AppType.ScreenTitle)
-                Text("Historical Timeworn Charm results · Tables 1–12", color = AppColors.ParchmentDeep, style = AppType.Metadata)
+            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text("Charm Tables", color = AppColors.Parchment, style = AppType.ScreenTitle, modifier = Modifier.weight(1f))
+                Surface(
+                    modifier = Modifier.size(34.dp).clickable { showHelp = true }.testTag("charm-help-open"),
+                    shape = AppDimens.ButtonShape,
+                    color = AppColors.Plum,
+                    border = BorderStroke(1.dp, AppColors.Gold)
+                ) {
+                    Box(contentAlignment = Alignment.Center) { Text("?", color = AppColors.Parchment, style = AppType.ButtonLabel) }
+                }
             }
         }
-        item {
-            CurrentTableCard(currentTable = currentTable, onSaveCurrentTable = onSaveCurrentTable)
-        }
+        item { CompactCurrentTable(currentTable, onSaveCurrentTable) }
         item {
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                FilterChip(
-                    selected = selectedPage == CharmTablesPage.SEARCH,
-                    onClick = { page = CharmTablesPage.SEARCH.name },
-                    label = { Text("Search charms") },
-                    shape = AppDimens.ButtonShape,
-                    colors = FilterChipDefaults.filterChipColors(
-                        selectedContainerColor = AppColors.Crimson,
-                        selectedLabelColor = AppColors.Parchment,
-                        containerColor = AppColors.NightRaised,
-                        labelColor = AppColors.Parchment
-                    ),
-                    border = FilterChipDefaults.filterChipBorder(
-                        enabled = true,
-                        selected = selectedPage == CharmTablesPage.SEARCH,
-                        borderColor = AppColors.ParchmentDeep.copy(alpha = .65f),
-                        selectedBorderColor = AppColors.Gold
-                    ),
-                    modifier = Modifier.weight(1f).testTag("charm-page-search")
-                )
-                FilterChip(
-                    selected = selectedPage == CharmTablesPage.IDENTIFY,
-                    onClick = { page = CharmTablesPage.IDENTIFY.name },
-                    label = { Text("Identify my table") },
-                    shape = AppDimens.ButtonShape,
-                    colors = FilterChipDefaults.filterChipColors(
-                        selectedContainerColor = AppColors.Crimson,
-                        selectedLabelColor = AppColors.Parchment,
-                        containerColor = AppColors.NightRaised,
-                        labelColor = AppColors.Parchment
-                    ),
-                    border = FilterChipDefaults.filterChipBorder(
-                        enabled = true,
-                        selected = selectedPage == CharmTablesPage.IDENTIFY,
-                        borderColor = AppColors.ParchmentDeep.copy(alpha = .65f),
-                        selectedBorderColor = AppColors.Gold
-                    ),
-                    modifier = Modifier.weight(1f).testTag("charm-page-identify")
-                )
+                listOf(CharmTablesPage.SEARCH to "Search", CharmTablesPage.IDENTIFY to "Identify").forEach { (which, label) ->
+                    val selected = selectedPage == which
+                    FilterChip(
+                        selected = selected,
+                        onClick = { page = which.name },
+                        label = { Text(label) },
+                        shape = AppDimens.ButtonShape,
+                        colors = FilterChipDefaults.filterChipColors(
+                            selectedContainerColor = AppColors.Plum,
+                            selectedLabelColor = AppColors.Parchment,
+                            containerColor = AppColors.NightRaised,
+                            labelColor = AppColors.Parchment
+                        ),
+                        border = FilterChipDefaults.filterChipBorder(enabled = true, selected = selected, borderColor = AppColors.ParchmentDeep.copy(alpha = .65f), selectedBorderColor = AppColors.Gold),
+                        modifier = Modifier.weight(1f).testTag(if (which == CharmTablesPage.SEARCH) "charm-page-search" else "charm-page-identify")
+                    )
+                }
             }
         }
         if (selectedPage == CharmTablesPage.SEARCH) {
@@ -200,138 +208,129 @@ internal fun CharmTablesScreen(
                 CharmSearchFilters(
                     skillTrees = skillTrees,
                     skillsById = skillsById,
+                    skill1Choices = skill1Choices,
+                    skill2Choices = skill2Choices,
+                    availableClasses = availableClasses,
                     skill1Id = skill1Id,
-                    onSkill1 = { skill1Id = it },
+                    onSkill1 = { skill1Id = it; if (it == null) skill1Points = "" },
                     skill1Points = skill1Points,
-                    onSkill1Points = { skill1Points = it.filter { char -> char == '-' || char.isDigit() }.take(3) },
-                    skill1Exact = skill1Exact,
-                    onSkill1Exact = { skill1Exact = it },
+                    onSkill1Points = { skill1Points = filterSignedPoints(it) },
+                    skill1Operator = skill1Operator,
+                    onSkill1Operator = { skill1OperatorName = it.name },
                     skill2Id = skill2Id,
-                    onSkill2 = { skill2Id = it },
+                    onSkill2 = { skill2Id = it; if (it == null) skill2Points = "" },
                     skill2Points = skill2Points,
-                    onSkill2Points = { skill2Points = it.filter { char -> char == '-' || char.isDigit() }.take(3) },
-                    skill2Exact = skill2Exact,
-                    onSkill2Exact = { skill2Exact = it },
+                    onSkill2Points = { skill2Points = filterSignedPoints(it) },
+                    skill2Operator = skill2Operator,
+                    onSkill2Operator = { skill2OperatorName = it.name },
                     slots = slots,
-                    onSlots = { slots = it },
-                    slotsExact = slotsExact,
-                    onSlotsExact = { slotsExact = it },
+                    onSlots = { value, exact -> slots = value; slotsExact = exact },
                     tableMode = tableMode,
                     explicitTable = explicitTable,
+                    currentTable = currentTable,
                     onTableMode = { mode, table -> tableModeName = mode.name; table?.let { explicitTable = it } },
                     talismanClass = talismanClass,
-                    onClass = { className = it?.name.orEmpty() }
+                    onClass = { className = it?.name.orEmpty() },
+                    savedSearches = savedSearches,
+                    criteria = criteria,
+                    onRestoreSearch = { restored ->
+                        skill1Id = restored.skill1Id
+                        skill1Points = restored.skill1Points?.toString().orEmpty()
+                        skill1OperatorName = restored.skill1Mode.name
+                        skill2Id = restored.skill2Id
+                        skill2Points = restored.skill2Points?.toString().orEmpty()
+                        skill2OperatorName = restored.skill2Mode.name
+                        slots = restored.slots
+                        slotsExact = restored.slotMode == CharmSlotMode.EXACT
+                        tableModeName = restored.tableMode.name
+                        explicitTable = restored.explicitTable ?: 1
+                        className = restored.talismanClass?.name.orEmpty()
+                        resultPage = 0
+                    },
+                    onSaveSearch = onSaveSearch,
+                    onDeleteSearch = onDeleteSearch
                 )
             }
             item {
-                if (!criteria.hasFilters) {
-                    EmptyInfoCard("Choose a skill or another filter", "Set Skill 1 or Skill 2 to search historical Timeworn outcomes. Source-state counts are not drop probabilities.", "charm-search-start")
-                } else if (tableMode == CharmTableMode.CURRENT && currentTable == null) {
-                    EmptyInfoCard("Current Table is unknown", "Set a current table or choose Any table / a specific table to search.", "charm-search-current-unknown")
-                } else if (searchResults.isEmpty()) {
-                    EmptyInfoCard("No matching charms", "No charms match the current filters. Try a lower minimum, another table, or Any table.", "charm-search-empty")
-                } else {
-                    Text("${searchResults.size} observable signatures", color = AppColors.Gold, style = AppType.SectionTitle, modifier = Modifier.testTag("charm-search-count"))
+                when {
+                    !criteria.hasFilters -> EmptyInfoCard("Choose a skill or another filter", "Find exact Timeworn outcomes across Tables 1–12.", "charm-search-start")
+                    tableMode == CharmTableMode.CURRENT && currentTable == null -> EmptyInfoCard("Current Table is unknown", "Choose a specific table or set your Current Table first.", "charm-search-current-unknown")
+                    searchResults.isEmpty() -> EmptyInfoCard("No matching charms", "No charms match the current filters.", "charm-search-empty")
+                    else -> Text(
+                        if (searchResults.size > CHARM_SEARCH_PREVIEW_LIMIT) "${searchResults.size} results · showing first $CHARM_SEARCH_PREVIEW_LIMIT" else "${searchResults.size} results",
+                        color = AppColors.Gold, style = AppType.SectionTitle, modifier = Modifier.testTag("charm-search-count")
+                    )
                 }
             }
-            items(searchResults, key = { group -> group.signature.toStableKey() }) { group ->
-                CharmResultCard(group = group, index = index, skillsById = skillsById)
+            items(charmSearchPreview(searchResults), key = { group -> group.signature.toStableKey() }) { group ->
+                CharmResultRow(group, index, skillsById)
+            }
+            if (searchResults.size > CHARM_SEARCH_PREVIEW_LIMIT) {
+                item {
+                    OutlinedButton(
+                        onClick = { resultPage = 0; showAllResults = true },
+                        modifier = Modifier.fillMaxWidth().testTag("charm-view-all"),
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = AppColors.Parchment),
+                        border = BorderStroke(1.dp, AppColors.Gold)
+                    ) { Text("View all ${searchResults.size} results") }
+                }
             }
         } else {
             item {
                 IdentifyWorkflow(
+                    index = index,
                     skillTrees = skillTrees,
                     skillsById = skillsById,
-                    observations = observations,
-                    onObservations = { value -> onUpdateIdentifyWorkingState { it.copy(observations = value) } },
-                    identification = identification,
+                    skill1Choices = skill1Choices,
+                    skill2Choices = skill2Choices,
+                    availableClasses = availableClasses,
+                    identifyState = identifyWorkingState,
+                    onUpdate = onUpdateIdentifyWorkingState,
+                    poolIdentification = identifyResult,
                     currentTable = currentTable,
-                    onSaveCurrentTable = onSaveCurrentTable,
-                    editingObservation = editingObservation,
-                    onEditingObservation = { value -> onUpdateIdentifyWorkingState { it.copy(editingObservation = value) } },
-                    formClassName = identifyWorkingState.formClass.name,
-                    onFormClass = { value -> onUpdateIdentifyWorkingState { it.copy(formClass = value) } },
-                    formSkill1Id = identifyWorkingState.formSkill1Id,
-                    onFormSkill1 = { value -> onUpdateIdentifyWorkingState { it.copy(formSkill1Id = value) } },
-                    formSkill1Points = identifyWorkingState.formSkill1Points,
-                    onFormSkill1Points = { value -> onUpdateIdentifyWorkingState { it.copy(formSkill1Points = value.filter { char -> char == '-' || char.isDigit() }.take(3)) } },
-                    formSkill2Id = identifyWorkingState.formSkill2Id,
-                    onFormSkill2 = { value -> onUpdateIdentifyWorkingState { it.copy(formSkill2Id = value) } },
-                    formSkill2Points = identifyWorkingState.formSkill2Points,
-                    onFormSkill2Points = { value -> onUpdateIdentifyWorkingState { it.copy(formSkill2Points = value.filter { char -> char == '-' || char.isDigit() }.take(3)) } },
-                    formSlots = identifyWorkingState.formSlots,
-                    onFormSlots = { value -> onUpdateIdentifyWorkingState { it.copy(formSlots = value) } },
-                    onClearForm = {
-                        onUpdateIdentifyWorkingState {
-                            it.copy(
-                                editingObservation = -1,
-                                formClass = TalismanClass.QUEEN,
-                                formSkill1Id = null,
-                                formSkill1Points = "",
-                                formSkill2Id = null,
-                                formSkill2Points = "",
-                                formSlots = null
-                            )
-                        }
-                    },
-                    onLoadObservationForEdit = { position, observation ->
-                        onUpdateIdentifyWorkingState {
-                            it.copy(
-                                editingObservation = position,
-                                formClass = observation.talismanClass,
-                                formSkill1Id = observation.skill1Id,
-                                formSkill1Points = observation.skill1Points.toString(),
-                                formSkill2Id = observation.skill2Id,
-                                formSkill2Points = observation.skill2Id?.let { observation.skill2Points.toString() }.orEmpty(),
-                                formSlots = observation.slots
-                            )
-                        }
-                    }
+                    onSaveCurrentTable = onSaveCurrentTable
                 )
             }
         }
-        item { CharmTableHelpCard() }
     }
+
+    if (showAllResults) {
+        BackHandler { showAllResults = false }
+        AllCharmResultsDialog(
+            groups = searchResults,
+            pageIndex = resultPage,
+            onPage = { resultPage = it },
+            index = index,
+            skillsById = skillsById,
+            onDismiss = { showAllResults = false }
+        )
+    }
+    if (showHelp) CharmHelpDialog(onDismiss = { showHelp = false })
 }
 
 @Composable
-private fun CurrentTableCard(currentTable: Int?, onSaveCurrentTable: (Int?) -> Unit) {
+private fun CompactCurrentTable(currentTable: Int?, onSaveCurrentTable: (Int?) -> Unit) {
     var expanded by remember { mutableStateOf(false) }
     Surface(
         modifier = Modifier.fillMaxWidth().testTag("current-charm-table-card"),
-        color = AppColors.Parchment,
-        shape = AppDimens.CardShape,
-        border = BorderStroke(1.dp, AppColors.ParchmentDeep)
+        color = AppColors.Parchment.copy(alpha = .08f),
+        shape = AppDimens.ButtonShape,
+        border = BorderStroke(1.dp, AppColors.Plum.copy(alpha = .8f))
     ) {
-        Row(
-            Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 9.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Column(Modifier.weight(1f)) {
-                Text("Current Table", color = AppColors.Ink, style = AppType.Metadata, fontWeight = FontWeight.Bold)
-                Text(currentTable?.let { "Table $it" } ?: "Unknown", color = AppColors.Crimson, style = AppType.CardTitle, modifier = Modifier.testTag("current-charm-table-value"))
-            }
+        Row(Modifier.fillMaxWidth().heightIn(min = 42.dp).padding(horizontal = 9.dp, vertical = 2.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(5.dp)) {
+            Text("Current Table:", color = AppColors.Parchment, style = AppType.Metadata, fontWeight = FontWeight.Bold)
+            Text(currentTable?.toString() ?: "Unknown", color = AppColors.Gold, style = AppType.ButtonLabel, modifier = Modifier.weight(1f).testTag("current-charm-table-value"))
             Box {
-                OutlinedButton(
-                    onClick = { expanded = true },
-                    modifier = Modifier.testTag("current-charm-table-change"),
-                    colors = ButtonDefaults.outlinedButtonColors(contentColor = AppColors.Crimson),
-                    border = BorderStroke(1.dp, AppColors.Crimson)
-                ) {
-                    Text("Change")
+                OutlinedButton(onClick = { expanded = true }, modifier = Modifier.heightIn(min = 34.dp).testTag("current-charm-table-change"), colors = ButtonDefaults.outlinedButtonColors(contentColor = AppColors.Parchment), border = BorderStroke(1.dp, AppColors.ParchmentDeep)) {
+                    Text("Change", style = AppType.Metadata)
                 }
                 DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
                     DropdownMenuItem(text = { Text("Unknown") }, onClick = { onSaveCurrentTable(null); expanded = false })
-                    (1..12).forEach { table ->
-                        DropdownMenuItem(text = { Text("Table $table") }, onClick = { onSaveCurrentTable(table); expanded = false })
-                    }
+                    (1..12).forEach { table -> DropdownMenuItem(text = { Text("Table $table") }, onClick = { onSaveCurrentTable(table); expanded = false }) }
                 }
             }
-            if (currentTable != null) {
-                IconButton(onClick = { onSaveCurrentTable(null) }, modifier = Modifier.size(40.dp).testTag("current-charm-table-clear")) {
-                    Icon(Icons.Default.Close, contentDescription = "Clear current table", tint = AppColors.Crimson)
-                }
+            if (currentTable != null) IconButton(onClick = { onSaveCurrentTable(null) }, modifier = Modifier.size(32.dp).testTag("current-charm-table-clear")) {
+                Icon(Icons.Default.Close, contentDescription = "Clear current table", tint = AppColors.Gold)
             }
         }
     }
@@ -341,102 +340,340 @@ private fun CurrentTableCard(currentTable: Int?, onSaveCurrentTable: (Int?) -> U
 private fun CharmSearchFilters(
     skillTrees: List<SkillTree>,
     skillsById: Map<String, SkillTree>,
+    skill1Choices: Set<String>, skill2Choices: Set<String>, availableClasses: List<TalismanClass>,
     skill1Id: String?, onSkill1: (String?) -> Unit,
-    skill1Points: String, onSkill1Points: (String) -> Unit, skill1Exact: Boolean, onSkill1Exact: (Boolean) -> Unit,
+    skill1Points: String, onSkill1Points: (String) -> Unit, skill1Operator: CharmPointOperator, onSkill1Operator: (CharmPointOperator) -> Unit,
     skill2Id: String?, onSkill2: (String?) -> Unit,
-    skill2Points: String, onSkill2Points: (String) -> Unit, skill2Exact: Boolean, onSkill2Exact: (Boolean) -> Unit,
-    slots: Int?, onSlots: (Int?) -> Unit, slotsExact: Boolean, onSlotsExact: (Boolean) -> Unit,
-    tableMode: CharmTableMode, explicitTable: Int, onTableMode: (CharmTableMode, Int?) -> Unit,
-    talismanClass: TalismanClass?, onClass: (TalismanClass?) -> Unit
+    skill2Points: String, onSkill2Points: (String) -> Unit, skill2Operator: CharmPointOperator, onSkill2Operator: (CharmPointOperator) -> Unit,
+    slots: Int?, onSlots: (Int?, Boolean) -> Unit,
+    tableMode: CharmTableMode, explicitTable: Int, currentTable: Int?, onTableMode: (CharmTableMode, Int?) -> Unit,
+    talismanClass: TalismanClass?, onClass: (TalismanClass?) -> Unit,
+    savedSearches: List<CharmSavedSearch>, criteria: CharmSearchCriteria,
+    onRestoreSearch: (CharmSearchCriteria) -> Unit, onSaveSearch: (String, CharmSearchCriteria) -> Unit, onDeleteSearch: (String) -> Unit
 ) {
-    SectionCard(title = "Search filters", accent = AppColors.Moss, contentPadding = 9.dp, modifier = Modifier.testTag("charm-search-filters")) {
-        Text("Skill points: use a minimum or an exact value for each selected skill.", color = AppColors.Ink, style = AppType.Metadata)
-        Spacer(Modifier.height(7.dp))
-        CharmSkillPicker("Skill 1", skillTrees, skillsById[skill1Id]?.displayName, false, onSkill1, "charm-search-skill1")
-        if (skill1Id != null) {
-            PointInputAndMode("Skill 1 points", skill1Points, onSkill1Points, skill1Exact, onSkill1Exact, "charm-search-skill1-points")
+    SectionCard(title = "Search", accent = AppColors.Plum, contentPadding = 7.dp, modifier = Modifier.testTag("charm-search-filters")) {
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp), verticalAlignment = Alignment.CenterVertically) {
+            CharmClassSelector("Class / Rarity", talismanClass, availableClasses, "charm-search-class", onClass, Modifier.weight(1f))
+            CharmSlotSelector(slots, criteria.slotMode == CharmSlotMode.EXACT, "charm-search-slots", onSlots, Modifier.weight(1f))
         }
-        Spacer(Modifier.height(7.dp))
-        CharmSkillPicker("Skill 2 · optional", skillTrees, skillsById[skill2Id]?.displayName, true, onSkill2, "charm-search-skill2")
-        if (skill2Id != null) PointInputAndMode("Skill 2 points", skill2Points, onSkill2Points, skill2Exact, onSkill2Exact, "charm-search-skill2-points")
-        Spacer(Modifier.height(7.dp))
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
-            ChoiceMenu(
-                label = "Slots",
-                selected = slots?.let { if (slotsExact) "Exactly $it" else "At least $it" } ?: "Any",
-                options = listOf("Any") + (0..3).map { "Minimum $it" } + (0..3).map { "Exact $it" },
-                onSelect = { option ->
-                    when {
-                        option == "Any" -> onSlots(null)
-                        option.startsWith("Minimum ") -> { onSlotsExact(false); onSlots(option.substringAfterLast(' ').toInt()) }
-                        else -> { onSlotsExact(true); onSlots(option.substringAfterLast(' ').toInt()) }
-                    }
-                },
-                modifier = Modifier.weight(1f).testTag("charm-search-slots")
-            )
-            ChoiceMenu(
-                label = "Class",
-                selected = talismanClass?.label ?: "Any",
-                options = listOf("Any") + TalismanClass.entries.map { it.label },
-                onSelect = { value -> onClass(TalismanClass.entries.firstOrNull { it.label == value }) },
-                modifier = Modifier.weight(1f).testTag("charm-search-class")
-            )
-        }
-        Spacer(Modifier.height(7.dp))
-        val tableLabel = when (tableMode) {
-            CharmTableMode.ANY -> "Any table"
-            CharmTableMode.CURRENT -> "Current table"
-            CharmTableMode.EXPLICIT -> "Table $explicitTable"
-        }
-        ChoiceMenu(
-            label = "Table",
-            selected = tableLabel,
-            options = listOf("Any table", "Current table") + (1..12).map { "Table $it" },
-            onSelect = { value ->
-                when (value) {
-                    "Any table" -> onTableMode(CharmTableMode.ANY, null)
-                    "Current table" -> onTableMode(CharmTableMode.CURRENT, null)
-                    else -> onTableMode(CharmTableMode.EXPLICIT, value.substringAfter(' ').toIntOrNull())
-                }
-            },
-            modifier = Modifier.fillMaxWidth().testTag("charm-search-table")
-        )
+        Spacer(Modifier.height(5.dp))
+        CharmSearchSkillLine("Skill 1", skillTrees, skill1Choices, skill1Id, skillsById[skill1Id]?.displayName, false, onSkill1, skill1Points, onSkill1Points, skill1Operator, onSkill1Operator, "charm-search-skill1")
+        Spacer(Modifier.height(4.dp))
+        CharmSearchSkillLine("Skill 2", skillTrees, skill2Choices, skill2Id, skillsById[skill2Id]?.displayName, true, onSkill2, skill2Points, onSkill2Points, skill2Operator, onSkill2Operator, "charm-search-skill2")
+        Spacer(Modifier.height(5.dp))
+        TableFilterControl(tableMode, explicitTable, currentTable, onTableMode)
+        Spacer(Modifier.height(3.dp))
+        SavedSearchesPanel(savedSearches, criteria, skillsById, onRestoreSearch, onSaveSearch, onDeleteSearch)
     }
 }
 
 @Composable
-private fun PointInputAndMode(
+private fun CharmSearchSkillLine(
     title: String,
-    value: String,
-    onValue: (String) -> Unit,
-    exact: Boolean,
-    onExact: (Boolean) -> Unit,
+    skillTrees: List<SkillTree>,
+    allowedSkillIds: Set<String>,
+    selectedId: String?,
+    selectedName: String?,
+    allowNone: Boolean,
+    onSelect: (String?) -> Unit,
+    points: String,
+    onPoints: (String) -> Unit,
+    operator: CharmPointOperator,
+    onOperator: (CharmPointOperator) -> Unit,
     tag: String
 ) {
-    Row(Modifier.fillMaxWidth().padding(top = 4.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-        SignedPointsField(
-            title = title,
-            value = value,
-            onValue = onValue,
-            tag = tag,
-            modifier = Modifier.weight(1f)
+    if (selectedId == null) {
+        CharmSkillPicker(title, skillTrees, allowedSkillIds, selectedName, allowNone, onSelect, tag)
+    } else {
+        BoxWithConstraints(Modifier.fillMaxWidth()) {
+            if (maxWidth < 460.dp) {
+                Column(verticalArrangement = Arrangement.spacedBy(3.dp)) {
+                    CharmSkillPicker(title, skillTrees, allowedSkillIds, selectedName, allowNone, onSelect, tag, Modifier.fillMaxWidth())
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(5.dp), verticalAlignment = Alignment.CenterVertically) {
+                        SignedPointsField("Points", points, onPoints, "$tag-points", Modifier.weight(1f))
+                        OperatorMenu(operator, onOperator, "$tag-points-operator", Modifier.width(64.dp))
+                    }
+                }
+            } else {
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(4.dp), verticalAlignment = Alignment.CenterVertically) {
+                    CharmSkillPicker(title, skillTrees, allowedSkillIds, selectedName, allowNone, onSelect, tag, Modifier.weight(1.3f))
+                    SignedPointsField("Points", points, onPoints, "$tag-points", Modifier.weight(.8f))
+                    OperatorMenu(operator, onOperator, "$tag-points-operator", Modifier.width(64.dp))
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun OperatorMenu(operator: CharmPointOperator, onOperator: (CharmPointOperator) -> Unit, tag: String, modifier: Modifier = Modifier) {
+    var open by remember { mutableStateOf(false) }
+    Box(modifier) {
+        OutlinedButton(onClick = { open = true }, modifier = Modifier.fillMaxWidth().heightIn(min = 46.dp).testTag(tag), colors = ButtonDefaults.outlinedButtonColors(contentColor = AppColors.Ink), border = BorderStroke(1.dp, AppColors.ParchmentDeep), contentPadding = PaddingValues(horizontal = 6.dp, vertical = 0.dp)) {
+            Text(operator.symbol, style = AppType.CardTitle)
+        }
+        DropdownMenu(expanded = open, onDismissRequest = { open = false }) {
+            CharmPointOperator.choices.forEach { option ->
+                DropdownMenuItem(text = { Text(option.symbol) }, onClick = { onOperator(option); open = false }, modifier = Modifier.testTag("$tag-${option.name.lowercase()}"))
+            }
+        }
+    }
+}
+
+@Composable
+private fun CharmSlotSelector(slots: Int?, exact: Boolean, tag: String, onSelect: (Int?, Boolean) -> Unit, modifier: Modifier = Modifier) {
+    var open by remember { mutableStateOf(false) }
+    val selected = charmSlotFilterChoices.firstOrNull { it.slots == slots && (it.mode == CharmSlotMode.EXACT) == exact }?.label ?: "Any"
+    Box(modifier) {
+        OutlinedButton(onClick = { open = true }, modifier = Modifier.fillMaxWidth().heightIn(min = 46.dp).testTag(tag), colors = ButtonDefaults.outlinedButtonColors(contentColor = AppColors.Ink), border = BorderStroke(1.dp, AppColors.ParchmentDeep)) {
+            Column(Modifier.weight(1f), horizontalAlignment = Alignment.Start) {
+                Text("Slots", color = AppColors.Ink.copy(alpha = .72f), style = AppType.Metadata, maxLines = 1)
+                Text(selected, color = AppColors.Ink, style = AppType.Body, maxLines = 1)
+            }
+        }
+        DropdownMenu(expanded = open, onDismissRequest = { open = false }, modifier = Modifier.widthIn(min = 190.dp)) {
+            Column(Modifier.padding(horizontal = 8.dp, vertical = 4.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                charmSlotFilterChoices.chunked(2).forEach { pair ->
+                    Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                        pair.forEach { choice ->
+                            FilterChip(
+                                selected = choice.slots == slots && (choice.mode == CharmSlotMode.EXACT) == exact,
+                                onClick = { onSelect(choice.slots, choice.mode == CharmSlotMode.EXACT); open = false },
+                                label = { Text(choice.label) },
+                                modifier = Modifier.weight(1f).testTag("$tag-choice-${choice.label.replace('=', 'e').replace('>', 'g') }"),
+                                colors = charmFilterChipColors(onParchment = false),
+                                border = charmFilterChipBorder(choice.slots == slots && (choice.mode == CharmSlotMode.EXACT) == exact, false)
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun CharmClassSelector(
+    title: String, selected: TalismanClass?, available: List<TalismanClass>, tag: String,
+    onSelect: (TalismanClass?) -> Unit, modifier: Modifier = Modifier, isError: Boolean = false
+) {
+    var open by remember { mutableStateOf(false) }
+    Box(modifier) {
+        OutlinedButton(onClick = { open = true }, modifier = Modifier.fillMaxWidth().heightIn(min = 46.dp).testTag(tag), colors = ButtonDefaults.outlinedButtonColors(contentColor = AppColors.Ink), border = BorderStroke(1.dp, if (isError) AppColors.Crimson else AppColors.ParchmentDeep)) {
+            Column(Modifier.weight(1f), horizontalAlignment = Alignment.Start) {
+                Text(title, color = AppColors.Ink.copy(alpha = .72f), style = AppType.Metadata, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                    selected?.let { CharmClassMark(it, Modifier.size(16.dp)) }
+                    Text(selected?.label ?: "Any", color = AppColors.Ink, style = AppType.Body, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                }
+            }
+        }
+        DropdownMenu(expanded = open, onDismissRequest = { open = false }) {
+            DropdownMenuItem(text = { Text("Any") }, onClick = { onSelect(null); open = false }, modifier = Modifier.testTag("$tag-any"))
+            available.forEach { rarity ->
+                DropdownMenuItem(
+                    text = { Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) { CharmClassMark(rarity, Modifier.size(20.dp)); Text(rarity.label) } },
+                    onClick = { onSelect(rarity); open = false }, modifier = Modifier.testTag("$tag-${rarity.name.lowercase()}")
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun CharmClassMark(talismanClass: TalismanClass, modifier: Modifier = Modifier) {
+    val tint = when (talismanClass) {
+        TalismanClass.QUEEN -> Color(0xFF8A517B)
+        TalismanClass.KING -> Color(0xFF9A7A36)
+        TalismanClass.DRAGON -> Color(0xFF426C84)
+    }
+    Canvas(modifier.semantics { contentDescription = "${talismanClass.label} rarity icon" }) {
+        val c = center
+        val radius = size.minDimension * .46f
+        drawCircle(tint, radius, c)
+        val half = size.minDimension * .19f
+        val mark = androidx.compose.ui.graphics.Path().apply {
+            moveTo(c.x, c.y - half); lineTo(c.x + half, c.y); lineTo(c.x, c.y + half); lineTo(c.x - half, c.y); close()
+        }
+        drawPath(mark, AppColors.Parchment)
+    }
+}
+
+@Composable
+private fun TableFilterControl(tableMode: CharmTableMode, explicitTable: Int, currentTable: Int?, onSelect: (CharmTableMode, Int?) -> Unit) {
+    val label = when (tableMode) {
+        CharmTableMode.ANY -> "Any Table"
+        CharmTableMode.CURRENT -> "Current Table"
+        CharmTableMode.EXPLICIT -> "Table $explicitTable"
+    }
+    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp), verticalAlignment = Alignment.CenterVertically) {
+        ChoiceMenu(
+            label = "Table", selected = label,
+            options = listOf("Any Table") + (1..12).map { "Table $it" } + listOf("Current Table"),
+            onSelect = { value -> when {
+                value == "Any Table" -> onSelect(CharmTableMode.ANY, null)
+                value == "Current Table" -> onSelect(CharmTableMode.CURRENT, null)
+                else -> onSelect(CharmTableMode.EXPLICIT, value.substringAfter(' ').toIntOrNull())
+            } },
+            modifier = Modifier.weight(1f).testTag("charm-search-table")
         )
-        FilterChip(
-            selected = !exact,
-            onClick = { onExact(false) },
-            label = { Text("At least") },
-            modifier = Modifier.testTag("$tag-minimum"),
-            colors = charmFilterChipColors(onParchment = true),
-            border = charmFilterChipBorder(selected = !exact, onParchment = true)
-        )
-        FilterChip(
-            selected = exact,
-            onClick = { onExact(true) },
-            label = { Text("Exact") },
-            modifier = Modifier.testTag("$tag-exact"),
-            colors = charmFilterChipColors(onParchment = true),
-            border = charmFilterChipBorder(selected = exact, onParchment = true)
-        )
+        OutlinedButton(
+            onClick = { onSelect(CharmTableMode.CURRENT, currentTable) },
+            enabled = currentTable != null,
+            modifier = Modifier.heightIn(min = 46.dp).testTag("charm-use-current-table"),
+            colors = ButtonDefaults.outlinedButtonColors(contentColor = AppColors.Ink), border = BorderStroke(1.dp, AppColors.Plum)
+        ) { Text("Use current\ntable", style = AppType.Metadata, maxLines = 2) }
+    }
+}
+
+@Composable
+private fun SavedSearchesPanel(
+    savedSearches: List<CharmSavedSearch>, criteria: CharmSearchCriteria, skillsById: Map<String, SkillTree>,
+    onRestore: (CharmSearchCriteria) -> Unit, onSave: (String, CharmSearchCriteria) -> Unit, onDelete: (String) -> Unit
+) {
+    var expanded by rememberSaveable { mutableStateOf(false) }
+    var showSave by rememberSaveable { mutableStateOf(false) }
+    var name by rememberSaveable { mutableStateOf("") }
+    var editingName by rememberSaveable { mutableStateOf(false) }
+    val focusManager = LocalFocusManager.current
+    val keyboardController = LocalSoftwareKeyboardController.current
+    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp), verticalAlignment = Alignment.CenterVertically) {
+        OutlinedButton(onClick = { expanded = !expanded }, modifier = Modifier.weight(1f).heightIn(min = 38.dp).testTag("charm-saved-searches-toggle"), colors = ButtonDefaults.outlinedButtonColors(contentColor = AppColors.Ink), border = BorderStroke(1.dp, AppColors.ParchmentDeep)) {
+            Text("Saved searches · ${savedSearches.size}", style = AppType.Metadata)
+        }
+        OutlinedButton(onClick = { focusManager.clearFocus(force = true); keyboardController?.hide(); name = defaultCharmSearchName(criteria, skillsById); editingName = false; showSave = true }, modifier = Modifier.heightIn(min = 38.dp).testTag("charm-save-search"), colors = ButtonDefaults.outlinedButtonColors(contentColor = AppColors.Ink), border = BorderStroke(1.dp, AppColors.Plum)) {
+            Text("Save search", style = AppType.Metadata)
+        }
+    }
+    if (expanded && savedSearches.isNotEmpty()) {
+        Column(Modifier.fillMaxWidth().padding(top = 3.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+            savedSearches.forEach { search ->
+                Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                    Text(search.name, modifier = Modifier.weight(1f).clickable { onRestore(search.criteria) }.testTag("charm-saved-search-${search.id}"), color = AppColors.Ink, style = AppType.Metadata, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    IconButton(onClick = { onDelete(search.id) }, modifier = Modifier.size(32.dp).testTag("charm-saved-search-delete-${search.id}")) { Icon(Icons.Default.Close, "Delete saved search", tint = AppColors.Crimson) }
+                }
+            }
+        }
+    }
+    if (showSave) {
+        TrackedDialog(onDismissRequest = { showSave = false }) {
+            Surface(Modifier.fillMaxWidth(.9f).widthIn(max = 430.dp).testTag("charm-save-search-dialog"), color = AppColors.Parchment, shape = AppDimens.CardShape, border = BorderStroke(1.dp, AppColors.Plum)) {
+                Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text("Save search", color = AppColors.Ink, style = AppType.SectionTitle)
+                    if (editingName) {
+                        OutlinedTextField(value = name, onValueChange = { name = it.take(48) }, label = { Text("Name") }, singleLine = true, modifier = Modifier.fillMaxWidth().testTag("charm-save-search-name"), colors = charmTextFieldColors())
+                    } else {
+                        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                            Text(name, modifier = Modifier.weight(1f).testTag("charm-save-search-name"), color = AppColors.Ink, style = AppType.Body, maxLines = 2, overflow = TextOverflow.Ellipsis)
+                            OutlinedButton(onClick = { editingName = true }, modifier = Modifier.testTag("charm-save-search-edit-name"), colors = ButtonDefaults.outlinedButtonColors(contentColor = AppColors.Ink), border = BorderStroke(1.dp, AppColors.ParchmentDeep)) { Text("Edit") }
+                        }
+                    }
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        OutlinedButton(onClick = { showSave = false; editingName = false }, modifier = Modifier.weight(1f)) { Text("Cancel") }
+                        Button(onClick = { focusManager.clearFocus(force = true); keyboardController?.hide(); onSave(name, criteria); showSave = false; editingName = false }, modifier = Modifier.weight(1f).testTag("charm-save-search-confirm"), colors = ButtonDefaults.buttonColors(containerColor = AppColors.Plum, contentColor = AppColors.Parchment)) { Text("Save") }
+                    }
+                }
+            }
+        }
+    }
+}
+
+internal fun defaultCharmSearchName(criteria: CharmSearchCriteria, skillsById: Map<String, SkillTree>): String {
+    val parts = mutableListOf<String>()
+    fun addSkill(id: String?, points: Int?, operator: CharmPointOperator) {
+        id?.let { skill ->
+            val label = skillsById[skill]?.displayName ?: skill
+            parts += if (points == null) label else "$label ${operator.symbol} ${formatPoints(points)}"
+        }
+    }
+    addSkill(criteria.skill1Id, criteria.skill1Points, criteria.skill1Mode)
+    addSkill(criteria.skill2Id, criteria.skill2Points, criteria.skill2Mode)
+    criteria.slots?.let { parts += (if (criteria.slotMode == CharmSlotMode.EXACT) "=" else ">=") + it + " slots" }
+    criteria.talismanClass?.let { parts += it.label }
+    when (criteria.tableMode) {
+        CharmTableMode.ANY -> Unit
+        CharmTableMode.CURRENT -> parts += "Current Table"
+        CharmTableMode.EXPLICIT -> parts += "Table ${criteria.explicitTable ?: 1}"
+    }
+    return parts.joinToString(" · ").ifBlank { "Charm search" }.take(48)
+}
+
+@Composable
+private fun CharmResultRow(group: CharmResultGroup, index: CharmTableIndex, skillsById: Map<String, SkillTree>, tagPrefix: String = "charm-result") {
+    val signature = group.signature
+    val rarity = index.classAt(signature.classIndex)
+    val skill1 = index.skillTreeId(signature.skill1Index)?.let { skillsById[it]?.displayName ?: it } ?: "Unknown"
+    val skill2 = index.skillTreeId(signature.skill2Index)?.let { skillsById[it]?.displayName ?: it }
+    Surface(Modifier.fillMaxWidth().testTag("$tagPrefix-${signature.toStableKey()}"), color = AppColors.Parchment, shape = AppDimens.ButtonShape, border = BorderStroke(1.dp, AppColors.ParchmentDeep)) {
+        BoxWithConstraints(Modifier.fillMaxWidth()) {
+            if (maxWidth >= 540.dp) {
+                Row(Modifier.fillMaxWidth().padding(horizontal = 8.dp, vertical = 5.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    if (rarity != null) CharmClassMark(rarity, Modifier.size(20.dp))
+                    Text(rarity?.label ?: "?", Modifier.width(54.dp), color = AppColors.Ink, style = AppType.Metadata, maxLines = 1)
+                    Column(Modifier.weight(1.15f)) {
+                        Text("$skill1 ${formatPoints(signature.skill1Points)}", color = AppColors.Ink, style = AppType.Metadata, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                        Text(skill2?.let { "$it ${formatPoints(signature.skill2Points)}" } ?: "—", color = AppColors.Ink.copy(alpha = .78f), style = AppType.Metadata, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    }
+                    Text(charmSlotNotation(signature.slots), Modifier.width(42.dp).testTag("charm-result-slots"), color = AppColors.Ink, style = AppType.Metadata, fontWeight = FontWeight.Bold)
+                    Text(group.tables.joinToString("·") { "T$it" }, Modifier.widthIn(min = 44.dp, max = 105.dp).testTag("charm-result-tables"), color = AppColors.Plum, style = AppType.Metadata, fontWeight = FontWeight.Bold, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                }
+            } else {
+                Column(Modifier.fillMaxWidth().padding(horizontal = 7.dp, vertical = 5.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(5.dp)) {
+                        if (rarity != null) CharmClassMark(rarity, Modifier.size(18.dp))
+                        Text(rarity?.label ?: "?", color = AppColors.Ink, style = AppType.Metadata, maxLines = 1)
+                        Text("${charmSlotNotation(signature.slots)} · ${group.tables.joinToString("·") { "T$it" }}", Modifier.weight(1f).testTag("charm-result-tables"), color = AppColors.Plum, style = AppType.Metadata, fontWeight = FontWeight.Bold, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    }
+                    Text("$skill1 ${formatPoints(signature.skill1Points)}", color = AppColors.Ink, style = AppType.Metadata, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    Text(skill2?.let { "$it ${formatPoints(signature.skill2Points)}" } ?: "—", color = AppColors.Ink.copy(alpha = .78f), style = AppType.Metadata, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun AllCharmResultsDialog(
+    groups: List<CharmResultGroup>, pageIndex: Int, onPage: (Int) -> Unit, index: CharmTableIndex,
+    skillsById: Map<String, SkillTree>, onDismiss: () -> Unit
+) {
+    val pageCount = charmSearchPageCount(groups.size)
+    val safePage = pageIndex.coerceIn(0, (pageCount - 1).coerceAtLeast(0))
+    val pageGroups = remember(groups, safePage) { charmSearchPage(groups, safePage) }
+    BackHandler(onBack = onDismiss)
+    TrackedDialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false, decorFitsSystemWindows = false)) {
+        Surface(Modifier.fillMaxWidth(.98f).fillMaxHeight(.96f).testTag("charm-view-all-dialog"), color = AppColors.Night, shape = AppDimens.CardShape, border = BorderStroke(1.dp, AppColors.Gold)) {
+            Column(Modifier.fillMaxSize().padding(8.dp)) {
+                Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                    Text("All ${groups.size} results", color = AppColors.Parchment, style = AppType.SectionTitle, modifier = Modifier.weight(1f))
+                    IconButton(onClick = onDismiss, modifier = Modifier.size(38.dp).testTag("charm-view-all-close")) { Icon(Icons.Default.Close, "Close all results", tint = AppColors.Parchment) }
+                }
+                Text("Stable order: class, Skill 1, points, Skill 2, points, then slots.", color = AppColors.ParchmentDeep, style = AppType.Metadata)
+                LazyColumn(Modifier.weight(1f).padding(top = 5.dp), verticalArrangement = Arrangement.spacedBy(3.dp)) {
+                    items(pageGroups, key = { it.signature.toStableKey() }) { group -> CharmResultRow(group, index, skillsById, "charm-all-result") }
+                }
+                Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    OutlinedButton(onClick = { onPage(safePage - 1) }, enabled = safePage > 0, modifier = Modifier.testTag("charm-results-previous")) { Text("Previous") }
+                    Text("Page ${safePage + 1} / ${pageCount.coerceAtLeast(1)}", color = AppColors.Parchment, style = AppType.Metadata, modifier = Modifier.weight(1f).testTag("charm-results-page"))
+                    OutlinedButton(onClick = { onPage(safePage + 1) }, enabled = safePage + 1 < pageCount, modifier = Modifier.testTag("charm-results-next")) { Text("Next") }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun CharmHelpDialog(onDismiss: () -> Unit) {
+    BackHandler(onBack = onDismiss)
+    TrackedDialog(onDismissRequest = onDismiss) {
+        Surface(Modifier.fillMaxWidth(.9f).widthIn(max = 520.dp).testTag("charm-help-dialog"), color = AppColors.Parchment, shape = AppDimens.CardShape, border = BorderStroke(1.dp, AppColors.Plum)) {
+            Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text("Charm Tables", color = AppColors.Ink, style = AppType.SectionTitle)
+                Text("This tool covers standard Timeworn Charm tables 1–12. It cannot read the active table from the game; set Current Table manually or identify it from exact charms.", color = AppColors.Ink, style = AppType.Body)
+                Text("The active table is selected when the game fully starts. A full restart can result in another table. Sleeping or returning to character selection is not guaranteed to change it.", color = AppColors.Ink, style = AppType.Body)
+                Button(onClick = onDismiss, modifier = Modifier.align(Alignment.End).testTag("charm-help-close"), colors = ButtonDefaults.buttonColors(containerColor = AppColors.Plum, contentColor = AppColors.Parchment)) { Text("Close") }
+            }
+        }
     }
 }
 
@@ -446,7 +683,8 @@ private fun SignedPointsField(
     value: String,
     onValue: (String) -> Unit,
     tag: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isError: Boolean = false
 ) {
     var fieldValue by remember(value) {
         mutableStateOf(TextFieldValue(value, selection = TextRange(value.length)))
@@ -478,248 +716,209 @@ private fun SignedPointsField(
             }
         },
         modifier = modifier.testTag(tag),
+        isError = isError,
         colors = charmTextFieldColors()
     )
 }
 
 @Composable
 private fun IdentifyWorkflow(
+    index: CharmTableIndex,
     skillTrees: List<SkillTree>,
     skillsById: Map<String, SkillTree>,
-    observations: List<CharmObservation>,
-    onObservations: (List<CharmObservation>) -> Unit,
-    identification: CharmIdentification,
-    currentTable: Int?,
-    onSaveCurrentTable: (Int?) -> Unit,
-    editingObservation: Int,
-    onEditingObservation: (Int) -> Unit,
-    formClassName: String, onFormClass: (TalismanClass) -> Unit,
-    formSkill1Id: String?, onFormSkill1: (String?) -> Unit,
-    formSkill1Points: String, onFormSkill1Points: (String) -> Unit,
-    formSkill2Id: String?, onFormSkill2: (String?) -> Unit,
-    formSkill2Points: String, onFormSkill2Points: (String) -> Unit,
-    formSlots: Int?, onFormSlots: (Int?) -> Unit,
-    onClearForm: () -> Unit,
-    onLoadObservationForEdit: (Int, CharmObservation) -> Unit
-) {
-    Column(verticalArrangement = Arrangement.spacedBy(9.dp)) {
-        SectionCard(title = "Identify My Table", accent = AppColors.Steel, contentPadding = 9.dp) {
-            Text("Enter appraised Timeworn talismans exactly as shown. Skill 1 and Skill 2 order matters.", color = AppColors.Ink, style = AppType.Body)
-            Spacer(Modifier.height(8.dp))
-            ChoiceMenu(
-                label = "Talisman class",
-                selected = TalismanClass.entries.firstOrNull { it.name == formClassName }?.label ?: "Queen",
-                options = TalismanClass.entries.map { it.label },
-                onSelect = { value -> TalismanClass.entries.firstOrNull { it.label == value }?.let(onFormClass) },
-                modifier = Modifier.fillMaxWidth().testTag("charm-identify-class")
-            )
-            Spacer(Modifier.height(8.dp))
-            CharmSkillPicker("Skill 1 · order is significant", skillTrees, skillsById[formSkill1Id]?.displayName, false, onFormSkill1, "charm-identify-skill1")
-            SignedPointsField(
-                title = "Skill 1 points",
-                value = formSkill1Points,
-                onValue = onFormSkill1Points,
-                tag = "charm-identify-skill1-points",
-                modifier = Modifier.fillMaxWidth()
-            )
-            Spacer(Modifier.height(6.dp))
-            CharmSkillPicker("Skill 2 · optional, keep displayed order", skillTrees, skillsById[formSkill2Id]?.displayName, true, onFormSkill2, "charm-identify-skill2")
-            if (formSkill2Id != null) {
-                SignedPointsField(
-                    title = "Skill 2 points",
-                    value = formSkill2Points,
-                    onValue = onFormSkill2Points,
-                    tag = "charm-identify-skill2-points",
-                    modifier = Modifier.fillMaxWidth().padding(top = 5.dp)
-                )
-            }
-            Spacer(Modifier.height(8.dp))
-            ChoiceMenu(
-                label = "Slots",
-                selected = formSlots?.toString() ?: "Select slots",
-                options = (0..3).map(Int::toString),
-                onSelect = { onFormSlots(it.toIntOrNull()) },
-                modifier = Modifier.fillMaxWidth().testTag("charm-identify-slots")
-            )
-            Spacer(Modifier.height(8.dp))
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Button(
-                    onClick = {
-                        val firstId = formSkill1Id ?: return@Button
-                        val firstPoints = formSkill1Points.toIntOrNull() ?: return@Button
-                        val slotsValue = formSlots ?: return@Button
-                        val secondPoints = if (formSkill2Id == null) 0 else formSkill2Points.toIntOrNull() ?: return@Button
-                        val observation = CharmObservation(
-                            talismanClass = TalismanClass.entries.firstOrNull { it.name == formClassName } ?: TalismanClass.QUEEN,
-                            skill1Id = firstId,
-                            skill1Points = firstPoints,
-                            skill2Id = formSkill2Id,
-                            skill2Points = secondPoints,
-                            slots = slotsValue
-                        )
-                        onObservations(if (editingObservation in observations.indices) observations.toMutableList().also { it[editingObservation] = observation } else observations + observation)
-                        onClearForm()
-                    },
-                    modifier = Modifier.weight(1f).testTag("charm-identify-add"),
-                    colors = ButtonDefaults.buttonColors(containerColor = AppColors.Crimson, contentColor = AppColors.Parchment)
-                ) {
-                    Text(if (editingObservation in observations.indices) "Update observation" else "Add observation")
-                }
-                if (editingObservation in observations.indices) {
-                    OutlinedButton(
-                        onClick = onClearForm,
-                        modifier = Modifier.testTag("charm-identify-cancel-edit"),
-                        colors = ButtonDefaults.outlinedButtonColors(contentColor = AppColors.Crimson),
-                        border = BorderStroke(1.dp, AppColors.ParchmentDeep)
-                    ) { Text("Cancel") }
-                }
-            }
-            if (formSkill1Id == null || formSkill1Points.toIntOrNull() == null || formSlots == null || (formSkill2Id != null && formSkill2Points.toIntOrNull() == null)) {
-                Text("Choose Skill 1, enter its points, and select slots before adding.", color = AppColors.Ink.copy(alpha = .72f), style = AppType.Metadata, modifier = Modifier.padding(top = 5.dp))
-            }
-        }
-
-        if (observations.isNotEmpty()) {
-            SectionCard(title = "Observed talismans (${observations.size})", accent = AppColors.Moss, contentPadding = 7.dp) {
-                observations.forEachIndexed { index, observation ->
-                    ObservationCard(
-                        observation = observation,
-                        skillsById = skillsById,
-                        onEdit = {
-                            onLoadObservationForEdit(index, observation)
-                        },
-                        onRemove = {
-                            onObservations(observations.filterIndexed { row, _ -> row != index })
-                            if (editingObservation == index) onClearForm()
-                            else if (editingObservation > index) onEditingObservation(editingObservation - 1)
-                        },
-                        modifier = Modifier.testTag("charm-observation-$index")
-                    )
-                }
-            }
-        }
-
-        IdentificationResult(
-            identification = identification,
-            observationCount = observations.size,
-            currentTable = currentTable,
-            onSaveCurrentTable = onSaveCurrentTable
-        )
-    }
-}
-
-@Composable
-private fun ObservationCard(
-    observation: CharmObservation,
-    skillsById: Map<String, SkillTree>,
-    onEdit: () -> Unit,
-    onRemove: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Surface(modifier.fillMaxWidth().padding(top = 5.dp), color = AppColors.ParchmentDeep.copy(alpha = .35f), shape = AppDimens.ButtonShape) {
-        Row(Modifier.fillMaxWidth().padding(start = 9.dp, end = 2.dp, top = 6.dp, bottom = 6.dp), verticalAlignment = Alignment.CenterVertically) {
-            Column(Modifier.weight(1f)) {
-                Text("${observation.talismanClass.label} · ${skillsById[observation.skill1Id]?.displayName ?: observation.skill1Id} ${formatPoints(observation.skill1Points)}" +
-                    (observation.skill2Id?.let { " · ${skillsById[it]?.displayName ?: it} ${formatPoints(observation.skill2Points)}" } ?: "") + " · ${observation.slots} slots",
-                    color = AppColors.Ink, style = AppType.Body)
-            }
-            IconButton(onClick = onEdit, modifier = Modifier.size(40.dp).testTag("charm-observation-edit")) {
-                Icon(Icons.Default.Edit, contentDescription = "Edit observation", tint = AppColors.Crimson)
-            }
-            IconButton(onClick = onRemove, modifier = Modifier.size(40.dp).testTag("charm-observation-remove")) {
-                Icon(Icons.Default.Close, contentDescription = "Remove observation", tint = AppColors.Crimson)
-            }
-        }
-    }
-}
-
-@Composable
-private fun IdentificationResult(
-    identification: CharmIdentification,
-    observationCount: Int,
+    skill1Choices: Set<String>,
+    skill2Choices: Set<String>,
+    availableClasses: List<TalismanClass>,
+    identifyState: CharmIdentifyWorkingState,
+    onUpdate: ((CharmIdentifyWorkingState) -> CharmIdentifyWorkingState) -> Unit,
+    poolIdentification: CharmIdentification,
     currentTable: Int?,
     onSaveCurrentTable: (Int?) -> Unit
 ) {
-    SectionCard(title = "Table match", accent = AppColors.Crimson, contentPadding = 10.dp, modifier = Modifier.testTag("charm-identify-result")) {
-        when (identification.state) {
-            CharmIdentificationState.NO_OBSERVATIONS -> Text("Add one or more exact Timeworn observations to compare them against Tables 1–12.", color = AppColors.Ink, style = AppType.Body)
-            CharmIdentificationState.ONE_TABLE -> {
-                Text("Table ${identification.tables.single()}", color = AppColors.Crimson, style = AppType.ScreenTitle, modifier = Modifier.testTag("charm-identify-one-table"))
-                Text("All $observationCount observation(s) match this table.", color = AppColors.Ink, style = AppType.Body)
-                if (currentTable != identification.tables.single()) {
-                    Button(
-                        onClick = { onSaveCurrentTable(identification.tables.single()) },
-                        modifier = Modifier.fillMaxWidth().padding(top = 6.dp).testTag("charm-identify-save-table"),
-                        colors = ButtonDefaults.buttonColors(containerColor = AppColors.Crimson, contentColor = AppColors.Parchment)
-                    ) {
-                        Text("Save as Current Table")
-                    }
-                } else {
-                    Text("This is already your Current Table.", color = AppColors.Moss, style = AppType.Body)
+    val observations = identifyState.observations
+    val editingObservation = identifyState.editingObservation
+    var formTouched by rememberSaveable { mutableStateOf(false) }
+    val formSkill1Id = identifyState.formSkill1Id
+    val formSkill2Id = identifyState.formSkill2Id
+    val formSkill1Points = identifyState.formSkill1Points
+    val formSkill2Points = identifyState.formSkill2Points
+    val formSlots = identifyState.formSlots
+    val formClass = identifyState.formClass
+    val formComplete = formSkill1Id != null && formSkill1Id in skill1Choices && formSkill1Points.toIntOrNull() != null &&
+        formSlots != null && formSlots in 0..3 && formClass in availableClasses &&
+        (formSkill2Id == null || (formSkill2Id in skill2Choices && formSkill2Points.toIntOrNull() != null))
+    val liveObservation = if (formComplete) CharmObservation(
+        talismanClass = formClass,
+        skill1Id = requireNotNull(formSkill1Id),
+        skill1Points = requireNotNull(formSkill1Points.toIntOrNull()),
+        skill2Id = formSkill2Id,
+        skill2Points = formSkill2Points.toIntOrNull() ?: 0,
+        slots = requireNotNull(formSlots)
+    ) else null
+    val liveIdentification = remember(index, liveObservation) { liveObservation?.let { index.identify(listOf(it)) } }
+
+    Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+        SectionCard(title = "Identify a charm", accent = AppColors.Plum, contentPadding = 7.dp, modifier = Modifier.testTag("charm-identify-form")) {
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp), verticalAlignment = Alignment.CenterVertically) {
+                CharmClassSelector("Class / Rarity", formClass, availableClasses, "charm-identify-class", { value -> formTouched = true; value?.let { onUpdate { state -> state.copy(formClass = it) } } }, Modifier.weight(1f))
+                IdentifySlotsSelector(formSlots, "charm-identify-slots", { value -> formTouched = true; onUpdate { state -> state.copy(formSlots = value) } }, Modifier.weight(1f), isError = formTouched && formSlots == null)
+            }
+            Spacer(Modifier.height(4.dp))
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(5.dp), verticalAlignment = Alignment.CenterVertically) {
+                CharmSkillPicker("Skill 1", skillTrees, skill1Choices, skillsById[formSkill1Id]?.displayName, false, { value ->
+                    formTouched = true
+                    onUpdate { state -> state.copy(formSkill1Id = value, formSkill1Points = if (value == null) "" else state.formSkill1Points) }
+                }, "charm-identify-skill1", Modifier.weight(1.35f), isError = formTouched && formSkill1Id !in skill1Choices)
+                SignedPointsField("Points", formSkill1Points, { value -> formTouched = true; onUpdate { state -> state.copy(formSkill1Points = filterSignedPoints(value)) } }, "charm-identify-skill1-points", Modifier.weight(.85f), isError = formTouched && formSkill1Points.toIntOrNull() == null)
+            }
+            Spacer(Modifier.height(4.dp))
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(5.dp), verticalAlignment = Alignment.CenterVertically) {
+                CharmSkillPicker("Skill 2", skillTrees, skill2Choices, skillsById[formSkill2Id]?.displayName, true, { value ->
+                    formTouched = true
+                    onUpdate { state -> state.copy(formSkill2Id = value, formSkill2Points = if (value == null) "" else state.formSkill2Points) }
+                }, "charm-identify-skill2", Modifier.weight(1.35f), isError = formTouched && formSkill2Id != null && formSkill2Id !in skill2Choices)
+                if (formSkill2Id != null) SignedPointsField("Points", formSkill2Points, { value -> formTouched = true; onUpdate { state -> state.copy(formSkill2Points = filterSignedPoints(value)) } }, "charm-identify-skill2-points", Modifier.weight(.85f), isError = formTouched && formSkill2Points.toIntOrNull() == null)
+                else Spacer(Modifier.weight(.85f))
+            }
+            Spacer(Modifier.height(4.dp))
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                Button(
+                    onClick = {
+                        val charm = liveObservation ?: return@Button
+                        val updated = if (editingObservation in observations.indices) observations.toMutableList().also { it[editingObservation] = charm } else observations + charm
+                        onUpdate { it.copy(observations = updated, editingObservation = -1, formClass = TalismanClass.QUEEN, formSkill1Id = null, formSkill1Points = "", formSkill2Id = null, formSkill2Points = "", formSlots = null) }
+                        formTouched = false
+                    },
+                    enabled = formComplete,
+                    modifier = Modifier.weight(1f).testTag("charm-identify-add"),
+                    colors = ButtonDefaults.buttonColors(containerColor = AppColors.Plum, contentColor = AppColors.Parchment)
+                ) { Text(if (editingObservation in observations.indices) "Update pool item" else "Add to pool") }
+                if (editingObservation in observations.indices) OutlinedButton(onClick = {
+                    onUpdate { it.copy(editingObservation = -1, formClass = TalismanClass.QUEEN, formSkill1Id = null, formSkill1Points = "", formSkill2Id = null, formSkill2Points = "", formSlots = null) }
+                    formTouched = false
+                }, modifier = Modifier.testTag("charm-identify-cancel-edit")) { Text("Cancel") }
+            }
+        }
+
+        if (liveIdentification == null && formTouched) {
+            Text("Complete the highlighted fields.", color = AppColors.ParchmentDeep, style = AppType.Metadata, modifier = Modifier.testTag("charm-identify-incomplete"))
+        }
+        liveIdentification?.let { result ->
+            CandidateTableResult("Current charm", result, currentTable, onSaveCurrentTable, "live")
+        }
+
+        if (observations.isNotEmpty()) {
+            SectionCard(title = "Charm pool · ${observations.size}", accent = AppColors.Plum, contentPadding = 6.dp, modifier = Modifier.testTag("charm-identify-pool")) {
+                observations.forEachIndexed { position, observation ->
+                    CharmPoolRow(
+                        position, observation, skillsById,
+                        onEdit = {
+                            formTouched = true
+                            onUpdate { it.copy(
+                                editingObservation = position,
+                                formClass = observation.talismanClass,
+                                formSkill1Id = observation.skill1Id,
+                                formSkill1Points = observation.skill1Points.toString(),
+                                formSkill2Id = observation.skill2Id,
+                                formSkill2Points = observation.skill2Id?.let { observation.skill2Points.toString() }.orEmpty(),
+                                formSlots = observation.slots
+                            ) }
+                        },
+                        onRemove = {
+                            onUpdate { state ->
+                                val nextEditing = when {
+                                    state.editingObservation == position -> -1
+                                    state.editingObservation > position -> state.editingObservation - 1
+                                    else -> state.editingObservation
+                                }
+                                state.copy(observations = state.observations.filterIndexed { i, _ -> i != position }, editingObservation = nextEditing)
+                            }
+                        },
+                        modifier = Modifier.testTag("charm-observation-$position")
+                    )
                 }
             }
-            CharmIdentificationState.MULTIPLE_TABLES -> {
-                Text("Possible tables: ${identification.tables.joinToString(", ")}", color = AppColors.Crimson, style = AppType.SectionTitle, modifier = Modifier.testTag("charm-identify-multiple"))
-                Text("Another exact Timeworn charm may narrow the result.", color = AppColors.Ink, style = AppType.Body)
-            }
-            CharmIdentificationState.ALL_TABLES -> {
-                Text("All 12 tables remain possible", color = AppColors.Crimson, style = AppType.SectionTitle, modifier = Modifier.testTag("charm-identify-all"))
-                Text("This charm appears in every standard table and does not narrow the result. Add a different Timeworn charm.", color = AppColors.Ink, style = AppType.Body)
-            }
-            CharmIdentificationState.NO_MATCH -> {
-                Text("No exact table match", color = AppColors.Crimson, style = AppType.SectionTitle, modifier = Modifier.testTag("charm-identify-no-match"))
-                Text("Check the talisman class, displayed skill order, both skill values, and slot count. No table is guessed.", color = AppColors.Ink, style = AppType.Body)
-            }
-        }
-        if (currentTable != null) Text("Current Table: $currentTable", color = AppColors.Moss, style = AppType.Metadata, modifier = Modifier.padding(top = 5.dp))
-    }
-}
-
-@Composable
-private fun CharmResultCard(group: CharmResultGroup, index: CharmTableIndex, skillsById: Map<String, SkillTree>) {
-    val signature = group.signature
-    val skill1Id = index.skillTreeId(signature.skill1Index)
-    val skill2Id = index.skillTreeId(signature.skill2Index)
-    val skill1Name = skill1Id?.let { skillsById[it]?.displayName } ?: skill1Id ?: "Unknown skill"
-    val skill2Name = skill2Id?.let { skillsById[it]?.displayName }
-    Surface(
-        modifier = Modifier.fillMaxWidth().testTag("charm-result-${signature.toStableKey()}"),
-        color = AppColors.Parchment,
-        shape = AppDimens.CardShape,
-        border = BorderStroke(1.dp, AppColors.ParchmentDeep)
-    ) {
-        Column(Modifier.fillMaxWidth().padding(horizontal = 11.dp, vertical = 9.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp), verticalAlignment = Alignment.CenterVertically) {
-                Text(index.classAt(signature.classIndex)?.label ?: "Talisman", color = AppColors.Crimson, style = AppType.Metadata, fontWeight = FontWeight.Bold)
-                Text("${signature.slots} slots", color = AppColors.Ink, style = AppType.Metadata)
-                Spacer(Modifier.weight(1f))
-                Text(group.tables.joinToString(" · ") { "T$it" }, color = AppColors.Steel, style = AppType.Metadata, fontWeight = FontWeight.Bold, modifier = Modifier.testTag("charm-result-tables"))
-            }
-            Text("$skill1Name ${formatPoints(signature.skill1Points)}", color = AppColors.Ink, style = AppType.CardTitle, maxLines = 2)
-            if (skill2Name != null) Text("$skill2Name ${formatPoints(signature.skill2Points)}", color = AppColors.Ink, style = AppType.CardTitle, maxLines = 2)
+            CandidateTableResult("Pool intersection", poolIdentification, currentTable, onSaveCurrentTable, "pool")
         }
     }
 }
 
 @Composable
-private fun CharmTableHelpCard() {
-    var expanded by rememberSaveable { mutableStateOf(false) }
-    SectionCard(title = "About charm tables", accent = AppColors.Steel, contentPadding = 9.dp, modifier = Modifier.testTag("charm-table-help")) {
-        Text("This 1.1 feature identifies standard tables from Timeworn Charm results. It cannot read the active table from the game.", color = AppColors.Ink, style = AppType.Body)
-        Spacer(Modifier.height(5.dp))
-        OutlinedButton(
-            onClick = { expanded = !expanded },
-            modifier = Modifier.testTag("charm-table-help-toggle"),
-            colors = ButtonDefaults.outlinedButtonColors(contentColor = AppColors.Crimson),
-            border = BorderStroke(1.dp, AppColors.ParchmentDeep)
-        ) {
-            Text(if (expanded) "Hide details" else "Table behavior")
+private fun IdentifySlotsSelector(
+    slots: Int?, tag: String, onSelect: (Int?) -> Unit, modifier: Modifier = Modifier, isError: Boolean = false
+) {
+    var open by remember { mutableStateOf(false) }
+    Box(modifier) {
+        OutlinedButton(onClick = { open = true }, modifier = Modifier.fillMaxWidth().heightIn(min = 46.dp).testTag(tag), colors = ButtonDefaults.outlinedButtonColors(contentColor = AppColors.Ink), border = BorderStroke(1.dp, if (isError) AppColors.Crimson else AppColors.ParchmentDeep)) {
+            Column(Modifier.weight(1f), horizontalAlignment = Alignment.Start) {
+                Text("Slots", color = AppColors.Ink.copy(alpha = .72f), style = AppType.Metadata)
+                Text(slots?.let(::charmSlotNotation) ?: "Select", color = AppColors.Ink, style = AppType.Body)
+            }
         }
-        if (expanded) {
-            Text(
-                "MHP3 uses standard charm tables 1–12 for this workflow. The active table is selected when the game fully starts. Fully restarting the game can result in a different table. Sleeping or returning to character selection is not a guaranteed table change.",
-                color = AppColors.Ink, style = AppType.Body, modifier = Modifier.padding(top = 4.dp).testTag("charm-table-help-details")
-            )
+        DropdownMenu(expanded = open, onDismissRequest = { open = false }) {
+            (0..3).forEach { count ->
+                DropdownMenuItem(text = { Text("${charmSlotNotation(count)} · $count") }, onClick = { onSelect(count); open = false }, modifier = Modifier.testTag("$tag-value-$count"))
+            }
+        }
+    }
+}
+
+@Composable
+private fun CharmPoolRow(
+    position: Int, observation: CharmObservation, skillsById: Map<String, SkillTree>,
+    onEdit: () -> Unit, onRemove: () -> Unit, modifier: Modifier = Modifier
+) {
+    Surface(modifier.fillMaxWidth().padding(top = 2.dp), color = AppColors.ParchmentDeep.copy(alpha = .28f), shape = AppDimens.ButtonShape) {
+        Row(Modifier.fillMaxWidth().padding(start = 7.dp, end = 1.dp, top = 2.dp, bottom = 2.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+            CharmClassMark(observation.talismanClass, Modifier.size(18.dp))
+            Column(Modifier.weight(1f)) {
+                val first = skillsById[observation.skill1Id]?.displayName ?: observation.skill1Id
+                val second = observation.skill2Id?.let { skillsById[it]?.displayName ?: it }?.let { " · $it ${formatPoints(observation.skill2Points)}" }.orEmpty()
+                Text("$first ${formatPoints(observation.skill1Points)}$second", color = AppColors.Ink, style = AppType.Metadata, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Text("${charmSlotNotation(observation.slots)} · ${observation.talismanClass.label}", color = AppColors.Ink.copy(alpha = .72f), style = AppType.Metadata)
+            }
+            IconButton(onClick = onEdit, modifier = Modifier.size(32.dp).testTag("charm-observation-edit-$position")) { Icon(Icons.Default.Edit, "Edit pool entry", tint = AppColors.Plum) }
+            IconButton(onClick = onRemove, modifier = Modifier.size(32.dp).testTag("charm-observation-remove-$position")) { Icon(Icons.Default.Close, "Remove pool entry", tint = AppColors.Crimson) }
+        }
+    }
+}
+
+@Composable
+private fun CandidateTableResult(
+    title: String, identification: CharmIdentification, currentTable: Int?, onSaveCurrentTable: (Int?) -> Unit, source: String
+) {
+    SectionCard(title = title, accent = AppColors.Plum, contentPadding = 7.dp, modifier = Modifier.testTag("charm-identify-result-$source")) {
+        when (identification.state) {
+            CharmIdentificationState.NO_OBSERVATIONS -> Text("Enter a charm to check.", color = AppColors.Ink, style = AppType.Metadata)
+            CharmIdentificationState.ONE_TABLE -> Text("Possible table: ${identification.tables.single()}", color = AppColors.Plum, style = AppType.SectionTitle, modifier = Modifier.testTag(if (source == "live") "charm-identify-live-one-table" else "charm-identify-pool-one-table"))
+            CharmIdentificationState.MULTIPLE_TABLES -> Text("Possible tables:", color = AppColors.Ink, style = AppType.Metadata, modifier = Modifier.testTag(if (source == "live") "charm-identify-live-multiple" else "charm-identify-pool-multiple"))
+            CharmIdentificationState.ALL_TABLES -> Text("All 12 tables remain possible.", color = AppColors.Ink, style = AppType.Metadata)
+            CharmIdentificationState.NO_MATCH -> Text("No exact table match.", color = AppColors.Crimson, style = AppType.Metadata, modifier = Modifier.testTag(if (source == "live") "charm-identify-live-no-match" else "charm-identify-pool-no-match"))
+        }
+        if (identification.tables.isNotEmpty()) {
+            if (identification.tables.size == 1) {
+                val candidate = identification.tables.single()
+                Button(
+                    onClick = { onSaveCurrentTable(candidate) },
+                    enabled = currentTable != candidate,
+                    modifier = Modifier.testTag(if (source == "live") "charm-identify-save-table" else "charm-identify-pool-save-table-$candidate"),
+                    colors = ButtonDefaults.buttonColors(containerColor = AppColors.Plum, contentColor = AppColors.Parchment)
+                ) {
+                    Text(if (currentTable == candidate) "Table $candidate · current" else "Save Table $candidate")
+                }
+            } else {
+                Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(5.dp)) {
+                    identification.tables.forEach { candidate ->
+                        val alreadySaved = currentTable == candidate
+                        Button(
+                            onClick = { onSaveCurrentTable(candidate) },
+                            enabled = !alreadySaved,
+                            modifier = Modifier.testTag("charm-identify-$source-save-table-$candidate"),
+                            colors = ButtonDefaults.buttonColors(containerColor = AppColors.Plum, contentColor = AppColors.Parchment)
+                        ) { Text(if (alreadySaved) "Table $candidate · current" else "Save Table $candidate", style = AppType.Metadata) }
+                    }
+                }
+            }
         }
     }
 }
@@ -735,29 +934,34 @@ private fun EmptyInfoCard(title: String, body: String, tag: String) {
 private fun CharmSkillPicker(
     title: String,
     skillTrees: List<SkillTree>,
+    allowedSkillIds: Set<String>,
     selectedName: String?,
     allowNone: Boolean,
     onSelect: (String?) -> Unit,
-    tag: String
+    tag: String,
+    modifier: Modifier = Modifier,
+    isError: Boolean = false
 ) {
     var open by rememberSaveable(tag) { mutableStateOf(false) }
     Surface(
-        modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).clickable { open = true }.testTag(tag),
+        modifier = modifier.fillMaxWidth().heightIn(min = 44.dp).clickable { open = true }.testTag(tag),
         color = AppColors.Parchment.copy(alpha = .45f),
         shape = AppDimens.ButtonShape,
-        border = BorderStroke(1.dp, AppColors.ParchmentDeep)
+        border = BorderStroke(1.dp, if (isError) AppColors.Crimson else AppColors.ParchmentDeep)
     ) {
         Row(Modifier.fillMaxWidth().padding(horizontal = 11.dp, vertical = 9.dp), verticalAlignment = Alignment.CenterVertically) {
             Column(Modifier.weight(1f)) {
                 Text(title, color = AppColors.Ink.copy(alpha = .72f), style = AppType.Metadata)
-                Text(selectedName ?: if (allowNone) "None" else "Choose a skill", color = AppColors.Ink, style = AppType.Body, maxLines = 2, overflow = TextOverflow.Ellipsis)
+                Text(selectedName ?: if (allowNone) "None / Any" else "Any", color = AppColors.Ink, style = AppType.Body, maxLines = 1, overflow = TextOverflow.Ellipsis)
             }
-            Icon(Icons.Default.Search, contentDescription = "Search skills", tint = AppColors.Crimson)
+            if (selectedName != null) {
+                IconButton(onClick = { onSelect(null) }, modifier = Modifier.size(30.dp).testTag("$tag-clear")) { Icon(Icons.Default.Close, contentDescription = "Clear $title", tint = AppColors.Crimson) }
+            } else Icon(Icons.Default.Search, contentDescription = "Search skills", tint = AppColors.Crimson)
         }
     }
     if (open) {
         var query by rememberSaveable(tag) { mutableStateOf("") }
-        val matches = remember(skillTrees, query) { filterCharmSkills(skillTrees, query) }
+        val matches = remember(skillTrees, allowedSkillIds, query) { filterCharmSkills(skillTrees, query, allowedSkillIds) }
         TrackedDialog(onDismissRequest = { open = false }, properties = DialogProperties(usePlatformDefaultWidth = false)) {
             Surface(color = AppColors.Parchment, shape = AppDimens.CardShape, border = BorderStroke(1.dp, AppColors.Gold), modifier = Modifier.fillMaxWidth(.94f).fillMaxHeight(.82f).widthIn(max = 560.dp)) {
                 Column(Modifier.fillMaxWidth()) {
@@ -772,7 +976,7 @@ private fun CharmSkillPicker(
                     )
                     Column(Modifier.weight(1f).padding(horizontal = 4.dp).padding(top = 6.dp).verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(2.dp)) {
                         if (allowNone) {
-                            DropdownMenuItem(text = { Text("None") }, onClick = { onSelect(null); open = false }, modifier = Modifier.testTag("$tag-picker-none"))
+                            DropdownMenuItem(text = { Text("None / Any Skill 2") }, onClick = { onSelect(null); open = false }, modifier = Modifier.testTag("$tag-picker-none"))
                         }
                         matches.forEach { skill ->
                             DropdownMenuItem(
@@ -835,7 +1039,7 @@ private fun charmTextFieldColors() = OutlinedTextFieldDefaults.colors(
 
 @Composable
 private fun charmFilterChipColors(onParchment: Boolean) = FilterChipDefaults.filterChipColors(
-    selectedContainerColor = AppColors.Crimson,
+    selectedContainerColor = AppColors.Plum,
     selectedLabelColor = AppColors.Parchment,
     containerColor = if (onParchment) Color.Transparent else AppColors.NightRaised,
     labelColor = if (onParchment) AppColors.Ink else AppColors.Parchment
@@ -846,16 +1050,24 @@ private fun charmFilterChipBorder(selected: Boolean, onParchment: Boolean) = Fil
     enabled = true,
     selected = selected,
     borderColor = if (onParchment) AppColors.ParchmentDeep.copy(alpha = .72f) else AppColors.ParchmentDeep.copy(alpha = .65f),
-    selectedBorderColor = AppColors.Gold
+    selectedBorderColor = AppColors.Plum
 )
 
-@Composable
-private fun formatPoints(points: Int): String = if (points >= 0) "+$points" else points.toString()
+private fun formatPoints(points: Int): String = if (points > 0) "+$points" else points.toString()
+
+private fun filterSignedPoints(value: String): String {
+    val negative = value.trimStart().startsWith('-')
+    val digits = value.filter(Char::isDigit).take(3)
+    return (if (negative) "-" else "") + digits
+}
 
 internal fun filterCharmSkills(skillTrees: List<SkillTree>, query: String): List<SkillTree> =
     skillTrees.asSequence().filter { skill ->
         query.isBlank() || skill.displayName.contains(query, true) || skill.tmoDisplayName.contains(query, true) || skill.jpName.contains(query, true)
     }.sortedBy { it.displayName.lowercase() }.toList()
+
+internal fun filterCharmSkills(skillTrees: List<SkillTree>, query: String, allowedSkillIds: Set<String>): List<SkillTree> =
+    filterCharmSkills(skillTrees, query).filter { it.stableSkillTreeId in allowedSkillIds }
 
 private fun com.waillio.mhp3rdcompanion.data.CharmSignature.toStableKey(): String =
     "${classIndex}_${skill1Index}_${skill1Points}_${skill2Index}_${skill2Points}_${slots}"

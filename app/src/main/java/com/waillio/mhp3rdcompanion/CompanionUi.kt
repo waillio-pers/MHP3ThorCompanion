@@ -440,14 +440,18 @@ internal fun CompanionApp(
                     charmTablesContent = {
                         val charmIndex by viewModel.charmIndex.collectAsStateWithLifecycle()
                         val charmLoadFailed by viewModel.charmLoadFailed.collectAsStateWithLifecycle()
+                        val savedCharmSearches by viewModel.charmSavedSearches.collectAsStateWithLifecycle()
                         CharmTablesScreen(
                             index = charmIndex,
                             skillTrees = viewModel.fixture.skillTrees,
                             currentTable = state.currentCharmTable,
                             loadingFailed = charmLoadFailed,
                             identifyWorkingState = state.charmIdentifyWorkingState,
+                            savedSearches = savedCharmSearches,
                             onUpdateIdentifyWorkingState = viewModel::updateCharmIdentifyWorkingState,
-                            onSaveCurrentTable = viewModel::setCurrentCharmTable
+                            onSaveCurrentTable = viewModel::setCurrentCharmTable,
+                            onSaveSearch = viewModel::saveCharmSearch,
+                            onDeleteSearch = viewModel::deleteCharmSearch
                         )
                     },
                     questProgression = viewModel.questProgression,
@@ -502,6 +506,7 @@ internal fun CompanionApp(
             composable(Routes.CHARM_TABLES) {
                 val charmIndex by viewModel.charmIndex.collectAsStateWithLifecycle()
                 val charmLoadFailed by viewModel.charmLoadFailed.collectAsStateWithLifecycle()
+                val savedCharmSearches by viewModel.charmSavedSearches.collectAsStateWithLifecycle()
                 val identifyWorkingState = state.charmIdentifyWorkingState
                 CharmTablesScreen(
                     index = charmIndex,
@@ -509,8 +514,11 @@ internal fun CompanionApp(
                     currentTable = state.currentCharmTable,
                     loadingFailed = charmLoadFailed,
                     identifyWorkingState = identifyWorkingState,
+                    savedSearches = savedCharmSearches,
                     onUpdateIdentifyWorkingState = viewModel::updateCharmIdentifyWorkingState,
-                    onSaveCurrentTable = viewModel::setCurrentCharmTable
+                    onSaveCurrentTable = viewModel::setCurrentCharmTable,
+                    onSaveSearch = viewModel::saveCharmSearch,
+                    onDeleteSearch = viewModel::deleteCharmSearch
                 )
             }
             composable(Routes.WEAPONS) {

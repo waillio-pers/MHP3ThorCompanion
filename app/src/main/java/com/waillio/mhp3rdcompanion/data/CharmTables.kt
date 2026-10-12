@@ -28,6 +28,7 @@ internal data class CharmAssetSource(
     val sourceRows: Int
 )
 
+@Serializable
 internal enum class TalismanClass(val label: String, val assetIndex: Int) {
     QUEEN("Queen", 0),
     KING("King", 1),
@@ -85,17 +86,41 @@ internal data class CharmIdentifyWorkingState(
     val formSlots: Int? = null
 )
 
-internal enum class CharmPointMode { MINIMUM, EXACT }
+@Serializable
+internal enum class CharmPointOperator(val symbol: String) {
+    EQUAL("="),
+    GREATER_THAN(">"),
+    LESS_THAN("<"),
+    GREATER_OR_EQUAL(">="),
+    LESS_OR_EQUAL("<=");
+
+    fun matches(actual: Int, requested: Int): Boolean = when (this) {
+        EQUAL -> actual == requested
+        GREATER_THAN -> actual > requested
+        LESS_THAN -> actual < requested
+        GREATER_OR_EQUAL -> actual >= requested
+        LESS_OR_EQUAL -> actual <= requested
+    }
+
+    companion object {
+        val choices = listOf(EQUAL, GREATER_THAN, LESS_THAN, GREATER_OR_EQUAL, LESS_OR_EQUAL)
+    }
+}
+
+@Serializable
 internal enum class CharmSlotMode { MINIMUM, EXACT }
+
+@Serializable
 internal enum class CharmTableMode { ANY, CURRENT, EXPLICIT }
 
+@Serializable
 internal data class CharmSearchCriteria(
     val skill1Id: String? = null,
     val skill1Points: Int? = null,
-    val skill1Mode: CharmPointMode = CharmPointMode.MINIMUM,
+    val skill1Mode: CharmPointOperator = CharmPointOperator.GREATER_OR_EQUAL,
     val skill2Id: String? = null,
     val skill2Points: Int? = null,
-    val skill2Mode: CharmPointMode = CharmPointMode.MINIMUM,
+    val skill2Mode: CharmPointOperator = CharmPointOperator.GREATER_OR_EQUAL,
     val slots: Int? = null,
     val slotMode: CharmSlotMode = CharmSlotMode.MINIMUM,
     val tableMode: CharmTableMode = CharmTableMode.ANY,
@@ -104,6 +129,64 @@ internal data class CharmSearchCriteria(
 ) {
     val hasFilters: Boolean
         get() = skill1Id != null || skill2Id != null || slots != null || talismanClass != null || tableMode != CharmTableMode.ANY
+}
+
+@Serializable
+internal data class CharmSavedSearch(
+    val id: String,
+    val name: String,
+    val criteria: CharmSearchCriteria
+)
+
+internal fun addCharmSavedSearch(
+    existing: List<CharmSavedSearch>,
+    requestedName: String,
+    criteria: CharmSearchCriteria,
+    id: String
+): List<CharmSavedSearch> {
+    if (existing.any { it.criteria == criteria }) return existing
+    val base = requestedName.trim().ifBlank { "Charm search" }
+    val used = existing.mapTo(hashSetOf()) { it.name.lowercase() }
+    var name = base
+    var suffix = 2
+    while (name.lowercase() in used) name = "$base ($suffix)".also { suffix++ }
+    return existing + CharmSavedSearch(id = id, name = name, criteria = criteria)
+}
+
+internal fun deleteCharmSavedSearch(existing: List<CharmSavedSearch>, id: String): List<CharmSavedSearch> =
+    existing.filterNot { it.id == id }
+
+internal const val CHARM_SEARCH_PREVIEW_LIMIT = 30
+internal const val CHARM_SEARCH_PAGE_SIZE = 50
+
+internal data class CharmSlotFilterChoice(val label: String, val slots: Int?, val mode: CharmSlotMode?)
+
+internal val charmSlotFilterChoices = listOf(
+    CharmSlotFilterChoice("Any", null, null),
+    CharmSlotFilterChoice(">=0", 0, CharmSlotMode.MINIMUM),
+    CharmSlotFilterChoice(">=1", 1, CharmSlotMode.MINIMUM),
+    CharmSlotFilterChoice(">=2", 2, CharmSlotMode.MINIMUM),
+    CharmSlotFilterChoice("=0", 0, CharmSlotMode.EXACT),
+    CharmSlotFilterChoice("=1", 1, CharmSlotMode.EXACT),
+    CharmSlotFilterChoice("=2", 2, CharmSlotMode.EXACT),
+    CharmSlotFilterChoice("=3", 3, CharmSlotMode.EXACT)
+)
+
+internal fun charmSearchPreview(results: List<CharmResultGroup>): List<CharmResultGroup> =
+    results.take(CHARM_SEARCH_PREVIEW_LIMIT)
+
+internal fun charmSearchPageCount(total: Int, pageSize: Int = CHARM_SEARCH_PAGE_SIZE): Int =
+    if (total <= 0) 0 else (total + pageSize - 1) / pageSize
+
+internal fun charmSearchPage(results: List<CharmResultGroup>, pageIndex: Int, pageSize: Int = CHARM_SEARCH_PAGE_SIZE): List<CharmResultGroup> {
+    require(pageSize > 0)
+    val page = pageIndex.coerceIn(0, (charmSearchPageCount(results.size, pageSize) - 1).coerceAtLeast(0))
+    return results.drop(page * pageSize).take(pageSize)
+}
+
+internal fun charmSlotNotation(slots: Int): String {
+    require(slots in 0..3)
+    return "O".repeat(slots) + "-".repeat(3 - slots)
 }
 
 internal data class CharmResultGroup(
@@ -154,6 +237,26 @@ internal class CharmTableIndex(
     fun skillTreeId(index: Int): String? = skillTreeIds.getOrNull(index)
 
     fun classAt(index: Int): TalismanClass? = TalismanClass.fromAsset(index)
+
+    fun skillIdsAtPosition(position: Int): Set<String> {
+        require(position == 1 || position == 2)
+        return states.asSequence()
+            .map { if (position == 1) it.skill1Index else it.skill2Index }
+            .filter { it >= 0 }
+            .distinct()
+            .mapNotNull(::skillTreeId)
+            .toSet()
+    }
+
+    fun availableClasses(): List<TalismanClass> = states.asSequence()
+        .mapNotNull { classAt(it.classIndex) }
+        .distinct()
+        .sortedBy { it.assetIndex }
+        .toList()
+
+    fun classDistribution(): Map<TalismanClass, Int> = states.groupingBy { state ->
+        requireNotNull(classAt(state.classIndex))
+    }.eachCount()
 
     fun search(criteria: CharmSearchCriteria, currentTable: Int?): List<CharmResultGroup> {
         if (!criteria.hasFilters) return emptyList()
@@ -230,8 +333,8 @@ internal class CharmTableIndex(
         return CharmIdentification(state, tables)
     }
 
-    private fun pointMatches(actual: Int, requested: Int?, mode: CharmPointMode): Boolean =
-        requested == null || if (mode == CharmPointMode.EXACT) actual == requested else actual >= requested
+    private fun pointMatches(actual: Int, requested: Int?, mode: CharmPointOperator): Boolean =
+        requested == null || mode.matches(actual, requested)
 
     private fun slotMatches(actual: Int, requested: Int, mode: CharmSlotMode): Boolean =
         if (mode == CharmSlotMode.EXACT) actual == requested else actual >= requested

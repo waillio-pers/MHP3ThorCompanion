@@ -6,7 +6,9 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import java.util.UUID
 import com.waillio.mhp3rdcompanion.MapSourceCrosswalk
 
 private val Context.dataStore by preferencesDataStore("companion_preferences")
@@ -50,6 +52,7 @@ class CompanionRepository(private val context: Context) {
     private val favoritesKey = stringPreferencesKey("favorites_v1")
     private val recentKey = stringPreferencesKey("recent_v1")
     private val currentCharmTableKey = stringPreferencesKey("current_charm_table_v1")
+    private val charmSavedSearchesKey = stringPreferencesKey("charm_saved_searches_v1")
     val favorites: Flow<List<FavoriteEntry>> = context.dataStore.data.map {
         ReferenceEntryCodec.decodeFavorites(it[favoritesKey])
     }
@@ -58,6 +61,11 @@ class CompanionRepository(private val context: Context) {
     }
     val currentCharmTable: Flow<Int?> = context.dataStore.data.map { preferences ->
         preferences[currentCharmTableKey]?.toIntOrNull()?.takeIf { it in 1..12 }
+    }
+    internal val charmSavedSearches: Flow<List<CharmSavedSearch>> = context.dataStore.data.map { preferences ->
+        preferences[charmSavedSearchesKey]?.let { encoded ->
+            runCatching { fixtureJson.decodeFromString<List<CharmSavedSearch>>(encoded) }.getOrDefault(emptyList())
+        }.orEmpty()
     }
 
     suspend fun saveFavorites(entries: List<FavoriteEntry>) {
@@ -73,6 +81,25 @@ class CompanionRepository(private val context: Context) {
         context.dataStore.edit { preferences ->
             if (table == null) preferences.remove(currentCharmTableKey)
             else preferences[currentCharmTableKey] = table.toString()
+        }
+    }
+
+    internal suspend fun saveCharmSearch(name: String, criteria: CharmSearchCriteria) {
+        context.dataStore.edit { preferences ->
+            val existing = preferences[charmSavedSearchesKey]?.let { encoded ->
+                runCatching { fixtureJson.decodeFromString<List<CharmSavedSearch>>(encoded) }.getOrDefault(emptyList())
+            }.orEmpty()
+            val updated = addCharmSavedSearch(existing, name, criteria, UUID.randomUUID().toString())
+            preferences[charmSavedSearchesKey] = fixtureJson.encodeToString(updated)
+        }
+    }
+
+    internal suspend fun deleteCharmSearch(id: String) {
+        context.dataStore.edit { preferences ->
+            val existing = preferences[charmSavedSearchesKey]?.let { encoded ->
+                runCatching { fixtureJson.decodeFromString<List<CharmSavedSearch>>(encoded) }.getOrDefault(emptyList())
+            }.orEmpty()
+            preferences[charmSavedSearchesKey] = fixtureJson.encodeToString(deleteCharmSavedSearch(existing, id))
         }
     }
 

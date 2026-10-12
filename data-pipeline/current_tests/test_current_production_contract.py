@@ -13,7 +13,7 @@ sys.path.insert(0, str(ROOT / "data-pipeline"))
 sys.path.insert(0, str(ROOT / "tools"))
 
 from item_icon_assets import resolved_icons  # noqa: E402
-from verify_rc1_portable import EXPECTED_SCHEMA, check_references  # noqa: E402
+from verify_rc1_portable import EXPECTED_SCHEMA, check_references, verify_root  # noqa: E402
 from weapon_recipe_usage import build_usage_index  # noqa: E402
 
 
@@ -44,6 +44,12 @@ class CurrentProductionContractTest(unittest.TestCase):
 
     def test_canonical_references_resolve_across_current_product_data(self):
         check_references(self.data)
+
+    def test_portable_verifier_accepts_all_current_1_1_factual_assets(self):
+        verified_data, monster_ids, canonical_bytes = verify_root(ROOT)
+        self.assertEqual(self.data, verified_data)
+        self.assertEqual(40, len(monster_ids))
+        self.assertEqual(EXPECTED_CURRENT_PRODUCTION_SHA256, hashlib.sha256(canonical_bytes).hexdigest().upper())
 
     def test_current_quest_monster_and_weapon_id_links_are_closed(self):
         large_ids = {row["id"] for row in self.data["monsters"]}

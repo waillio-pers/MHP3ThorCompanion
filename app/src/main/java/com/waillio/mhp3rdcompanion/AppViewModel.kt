@@ -23,6 +23,8 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     val fixture = repository.data
     internal val questProgression = repository.questProgression
     private val charmRepository = CharmTableRepository(application, fixture.skillTrees)
+    internal val charmSavedSearches = repository.charmSavedSearches
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
     private val mutableCharmIndex = MutableStateFlow<CharmTableIndex?>(null)
     internal val charmIndex = mutableCharmIndex.asStateFlow()
     private val mutableCharmLoadFailed = MutableStateFlow(false)
@@ -76,6 +78,14 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         require(table == null || table in 1..12)
         mutableState.update { it.copy(currentCharmTable = table) }
         viewModelScope.launch(Dispatchers.IO) { repository.saveCurrentCharmTable(table) }
+    }
+
+    internal fun saveCharmSearch(name: String, criteria: CharmSearchCriteria) {
+        viewModelScope.launch(Dispatchers.IO) { repository.saveCharmSearch(name, criteria) }
+    }
+
+    internal fun deleteCharmSearch(id: String) {
+        viewModelScope.launch(Dispatchers.IO) { repository.deleteCharmSearch(id) }
     }
 
     /** Keeps incomplete Identify work across Activity configuration changes only. */
