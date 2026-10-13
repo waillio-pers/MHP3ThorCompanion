@@ -12,13 +12,14 @@ Project: [github.com/waillio-pers/MHP3ThorCompanion](https://github.com/waillio-
 
 - All monsters from the game been added, Large and Small. Rewards, hitzones, recommended element and such.
 - All items is added, I believe with most complete source information - percentages, amount of drops and so on. Data about sources been cross-referenced from different sources, to increase accuracy. All sources are present in "About" section in settings inside the app or in Sources.md. Also each item has all possible way to use it (in crafting or trading)
-- Maps with interactive nodes. Each node are calibrated manually to increase accuracy with complete breakdown what you can get from low rang and high rang version of such node. Since its hard to click individual node on a map sometimes, there will show up a modal pop-up, allowing you to choose which node you were meant to press.
+- Maps with interactive nodes. Each node are calibrated manually to increase accuracy with complete breakdown what you can get from low rank and high rank version of such node. Since its hard to click individual node on a map sometimes, there will show up a modal pop-up, allowing you to choose which node you were meant to press.
 - Complete weapons trees. Less UI polished part of an app for my liking, but I cant figure out a better way to do it. However, its usable and understandable. You can get a crafting path to selected weapon, can sort by attack power and rarity, filter by element, decorations slots and such. Better to be used in landscape mode, but I made adjustments for narrow screens (it will be ugly, sorry).
 - Complete skills and according decorations list. No need to click a ton of buttons inside interface to figure out what this or that skill do, hooray! With extended description.
 - (v1.1 addition) Charm tables - you can identify your table trough main window or through special identify windows. Save search of a specific charm and basically everything you can do with different online charm tables (not much).
 - There is quests and trainings sections. Quests are not clickable, since there will be TOO much to show. However, each quests internally contain all information about possible rewards and such - so you can see where you can get Commendation or anything else. (v1.1 addition) - you can now see key, urgent and prerequisite quests!
 - All and all, almost everything you have in game is present. Only two missing pieces: armor and felyne skills from drinks. Armor Im not adding to plan, since, well, you can see it in game, nothing is hidden (as far as I know). But felyne skills I might add later, since descriptions are too vague for my liking.
 - You can adjust UI scale in settings from 0.8 to 1.1 scale. All pieces of UI **should** be adaptive. Reach out if anything looks ugly on your device (except weapons section, thats Im aware of already)
+- There is few features for overall app behavior you might want to try out (such as menu swipe, oled screensaver etc), which are not enabled by default and available in setting menu. Check it out!
 
 Huge thanks for Team Maverick ONE for transalting this wonderful game. That made it accesible to me when I was a kid and has been improved since even more. And all english naming in this app corresponds to their translation.
 
@@ -30,7 +31,7 @@ The Ayn Thor is the original target. The interface adapts to portrait and landsc
 
 ## Installation
 
-Download **MHP3rd-Companion-1.0.0.apk** from [GitHub Releases](https://github.com/waillio-pers/MHP3ThorCompanion/releases). Android may ask you to allow installation from the app or browser used to open the APK. Only grant that permission to a source you trust; there is no need to disable Android's general security protections.
+Download **MHP3rd-Companion-1.x.x.apk** from [GitHub Releases](https://github.com/waillio-pers/MHP3ThorCompanion/releases). Android may ask you to allow installation from the app or browser used to open the APK. Only grant that permission to a source you trust; there is no need to disable Android's general security protections.
 
 ## Build from source
 
