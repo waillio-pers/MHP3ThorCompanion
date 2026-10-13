@@ -6,7 +6,9 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.assertIsNotEnabled
+import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.hasTestTag
+import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
@@ -63,6 +65,52 @@ class CharmTablesPhoneUiTest {
     @get:Rule val rule = createComposeRule()
 
     @Test
+    fun rarityPickerAndIdentifyPoolRenderApprovedPixelIconsWithoutAddingCommonToTimeworn() {
+        val identifyState = mutableStateOf(CharmIdentifyWorkingState())
+        rule.setContent {
+            CompanionTheme {
+                CharmTablesScreen(
+                    index = CharmUiFixture.index,
+                    skillTrees = CharmUiFixture.skills,
+                    currentTable = null,
+                    loadingFailed = false,
+                    identifyWorkingState = identifyState.value,
+                    onUpdateIdentifyWorkingState = { identifyState.value = it(identifyState.value) },
+                    onSaveCurrentTable = {}
+                )
+            }
+        }
+
+        rule.onNodeWithTag("charm-search-class").performScrollTo().performClick()
+        rule.onNodeWithTag("charm-search-class-queen").assertIsDisplayed()
+        assertTrue(
+            rule.onAllNodesWithContentDescription("Queen rarity icon", useUnmergedTree = true)
+                .fetchSemanticsNodes().isNotEmpty()
+        )
+        assertTrue(rule.onAllNodesWithTag("charm-search-class-common").fetchSemanticsNodes().isEmpty())
+        rule.onNodeWithTag("charm-search-class-queen").performClick()
+
+        rule.onNodeWithTag("charm-page-identify").performClick()
+        rule.onNodeWithTag("charm-identify-skill1").performScrollTo().performClick()
+        rule.onNodeWithTag("charm-identify-skill1-picker-search").performTextInput("Attack")
+        rule.onNodeWithTag("charm-identify-skill1-picker-option-attack").assertIsDisplayed().performClick()
+        rule.onNodeWithTag("charm-identify-skill1-points").performScrollTo().performTextInput("7")
+        rule.onNodeWithTag("charm-identify-skill2").performScrollTo().performClick()
+        rule.onNodeWithTag("charm-identify-skill2-picker-search").performTextInput("Expert")
+        rule.onNodeWithTag("charm-identify-skill2-picker-option-expert").assertIsDisplayed().performClick()
+        rule.onNodeWithTag("charm-identify-skill2-points").performScrollTo().performTextInput("10")
+        rule.onNodeWithTag("charm-identify-slots").performScrollTo().performClick()
+        rule.onNodeWithTag("charm-identify-slots-value-2").performClick()
+        rule.onNodeWithTag("charm-identify-add").performScrollTo().performClick()
+        rule.onNodeWithTag("charm-identify-pool").performScrollTo().assertIsDisplayed()
+        assertEquals(
+            2,
+            rule.onAllNodesWithContentDescription("Queen rarity icon", useUnmergedTree = true)
+                .fetchSemanticsNodes().size
+        )
+    }
+
+    @Test
     fun narrowPortraitShowsCurrentTableAndSearchableSkillSelectorWithoutHorizontalOverflow() {
         val identifyState = mutableStateOf(CharmIdentifyWorkingState())
         rule.setContent {
@@ -79,7 +127,9 @@ class CharmTablesPhoneUiTest {
             }
         }
         rule.onNodeWithTag("screen-charm-tables").assertIsDisplayed()
-        rule.onNodeWithTag("current-charm-table-value").assertTextEquals("7")
+        rule.onNodeWithTag("charm-tables-title").assertIsDisplayed().assertTextEquals("Charm Tables")
+        rule.onNodeWithTag("current-charm-table-card").assertIsDisplayed()
+        rule.onNodeWithTag("current-charm-table-value").assertTextEquals("T7")
         val screen = rule.onNodeWithTag("screen-charm-tables").fetchSemanticsNode().boundsInRoot
         val filter = rule.onNodeWithTag("charm-search-filters").fetchSemanticsNode().boundsInRoot
         assertTrue("search filters fit the narrow portrait viewport", filter.width <= screen.width + 1f)
@@ -122,6 +172,30 @@ class CharmTablesPhoneUiTest {
         rule.onNodeWithTag("charm-search-skill1-points-operator-equal").performClick()
         rule.onNodeWithTag("charm-search-count").performScrollTo().assertTextContains("1 results")
         assertTrue(rule.onAllNodesWithTag("charm-result-source-count").fetchSemanticsNodes().isEmpty())
+    }
+
+    @Test
+    fun charmHelpExplainsTablesStartupAndScreenWorkflowInPlayerLanguage() {
+        val identifyState = mutableStateOf(CharmIdentifyWorkingState())
+        rule.setContent {
+            CompanionTheme {
+                CharmTablesScreen(
+                    index = CharmUiFixture.index,
+                    skillTrees = CharmUiFixture.skills,
+                    currentTable = null,
+                    loadingFailed = false,
+                    identifyWorkingState = identifyState.value,
+                    onUpdateIdentifyWorkingState = { identifyState.value = it(identifyState.value) },
+                    onSaveCurrentTable = {}
+                )
+            }
+        }
+        rule.onNodeWithTag("charm-help-open").performClick()
+        rule.onNodeWithTag("charm-help-what").assertTextContains("standard charm tables", substring = true)
+        rule.onNodeWithTag("charm-help-change").assertTextContains("sleeping or returning to character selection", substring = true)
+        rule.onNodeWithTag("charm-help-change").assertTextContains("cannot read the active table automatically", substring = true)
+        rule.onNodeWithTag("charm-help-tool").assertTextContains("adding more exact charms narrows the possible tables", substring = true)
+        rule.onNodeWithTag("charm-help-close").performClick()
     }
 
     @Test
@@ -177,7 +251,7 @@ class CharmTablesThorUiTest {
         rule.onNodeWithTag("charm-identify-add").performScrollTo().performClick()
         rule.onNodeWithTag("charm-identify-pool-one-table").performScrollTo().assertTextContains("Possible table: 7", substring = true)
         rule.onNodeWithTag("charm-identify-pool-save-table-7").performScrollTo().performClick()
-        rule.onNodeWithTag("current-charm-table-value").assertTextEquals("7")
+        rule.onNodeWithTag("current-charm-table-value").assertTextEquals("T7")
         rule.onNodeWithTag("charm-observation-edit-0").performScrollTo().performClick()
         rule.onNodeWithTag("charm-identify-skill1-points").performScrollTo().performTextClearance()
         rule.onNodeWithTag("charm-identify-skill1-points").performTextInput("99")
@@ -218,7 +292,7 @@ class CharmTablesThorUiTest {
         rule.onNodeWithTag("charm-identify-slots-value-2").performClick()
         rule.onNodeWithTag("charm-identify-live-one-table").performScrollTo().assertTextContains("Possible table: 7", substring = true)
         rule.onNodeWithTag("charm-identify-save-table").performScrollTo().performClick()
-        rule.onNodeWithTag("current-charm-table-value").assertTextEquals("7")
+        rule.onNodeWithTag("current-charm-table-value").assertTextEquals("T7")
         rule.onNodeWithTag("charm-identify-add").performScrollTo().performClick()
         rule.onNodeWithTag("charm-identify-pool-one-table").performScrollTo().assertTextContains("Possible table: 7", substring = true)
     }
@@ -296,13 +370,77 @@ class CharmSavedSearchUiTest {
         assertEquals(-3, savedCriteria.skill1Points)
         assertEquals(CharmPointOperator.GREATER_OR_EQUAL, savedCriteria.skill1Mode)
         rule.onNodeWithTag("charm-search-skill1-points").performScrollTo().performTextClearance()
-        rule.onNodeWithTag("charm-saved-searches-toggle").performScrollTo().performClick()
+        rule.onNodeWithTag("charm-saved-searches-toggle").performScrollTo().assertTextContains("Saved searches (1)").performClick()
         rule.onNodeWithTag("charm-saved-search-ui-test").performClick()
         rule.onNodeWithTag("charm-search-skill1-points").assertTextContains("-3")
         rule.onNodeWithTag("charm-search-skill1-points-operator").assertTextContains(">=")
 
         rule.onNodeWithTag("charm-saved-search-delete-ui-test").performClick()
         assertTrue(saved.value.isEmpty())
+        rule.onNodeWithTag("charm-search-skill1-points").assertTextContains("-3")
+        rule.onNodeWithTag("charm-saved-searches-toggle").assertTextContains("Saved searches (0)").assertIsNotEnabled()
+    }
+}
+
+@RunWith(RobolectricTestRunner::class)
+@Config(sdk = [35], qualifiers = "w360dp-h800dp-port-xhdpi")
+@GraphicsMode(GraphicsMode.Mode.NATIVE)
+class CharmCurrentTableUnknownUiTest {
+    @get:Rule val rule = createComposeRule()
+
+    @Test
+    fun unknownCurrentTableActionIsReadableDisabledAndHintDisappearsWhenKnown() {
+        val identifyState = mutableStateOf(CharmIdentifyWorkingState())
+        val table = mutableStateOf<Int?>(null)
+        rule.setContent {
+            CompanionTheme {
+                CharmTablesScreen(
+                    index = CharmUiFixture.index,
+                    skillTrees = CharmUiFixture.skills,
+                    currentTable = table.value,
+                    loadingFailed = false,
+                    identifyWorkingState = identifyState.value,
+                    onUpdateIdentifyWorkingState = { identifyState.value = it(identifyState.value) },
+                    onSaveCurrentTable = { table.value = it }
+                )
+            }
+        }
+        rule.onNodeWithTag("screen-charm-tables").performScrollToNode(hasTestTag("charm-use-current-table"))
+        rule.onNodeWithTag("charm-use-current-table").assertIsNotEnabled().assertTextEquals("Use current\ntable")
+        rule.onNodeWithTag("charm-use-current-table-hint").assertTextEquals("Set a Current Table first.")
+
+        table.value = 7
+        rule.waitForIdle()
+        rule.onNodeWithTag("charm-use-current-table").assertIsEnabled()
+        assertEquals(0, rule.onAllNodesWithTag("charm-use-current-table-hint").fetchSemanticsNodes().size)
+    }
+}
+
+@RunWith(RobolectricTestRunner::class)
+@Config(sdk = [35], qualifiers = "w800dp-h1080dp-land-xhdpi")
+@GraphicsMode(GraphicsMode.Mode.NATIVE)
+class CharmHeaderThorUiTest {
+    @get:Rule val rule = createComposeRule()
+
+    @Test
+    fun currentTableAndTitleShareTheCompactWideHeaderRow() {
+        val identifyState = mutableStateOf(CharmIdentifyWorkingState())
+        rule.setContent {
+            CompanionTheme {
+                CharmTablesScreen(
+                    index = CharmUiFixture.index,
+                    skillTrees = CharmUiFixture.skills,
+                    currentTable = 7,
+                    loadingFailed = false,
+                    identifyWorkingState = identifyState.value,
+                    onUpdateIdentifyWorkingState = { identifyState.value = it(identifyState.value) },
+                    onSaveCurrentTable = {}
+                )
+            }
+        }
+        val title = rule.onNodeWithTag("charm-tables-title").fetchSemanticsNode().boundsInRoot
+        val table = rule.onNodeWithTag("current-charm-table-card").fetchSemanticsNode().boundsInRoot
+        assertTrue("wide title and Current Table should share a row", kotlin.math.abs(title.center.y - table.center.y) < 3f)
     }
 }
 

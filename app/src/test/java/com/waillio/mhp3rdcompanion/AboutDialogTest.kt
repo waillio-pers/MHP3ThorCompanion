@@ -46,7 +46,7 @@ class AboutDialogTest {
             rule.waitForIdle()
         }
 
-        assertEquals(26, ABOUT_SOURCE_CREDITS.size)
+        assertEquals(30, ABOUT_SOURCE_CREDITS.size)
         assertEquals("1.0.0", BuildConfig.VERSION_NAME)
         assertEquals(2, BuildConfig.VERSION_CODE)
         assertTrue(ABOUT_SOURCE_CREDITS.all { it.url.startsWith("https://") || it.url.startsWith("http://") })
@@ -58,9 +58,14 @@ class AboutDialogTest {
         assertTrue(ABOUT_SOURCE_CREDITS.none { it.url.contains("scribd", ignoreCase = true) })
         assertTrue(ABOUT_SOURCE_CREDITS.any { it.url == "https://game-cap.com/mhp3rd/data/monstlist.html" })
         assertTrue(ABOUT_SOURCE_CREDITS.any { it.url.contains("mhp3db.github.io/tree/7ad3cf1c5ba07ce2e63afdaa1fa37c4671edc3bf") })
+        assertTrue(ABOUT_SOURCE_CREDITS.any { it.url == "https://github.com/mikejsavage/MHP3DB/tree/bfbab18460d95d921d4a3492644b46bfc5ca1f3c" })
+        assertTrue(ABOUT_SOURCE_CREDITS.any { it.url == "https://w.atwiki.jp/mhp3/pages/237.html" })
+        assertTrue(ABOUT_SOURCE_CREDITS.any { it.url == "https://kouryakutsushin.com/mhp3rdwiki/%E3%82%B9%E3%82%AD%E3%83%AB%E4%B8%80%E8%A6%A7.html" })
+        assertTrue(ABOUT_SOURCE_CREDITS.any { it.url == "https://wikiwiki.jp/s-5672s-5672/%E3%82%B9%E3%82%AD%E3%83%AB%E4%B8%80%E8%A6%A7" })
+        assertTrue(ABOUT_SOURCE_CREDITS.any { it.url == "https://monsterhunter.fandom.com/wiki/MHP3:_Armor_Skill_List" })
         assertEquals("English names and translation references used throughout the app.", ABOUT_SOURCE_CREDITS[0].description)
         assertEquals("Monster data, maps, gathering spots, farm data, quests, items, and other game information.", ABOUT_SOURCE_CREDITS[1].description)
-        assertEquals("Creator and rights holder of Monster Hunter Portable 3rd and its original game assets.", ABOUT_SOURCE_CREDITS[17].description)
+        assertEquals("Creator and rights holder of Monster Hunter Portable 3rd and its original game assets.", ABOUT_SOURCE_CREDITS.single { it.name == "CAPCOM · Monster Hunter Portable 3rd" }.description)
         assertTrue(ABOUT_SOURCE_CREDITS.all { it.linkLabel in setOf("Visit website", "Open source", "Open on GitHub") })
     }
 

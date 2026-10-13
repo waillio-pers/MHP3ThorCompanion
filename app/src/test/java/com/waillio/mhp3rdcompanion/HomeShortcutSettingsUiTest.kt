@@ -35,6 +35,9 @@ class HomeShortcutSettingsUiTest {
             rule.onNodeWithTag("home-shortcut-charm_tables").assertIsDisplayed()
 
             rule.onNodeWithTag("settings-button").performClick()
+            rule.onNodeWithTag("home-shortcuts-toggle").assertIsDisplayed()
+            rule.onNodeWithTag("home-shortcut-slot-1").assertDoesNotExist()
+            rule.onNodeWithTag("home-shortcuts-toggle").performClick()
             rule.onNodeWithTag("home-shortcut-slot-1").performClick()
             rule.onNodeWithTag("home-shortcut-option-1-quests").performClick()
 
@@ -55,6 +58,8 @@ class HomeShortcutSettingsUiTest {
             rule.onNodeWithTag("home-shortcut-charm_tables").assertIsDisplayed()
 
             rule.onNodeWithTag("settings-button").performClick()
+            rule.onNodeWithTag("home-shortcut-slot-1").assertDoesNotExist()
+            rule.onNodeWithTag("home-shortcuts-toggle").performClick()
             rule.onNodeWithTag("home-shortcut-slot-1").assertTextContains("Quests")
             rule.onNodeWithTag("home-shortcut-slot-2").assertTextContains("None")
         } finally {

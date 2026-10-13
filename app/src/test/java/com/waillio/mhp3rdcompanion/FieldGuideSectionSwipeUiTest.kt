@@ -19,6 +19,7 @@ import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.click
 import androidx.compose.ui.test.swipeLeft
 import androidx.compose.ui.test.swipeRight
+import com.waillio.mhp3rdcompanion.data.Material
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
@@ -97,6 +98,19 @@ class FieldGuideSectionSwipeUiTest {
     }
 
     @Test
+    fun itemsPageHasRealContentBeforeItsCategoryBecomesSelected() {
+        val material = Material("preview-item", "Herb", description = "Healing item", sources = emptyList(), uses = emptyList())
+        mount(enabled = true, initialPage = FieldGuideRootPage.MAPS, materials = listOf(material))
+
+        // Items is the preceding pager page; the active Maps search result list is empty.
+        rule.onNodeWithTag("field-guide-pager").performTouchInput { swipeRight() }
+        rule.waitForIdle()
+
+        rule.onNodeWithTag("selected-section").assertTextEquals(FieldGuideRootPage.ITEMS.id)
+        rule.onNodeWithTag("result-material-preview-item").assertExists()
+    }
+
+    @Test
     fun weaponTreeChildKeepsItsHorizontalGestureFromRootPager() {
         mount(enabled = true, initialPage = FieldGuideRootPage.WEAPONS, weaponTypeSelected = true)
 
@@ -106,10 +120,10 @@ class FieldGuideSectionSwipeUiTest {
         rule.onNodeWithTag("selected-section").assertTextEquals(FieldGuideRootPage.WEAPONS.id)
     }
 
-    private fun mount(enabled: Boolean, initialPage: FieldGuideRootPage, weaponTypeSelected: Boolean = false) {
+    private fun mount(enabled: Boolean, initialPage: FieldGuideRootPage, weaponTypeSelected: Boolean = false, materials: List<Material> = emptyList()) {
         rule.setContent {
             CompanionTheme {
-                PagerHarness(enabled, initialPage, weaponTypeSelected)
+                PagerHarness(enabled, initialPage, weaponTypeSelected, materials)
             }
         }
         rule.waitForIdle()
@@ -118,7 +132,7 @@ class FieldGuideSectionSwipeUiTest {
 
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
-private fun PagerHarness(enabled: Boolean, initialPage: FieldGuideRootPage, weaponTypeSelected: Boolean) {
+private fun PagerHarness(enabled: Boolean, initialPage: FieldGuideRootPage, weaponTypeSelected: Boolean, materials: List<Material> = emptyList()) {
     var selected by remember { mutableStateOf(initialPage) }
     val weaponState = remember { WeaponScreenState() }
     if (weaponTypeSelected) weaponState.selectedType = "GREAT_SWORD"
@@ -129,6 +143,7 @@ private fun PagerHarness(enabled: Boolean, initialPage: FieldGuideRootPage, weap
             query = "",
             filter = filter,
             results = emptyList(),
+            materials = materials,
             listState = rememberLazyListState(),
             weaponScreenState = weaponState,
             onFilter = { selected = fieldGuidePageForCategory(it) },

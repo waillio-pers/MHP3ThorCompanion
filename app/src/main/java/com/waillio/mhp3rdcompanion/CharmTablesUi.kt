@@ -2,7 +2,7 @@ package com.waillio.mhp3rdcompanion
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -29,6 +29,9 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.ChevronRight
+import androidx.compose.material.icons.filled.ExpandLess
+import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
@@ -55,9 +58,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.FilterQuality
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
@@ -169,19 +176,24 @@ internal fun CharmTablesScreen(
         contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 10.dp, vertical = 7.dp)
     ) {
         item {
-            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text("Charm Tables", color = AppColors.Parchment, style = AppType.ScreenTitle, modifier = Modifier.weight(1f))
-                Surface(
-                    modifier = Modifier.size(34.dp).clickable { showHelp = true }.testTag("charm-help-open"),
-                    shape = AppDimens.ButtonShape,
-                    color = AppColors.Plum,
-                    border = BorderStroke(1.dp, AppColors.Gold)
-                ) {
-                    Box(contentAlignment = Alignment.Center) { Text("?", color = AppColors.Parchment, style = AppType.ButtonLabel) }
+            BoxWithConstraints(Modifier.fillMaxWidth()) {
+                if (maxWidth >= 560.dp) {
+                    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(7.dp)) {
+                        Text("Charm Tables", color = AppColors.Parchment, style = AppType.ScreenTitle, modifier = Modifier.weight(1f).testTag("charm-tables-title"), maxLines = 1)
+                        CompactCurrentTable(currentTable, onSaveCurrentTable)
+                        CharmHelpButton { showHelp = true }
+                    }
+                } else {
+                    Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                            Text("Charm Tables", color = AppColors.Parchment, style = AppType.ScreenTitle, modifier = Modifier.weight(1f).testTag("charm-tables-title"), maxLines = 1)
+                            CharmHelpButton { showHelp = true }
+                        }
+                        CompactCurrentTable(currentTable, onSaveCurrentTable, Modifier.fillMaxWidth())
+                    }
                 }
             }
         }
-        item { CompactCurrentTable(currentTable, onSaveCurrentTable) }
         item {
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 listOf(CharmTablesPage.SEARCH to "Search", CharmTablesPage.IDENTIFY to "Identify").forEach { (which, label) ->
@@ -309,19 +321,25 @@ internal fun CharmTablesScreen(
 }
 
 @Composable
-private fun CompactCurrentTable(currentTable: Int?, onSaveCurrentTable: (Int?) -> Unit) {
-    var expanded by remember { mutableStateOf(false) }
+private fun CharmHelpButton(onClick: () -> Unit) {
     Surface(
-        modifier = Modifier.fillMaxWidth().testTag("current-charm-table-card"),
-        color = AppColors.Parchment.copy(alpha = .08f),
+        modifier = Modifier.size(34.dp).clickable(onClick = onClick).testTag("charm-help-open"),
         shape = AppDimens.ButtonShape,
-        border = BorderStroke(1.dp, AppColors.Plum.copy(alpha = .8f))
+        color = AppColors.Plum,
+        border = BorderStroke(1.dp, AppColors.Gold)
     ) {
-        Row(Modifier.fillMaxWidth().heightIn(min = 42.dp).padding(horizontal = 9.dp, vertical = 2.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(5.dp)) {
-            Text("Current Table:", color = AppColors.Parchment, style = AppType.Metadata, fontWeight = FontWeight.Bold)
-            Text(currentTable?.toString() ?: "Unknown", color = AppColors.Gold, style = AppType.ButtonLabel, modifier = Modifier.weight(1f).testTag("current-charm-table-value"))
+        Box(contentAlignment = Alignment.Center) { Text("?", color = AppColors.Parchment, style = AppType.ButtonLabel) }
+    }
+}
+
+@Composable
+private fun CompactCurrentTable(currentTable: Int?, onSaveCurrentTable: (Int?) -> Unit, modifier: Modifier = Modifier) {
+    var expanded by remember { mutableStateOf(false) }
+    Row(modifier.heightIn(min = 36.dp).testTag("current-charm-table-card"), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(5.dp)) {
+            Text("Current Table:", color = AppColors.Parchment, style = AppType.Metadata, fontWeight = FontWeight.Bold, maxLines = 1)
+            Text(currentTable?.let { "T$it" } ?: "Unknown", color = AppColors.Gold, style = AppType.ButtonLabel, modifier = Modifier.testTag("current-charm-table-value"), maxLines = 1)
             Box {
-                OutlinedButton(onClick = { expanded = true }, modifier = Modifier.heightIn(min = 34.dp).testTag("current-charm-table-change"), colors = ButtonDefaults.outlinedButtonColors(contentColor = AppColors.Parchment), border = BorderStroke(1.dp, AppColors.ParchmentDeep)) {
+                OutlinedButton(onClick = { expanded = true }, modifier = Modifier.heightIn(min = 32.dp).testTag("current-charm-table-change"), contentPadding = PaddingValues(horizontal = 7.dp, vertical = 3.dp), colors = ButtonDefaults.outlinedButtonColors(contentColor = AppColors.Parchment), border = BorderStroke(1.dp, AppColors.ParchmentDeep)) {
                     Text("Change", style = AppType.Metadata)
                 }
                 DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
@@ -332,7 +350,6 @@ private fun CompactCurrentTable(currentTable: Int?, onSaveCurrentTable: (Int?) -
             if (currentTable != null) IconButton(onClick = { onSaveCurrentTable(null) }, modifier = Modifier.size(32.dp).testTag("current-charm-table-clear")) {
                 Icon(Icons.Default.Close, contentDescription = "Clear current table", tint = AppColors.Gold)
             }
-        }
     }
 }
 
@@ -482,21 +499,18 @@ private fun CharmClassSelector(
 
 @Composable
 private fun CharmClassMark(talismanClass: TalismanClass, modifier: Modifier = Modifier) {
-    val tint = when (talismanClass) {
-        TalismanClass.QUEEN -> Color(0xFF8A517B)
-        TalismanClass.KING -> Color(0xFF9A7A36)
-        TalismanClass.DRAGON -> Color(0xFF426C84)
+    val resourceId = when (talismanClass) {
+        TalismanClass.QUEEN -> R.drawable.charm_rarity_queen
+        TalismanClass.KING -> R.drawable.charm_rarity_king
+        TalismanClass.DRAGON -> R.drawable.charm_rarity_dragon
     }
-    Canvas(modifier.semantics { contentDescription = "${talismanClass.label} rarity icon" }) {
-        val c = center
-        val radius = size.minDimension * .46f
-        drawCircle(tint, radius, c)
-        val half = size.minDimension * .19f
-        val mark = androidx.compose.ui.graphics.Path().apply {
-            moveTo(c.x, c.y - half); lineTo(c.x + half, c.y); lineTo(c.x, c.y + half); lineTo(c.x - half, c.y); close()
-        }
-        drawPath(mark, AppColors.Parchment)
-    }
+    Image(
+        bitmap = ImageBitmap.imageResource(resourceId),
+        contentDescription = "${talismanClass.label} rarity icon",
+        contentScale = ContentScale.Fit,
+        filterQuality = FilterQuality.None,
+        modifier = modifier
+    )
 }
 
 @Composable
@@ -506,23 +520,32 @@ private fun TableFilterControl(tableMode: CharmTableMode, explicitTable: Int, cu
         CharmTableMode.CURRENT -> "Current Table"
         CharmTableMode.EXPLICIT -> "Table $explicitTable"
     }
-    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp), verticalAlignment = Alignment.CenterVertically) {
-        ChoiceMenu(
-            label = "Table", selected = label,
-            options = listOf("Any Table") + (1..12).map { "Table $it" } + listOf("Current Table"),
-            onSelect = { value -> when {
-                value == "Any Table" -> onSelect(CharmTableMode.ANY, null)
-                value == "Current Table" -> onSelect(CharmTableMode.CURRENT, null)
-                else -> onSelect(CharmTableMode.EXPLICIT, value.substringAfter(' ').toIntOrNull())
-            } },
-            modifier = Modifier.weight(1f).testTag("charm-search-table")
-        )
-        OutlinedButton(
-            onClick = { onSelect(CharmTableMode.CURRENT, currentTable) },
-            enabled = currentTable != null,
-            modifier = Modifier.heightIn(min = 46.dp).testTag("charm-use-current-table"),
-            colors = ButtonDefaults.outlinedButtonColors(contentColor = AppColors.Ink), border = BorderStroke(1.dp, AppColors.Plum)
-        ) { Text("Use current\ntable", style = AppType.Metadata, maxLines = 2) }
+    Column(Modifier.fillMaxWidth()) {
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp), verticalAlignment = Alignment.CenterVertically) {
+            ChoiceMenu(
+                label = "Table", selected = label,
+                options = listOf("Any Table") + (1..12).map { "Table $it" } + listOf("Current Table"),
+                onSelect = { value -> when {
+                    value == "Any Table" -> onSelect(CharmTableMode.ANY, null)
+                    value == "Current Table" -> onSelect(CharmTableMode.CURRENT, null)
+                    else -> onSelect(CharmTableMode.EXPLICIT, value.substringAfter(' ').toIntOrNull())
+                } },
+                modifier = Modifier.weight(1f).testTag("charm-search-table")
+            )
+            OutlinedButton(
+                onClick = { onSelect(CharmTableMode.CURRENT, currentTable) },
+                enabled = currentTable != null,
+                modifier = Modifier.heightIn(min = 46.dp).testTag("charm-use-current-table"),
+                colors = ButtonDefaults.outlinedButtonColors(
+                    contentColor = AppColors.Ink,
+                    disabledContentColor = AppColors.Ink.copy(alpha = .68f)
+                ),
+                border = BorderStroke(1.dp, AppColors.Plum)
+            ) { Text("Use current\ntable", style = AppType.Metadata, maxLines = 2) }
+        }
+        if (currentTable == null) {
+            Text("Set a Current Table first.", modifier = Modifier.padding(start = 3.dp, top = 2.dp).testTag("charm-use-current-table-hint"), color = AppColors.Ink.copy(alpha = .72f), style = AppType.Metadata)
+        }
     }
 }
 
@@ -538,8 +561,10 @@ private fun SavedSearchesPanel(
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp), verticalAlignment = Alignment.CenterVertically) {
-        OutlinedButton(onClick = { expanded = !expanded }, modifier = Modifier.weight(1f).heightIn(min = 38.dp).testTag("charm-saved-searches-toggle"), colors = ButtonDefaults.outlinedButtonColors(contentColor = AppColors.Ink), border = BorderStroke(1.dp, AppColors.ParchmentDeep)) {
-            Text("Saved searches · ${savedSearches.size}", style = AppType.Metadata)
+        OutlinedButton(onClick = { if (savedSearches.isNotEmpty()) expanded = !expanded }, enabled = savedSearches.isNotEmpty(), modifier = Modifier.weight(1f).heightIn(min = 38.dp).testTag("charm-saved-searches-toggle"), colors = ButtonDefaults.outlinedButtonColors(contentColor = AppColors.Ink, disabledContentColor = AppColors.Ink.copy(alpha = .7f)), border = BorderStroke(1.dp, AppColors.ParchmentDeep)) {
+            Text("Saved searches (${savedSearches.size})", style = AppType.Metadata, maxLines = 1)
+            Spacer(Modifier.weight(1f))
+            Icon(if (expanded) Icons.Default.ExpandLess else Icons.Default.ExpandMore, contentDescription = if (expanded) "Collapse saved searches" else "Expand saved searches", tint = AppColors.Crimson, modifier = Modifier.size(18.dp))
         }
         OutlinedButton(onClick = { focusManager.clearFocus(force = true); keyboardController?.hide(); name = defaultCharmSearchName(criteria, skillsById); editingName = false; showSave = true }, modifier = Modifier.heightIn(min = 38.dp).testTag("charm-save-search"), colors = ButtonDefaults.outlinedButtonColors(contentColor = AppColors.Ink), border = BorderStroke(1.dp, AppColors.Plum)) {
             Text("Save search", style = AppType.Metadata)
@@ -548,8 +573,18 @@ private fun SavedSearchesPanel(
     if (expanded && savedSearches.isNotEmpty()) {
         Column(Modifier.fillMaxWidth().padding(top = 3.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
             savedSearches.forEach { search ->
-                Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                    Text(search.name, modifier = Modifier.weight(1f).clickable { onRestore(search.criteria) }.testTag("charm-saved-search-${search.id}"), color = AppColors.Ink, style = AppType.Metadata, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Surface(
+                        modifier = Modifier.weight(1f).clickable { onRestore(search.criteria) }.testTag("charm-saved-search-${search.id}"),
+                        color = AppColors.ParchmentDeep.copy(alpha = .28f),
+                        shape = AppDimens.ButtonShape,
+                        border = BorderStroke(1.dp, AppColors.ParchmentDeep.copy(alpha = .75f))
+                    ) {
+                        Row(Modifier.fillMaxWidth().padding(horizontal = 8.dp, vertical = 6.dp), verticalAlignment = Alignment.CenterVertically) {
+                            Text(search.name, modifier = Modifier.weight(1f), color = AppColors.Ink, style = AppType.Metadata, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                            Icon(Icons.Default.ChevronRight, "Load saved search", tint = AppColors.Crimson, modifier = Modifier.size(18.dp))
+                        }
+                    }
                     IconButton(onClick = { onDelete(search.id) }, modifier = Modifier.size(32.dp).testTag("charm-saved-search-delete-${search.id}")) { Icon(Icons.Default.Close, "Delete saved search", tint = AppColors.Crimson) }
                 }
             }
@@ -667,10 +702,14 @@ private fun CharmHelpDialog(onDismiss: () -> Unit) {
     BackHandler(onBack = onDismiss)
     TrackedDialog(onDismissRequest = onDismiss) {
         Surface(Modifier.fillMaxWidth(.9f).widthIn(max = 520.dp).testTag("charm-help-dialog"), color = AppColors.Parchment, shape = AppDimens.CardShape, border = BorderStroke(1.dp, AppColors.Plum)) {
-            Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Column(Modifier.padding(14.dp).verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(7.dp)) {
                 Text("Charm Tables", color = AppColors.Ink, style = AppType.SectionTitle)
-                Text("This tool covers standard Timeworn Charm tables 1–12. It cannot read the active table from the game; set Current Table manually or identify it from exact charms.", color = AppColors.Ink, style = AppType.Body)
-                Text("The active table is selected when the game fully starts. A full restart can result in another table. Sleeping or returning to character selection is not guaranteed to change it.", color = AppColors.Ink, style = AppType.Body)
+                Text("WHAT ARE CHARM TABLES?", color = AppColors.Crimson, style = AppType.Metadata, fontWeight = FontWeight.Bold)
+                Text("A full game startup selects one of the standard charm tables. It affects which Timeworn Charm results can occur.", modifier = Modifier.testTag("charm-help-what"), color = AppColors.Ink, style = AppType.Body)
+                Text("HOW DOES THE TABLE CHANGE?", color = AppColors.Crimson, style = AppType.Metadata, fontWeight = FontWeight.Bold)
+                Text("The table is selected when the game fully starts. A full restart may give you another table; sleeping or returning to character selection is not guaranteed to change it. This app cannot read the active table automatically.", modifier = Modifier.testTag("charm-help-change"), color = AppColors.Ink, style = AppType.Body)
+                Text("HOW TO USE THIS TOOL", color = AppColors.Crimson, style = AppType.Metadata, fontWeight = FontWeight.Bold)
+                Text("Search to find possible Timeworn Charms. Set Current Table to restrict searches when you already know it. In Identify, enter appraised charms; adding more exact charms narrows the possible tables. Save the result as Current Table to store it on this device.", modifier = Modifier.testTag("charm-help-tool"), color = AppColors.Ink, style = AppType.Body)
                 Button(onClick = onDismiss, modifier = Modifier.align(Alignment.End).testTag("charm-help-close"), colors = ButtonDefaults.buttonColors(containerColor = AppColors.Plum, contentColor = AppColors.Parchment)) { Text("Close") }
             }
         }

@@ -53,6 +53,7 @@ class QuestBrowserUiTest {
         rule.onNodeWithTag("quest-list").performScrollToNode(hasTestTag("quest-row-quest_village_2_star_05"))
         rule.onNodeWithTag("quest-row-quest_village_2_star_05").assertIsDisplayed()
 
+        revealQuestFilters()
         rule.onNodeWithTag("quest-filters-button").performClick()
         rule.onNodeWithTag("quest-filter-type-guild").performClick()
         rule.waitForIdle()
@@ -110,8 +111,8 @@ class QuestBrowserUiTest {
             SemanticsMatcher.expectValue(SemanticsProperties.EditableText, AnnotatedString("a"))
         )
         rule.onNodeWithTag("field-filter-quest").assertIsSelected()
-        rule.onNodeWithTag("quest-filter-summary").assertTextEquals("Guild · High Rank · ★8")
-        rule.onNodeWithTag("quest-filters-button").assertTextContains("Filters (3)")
+        rule.onAllNodesWithTag("quest-filter-summary").assertCountEquals(0)
+        rule.onNodeWithTag("quest-filters-button").assertDoesNotExist()
         assertEquals(before, rule.onNodeWithTag("quest-row-quest_guild_8_urgent_amatsu").fetchSemanticsNode().boundsInRoot)
     }
 
@@ -169,5 +170,12 @@ class QuestBrowserUiTest {
         rule.onNodeWithTag("field-guide-category-strip")
             .performScrollToNode(hasTestTag("field-filter-quest"))
         rule.onNodeWithTag("field-filter-quest").performClick()
+    }
+
+    private fun revealQuestFilters() {
+        if (rule.onAllNodesWithTag("quest-filters-button").fetchSemanticsNodes().isEmpty()) {
+            rule.onNodeWithTag("quest-list").performTouchInput { swipeDown() }
+            rule.waitForIdle()
+        }
     }
 }

@@ -58,8 +58,6 @@ import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.BlendMode
-import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.graphics.Path
@@ -73,7 +71,6 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalContext
@@ -981,6 +978,8 @@ internal fun UiSettingsDialog(
     val scaleLabel = "${percentage / 100}.${(percentage % 100).toString().padStart(2, '0')}"
     val compactPortrait = LocalAppWindowLayout.current.profile == AppLayoutProfile.COMPACT_PORTRAIT
     var expandedShortcutSlot by remember { mutableIntStateOf(-1) }
+    var homeShortcutsExpanded by remember { mutableStateOf(false) }
+    var durationMenuExpanded by remember { mutableStateOf(false) }
     val normalizedShortcutSlots = remember(homeShortcutSlots) { normalizeHomeShortcutSlots(homeShortcutSlots) }
 
     BackHandler(onBack = onDismiss)
@@ -1068,70 +1067,70 @@ internal fun UiSettingsDialog(
                     Text("0.80", style = AppType.Metadata, color = AppColors.Ink.copy(alpha = .72f))
                     Text("1.10", style = AppType.Metadata, color = AppColors.Ink.copy(alpha = .72f))
                 }
-                Text(
-                    "Customize Home shortcuts",
-                    modifier = Modifier.padding(top = 14.dp),
-                    style = AppType.CardTitle,
-                    color = AppColors.Ink
-                )
-                Text(
-                    "Choose up to 4 shortcuts to show on Home.",
-                    modifier = Modifier.padding(top = 3.dp, bottom = 7.dp),
-                    style = AppType.Metadata,
-                    color = AppColors.Ink.copy(alpha = .72f)
-                )
-                repeat(HOME_SHORTCUT_SLOT_COUNT) { slotIndex ->
-                    val selectedId = normalizedShortcutSlots[slotIndex]
-                    val selectedPage = fieldGuideShortcutChoices.firstOrNull { it.id == selectedId }
-                    Row(
-                        Modifier.fillMaxWidth().padding(vertical = 3.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text("Slot ${slotIndex + 1}", Modifier.width(58.dp), style = AppType.Metadata, color = AppColors.Ink)
-                        Box(Modifier.weight(1f)) {
-                            OutlinedButton(
-                                onClick = { expandedShortcutSlot = slotIndex },
-                                modifier = Modifier.fillMaxWidth().testTag("home-shortcut-slot-${slotIndex + 1}"),
-                                shape = AppDimens.ButtonShape,
-                                border = BorderStroke(1.dp, AppColors.ParchmentDeep),
-                                contentPadding = PaddingValues(horizontal = 10.dp, vertical = 6.dp)
-                            ) {
-                                Text(selectedPage?.displayLabel() ?: "None", color = AppColors.Ink, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                                Spacer(Modifier.weight(1f))
-                                Icon(Icons.Default.ExpandMore, null, tint = AppColors.Crimson, modifier = Modifier.size(18.dp))
-                            }
-                            DropdownMenu(
-                                expanded = expandedShortcutSlot == slotIndex,
-                                onDismissRequest = { expandedShortcutSlot = -1 },
-                                modifier = Modifier.heightIn(max = 360.dp)
-                            ) {
-                                DropdownMenuItem(
-                                    text = { Text("None") },
-                                    onClick = {
-                                        onHomeShortcutSlotsChange(selectHomeShortcut(normalizedShortcutSlots, slotIndex, null))
-                                        expandedShortcutSlot = -1
-                                    },
-                                    modifier = Modifier.testTag("home-shortcut-option-${slotIndex + 1}-none")
-                                )
-                                fieldGuideShortcutChoices.forEach { page ->
-                                    val usedInOtherSlot = normalizedShortcutSlots.indices.any {
-                                        it != slotIndex && normalizedShortcutSlots[it] == page.id
-                                    }
+                TextButton(
+                    onClick = { homeShortcutsExpanded = !homeShortcutsExpanded; expandedShortcutSlot = -1 },
+                    modifier = Modifier.fillMaxWidth().padding(top = 7.dp).testTag("home-shortcuts-toggle"),
+                    contentPadding = PaddingValues(horizontal = 2.dp, vertical = 4.dp)
+                ) {
+                    Text("Customize Home shortcuts", modifier = Modifier.weight(1f), style = AppType.CardTitle, color = AppColors.Ink)
+                    Icon(if (homeShortcutsExpanded) Icons.Default.ExpandLess else Icons.Default.ExpandMore,
+                        contentDescription = if (homeShortcutsExpanded) "Collapse Home shortcuts" else "Expand Home shortcuts",
+                        tint = AppColors.Crimson)
+                }
+                if (homeShortcutsExpanded) {
+                    repeat(HOME_SHORTCUT_SLOT_COUNT) { slotIndex ->
+                        val selectedId = normalizedShortcutSlots[slotIndex]
+                        val selectedPage = fieldGuideShortcutChoices.firstOrNull { it.id == selectedId }
+                        Row(
+                            Modifier.fillMaxWidth().padding(vertical = 3.dp).testTag("home-shortcut-slot-row-${slotIndex + 1}"),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text("Slot ${slotIndex + 1}", Modifier.width(58.dp), style = AppType.Metadata, color = AppColors.Ink)
+                            Box(Modifier.weight(1f)) {
+                                OutlinedButton(
+                                    onClick = { expandedShortcutSlot = slotIndex },
+                                    modifier = Modifier.fillMaxWidth().testTag("home-shortcut-slot-${slotIndex + 1}"),
+                                    shape = AppDimens.ButtonShape,
+                                    border = BorderStroke(1.dp, AppColors.ParchmentDeep),
+                                    contentPadding = PaddingValues(horizontal = 10.dp, vertical = 6.dp)
+                                ) {
+                                    Text(selectedPage?.displayLabel() ?: "None", color = AppColors.Ink, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                                    Spacer(Modifier.weight(1f))
+                                    Icon(Icons.Default.ExpandMore, null, tint = AppColors.Crimson, modifier = Modifier.size(18.dp))
+                                }
+                                DropdownMenu(
+                                    expanded = expandedShortcutSlot == slotIndex,
+                                    onDismissRequest = { expandedShortcutSlot = -1 },
+                                    modifier = Modifier.heightIn(max = 360.dp)
+                                ) {
                                     DropdownMenuItem(
-                                        text = {
-                                            Text(
-                                                if (usedInOtherSlot) "${page.displayLabel()} · already in another slot" else page.displayLabel(),
-                                                maxLines = 1,
-                                                overflow = TextOverflow.Ellipsis
-                                            )
-                                        },
-                                        enabled = !usedInOtherSlot,
+                                        text = { Text("None") },
                                         onClick = {
-                                            onHomeShortcutSlotsChange(selectHomeShortcut(normalizedShortcutSlots, slotIndex, page.id))
+                                            onHomeShortcutSlotsChange(selectHomeShortcut(normalizedShortcutSlots, slotIndex, null))
                                             expandedShortcutSlot = -1
                                         },
-                                        modifier = Modifier.testTag("home-shortcut-option-${slotIndex + 1}-${page.id}")
+                                        modifier = Modifier.testTag("home-shortcut-option-${slotIndex + 1}-none")
                                     )
+                                    fieldGuideShortcutChoices.forEach { page ->
+                                        val usedInOtherSlot = normalizedShortcutSlots.indices.any {
+                                            it != slotIndex && normalizedShortcutSlots[it] == page.id
+                                        }
+                                        DropdownMenuItem(
+                                            text = {
+                                                Text(
+                                                    if (usedInOtherSlot) "${page.displayLabel()} · already in another slot" else page.displayLabel(),
+                                                    maxLines = 1,
+                                                    overflow = TextOverflow.Ellipsis
+                                                )
+                                            },
+                                            enabled = !usedInOtherSlot,
+                                            onClick = {
+                                                onHomeShortcutSlotsChange(selectHomeShortcut(normalizedShortcutSlots, slotIndex, page.id))
+                                                expandedShortcutSlot = -1
+                                            },
+                                            modifier = Modifier.testTag("home-shortcut-option-${slotIndex + 1}-${page.id}")
+                                        )
+                                    }
                                 }
                             }
                         }
@@ -1163,7 +1162,7 @@ internal fun UiSettingsDialog(
                     Modifier.fillMaxWidth().padding(top = 12.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Column(Modifier.weight(1f).padding(end = 10.dp)) {
+                    Column(Modifier.weight(1f).padding(end = 5.dp)) {
                         Text(
                             stringResource(R.string.settings_oled_screen_saver),
                             style = AppType.CardTitle,
@@ -1174,6 +1173,31 @@ internal fun UiSettingsDialog(
                             style = AppType.Metadata,
                             color = AppColors.Ink.copy(alpha = .72f)
                         )
+                    }
+                    Box {
+                    OutlinedButton(
+                        onClick = { durationMenuExpanded = true },
+                        enabled = screenSaverTimeoutMinutes > 0,
+                        modifier = Modifier.height(32.dp).testTag("oled-duration-selector"),
+                        contentPadding = PaddingValues(horizontal = 8.dp, vertical = 4.dp),
+                        colors = ButtonDefaults.outlinedButtonColors(
+                            contentColor = AppColors.Ink,
+                            disabledContentColor = AppColors.Ink.copy(alpha = .62f)
+                        ),
+                        border = BorderStroke(1.dp, AppColors.ParchmentDeep)
+                    ) {
+                        Text(oledScreenSaverTimeoutLabel(if (screenSaverTimeoutMinutes > 0) screenSaverTimeoutMinutes else screenSaverLastDurationMinutes), style = AppType.Metadata, maxLines = 1)
+                        Icon(Icons.Default.ExpandMore, null, modifier = Modifier.size(17.dp))
+                    }
+                    DropdownMenu(expanded = durationMenuExpanded && screenSaverTimeoutMinutes > 0, onDismissRequest = { durationMenuExpanded = false }) {
+                        OLED_SCREEN_SAVER_TIMEOUT_OPTIONS.filter { it > 0 }.forEach { minutes ->
+                            DropdownMenuItem(
+                                text = { Text(oledScreenSaverTimeoutLabel(minutes)) },
+                                onClick = { onScreenSaverTimeoutMinutesChange(minutes); durationMenuExpanded = false },
+                                modifier = Modifier.testTag("oled-screen-saver-duration-$minutes")
+                            )
+                        }
+                    }
                     }
                     Switch(
                         checked = screenSaverTimeoutMinutes > 0,
@@ -1191,40 +1215,6 @@ internal fun UiSettingsDialog(
                             uncheckedTrackColor = AppColors.Ink.copy(alpha = .35f)
                         )
                     )
-                }
-                if (screenSaverTimeoutMinutes > 0) {
-                    Text(
-                        "Turn off after",
-                        modifier = Modifier.padding(top = 4.dp, bottom = 4.dp),
-                        style = AppType.Metadata,
-                        color = AppColors.Ink.copy(alpha = .72f)
-                    )
-                    FlowRow(
-                        horizontalArrangement = Arrangement.spacedBy(5.dp),
-                        verticalArrangement = Arrangement.spacedBy(4.dp)
-                    ) {
-                        OLED_SCREEN_SAVER_TIMEOUT_OPTIONS.filter { it > 0 }.forEach { minutes ->
-                            FilterChip(
-                                selected = screenSaverTimeoutMinutes == minutes,
-                                onClick = { onScreenSaverTimeoutMinutesChange(minutes) },
-                                label = { Text(oledScreenSaverTimeoutLabel(minutes), style = AppType.Metadata, maxLines = 1) },
-                                modifier = Modifier.testTag("oled-screen-saver-duration-$minutes"),
-                                shape = AppDimens.ButtonShape,
-                                colors = FilterChipDefaults.filterChipColors(
-                                    selectedContainerColor = AppColors.Crimson,
-                                    selectedLabelColor = AppColors.Parchment,
-                                    containerColor = AppColors.ParchmentDeep.copy(alpha = .35f),
-                                    labelColor = AppColors.Ink
-                                ),
-                                border = FilterChipDefaults.filterChipBorder(
-                                    enabled = true,
-                                    selected = screenSaverTimeoutMinutes == minutes,
-                                    borderColor = AppColors.ParchmentDeep,
-                                    selectedBorderColor = AppColors.Crimson
-                                )
-                            )
-                        }
-                    }
                 }
                 Row(
                     Modifier.fillMaxWidth().padding(top = 12.dp),
@@ -1437,13 +1427,6 @@ internal fun HomeScreen(
     }
 }
 
-internal fun fieldGuideScrollPosition(canScrollBackward: Boolean, canScrollForward: Boolean): String = when {
-    canScrollBackward && canScrollForward -> "middle"
-    canScrollBackward -> "rightmost"
-    canScrollForward -> "leftmost"
-    else -> "no overflow"
-}
-
 @Composable
 internal fun FieldGuideCategorySelector(
     selectedPage: FieldGuideRootPage,
@@ -1451,7 +1434,6 @@ internal fun FieldGuideCategorySelector(
 ) {
     val scrollState = rememberScrollState()
     val chipRequesters = remember { List(fieldGuideCategoryOrder.size) { BringIntoViewRequester() } }
-    val edgeState = fieldGuideScrollPosition(scrollState.canScrollBackward, scrollState.canScrollForward)
     val selectedIndex = fieldGuideCategoryOrder.indexOf(selectedPage)
     LaunchedEffect(selectedPage) {
         if (selectedIndex >= 0) chipRequesters[selectedIndex].bringIntoView()
@@ -1459,33 +1441,6 @@ internal fun FieldGuideCategorySelector(
     Box(
         Modifier.fillMaxWidth().padding(vertical = 9.dp)
             .testTag("field-guide-category-strip")
-            .semantics { stateDescription = edgeState }
-            .graphicsLayer { compositingStrategy = CompositingStrategy.Offscreen }
-            .drawWithContent {
-                drawContent()
-                val edgeWidth = 24.dp.toPx()
-                if (scrollState.canScrollBackward) {
-                    drawRect(
-                        brush = Brush.horizontalGradient(
-                            0f to Color.Transparent,
-                            1f to Color.White
-                        ),
-                        size = Size(edgeWidth, size.height),
-                        blendMode = BlendMode.DstIn
-                    )
-                }
-                if (scrollState.canScrollForward) {
-                    drawRect(
-                        brush = Brush.horizontalGradient(
-                            0f to Color.White,
-                            1f to Color.Transparent
-                        ),
-                        topLeft = Offset(size.width - edgeWidth, 0f),
-                        size = Size(edgeWidth, size.height),
-                        blendMode = BlendMode.DstIn
-                    )
-                }
-            }
     ) {
         Row(
             Modifier.fillMaxWidth().horizontalScroll(scrollState).padding(horizontal = 12.dp),
@@ -1761,6 +1716,7 @@ internal fun SearchScreen(
             results.filterNot { it.type == EntityType.SMALL_MONSTER } + smallMonsterResults
         } else results
     }
+    val itemResults = remember(materials, query) { itemResultsForQuery(materials, query) }
     val selectedPage = if (selectedCharmTablesRoot) FieldGuideRootPage.CHARM_TABLES else fieldGuidePageForCategory(filter)
     val selectedPageIndex = fieldGuideCategoryOrder.indexOf(selectedPage).coerceAtLeast(0)
     val pagerState = rememberPagerState(initialPage = selectedPageIndex) { fieldGuideCategoryOrder.size }
@@ -1830,8 +1786,8 @@ internal fun SearchScreen(
                     }
                 )
                 pageFilter == EntityType.MATERIAL -> ItemIndex(
-                    itemResults = displayResults.filter { it.type == EntityType.MATERIAL },
-                    totalCount = results.count { it.type == EntityType.MATERIAL },
+                    itemResults = itemResults,
+                    totalCount = itemResults.size,
                     query = query,
                     listState = itemListState,
                     onItem = onResult
@@ -1935,10 +1891,55 @@ internal fun skillsFilterVisibilityAfterScroll(
     currentlyVisible: Boolean,
     accumulatedDeltaPx: Float,
     thresholdPx: Float
+): Boolean = filterToolbarVisibilityAfterScroll(currentlyVisible, accumulatedDeltaPx, thresholdPx)
+
+internal fun filterToolbarVisibilityAfterScroll(
+    currentlyVisible: Boolean,
+    accumulatedDeltaPx: Float,
+    thresholdPx: Float
 ): Boolean = when {
     currentlyVisible && accumulatedDeltaPx >= thresholdPx -> false
     !currentlyVisible && accumulatedDeltaPx <= -thresholdPx -> true
     else -> currentlyVisible
+}
+
+@Composable
+internal fun rememberLocalFilterToolbarVisibility(listState: LazyListState): Boolean {
+    val thresholdPx = with(LocalDensity.current) { 56.dp.toPx() }
+    var visible by remember(listState) {
+        mutableStateOf(
+            listState.firstVisibleItemIndex == 0 &&
+                listState.firstVisibleItemScrollOffset < thresholdPx
+        )
+    }
+    LaunchedEffect(listState, thresholdPx) {
+        var lastIndex = listState.firstVisibleItemIndex
+        var lastOffset = listState.firstVisibleItemScrollOffset
+        var accumulated = 0f
+        var lastDirection = 0
+        var currentVisible = visible
+        snapshotFlow { listState.firstVisibleItemIndex to listState.firstVisibleItemScrollOffset }
+            .collect { (index, offset) ->
+                val delta = when {
+                    index == lastIndex -> (offset - lastOffset).toFloat()
+                    index > lastIndex -> thresholdPx
+                    else -> -thresholdPx
+                }
+                val direction = delta.compareTo(0f)
+                if (direction != 0 && lastDirection != 0 && direction != lastDirection) accumulated = 0f
+                if (direction != 0) lastDirection = direction
+                accumulated += delta
+                val nextVisible = filterToolbarVisibilityAfterScroll(currentVisible, accumulated, thresholdPx)
+                if (nextVisible != currentVisible) {
+                    currentVisible = nextVisible
+                    visible = nextVisible
+                    accumulated = 0f
+                }
+                lastIndex = index
+                lastOffset = offset
+            }
+    }
+    return visible
 }
 
 @Composable
@@ -1957,40 +1958,7 @@ internal fun SkillsBrowser(
     val categories = remember { SkillCategory.values().toList() }
     var categoryMask by rememberSaveable { mutableIntStateOf(0) }
     var showCategoryFilter by rememberSaveable { mutableStateOf(false) }
-    var categoryFilterVisible by rememberSaveable { mutableStateOf(true) }
-    val compactPortrait = LocalAppWindowLayout.current.profile == AppLayoutProfile.COMPACT_PORTRAIT
-    val directionThresholdPx = with(LocalDensity.current) { 56.dp.toPx() }
-    LaunchedEffect(listState, compactPortrait, directionThresholdPx) {
-        if (!compactPortrait) {
-            categoryFilterVisible = true
-            return@LaunchedEffect
-        }
-        var lastIndex = listState.firstVisibleItemIndex
-        var lastOffset = listState.firstVisibleItemScrollOffset
-        var accumulated = 0f
-        var lastDirection = 0
-        var visible = categoryFilterVisible
-        snapshotFlow { listState.firstVisibleItemIndex to listState.firstVisibleItemScrollOffset }
-            .collect { (index, offset) ->
-                val delta = when {
-                    index == lastIndex -> (offset - lastOffset).toFloat()
-                    index > lastIndex -> directionThresholdPx
-                    else -> -directionThresholdPx
-                }
-                val direction = delta.compareTo(0f)
-                if (direction != 0 && lastDirection != 0 && direction != lastDirection) accumulated = 0f
-                if (direction != 0) lastDirection = direction
-                accumulated += delta
-                val nextVisible = skillsFilterVisibilityAfterScroll(visible, accumulated, directionThresholdPx)
-                if (nextVisible != visible) {
-                    visible = nextVisible
-                    categoryFilterVisible = nextVisible
-                    accumulated = 0f
-                }
-                lastIndex = index
-                lastOffset = offset
-            }
-    }
+    val categoryFilterVisible = rememberLocalFilterToolbarVisibility(listState)
     val selectedCategories = remember(categoryMask) {
         categories.filterIndexed { index, _ -> categoryMask and (1 shl index) != 0 }
             .mapTo(linkedSetOf()) { it.name }
@@ -2021,7 +1989,7 @@ internal fun SkillsBrowser(
     }
     Column(Modifier.fillMaxSize().testTag("skills-browser")) {
         AnimatedVisibility(
-            visible = !compactPortrait || categoryFilterVisible,
+            visible = categoryFilterVisible,
             enter = expandVertically(),
             exit = shrinkVertically(),
             modifier = Modifier.testTag("skills-category-filter-row")
@@ -2062,12 +2030,14 @@ internal fun SkillsBrowser(
         if (filtered.isEmpty()) {
             EmptyState(Icons.Default.SearchOff, "No skills found", "Try another query or change the selected categories")
         } else {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize().testTag("skills-list"),
-                state = listState,
-                verticalArrangement = Arrangement.spacedBy(7.dp),
-                contentPadding = PaddingValues(bottom = 14.dp)
-            ) {
+            Box(Modifier.fillMaxSize().testTag("skills-content")) {
+                val letters = remember(filtered) { skillInitialLetters(filtered) }
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize().padding(end = if (letters.isNotEmpty()) 34.dp else 0.dp).testTag("skills-list"),
+                    state = listState,
+                    verticalArrangement = Arrangement.spacedBy(7.dp),
+                    contentPadding = PaddingValues(bottom = 14.dp)
+                ) {
                 item(key = "skills-explanation") {
                     ParchmentSurface(Modifier.fillMaxWidth().testTag("skills-explanation-card")) {
                         Column(Modifier.padding(10.dp)) {
@@ -2144,6 +2114,26 @@ internal fun SkillsBrowser(
                             }
                         }
                     }
+                }
+            }
+                if (letters.isNotEmpty()) {
+                    val visibleLetter by remember(filtered, listState) {
+                        derivedStateOf {
+                            filtered.getOrNull((listState.firstVisibleItemIndex - 1).coerceAtLeast(0))
+                                ?.displayName?.trim()?.firstOrNull()?.uppercaseChar()
+                        }
+                    }
+                    val scope = rememberCoroutineScope()
+                    AlphabetScrubber(
+                        letters = letters,
+                        selectedLetter = visibleLetter,
+                        onJump = { letter ->
+                            firstSkillIndexForLetter(filtered, letter).takeIf { it >= 0 }?.let { index ->
+                                scope.launch { listState.scrollToItem(index + 1) }
+                            }
+                        },
+                        modifier = Modifier.align(Alignment.CenterEnd).testTag("skills-alphabet-scrubber")
+                    )
                 }
             }
         }
@@ -3332,6 +3322,31 @@ internal fun itemInitialLetters(items: List<SearchResult>): List<Char> = items
 internal fun firstItemIndexForLetter(items: List<SearchResult>, letter: Char): Int =
     items.indexOfFirst { it.name.trim().startsWith(letter, ignoreCase = true) }
 
+internal fun itemResultsForQuery(materials: List<Material>, query: String): List<SearchResult> {
+    val q = query.trim()
+    return materials.asSequence()
+        .filter { material ->
+            q.isBlank() || material.name.contains(q, ignoreCase = true) ||
+                material.description.contains(q, ignoreCase = true) ||
+                material.aliases.any { it.contains(q, ignoreCase = true) }
+        }
+        .map { material -> SearchResult(material.id, material.name, material.description, EntityType.MATERIAL, material.aliases, material.gameItemId) }
+        .sortedWith(compareBy<SearchResult>(
+            { !it.name.equals(q, ignoreCase = true) },
+            { !it.name.startsWith(q, ignoreCase = true) },
+            { it.name.lowercase() }
+        ))
+        .toList()
+}
+
+internal fun skillInitialLetters(skills: List<SkillTree>): List<Char> = skills
+    .mapNotNull { it.displayName.trim().firstOrNull()?.uppercaseChar() }
+    .distinct()
+    .sorted()
+
+internal fun firstSkillIndexForLetter(skills: List<SkillTree>, letter: Char): Int =
+    skills.indexOfFirst { it.displayName.trim().startsWith(letter, ignoreCase = true) }
+
 @Composable
 internal fun MonsterIndex(
     monsters: List<Monster>,
@@ -3398,12 +3413,18 @@ internal fun AlphabetScrubber(
     var scrubberHeight by remember { mutableIntStateOf(1) }
     var dragging by remember { mutableStateOf(false) }
     var dragLetter by remember { mutableStateOf<Char?>(null) }
+    val latestScrubberHeight = rememberUpdatedState(scrubberHeight)
+    val latestOnJump = rememberUpdatedState(onJump)
     val selected = dragLetter ?: selectedLetter ?: letters.first()
     fun jump(letter: Char) {
         dragLetter = letter
-        onJump(letter)
+        latestOnJump.value(letter)
     }
-    fun letterAt(y: Float): Char = letters[((y / scrubberHeight) * letters.size).toInt().coerceIn(0, letters.lastIndex)]
+    fun letterAt(y: Float): Char = letters[
+        ((y / latestScrubberHeight.value.coerceAtLeast(1)) * letters.size)
+            .toInt()
+            .coerceIn(0, letters.lastIndex)
+    ]
 
     BoxWithConstraints(modifier.fillMaxHeight().width(36.dp).padding(vertical = 5.dp)) {
         val density = LocalDensity.current
@@ -3413,7 +3434,7 @@ internal fun AlphabetScrubber(
         Column(
             Modifier.fillMaxSize().testTag("alphabet-scrubber")
                 .onGloballyPositioned { scrubberHeight = it.size.height.coerceAtLeast(1) }
-                .pointerInput(letters, scrubberHeight) {
+                .pointerInput(letters) {
                     detectVerticalDragGestures(
                         onDragStart = { offset -> dragging = true; jump(letterAt(offset.y)) },
                         onVerticalDrag = { change, _ -> change.consume(); jump(letterAt(change.position.y)) },
@@ -3896,7 +3917,7 @@ private fun Modifier.questProgressionOutline(style: QuestOutlineStyle): Modifier
     if (style == QuestOutlineStyle.NONE) this else drawWithContent {
         drawContent()
         val pathEffect = if (style == QuestOutlineStyle.PREREQUISITE_DASHED) {
-            PathEffect.dashPathEffect(floatArrayOf(7.dp.toPx(), 4.dp.toPx()))
+            PathEffect.dashPathEffect(floatArrayOf(10.dp.toPx(), 5.dp.toPx()))
         } else null
         val outline = AppDimens.CardShape.createOutline(size, layoutDirection, this)
         val path = when (outline) {
@@ -3904,7 +3925,7 @@ private fun Modifier.questProgressionOutline(style: QuestOutlineStyle): Modifier
             is Outline.Rectangle -> Path().apply { addRect(outline.rect) }
             is Outline.Rounded -> Path().apply { addRoundRect(outline.roundRect) }
         }
-        drawPath(path, AppColors.Crimson, style = Stroke(width = 1.6.dp.toPx(), pathEffect = pathEffect))
+        drawPath(path, AppColors.Crimson, style = Stroke(width = 3.dp.toPx(), pathEffect = pathEffect))
     }
 
 @Composable
@@ -4045,14 +4066,21 @@ private fun QuestBrowser(
     var draftState by remember { mutableStateOf(QuestFilterState()) }
     val summary = questFilterSummary(appliedState)
     val activeDimensions = questFilterDimensionCount(appliedState)
+    val filterControlsVisible = rememberLocalFilterToolbarVisibility(listState)
 
     Column(Modifier.fillMaxSize().testTag("quest-browser")) {
-        FlowRow(
-            Modifier.fillMaxWidth().padding(vertical = 3.dp).testTag("quest-filter-controls"),
-            horizontalArrangement = Arrangement.spacedBy(6.dp),
-            verticalArrangement = Arrangement.spacedBy(3.dp),
-            itemVerticalAlignment = Alignment.CenterVertically
+        AnimatedVisibility(
+            visible = filterControlsVisible,
+            enter = expandVertically(),
+            exit = shrinkVertically(),
+            modifier = Modifier.testTag("quest-filter-controls")
         ) {
+            FlowRow(
+                Modifier.fillMaxWidth().padding(vertical = 3.dp),
+                horizontalArrangement = Arrangement.spacedBy(6.dp),
+                verticalArrangement = Arrangement.spacedBy(3.dp),
+                itemVerticalAlignment = Alignment.CenterVertically
+            ) {
             FilterChip(
                 selected = activeDimensions > 0,
                 onClick = {
@@ -4099,43 +4127,47 @@ private fun QuestBrowser(
                     selectedBorderColor = AppColors.Gold
                 )
             )
+            }
         }
-        Row(
-            Modifier.fillMaxWidth().heightIn(min = 30.dp).padding(bottom = 3.dp),
-            verticalAlignment = Alignment.CenterVertically
+        LazyColumn(
+            modifier = Modifier.weight(1f).fillMaxWidth().testTag("quest-list"),
+            state = listState,
+            verticalArrangement = Arrangement.spacedBy(7.dp),
+            contentPadding = PaddingValues(bottom = 12.dp)
         ) {
-            Text(summary, color = AppColors.Parchment, style = AppType.Metadata, maxLines = 1,
-                overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f).testTag("quest-filter-summary"))
-            if (activeDimensions > 0) {
-                IconButton(onClick = { onApplyFilters(QuestFilterState()) }, modifier = Modifier.size(32.dp).testTag("quest-filter-clear")) {
-                    Icon(Icons.Default.Close, "Clear quest filters", tint = AppColors.Gold, modifier = Modifier.size(18.dp))
+            item(key = "quest-context-and-progression") {
+                Column(verticalArrangement = Arrangement.spacedBy(3.dp)) {
+                    Row(Modifier.fillMaxWidth().heightIn(min = 30.dp), verticalAlignment = Alignment.CenterVertically) {
+                        Text(summary, color = AppColors.Parchment, style = AppType.Metadata, maxLines = 1,
+                            overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f).testTag("quest-filter-summary"))
+                        if (activeDimensions > 0) {
+                            IconButton(onClick = { onApplyFilters(QuestFilterState()) }, modifier = Modifier.size(32.dp).testTag("quest-filter-clear")) {
+                                Icon(Icons.Default.Close, "Clear quest filters", tint = AppColors.Gold, modifier = Modifier.size(18.dp))
+                            }
+                        }
+                        Text(
+                            questCountLabel(filtered.size),
+                            color = AppColors.Gold,
+                            style = AppType.Metadata,
+                            maxLines = 1,
+                            softWrap = false,
+                            modifier = Modifier.testTag("quest-count")
+                        )
+                    }
+                    if (progressionSteps.isNotEmpty()) {
+                        QuestProgressionSummary(
+                            steps = progressionSteps,
+                            progression = progression,
+                            questNamesById = questNamesById
+                        )
+                    }
                 }
             }
-            Text(
-                questCountLabel(filtered.size),
-                color = AppColors.Gold,
-                style = AppType.Metadata,
-                maxLines = 1,
-                softWrap = false,
-                modifier = Modifier.testTag("quest-count")
-            )
-        }
-        if (progressionSteps.isNotEmpty()) {
-            QuestProgressionSummary(
-                steps = progressionSteps,
-                progression = progression,
-                questNamesById = questNamesById
-            )
-        }
-        if (filtered.isEmpty()) {
-            EmptyState(Icons.Default.SearchOff, stringResource(R.string.search_empty_title), stringResource(R.string.search_empty_body))
-        } else {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize().testTag("quest-list"),
-                state = listState,
-                verticalArrangement = Arrangement.spacedBy(7.dp),
-                contentPadding = PaddingValues(bottom = 12.dp)
-            ) {
+            if (filtered.isEmpty()) {
+                item(key = "quest-empty-state") {
+                    Text(stringResource(R.string.search_empty_title) + ". " + stringResource(R.string.search_empty_body), color = AppColors.ParchmentDeep, style = AppType.Body)
+                }
+            } else {
                 items(filtered, key = { it.id }) { quest ->
                     QuestRow(quest, monstersById, smallMonstersById, displayTerminology, progression, questNamesById)
                 }

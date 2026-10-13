@@ -22,6 +22,18 @@ class OledScreenSaverSettingsUiTest {
     @get:Rule val rule = createAndroidComposeRule<MainActivity>()
 
     @Test
+    fun durationSelectorMatchesToggleHeight() {
+        rule.onNodeWithTag("settings-button").performClick()
+        rule.onNodeWithTag("oled-screen-saver-toggle").performScrollTo()
+        rule.waitForIdle()
+
+        val selectorHeight = rule.onNodeWithTag("oled-duration-selector").fetchSemanticsNode().boundsInRoot.height
+        val toggleHeight = rule.onNodeWithTag("oled-screen-saver-toggle").fetchSemanticsNode().boundsInRoot.height
+
+        assertEquals("Duration selector should match the toggle's touch target height", toggleHeight, selectorHeight, 0.5f)
+    }
+
+    @Test
     fun toggleDefaultsOffAndRetainsDurationWhenDisabledAndReenabled() {
         val preferences = rule.activity.getSharedPreferences(UI_SETTINGS_PREFS, Context.MODE_PRIVATE)
         val originalTimeout = preferences.getInt(OLED_SCREEN_SAVER_TIMEOUT_KEY, 0)
@@ -38,34 +50,41 @@ class OledScreenSaverSettingsUiTest {
 
             openSettingsAndScrollToSaver()
             rule.onNodeWithTag("oled-screen-saver-toggle").assertIsOff()
+            rule.onNodeWithTag("oled-duration-selector").assertIsNotEnabled().assertIsDisplayed()
             rule.onNodeWithTag("oled-screen-saver-duration-1").assertDoesNotExist()
 
             rule.onNodeWithTag("oled-screen-saver-toggle").performClick()
+            rule.onNodeWithTag("oled-duration-selector").assertIsEnabled().performClick()
             rule.onNodeWithTag("oled-screen-saver-duration-1").assertIsDisplayed()
             OLED_SCREEN_SAVER_TIMEOUT_OPTIONS.filter { it > 0 }.forEach { minutes ->
+                if (minutes != 1) rule.onNodeWithTag("oled-duration-selector").performClick()
                 rule.onNodeWithTag("oled-screen-saver-duration-$minutes").performClick()
                 assertEquals(minutes, preferences.getInt(OLED_SCREEN_SAVER_TIMEOUT_KEY, -1))
                 assertEquals(minutes, preferences.getInt(OLED_SCREEN_SAVER_LAST_DURATION_KEY, -1))
             }
 
             // Verify all durations above, then keep the saved recreation case at 5 minutes.
+            rule.onNodeWithTag("oled-duration-selector").performClick()
             rule.onNodeWithTag("oled-screen-saver-duration-5").performClick()
 
             rule.onNodeWithTag("oled-screen-saver-toggle").performClick()
             assertEquals(0, preferences.getInt(OLED_SCREEN_SAVER_TIMEOUT_KEY, -1))
             assertEquals(5, preferences.getInt(OLED_SCREEN_SAVER_LAST_DURATION_KEY, -1))
+            rule.onNodeWithTag("oled-duration-selector").assertIsNotEnabled().assertIsDisplayed()
             rule.onNodeWithTag("oled-screen-saver-duration-5").assertDoesNotExist()
 
             rule.onNodeWithTag("oled-screen-saver-toggle").performClick()
             assertEquals(5, preferences.getInt(OLED_SCREEN_SAVER_TIMEOUT_KEY, -1))
+            rule.onNodeWithTag("oled-duration-selector").assertIsEnabled().performClick()
             rule.onNodeWithTag("oled-screen-saver-duration-5").assertIsDisplayed()
+            rule.onNodeWithTag("oled-screen-saver-duration-5").performClick()
 
             rule.onNodeWithTag("settings-done").performClick()
             rule.runOnUiThread { rule.activity.recreate() }
             rule.waitForIdle()
             openSettingsAndScrollToSaver()
             rule.onNodeWithTag("oled-screen-saver-toggle").assertIsOn()
-            rule.onNodeWithTag("oled-screen-saver-duration-5").assertIsDisplayed()
+            rule.onNodeWithTag("oled-duration-selector").assertIsDisplayed().assertTextContains("5 minutes")
         } finally {
             val editor = preferences.edit()
             if (hadTimeout) editor.putInt(OLED_SCREEN_SAVER_TIMEOUT_KEY, originalTimeout) else editor.remove(OLED_SCREEN_SAVER_TIMEOUT_KEY)
@@ -89,7 +108,7 @@ class OledScreenSaverSettingsUiTest {
             rule.waitForIdle()
             openSettingsAndScrollToSaver()
             rule.onNodeWithTag("oled-screen-saver-toggle").assertIsOn()
-            rule.onNodeWithTag("oled-screen-saver-duration-5").assertIsDisplayed()
+            rule.onNodeWithTag("oled-duration-selector").assertIsDisplayed().assertTextContains("5 minutes")
             assertEquals(5, preferences.getInt(OLED_SCREEN_SAVER_LAST_DURATION_KEY, -1))
         } finally {
             val editor = preferences.edit()

@@ -5,6 +5,9 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
+import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.test.swipeDown
+import androidx.compose.ui.test.swipeUp
 import androidx.compose.ui.semantics.SemanticsActions
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -77,6 +80,31 @@ class QuestProgressionUiTest {
         rule.onNodeWithTag("quest-role-badge-key-quest_guild_8_star_02").assertIsDisplayed()
     }
 
+    @Test
+    fun questProgressionHeaderScrollsAwayAndLocalControlsHideAndReturn() {
+        openQuests()
+        selectFilters("guild", "high", "8")
+        rule.onNodeWithTag("quest-progression-summary").assertIsDisplayed()
+        repeat(2) {
+            rule.onNodeWithTag("quest-list").performTouchInput { swipeUp() }
+            rule.waitForIdle()
+        }
+        rule.onNodeWithTag("quest-filters-button").assertDoesNotExist()
+        rule.onNodeWithTag("quest-key-only-filter").assertDoesNotExist()
+        rule.onNodeWithTag("quest-progression-summary").assertDoesNotExist()
+
+        rule.onNodeWithTag("quest-list").performTouchInput { swipeDown() }
+        rule.waitForIdle()
+        repeat(3) {
+            if (rule.onAllNodesWithTag("quest-progression-summary").fetchSemanticsNodes().isEmpty()) {
+                rule.onNodeWithTag("quest-list").performTouchInput { swipeDown() }
+                rule.waitForIdle()
+            }
+        }
+        rule.onNodeWithTag("quest-filters-button").assertIsDisplayed()
+        rule.onNodeWithTag("quest-progression-summary").assertIsDisplayed()
+    }
+
     private fun openQuests() {
         rule.onNodeWithTag("nav-search").performClick()
         rule.onNodeWithTag("field-guide-category-strip").performScrollToNode(hasTestTag("field-filter-quest"))
@@ -84,6 +112,10 @@ class QuestProgressionUiTest {
     }
 
     private fun selectFilters(category: String, rank: String?, star: String) {
+        if (rule.onAllNodesWithTag("quest-filters-button").fetchSemanticsNodes().isEmpty()) {
+            rule.onNodeWithTag("quest-list").performTouchInput { swipeDown() }
+            rule.waitForIdle()
+        }
         rule.onNodeWithTag("quest-filters-button").performClick()
         rule.onNodeWithTag("quest-filter-reset").performClick()
         rule.onNodeWithTag("quest-filter-type-$category").performClick()

@@ -111,6 +111,30 @@ internal val ABOUT_SOURCE_CREDITS = listOf(
         "Open on GitHub"
     ),
     AboutSourceCredit(
+        "MHP3@Wiki · Skill-by-skill list",
+        "Community reference used to cross-check skill thresholds, activated effects, and selected mechanics notes.",
+        "https://w.atwiki.jp/mhp3/pages/237.html",
+        "Open source"
+    ),
+    AboutSourceCredit(
+        "MHP3rd攻略通信 · Skill List",
+        "Independent Japanese cross-check for skill names and selected effect values.",
+        "https://kouryakutsushin.com/mhp3rdwiki/%E3%82%B9%E3%82%AD%E3%83%AB%E4%B8%80%E8%A6%A7.html",
+        "Open source"
+    ),
+    AboutSourceCredit(
+        "MHP3 Wiki* · Skill List",
+        "Community reference used to cross-check skill names and stamina-cost notes; conflicting values remain identified as conflicts.",
+        "https://wikiwiki.jp/s-5672s-5672/%E3%82%B9%E3%82%AD%E3%83%AB%E4%B8%80%E8%A6%A7",
+        "Open source"
+    ),
+    AboutSourceCredit(
+        "Monster Hunter Wiki · MHP3 Armor Skill List",
+        "English skill labels and category terminology cross-check; no page prose is reproduced.",
+        "https://monsterhunter.fandom.com/wiki/MHP3:_Armor_Skill_List",
+        "Open source"
+    ),
+    AboutSourceCredit(
         "Monster Hunter Wiki · MHP3 Monsters",
         "Used to check the MHP3 monster roster, English names, and monster classes.",
         "https://monsterhunter.fandom.com/wiki/MHP3:_Monsters",

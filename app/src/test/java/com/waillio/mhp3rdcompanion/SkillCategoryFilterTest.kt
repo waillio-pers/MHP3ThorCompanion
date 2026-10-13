@@ -44,4 +44,23 @@ class SkillCategoryFilterTest {
         assertEquals(false, skillsFilterVisibilityAfterScroll(currentlyVisible = false, accumulatedDeltaPx = -40f, thresholdPx = 56f))
         assertEquals(true, skillsFilterVisibilityAfterScroll(currentlyVisible = false, accumulatedDeltaPx = -56f, thresholdPx = 56f))
     }
+
+    @Test
+    fun skillAlphabetUsesOnlyCurrentFilteredDisplayNamesAndJumpsToFirstMatch() {
+        val skills = listOf(
+            SkillTree("attack", "Attack", "Attack", "", "", categories = listOf("BLADEMASTER")),
+            SkillTree("focus", "Focus", "Focus", "", "", categories = listOf("UTILITY")),
+            SkillTree("guard", "Guard", "Guard", "", "", categories = listOf("DEFENSE")),
+            SkillTree("gathering", "Gathering", "Gathering", "", "", categories = listOf("UTILITY"))
+        ).sortedBy { it.displayName.lowercase() }
+
+        val utilityOnly = filterSkillTreesByCategories(skills, setOf("UTILITY"))
+        assertEquals(listOf('F', 'G'), skillInitialLetters(utilityOnly))
+        assertEquals(0, firstSkillIndexForLetter(utilityOnly, 'F'))
+        assertEquals(1, firstSkillIndexForLetter(utilityOnly, 'G'))
+
+        val searchFiltered = utilityOnly.filter { it.displayName.contains("gather", ignoreCase = true) }
+        assertEquals(listOf('G'), skillInitialLetters(searchFiltered))
+        assertEquals(-1, firstSkillIndexForLetter(searchFiltered, 'F'))
+    }
 }
