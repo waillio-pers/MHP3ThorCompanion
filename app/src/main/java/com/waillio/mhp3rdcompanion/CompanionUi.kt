@@ -17,6 +17,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.DragInteraction
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.detectVerticalDragGestures
 import androidx.compose.foundation.horizontalScroll
@@ -1904,7 +1905,7 @@ internal fun filterToolbarVisibilityAfterScroll(
 }
 
 @Composable
-internal fun rememberLocalFilterToolbarVisibility(listState: LazyListState): Boolean {
+internal fun rememberLocalFilterToolbarVisibility(listState: LazyListState, paused: Boolean = false): Boolean {
     val thresholdPx = with(LocalDensity.current) { 56.dp.toPx() }
     var visible by remember(listState) {
         mutableStateOf(
@@ -1912,7 +1913,8 @@ internal fun rememberLocalFilterToolbarVisibility(listState: LazyListState): Boo
                 listState.firstVisibleItemScrollOffset < thresholdPx
         )
     }
-    LaunchedEffect(listState, thresholdPx) {
+    LaunchedEffect(listState, thresholdPx, paused) {
+        if (paused) return@LaunchedEffect
         var lastIndex = listState.firstVisibleItemIndex
         var lastOffset = listState.firstVisibleItemScrollOffset
         var accumulated = 0f
@@ -1958,7 +1960,19 @@ internal fun SkillsBrowser(
     val categories = remember { SkillCategory.values().toList() }
     var categoryMask by rememberSaveable { mutableIntStateOf(0) }
     var showCategoryFilter by rememberSaveable { mutableStateOf(false) }
-    val categoryFilterVisible = rememberLocalFilterToolbarVisibility(listState)
+    var alphabetScrubbing by remember { mutableStateOf(false) }
+    var frozenCategoryFilterVisibility by remember { mutableStateOf<Boolean?>(null) }
+    LaunchedEffect(listState) {
+        listState.interactionSource.interactions.collect { interaction ->
+            if (interaction is DragInteraction.Start) frozenCategoryFilterVisibility = null
+        }
+    }
+    val categoryFilterAutoHidePaused = alphabetScrubbing || frozenCategoryFilterVisibility != null
+    val scrollDrivenCategoryFilterVisible = rememberLocalFilterToolbarVisibility(
+        listState,
+        paused = categoryFilterAutoHidePaused
+    )
+    val categoryFilterVisible = frozenCategoryFilterVisibility ?: scrollDrivenCategoryFilterVisible
     val selectedCategories = remember(categoryMask) {
         categories.filterIndexed { index, _ -> categoryMask and (1 shl index) != 0 }
             .mapTo(linkedSetOf()) { it.name }
@@ -2127,6 +2141,10 @@ internal fun SkillsBrowser(
                     AlphabetScrubber(
                         letters = letters,
                         selectedLetter = visibleLetter,
+                        onDraggingChange = { dragging ->
+                            if (dragging) frozenCategoryFilterVisibility = scrollDrivenCategoryFilterVisible
+                            alphabetScrubbing = dragging
+                        },
                         onJump = { letter ->
                             firstSkillIndexForLetter(filtered, letter).takeIf { it >= 0 }?.let { index ->
                                 scope.launch { listState.scrollToItem(index + 1) }
@@ -3408,6 +3426,7 @@ internal fun AlphabetScrubber(
     letters: List<Char>,
     selectedLetter: Char?,
     onJump: (Char) -> Unit,
+    onDraggingChange: (Boolean) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     var scrubberHeight by remember { mutableIntStateOf(1) }
@@ -3415,6 +3434,7 @@ internal fun AlphabetScrubber(
     var dragLetter by remember { mutableStateOf<Char?>(null) }
     val latestScrubberHeight = rememberUpdatedState(scrubberHeight)
     val latestOnJump = rememberUpdatedState(onJump)
+    val latestOnDraggingChange = rememberUpdatedState(onDraggingChange)
     val selected = dragLetter ?: selectedLetter ?: letters.first()
     fun jump(letter: Char) {
         dragLetter = letter
@@ -3436,10 +3456,14 @@ internal fun AlphabetScrubber(
                 .onGloballyPositioned { scrubberHeight = it.size.height.coerceAtLeast(1) }
                 .pointerInput(letters) {
                     detectVerticalDragGestures(
-                        onDragStart = { offset -> dragging = true; jump(letterAt(offset.y)) },
+                        onDragStart = { offset ->
+                            dragging = true
+                            latestOnDraggingChange.value(true)
+                            jump(letterAt(offset.y))
+                        },
                         onVerticalDrag = { change, _ -> change.consume(); jump(letterAt(change.position.y)) },
-                        onDragEnd = { dragging = false; dragLetter = null },
-                        onDragCancel = { dragging = false; dragLetter = null }
+                        onDragEnd = { dragging = false; dragLetter = null; latestOnDraggingChange.value(false) },
+                        onDragCancel = { dragging = false; dragLetter = null; latestOnDraggingChange.value(false) }
                     )
                 },
             horizontalAlignment = Alignment.CenterHorizontally

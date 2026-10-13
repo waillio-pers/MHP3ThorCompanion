@@ -73,6 +73,25 @@ class SkillFilterAutoHideUiTest {
         val absentLetter = ('A'..'Z').first { it !in utilityLetters }
         rule.onNodeWithTag("alphabet-letter-$absentLetter").assertDoesNotExist()
     }
+
+    @Test
+    fun categoryFilterStaysInPlaceDuringAlphabetScrubbing() {
+        rule.onNodeWithTag("nav-search").performClick()
+        rule.onNodeWithTag("field-filter-skill").performScrollTo().performClick()
+        rule.onNodeWithTag("skills-category-filter-button").assertIsDisplayed()
+
+        rule.onNodeWithTag("skills-alphabet-scrubber").performTouchInput {
+            swipe(
+                start = Offset(centerX, height * .12f),
+                end = Offset(centerX, height * .88f),
+                durationMillis = 900
+            )
+        }
+        rule.waitForIdle()
+
+        // Scrubber-driven list jumps must not collapse or animate the row under the active gesture.
+        rule.onNodeWithTag("skills-category-filter-button").assertIsDisplayed()
+    }
 }
 
 @RunWith(RobolectricTestRunner::class)

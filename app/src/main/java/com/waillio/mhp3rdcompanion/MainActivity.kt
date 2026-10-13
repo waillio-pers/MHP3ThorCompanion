@@ -147,7 +147,13 @@ class MainActivity : ComponentActivity() {
 
     private fun enterImmersiveMode() {
         WindowInsetsControllerCompat(window, window.decorView).apply {
-            hide(WindowInsetsCompat.Type.systemBars())
+            hide(WindowInsetsCompat.Type.navigationBars())
+            if (shouldShowPhoneStatusBar(resources.configuration.screenWidthDp, resources.configuration.screenHeightDp)) {
+                isAppearanceLightStatusBars = false
+                show(WindowInsetsCompat.Type.statusBars())
+            } else {
+                hide(WindowInsetsCompat.Type.statusBars())
+            }
             systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         }
     }

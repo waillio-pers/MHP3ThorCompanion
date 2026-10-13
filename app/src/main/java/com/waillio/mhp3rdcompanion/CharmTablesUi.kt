@@ -499,11 +499,7 @@ private fun CharmClassSelector(
 
 @Composable
 private fun CharmClassMark(talismanClass: TalismanClass, modifier: Modifier = Modifier) {
-    val resourceId = when (talismanClass) {
-        TalismanClass.QUEEN -> R.drawable.charm_rarity_queen
-        TalismanClass.KING -> R.drawable.charm_rarity_king
-        TalismanClass.DRAGON -> R.drawable.charm_rarity_dragon
-    }
+    val resourceId = charmRarityIconResource(talismanClass)
     Image(
         bitmap = ImageBitmap.imageResource(resourceId),
         contentDescription = "${talismanClass.label} rarity icon",
@@ -511,6 +507,12 @@ private fun CharmClassMark(talismanClass: TalismanClass, modifier: Modifier = Mo
         filterQuality = FilterQuality.None,
         modifier = modifier
     )
+}
+
+internal fun charmRarityIconResource(talismanClass: TalismanClass): Int = when (talismanClass) {
+    TalismanClass.QUEEN -> R.drawable.charm_rarity_queen
+    TalismanClass.KING -> R.drawable.charm_rarity_king
+    TalismanClass.DRAGON -> R.drawable.charm_rarity_dragon
 }
 
 @Composable

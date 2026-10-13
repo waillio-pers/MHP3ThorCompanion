@@ -3,6 +3,7 @@ package com.waillio.mhp3rdcompanion
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.staticCompositionLocalOf
@@ -39,6 +40,10 @@ internal fun appWindowLayout(widthDp: Int, heightDp: Int): AppWindowLayout {
     }
     return AppWindowLayout(width, height, profile)
 }
+
+/** A visible status bar is useful only on narrow portrait phones, not on Thor/tablet layouts. */
+internal fun shouldShowPhoneStatusBar(widthDp: Int, heightDp: Int): Boolean =
+    appWindowLayout(widthDp, heightDp).profile == AppLayoutProfile.COMPACT_PORTRAIT
 
 /** Width-derived column count with profile caps to retain the accepted Thor geometry. */
 internal fun responsiveGridColumns(
@@ -90,6 +95,10 @@ internal fun AdaptiveLayoutRoot(content: @Composable () -> Unit) {
         CompositionLocalProvider(LocalAppWindowLayout provides layout) {
             Box(
                 Modifier.fillMaxSize()
+                    .then(
+                        if (layout.profile == AppLayoutProfile.COMPACT_PORTRAIT) Modifier.statusBarsPadding()
+                        else Modifier
+                    )
                     .semantics { contentDescription = "adaptive-window-${layout.widthDp}x${layout.heightDp}-dp" }
                     .testTag("adaptive-profile-${layout.profile.name.lowercase()}")
             ) {

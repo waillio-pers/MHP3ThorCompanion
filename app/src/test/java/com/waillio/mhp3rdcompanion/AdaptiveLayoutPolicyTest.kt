@@ -50,4 +50,13 @@ class AdaptiveLayoutPolicyTest {
         val profiles = supportedScaleValues.map { _ -> appWindowLayout(827, 720).profile }
         assertTrue(profiles.all { it == AppLayoutProfile.MEDIUM })
     }
+
+    @Test
+    fun statusBarIsReservedOnlyForCompactPortraitPhones() {
+        assertTrue(shouldShowPhoneStatusBar(360, 800))
+        assertTrue(shouldShowPhoneStatusBar(412, 915))
+        assertTrue(!shouldShowPhoneStatusBar(800, 360))
+        assertTrue(!shouldShowPhoneStatusBar(827, 720))
+        assertTrue(!shouldShowPhoneStatusBar(1280, 800))
+    }
 }
