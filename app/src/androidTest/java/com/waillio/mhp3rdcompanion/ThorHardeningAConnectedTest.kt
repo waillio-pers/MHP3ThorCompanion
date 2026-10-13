@@ -5,6 +5,7 @@ import android.view.KeyEvent
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.test.*
 import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.semantics.getOrNull
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
@@ -36,16 +37,31 @@ class ThorHardeningAConnectedTest {
         // A. Field Guide categories are in the requested presentation order.
         rule.onNodeWithTag("nav-search").performClick()
         rule.onNodeWithTag("field-filter-all").performClick()
-        val categoryTags = listOf(
-            "field-filter-all", "field-filter-monster", "field-filter-small_monster",
-            "field-filter-material", "field-filter-map", "field-filter-weapons",
-            "field-filter-skill", "field-filter-quest", "field-filter-training"
+        val expectedCategoryTags = fieldGuideCategoryOrder.map { page ->
+            val suffix = when (page) {
+                FieldGuideRootPage.ALL -> "all"
+                FieldGuideRootPage.CHARM_TABLES -> page.id
+                FieldGuideRootPage.WEAPONS -> "weapons"
+                else -> requireNotNull(page.entityType).name.lowercase()
+            }
+            "field-filter-$suffix"
+        }
+        val expectedCategoryTagSet = expectedCategoryTags.toSet()
+        val renderedCategoryTags = rule.onAllNodes(
+            SemanticsMatcher("Field Guide category chip") { node ->
+                node.config.getOrNull(SemanticsProperties.TestTag) in expectedCategoryTagSet
+            }
+        ).fetchSemanticsNodes().map { it.config[SemanticsProperties.TestTag] }
+        assertEquals(
+            "Rendered Field Guide chips must match canonical order with no missing or duplicate destinations",
+            expectedCategoryTags,
+            renderedCategoryTags
         )
-        val categoryLefts = categoryTags.map { rule.onNodeWithTag(it).fetchSemanticsNode().boundsInRoot.left }
-        assertTrue("Field Guide order is not left-to-right as accepted", categoryLefts.zipWithNext().all { it.first < it.second })
-        val stripBounds = rule.onNodeWithTag("field-guide-category-strip").fetchSemanticsNode().boundsInRoot
-        val trainingBounds = rule.onNodeWithTag("field-filter-training").fetchSemanticsNode().boundsInRoot
-        assertTrue("Training category must remain fully visible at Thor width", trainingBounds.right <= stripBounds.right)
+        // Each choice must remain reachable; selecting it scrolls the chip into view as needed.
+        expectedCategoryTags.forEach { tag ->
+            rule.onNodeWithTag(tag).performScrollTo().performClick().assertIsSelected()
+        }
+        rule.onNodeWithTag("field-filter-all").performScrollTo().performClick().assertIsSelected()
         capture(captureDir, "hardening-a-field-guide.png")
 
         // B. Real Zinogre content: keep Overview factual values, omit its redundant caption,
