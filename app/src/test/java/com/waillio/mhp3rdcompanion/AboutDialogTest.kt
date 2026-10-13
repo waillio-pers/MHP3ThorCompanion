@@ -47,8 +47,8 @@ class AboutDialogTest {
         }
 
         assertEquals(30, ABOUT_SOURCE_CREDITS.size)
-        assertEquals("1.0.0", BuildConfig.VERSION_NAME)
-        assertEquals(2, BuildConfig.VERSION_CODE)
+        assertEquals("1.1.0", BuildConfig.VERSION_NAME)
+        assertEquals(3, BuildConfig.VERSION_CODE)
         assertTrue(ABOUT_SOURCE_CREDITS.all { it.url.startsWith("https://") || it.url.startsWith("http://") })
         assertTrue(ABOUT_SOURCE_CREDITS.any { it.name.contains("TMO PSP v6.1 (r754)") })
         assertTrue(ABOUT_SOURCE_CREDITS.any { it.url == "https://github.com/gaugustini/monster-hunter-armor-data" })
