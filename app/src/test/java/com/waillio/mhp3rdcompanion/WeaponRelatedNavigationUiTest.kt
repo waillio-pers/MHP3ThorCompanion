@@ -14,8 +14,7 @@ import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [35], qualifiers = "w827dp-h720dp-land-xhdpi")
-class WeaponRelatedNavigationUiTest {
-    @get:Rule val rule = createAndroidComposeRule<MainActivity>()
+class WeaponRelatedNavigationUiTest : MainActivityUiTestBase() {
 
     @Test
     fun hammerRelatedWeaponLinksUseStableIdsAndBackRestoresPreviousDetails() {
@@ -32,6 +31,7 @@ class WeaponRelatedNavigationUiTest {
                 setScale(step)
                 rule.onNodeWithTag("nav-search").performClick()
                 rule.onNodeWithTag("field-filter-weapons").performClick()
+                awaitTag("weapons-chooser")
                 rule.onNodeWithTag("weapon-type-hammer").performClick()
                 rule.onNodeWithTag("weapon-search").performTextClearance()
                 rule.onNodeWithTag("weapon-search").performTextInput("Worn Hammer")

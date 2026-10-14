@@ -17,8 +17,7 @@ import org.robolectric.annotation.GraphicsMode
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [35], qualifiers = "w620dp-h540dp-land-xhdpi")
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
-class NavigationRegressionTest {
-    @get:Rule val rule = createAndroidComposeRule<MainActivity>()
+class NavigationRegressionTest : MainActivityUiTestBase() {
 
     @Test fun bottomNavigationIsReferenceOnly() {
         rule.onNodeWithTag("nav-home").assertIsDisplayed()
@@ -43,6 +42,7 @@ class NavigationRegressionTest {
     @Test fun hrOnlyItemFocusShowsStaticRankWithoutDeadControls() {
         openMaterial("Bathycite Ore", "item_deposite_ore")
         rule.onNodeWithTag("field-show-map-flooded_forest").performClick()
+        awaitTag("map-detail-flooded_forest")
         rule.onNodeWithTag("map-detail-flooded_forest").assertIsDisplayed()
         rule.onNodeWithTag("map-focus-rank-static").assertIsDisplayed()
         rule.onNodeWithText("HR").assertIsDisplayed()
@@ -54,6 +54,7 @@ class NavigationRegressionTest {
     @Test fun dualRankItemFocusRetainsAllLowHighControls() {
         openMaterial("Stone", "item_stone")
         rule.onNodeWithTag("field-show-map-misty_peaks").performClick()
+        awaitTag("map-detail-misty_peaks")
         rule.onNodeWithTag("map-detail-misty_peaks").assertIsDisplayed()
         rule.onNodeWithTag("map-rank-all").assertIsDisplayed()
         rule.onNodeWithTag("map-rank-low").assertIsDisplayed()
@@ -66,6 +67,7 @@ class NavigationRegressionTest {
         rule.onNodeWithTag("field-filter-map").performClick()
         rule.onNodeWithTag("maps-index").assertIsDisplayed()
         rule.onNodeWithTag("map-card-flooded_forest").performClick()
+        awaitTag("map-detail-flooded_forest")
         val map = rule.onNodeWithTag("map-detail-flooded_forest")
         map.assertIsDisplayed().performTouchInput { swipeLeft() }
         map.assertIsDisplayed()
@@ -115,6 +117,7 @@ class NavigationRegressionTest {
         rule.onNodeWithTag("nav-favorites").performClick()
         rule.onNodeWithTag("favorites-list").performScrollToNode(hasTestTag("favorite-material-item_mega_demondrug"))
         rule.onNodeWithTag("favorite-material-item_mega_demondrug").assertIsDisplayed().performClick()
+        awaitTag("screen-material")
         rule.onNodeWithTag("screen-material").assertIsDisplayed()
         rule.onNodeWithText("Mega Demondrug").assertIsDisplayed()
     }
@@ -125,10 +128,13 @@ class NavigationRegressionTest {
         rule.onNodeWithTag("home-shortcut-items").performClick()
         rule.onNodeWithTag("global-search").performTextInput("Ice Crystal")
         rule.onNodeWithTag("result-material-item_ice_crystal").performClick()
+        awaitTag("screen-material")
         rule.onNodeWithTag("nav-search").performClick()
         rule.onNodeWithTag("global-search").performTextInput("Zinogre")
         rule.onNodeWithTag("monster-card-monster_zinogre").performClick()
         rule.onNodeWithTag("nav-home").performClick()
+        awaitTag("reference-monster-monster_zinogre")
+        awaitTag("reference-material-item_ice_crystal")
         val zinogre = rule.onNodeWithTag("reference-monster-monster_zinogre").fetchSemanticsNode().boundsInRoot
         val crystal = rule.onNodeWithTag("reference-material-item_ice_crystal").fetchSemanticsNode().boundsInRoot
         assertTrue("reopened entity must move to the front", zinogre.top <= crystal.top)
@@ -199,6 +205,7 @@ class NavigationRegressionTest {
     @Test fun materialSearchBackRestoresProductionQueryAndResult() {
         rule.onNodeWithTag("global-search").performTextInput("Ice Crystal")
         rule.onNodeWithTag("result-material-item_ice_crystal").performClick()
+        awaitTag("screen-material")
         rule.onNodeWithTag("screen-material").assertIsDisplayed()
 
         rule.activity.onBackPressedDispatcher.onBackPressed()
@@ -216,6 +223,7 @@ class NavigationRegressionTest {
         rule.onNodeWithTag("search-results").performScrollToNode(hasTestTag("result-material-item_divine_rhino"))
         val before = rule.onNodeWithTag("result-material-item_divine_rhino").fetchSemanticsNode().boundsInRoot
         rule.onNodeWithTag("result-material-item_divine_rhino").performClick()
+        awaitTag("screen-material")
         rule.onNodeWithTag("screen-material").assertIsDisplayed()
         rule.onNodeWithText("Divine Rhino").assertIsDisplayed()
         ensureNotFavorite()
@@ -250,6 +258,7 @@ class NavigationRegressionTest {
         rule.onNodeWithTag("monster-tab-1").performClick()
         rule.onNodeWithTag("reward-context-monster_zinogre-HIGH").performClick()
         rule.onNodeWithText("Zinogre Claw+").performClick()
+        awaitTag("screen-material")
         rule.onNodeWithTag("screen-material").assertIsDisplayed()
         rule.activity.onBackPressedDispatcher.onBackPressed()
         rule.onNodeWithTag("monster-rewards").assertIsDisplayed()
@@ -271,6 +280,7 @@ class NavigationRegressionTest {
     private fun openMaterial(name: String, id: String) {
         rule.onNodeWithTag("global-search").performTextInput(name)
         rule.onNodeWithTag("result-material-$id").performClick()
+        awaitTag("screen-material")
         rule.onNodeWithTag("screen-material").assertIsDisplayed()
     }
 

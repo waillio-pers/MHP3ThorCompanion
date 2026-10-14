@@ -16,8 +16,7 @@ import org.robolectric.annotation.GraphicsMode
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [35], qualifiers = "w620dp-h540dp-land-xhdpi")
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
-class MapFoundationTest {
-    @get:Rule val rule = createAndroidComposeRule<MainActivity>()
+class MapFoundationTest : MainActivityUiTestBase() {
 
     private val mapNodes = SemanticsMatcher("runtime map nodes") { node ->
         node.config.getOrNull(SemanticsProperties.TestTag)?.startsWith("map-node-ff-") == true
@@ -96,6 +95,7 @@ class MapFoundationTest {
         rule.onNodeWithTag("maps-list").performScrollToNode(hasTestTag("map-card-flooded_forest"))
         rule.onNodeWithTag("map-card-flooded_forest").assertIsDisplayed()
         rule.onNodeWithTag("map-card-flooded_forest").performClick()
+        awaitTag("map-detail-flooded_forest")
 
         rule.onNodeWithTag("map-detail-flooded_forest").assertIsDisplayed()
         rule.onNodeWithTag("map-base-image").assertIsDisplayed()
@@ -112,6 +112,7 @@ class MapFoundationTest {
         MapRegistry.maps.forEach { map ->
             rule.onNodeWithTag("maps-list").performScrollToNode(hasTestTag("map-card-${map.mapId}"))
             rule.onNodeWithTag("map-card-${map.mapId}").performClick()
+            awaitTag("map-detail-${map.mapId}")
             rule.onNodeWithTag("map-detail-${map.mapId}").assertIsDisplayed()
             rule.onNodeWithTag("map-base-image").assertIsDisplayed()
             rule.onNodeWithTag("map-fullscreen-open").assertIsDisplayed()
@@ -158,6 +159,7 @@ class MapFoundationTest {
     @Test fun equivalentBambooAndCactusMarkersOpenHonestDeduplicatedDetails() {
         openMaps()
         rule.onNodeWithTag("map-card-misty_peaks").performClick()
+        awaitTag("map-detail-misty_peaks")
         rule.onNodeWithTag("map-node-mp-a3-bamboo-shoot-north", useUnmergedTree = true)
             .assertIsDisplayed().performClick()
         rule.onNodeWithTag("map-tap-chooser").assertIsDisplayed()
@@ -179,6 +181,7 @@ class MapFoundationTest {
 
         rule.onNodeWithTag("maps-list").performScrollToNode(hasTestTag("map-card-sandy_plains"))
         rule.onNodeWithTag("map-card-sandy_plains").performClick()
+        awaitTag("map-detail-sandy_plains")
         rule.onNodeWithTag("map-node-sp-a8-plants-west", useUnmergedTree = true)
             .assertIsDisplayed().performClick()
         chooseMapRowIfAmbiguous("sp-a8-plants-west")
@@ -196,6 +199,7 @@ class MapFoundationTest {
     @Test fun c3FinalOrdinaryMarkersOpenNodeDetails() {
         openMaps()
         rule.onNodeWithTag("map-card-misty_peaks").performClick()
+        awaitTag("map-detail-misty_peaks")
         rule.onNodeWithTag("map-node-mp-a3-spider-web", useUnmergedTree = true)
             .assertIsDisplayed().performClick()
         rule.onNodeWithTag("map-tap-chooser").assertIsDisplayed()
@@ -206,6 +210,7 @@ class MapFoundationTest {
 
         rule.onNodeWithTag("maps-list").performScrollToNode(hasTestTag("map-card-flooded_forest"))
         rule.onNodeWithTag("map-card-flooded_forest").performClick()
+        awaitTag("map-detail-flooded_forest")
         rule.onNodeWithTag("map-node-ff-a4-fish", useUnmergedTree = true)
             .assertIsDisplayed().performClick()
         rule.onNodeWithText("Area 4 · Point 5 · Fishing").assertIsDisplayed()
@@ -219,6 +224,7 @@ class MapFoundationTest {
 
         rule.onNodeWithTag("maps-list").performScrollToNode(hasTestTag("map-card-deserted_island"))
         rule.onNodeWithTag("map-card-deserted_island").performClick()
+        awaitTag("map-detail-deserted_island")
         rule.onNodeWithTag("map-node-di-a6-bones-west", useUnmergedTree = true)
             .assertIsDisplayed().performClick()
         rule.onNodeWithText("Area 6 · Point 1 · Gathering").assertIsDisplayed()
@@ -232,6 +238,7 @@ class MapFoundationTest {
     private fun openMapDetail() {
         openMaps()
         rule.onNodeWithTag("map-card-flooded_forest").performClick()
+        awaitTag("map-detail-flooded_forest")
     }
 
     private fun chooseMapRowIfAmbiguous(nodeId: String) {

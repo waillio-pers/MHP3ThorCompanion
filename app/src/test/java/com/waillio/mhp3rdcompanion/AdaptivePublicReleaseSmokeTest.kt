@@ -17,8 +17,7 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
 
-abstract class AdaptivePublicReleaseSmokeBase {
-    @get:Rule val rule = createAndroidComposeRule<MainActivity>()
+abstract class AdaptivePublicReleaseSmokeBase : MainActivityUiTestBase() {
     protected abstract val screenshotProfile: String?
     protected abstract val expectedWindowDp: Pair<Int, Int>
 
@@ -33,6 +32,7 @@ abstract class AdaptivePublicReleaseSmokeBase {
         rule.onNodeWithTag("home-shortcut-maps").performClick()
         rule.onNodeWithTag("maps-index").assertIsDisplayed()
         rule.onNodeWithTag("map-card-misty_peaks").performClick()
+        awaitTag("map-detail-misty_peaks")
         rule.onNodeWithTag("map-node-mp-a3-bamboo-shoot-north", useUnmergedTree = true)
             .assertIsDisplayed().performClick()
         val hasAmbiguityChooser = rule.onAllNodesWithTag("map-tap-chooser").fetchSemanticsNodes().isNotEmpty()
@@ -63,12 +63,14 @@ abstract class AdaptivePublicReleaseSmokeBase {
         val materialTag = "result-material-${material.id}"
         rule.onNodeWithTag("search-results").performScrollToNode(hasTestTag(materialTag))
         rule.onNodeWithTag(materialTag).performClick()
+        awaitTag("screen-material")
         rule.onNodeWithTag("screen-material").assertIsDisplayed()
         rule.onNodeWithTag("item-sources-section").performScrollTo()
         saveScreenshot("04-dense-item-sources.png")
 
         rule.onNodeWithTag("nav-search").performClick()
         rule.onNodeWithTag("field-filter-weapons").performScrollTo().performClick()
+        awaitTag("weapons-chooser")
         rule.onNodeWithTag("weapons-chooser").assertIsDisplayed()
         saveScreenshot("05-weapon-type-chooser.png")
         rule.onNodeWithTag("weapon-type-great-sword").performClick()

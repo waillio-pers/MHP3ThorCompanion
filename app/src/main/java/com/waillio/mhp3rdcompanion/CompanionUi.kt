@@ -3,6 +3,7 @@ package com.waillio.mhp3rdcompanion
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.os.Build
+import android.os.SystemClock
 import android.util.Log
 import android.view.WindowManager
 import androidx.activity.compose.BackHandler
@@ -40,7 +41,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -87,6 +88,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -114,13 +116,14 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.waillio.mhp3rdcompanion.data.*
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.withContext
 import kotlin.math.roundToInt
 
 internal object Routes {
     const val HOME = "home"
-    const val CHARM_TABLES = "charm-tables"
     const val SEARCH = "search"
     const val WEAPONS = "weapons"
     const val WEAPON_TYPE = "weapon-type/{type}"
@@ -270,6 +273,9 @@ internal fun CompanionApp(
     val nav = rememberNavController()
     val state by viewModel.state.collectAsStateWithLifecycle()
     val results by viewModel.results.collectAsStateWithLifecycle()
+    val weaponRepository by viewModel.weaponRepositoryState.collectAsStateWithLifecycle()
+    val weaponRepositoryFailed by viewModel.weaponRepositoryFailed.collectAsStateWithLifecycle()
+    val itemUsageIndexFailed by viewModel.itemUsageIndexFailed.collectAsStateWithLifecycle()
     val snackbar = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val searchListState = rememberLazyListState()
@@ -304,12 +310,12 @@ internal fun CompanionApp(
     val smallMonsterRewardContexts = remember { mutableStateMapOf<String, SmallMonsterRewardContext>() }
     var showSettings by rememberSaveable { mutableStateOf(false) }
     var showAbout by rememberSaveable { mutableStateOf(false) }
-    var charmTablesRootSelected by rememberSaveable { mutableStateOf(false) }
 
     Box(Modifier.fillMaxSize()) {
     AppShell(
         nav = nav,
         query = state.query,
+        queryResetKey = state.queryResetGeneration,
         onQueryChange = { value ->
             viewModel.setQuery(value)
             // The global empty-query Weapons state is the category chooser. Clear
@@ -328,8 +334,7 @@ internal fun CompanionApp(
         },
         onOpenSettings = { showSettings = true },
         onMainNavigate = { route ->
-            charmTablesRootSelected = false
-            viewModel.setQuery("")
+            viewModel.resetQuery()
             viewModel.setFilter(if (route == Routes.SEARCH) EntityType.MONSTER else null)
             scope.launch {
                 searchListState.scrollToItem(0)
@@ -362,14 +367,13 @@ internal fun CompanionApp(
             composable(Routes.HOME) {
                 HomeScreen(
                     data = viewModel.fixture,
-                    weaponRepository = viewModel.weaponRepository,
+                    weaponRepository = null,
                     recent = state.recent,
                     favorites = state.favorites,
                     shortcutSlots = homeShortcutSlots,
                     onShortcut = { page ->
-                        charmTablesRootSelected = page == FieldGuideRootPage.CHARM_TABLES
-                        viewModel.setQuery("")
-                        viewModel.setFilter(page.entityType)
+                        viewModel.selectFieldGuideRootPage(page)
+                        viewModel.resetQuery()
                         if (page == FieldGuideRootPage.WEAPONS) viewModel.weaponScreenState.selectedType = null
                         nav.navigate(Routes.SEARCH) { launchSingleTop = true }
                     },
@@ -398,7 +402,9 @@ internal fun CompanionApp(
                     quests = viewModel.fixture.quests,
                     trainingQuests = viewModel.fixture.trainingQuests,
                     weapons = viewModel.fixture.weapons,
-                    weaponRepository = viewModel.weaponRepository,
+                    weaponRepository = weaponRepository,
+                    weaponRepositoryFailed = weaponRepositoryFailed,
+                    onPrepareWeapons = viewModel::prepareWeaponRepository,
                     weaponScreenState = viewModel.weaponScreenState,
                     maps = MapRegistry.maps,
                     monsterGridState = monsterGridState,
@@ -415,20 +421,18 @@ internal fun CompanionApp(
                     onMaterial = { nav.navigate(Routes.material(it)) },
                     displayTerminology = viewModel.fixture.displayTerminology,
                     fieldGuideSwipeEnabled = fieldGuideSwipeEnabled,
-                    selectedCharmTablesRoot = charmTablesRootSelected,
+                    selectedRootPage = state.fieldGuideRootPage,
                     onFieldGuidePageSelected = { page ->
-                        charmTablesRootSelected = page == FieldGuideRootPage.CHARM_TABLES
+                        viewModel.selectFieldGuideRootPage(page)
                         if (page == FieldGuideRootPage.CHARM_TABLES) {
-                            viewModel.setQuery("")
-                        } else if (page == FieldGuideRootPage.ALL) {
-                            viewModel.setFilter(null)
+                            viewModel.resetQuery()
                         } else {
                             selectFieldGuideCategory(
                                 page.entityType ?: return@SearchScreen,
                                 state.query.isBlank(),
                                 onFilter = viewModel::setFilter,
                                 onWeapons = {
-                                    viewModel.setQuery("")
+                                    viewModel.resetQuery()
                                     viewModel.setFilter(EntityType.WEAPON)
                                     viewModel.weaponScreenState.selectedType = null
                                 }
@@ -436,6 +440,7 @@ internal fun CompanionApp(
                         }
                     },
                     charmTablesContent = {
+                        LaunchedEffect(Unit) { viewModel.prepareCharmIndex() }
                         val charmIndex by viewModel.charmIndex.collectAsStateWithLifecycle()
                         val charmLoadFailed by viewModel.charmLoadFailed.collectAsStateWithLifecycle()
                         val savedCharmSearches by viewModel.charmSavedSearches.collectAsStateWithLifecycle()
@@ -465,7 +470,6 @@ internal fun CompanionApp(
                         scope.launch { questListState.scrollToItem(0) }
                     },
                     onFilter = { filter ->
-                        charmTablesRootSelected = false
                         pendingSkillFocusId = null
                         expandedSkillTreeId = null
                         viewModel.setFilter(filter)
@@ -473,7 +477,7 @@ internal fun CompanionApp(
                     // Keep the accepted type chooser as the empty-query Weapons entry point;
                     // typed queries stay in the global result list and can deep-link by ID.
                     onWeapons = {
-                        viewModel.setQuery("")
+                        viewModel.resetQuery()
                         viewModel.setFilter(EntityType.WEAPON)
                         viewModel.weaponScreenState.selectedType = null
                     },
@@ -491,7 +495,7 @@ internal fun CompanionApp(
                             EntityType.MAP -> Unit
                             EntityType.WEAPON -> nav.navigate(Routes.weapon(result.id))
                             EntityType.SKILL -> {
-                                viewModel.setQuery("")
+                                viewModel.resetQuery()
                                 viewModel.setFilter(EntityType.SKILL)
                                 pendingSkillFocusId = result.id
                             }
@@ -501,27 +505,11 @@ internal fun CompanionApp(
                     onTraining = { nav.navigate(Routes.training(it.id)) }
                 )
             }
-            composable(Routes.CHARM_TABLES) {
-                val charmIndex by viewModel.charmIndex.collectAsStateWithLifecycle()
-                val charmLoadFailed by viewModel.charmLoadFailed.collectAsStateWithLifecycle()
-                val savedCharmSearches by viewModel.charmSavedSearches.collectAsStateWithLifecycle()
-                val identifyWorkingState = state.charmIdentifyWorkingState
-                CharmTablesScreen(
-                    index = charmIndex,
-                    skillTrees = viewModel.fixture.skillTrees,
-                    currentTable = state.currentCharmTable,
-                    loadingFailed = charmLoadFailed,
-                    identifyWorkingState = identifyWorkingState,
-                    savedSearches = savedCharmSearches,
-                    onUpdateIdentifyWorkingState = viewModel::updateCharmIdentifyWorkingState,
-                    onSaveCurrentTable = viewModel::setCurrentCharmTable,
-                    onSaveSearch = viewModel::saveCharmSearch,
-                    onDeleteSearch = viewModel::deleteCharmSearch
-                )
-            }
             composable(Routes.WEAPONS) {
-                WeaponsScreen(
-                    repository = viewModel.weaponRepository,
+                LaunchedEffect(Unit) { viewModel.prepareWeaponRepository() }
+                if (weaponRepository == null) FirstUseLoadingContent("Preparing weapon guide…", isError = weaponRepositoryFailed)
+                else WeaponsScreen(
+                    repository = checkNotNull(weaponRepository),
                     screenState = viewModel.weaponScreenState,
                     onItem = { material -> nav.navigate(Routes.material(material.id)) },
                     isFavorite = { id -> state.favorites.any { it.type == ReferenceEntityType.WEAPON && it.entityId == id } },
@@ -534,9 +522,12 @@ internal fun CompanionApp(
                 arguments = listOf(navArgument("type") { type = NavType.StringType })
             ) { entry ->
                 val type = entry.arguments?.getString("type")
-                if (type in WeaponRepository.PRODUCTION_WEAPON_TYPES) {
+                LaunchedEffect(type) { viewModel.prepareWeaponRepository() }
+                if (type in WeaponRepository.PRODUCTION_WEAPON_TYPES && weaponRepository == null) {
+                    FirstUseLoadingContent("Preparing weapon guide…", isError = weaponRepositoryFailed)
+                } else if (type in WeaponRepository.PRODUCTION_WEAPON_TYPES) {
                     WeaponsScreen(
-                        repository = viewModel.weaponRepository,
+                        repository = checkNotNull(weaponRepository),
                         screenState = viewModel.weaponScreenState,
                         forcedType = type,
                         onBackFromForcedType = {
@@ -552,12 +543,14 @@ internal fun CompanionApp(
             }
             composable(Routes.WEAPON_DETAIL) { entry ->
                 val id = entry.arguments?.getString("id")
-                val weapon = id?.let(viewModel.weaponRepository.weaponById::get)
-                if (weapon != null) {
+                LaunchedEffect(id) { viewModel.prepareWeaponRepository() }
+                val weapon = id?.let { weaponRepository?.weaponById?.get(it) }
+                if (id != null && weaponRepository == null) FirstUseLoadingContent("Preparing weapon details…", isError = weaponRepositoryFailed)
+                else if (weapon != null) {
                     LaunchedEffect(weapon.id) { viewModel.recordOpened(ReferenceEntityType.WEAPON, weapon.id) }
                     WeaponDeepLinkScreen(
                         weapon = weapon,
-                        catalog = viewModel.weaponRepository.catalog(weapon.weaponType),
+                        catalog = checkNotNull(weaponRepository).catalog(weapon.weaponType),
                         isFavorite = { selectedId -> state.favorites.any { it.type == ReferenceEntityType.WEAPON && it.entityId == selectedId } },
                         onFavorite = { selectedId -> viewModel.toggleFavorite(ReferenceEntityType.WEAPON, selectedId) },
                         onClose = { nav.popBackStack() },
@@ -569,7 +562,14 @@ internal fun CompanionApp(
             composable(Routes.MATERIAL) { entry ->
                 val id = entry.arguments?.getString("id")
                 val material = viewModel.fixture.materials.firstOrNull { it.id == id }
-                if (material != null) {
+                val itemUsageIndex by viewModel.itemUsageIndexState.collectAsStateWithLifecycle()
+                LaunchedEffect(material?.id) {
+                    if (material != null) {
+                        viewModel.prepareItemUsageIndex()
+                        viewModel.prepareWeaponRepository()
+                    }
+                }
+                if (material != null && itemUsageIndex != null && weaponRepository != null) {
                     LaunchedEffect(material.id) { viewModel.recordOpened(ReferenceEntityType.MATERIAL, material.id) }
                     MaterialScreen(
                         material = material,
@@ -582,9 +582,9 @@ internal fun CompanionApp(
                         onMonster = { nav.navigate(Routes.monster(it)) },
                         onQuest = { nav.navigate(Routes.quest(it)) },
                         onTraining = { nav.navigate(Routes.training(it)) },
-                        weaponUsages = material.gameItemId?.let(viewModel.weaponUsageIndex::forItem).orEmpty(),
-                        weaponRepository = viewModel.weaponRepository,
-                        usageProjection = material.gameItemId?.let(viewModel.itemUsageIndex::forItem),
+                        weaponUsages = material.gameItemId?.let(checkNotNull(weaponRepository).recipeUsageIndex::forItem).orEmpty(),
+                        weaponRepository = checkNotNull(weaponRepository),
+                        usageProjection = material.gameItemId?.let(checkNotNull(itemUsageIndex)::forItem),
                         onUsageFamily = { family -> nav.navigate(Routes.materialUsageFamily(material.id, family.name)) },
                         onUsageTarget = { target ->
                             when (target.targetKind) {
@@ -598,7 +598,7 @@ internal fun CompanionApp(
                         jewelSkillRelations = viewModel.fixture.decorationSkillRelations,
                         skillTrees = viewModel.fixture.skillTrees,
                         onSkill = { skillId ->
-                            viewModel.setQuery("")
+                            viewModel.resetQuery()
                             viewModel.setFilter(EntityType.SKILL)
                             pendingSkillFocusId = skillId
                             nav.navigate(Routes.SEARCH) { launchSingleTop = true }
@@ -608,7 +608,10 @@ internal fun CompanionApp(
                             nav.navigate(Routes.map(mapId, gameItemId, rank))
                         }
                     )
-                }
+                } else if (material != null) FirstUseLoadingContent(
+                    "Preparing item sources…",
+                    isError = itemUsageIndexFailed || weaponRepositoryFailed
+                )
             }
             composable(
                 Routes.QUEST,
@@ -655,13 +658,20 @@ internal fun CompanionApp(
                     ItemUsageFamily.entries.firstOrNull { it.name == name }
                 }
                 val material = viewModel.fixture.materials.firstOrNull { it.id == materialId }
-                val projection = material?.gameItemId?.let(viewModel.itemUsageIndex::forItem)
+                val itemUsageIndex by viewModel.itemUsageIndexState.collectAsStateWithLifecycle()
+                LaunchedEffect(material?.id) {
+                    if (material != null) {
+                        viewModel.prepareItemUsageIndex()
+                        viewModel.prepareWeaponRepository()
+                    }
+                }
+                val projection = material?.gameItemId?.let { gameItemId -> itemUsageIndex?.forItem(gameItemId) }
                 val familyProjection = projection?.families?.firstOrNull { it.family == family }
-                if (material != null && familyProjection != null) {
+                if (material != null && itemUsageIndex != null && weaponRepository != null && familyProjection != null) {
                     UsageFamilyScreen(
                         material = material,
                         family = familyProjection,
-                        weaponRepository = viewModel.weaponRepository,
+                        weaponRepository = checkNotNull(weaponRepository),
                         onBack = nav::popBackStack,
                         onTarget = { target ->
                             when (target.targetKind) {
@@ -671,7 +681,9 @@ internal fun CompanionApp(
                             }
                         }
                     )
-                }
+                } else if (material != null && (itemUsageIndex == null || weaponRepository == null)) FirstUseLoadingContent(
+                    "Preparing item sources…", isError = itemUsageIndexFailed || weaponRepositoryFailed
+                )
             }
             composable(Routes.TRAINING) { entry ->
                 val id = entry.arguments?.getString("id")
@@ -689,7 +701,7 @@ internal fun CompanionApp(
                         onWeapon = { nav.navigate(Routes.weapon(it)) },
                         skills = viewModel.fixture.skillTrees,
                         onSkill = { skillId ->
-                            viewModel.setQuery("")
+                            viewModel.resetQuery()
                             viewModel.setFilter(EntityType.SKILL)
                             pendingSkillFocusId = skillId
                             nav.navigate(Routes.SEARCH) { launchSingleTop = true }
@@ -729,43 +741,57 @@ internal fun CompanionApp(
                 )
             ) { entry ->
                 val map = entry.arguments?.getString("id")?.let(MapRegistry::resolve)
+                val fieldIndex by viewModel.fieldIndexState.collectAsStateWithLifecycle()
+                val fieldIndexFailed by viewModel.fieldIndexFailed.collectAsStateWithLifecycle()
                 val focusedItemId = entry.arguments?.getInt("focusItemId", -1)?.takeIf { it >= 0 }
                 val initialRank = entry.arguments?.getString("rank")?.let { name ->
                     RewardContext.entries.firstOrNull { it.name == name }
                 }
-                if (map != null) MapDetailScreen(
+                LaunchedEffect(map?.mapId) { if (map != null) viewModel.prepareFieldIndex() }
+                if (map != null && fieldIndex != null) MapDetailScreen(
                     map = map,
-                    fieldIndex = viewModel.fieldIndex,
+                    fieldIndex = checkNotNull(fieldIndex),
                     materials = viewModel.fixture.materials,
                     onBack = nav::popBackStack,
                     onClearFocus = { nav.navigate(Routes.map(map.mapId)) { launchSingleTop = true } },
                     focusedGameItemId = focusedItemId,
                     initialRankContext = initialRank,
                     onItem = { nav.navigate(Routes.material(it)) }
+                ) else if (map != null) FirstUseLoadingContent(
+                    message = if (fieldIndexFailed) "Unable to prepare map data." else "Preparing map…"
                 )
             }
             composable(Routes.MATERIAL_USED_IN_WEAPONS) { entry ->
                 val id = entry.arguments?.getString("id")
                 val material = viewModel.fixture.materials.firstOrNull { it.id == id }
-                val family = material?.gameItemId?.let(viewModel.itemUsageIndex::forItem)?.families
+                val itemUsageIndex by viewModel.itemUsageIndexState.collectAsStateWithLifecycle()
+                LaunchedEffect(material?.id) {
+                    if (material != null) {
+                        viewModel.prepareItemUsageIndex()
+                        viewModel.prepareWeaponRepository()
+                    }
+                }
+                val family = material?.gameItemId?.let { gameItemId -> itemUsageIndex?.forItem(gameItemId) }?.families
                     ?.firstOrNull { it.family == ItemUsageFamily.WEAPONS }
-                if (material != null && family != null) {
+                if (material != null && itemUsageIndex != null && weaponRepository != null && family != null) {
                     UsageFamilyScreen(
                         material = material,
                         family = family,
-                        weaponRepository = viewModel.weaponRepository,
+                        weaponRepository = checkNotNull(weaponRepository),
                         onBack = nav::popBackStack,
                         onTarget = { target ->
                             if (target.targetKind == UsageTargetKind.WEAPON) nav.navigate(Routes.weapon(target.targetId))
                         }
                     )
-                }
+                } else if (material != null && (itemUsageIndex == null || weaponRepository == null)) FirstUseLoadingContent(
+                    "Preparing item sources…", isError = itemUsageIndexFailed || weaponRepositoryFailed
+                )
             }
             composable(Routes.FAVORITES) {
                 FavoritesScreen(
                     favorites = state.favorites,
                     data = viewModel.fixture,
-                    weaponRepository = viewModel.weaponRepository,
+                    weaponRepository = null,
                     onEntity = { type, id ->
                         when (type) {
                             ReferenceEntityType.MONSTER -> nav.navigate(Routes.monster(id))
@@ -812,6 +838,7 @@ private val navItems = listOf(
 private fun AppShell(
     nav: NavHostController,
     query: String,
+    queryResetKey: Any = Unit,
     onQueryChange: (String) -> Unit,
     onSearch: () -> Unit,
     onOpenSettings: () -> Unit,
@@ -827,6 +854,7 @@ private fun AppShell(
         ShellFrame(
             selectedRoute = selectedRoute,
             query = query,
+            queryResetKey = queryResetKey,
             onQueryChange = onQueryChange,
             onSearch = onSearch,
             onOpenSettings = onOpenSettings,
@@ -857,6 +885,7 @@ internal fun DetailShell(
 internal fun ShellFrame(
     selectedRoute: String,
     query: String,
+    queryResetKey: Any = Unit,
     onQueryChange: (String) -> Unit,
     onSearch: () -> Unit,
     onNavigate: (String) -> Unit,
@@ -871,6 +900,7 @@ internal fun ShellFrame(
         topBar = {
             AppTopBar(
                 query = if (selectedRoute == Routes.SEARCH) query else "",
+                queryResetKey = queryResetKey,
                 onQueryChange = onQueryChange,
                 onSearch = onSearch,
                 onOpenSettings = onOpenSettings
@@ -886,6 +916,7 @@ internal fun ShellFrame(
 @Composable
 private fun AppTopBar(
     query: String,
+    queryResetKey: Any,
     onQueryChange: (String) -> Unit,
     onSearch: () -> Unit,
     onOpenSettings: () -> Unit
@@ -908,7 +939,7 @@ private fun AppTopBar(
                     }
                     SettingsButton(onOpenSettings, Modifier.testTag("settings-button"))
                 }
-                SearchField(query, onQueryChange, onSearch, Modifier.fillMaxWidth())
+                SearchField(query, onQueryChange, onSearch, Modifier.fillMaxWidth(), queryResetKey)
             }
         } else {
         Row(
@@ -938,7 +969,8 @@ private fun AppTopBar(
                 value = query,
                 onValueChange = onQueryChange,
                 onFocus = onSearch,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                externalResetKey = queryResetKey
             )
         }
         }
@@ -1258,21 +1290,24 @@ private fun SearchField(
     value: String,
     onValueChange: (String) -> Unit,
     onFocus: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    externalResetKey: Any = Unit
 ) {
     val focusManager = LocalFocusManager.current
     SearchInputField(
         query = value,
         onQueryChange = onValueChange,
+        externalResetKey = externalResetKey,
         modifier = modifier.height(52.dp).onFocusChanged { if (it.isFocused) onFocus() },
         tag = "global-search",
         textStyle = AppType.Body,
         placeholder = { Text(stringResource(R.string.search_hint), style = AppType.Body, maxLines = 1) },
         leadingIcon = { Icon(Icons.Default.Search, null, tint = AppColors.Gold, modifier = Modifier.size(21.dp)) },
         trailingIcon = if (value.isNotEmpty()) {
-            { IconButton(onClick = { onValueChange("") }) { Icon(Icons.Default.Close, stringResource(R.string.action_clear), modifier = Modifier.size(20.dp)) } }
+            { clear -> IconButton(onClick = clear) { Icon(Icons.Default.Close, stringResource(R.string.action_clear), modifier = Modifier.size(20.dp)) } }
         } else null,
-        keyboardActions = KeyboardActions(onSearch = { focusManager.clearFocus() }),
+        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+        onImeAction = { focusManager.clearFocus() },
         shape = RoundedCornerShape(26.dp),
         colors = OutlinedTextFieldDefaults.colors(
             focusedBorderColor = AppColors.Gold,
@@ -1297,7 +1332,6 @@ private fun AppBottomBar(selectedRoute: String, onNavigate: (String) -> Unit, he
         Row(Modifier.fillMaxWidth().height(if (compactPortrait) 62.dp else height).testTag("bottom-navigation")) {
             navItems.forEach { item ->
                 val selected = selectedRoute == item.route ||
-                    (item.route == Routes.HOME && selectedRoute == Routes.CHARM_TABLES) ||
                     (item.route == Routes.SEARCH && selectedRoute in listOf(Routes.MATERIAL, Routes.MONSTER, Routes.SMALL_MONSTER, Routes.MAP, Routes.WEAPON_TYPE, Routes.TRAINING))
                 Box(
                     Modifier
@@ -1547,7 +1581,7 @@ private fun FixtureData.resolveReference(type: ReferenceEntityType, id: String, 
     ReferenceEntityType.MATERIAL -> materials.firstOrNull { it.id == id }?.let {
         ResolvedReference(type, id, it.name, it.description, gameItemId = it.gameItemId)
     }
-    ReferenceEntityType.WEAPON -> weaponRepository?.weaponById?.get(id)?.let { weapon ->
+    ReferenceEntityType.WEAPON -> (weaponRepository?.weaponById?.get(id) ?: weapons.firstOrNull { it.stableWeaponId == id })?.let { weapon ->
         ResolvedReference(
             type,
             id,
@@ -1650,6 +1684,17 @@ internal fun AutoFitCompactText(text: String, modifier: Modifier = Modifier) {
     )
 }
 
+@Composable
+internal fun FirstUseLoadingContent(message: String, isError: Boolean = false) {
+    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        if (isError) Text(message, color = AppColors.Crimson)
+        else Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            CircularProgressIndicator(color = AppColors.Gold)
+            Text(message, color = AppColors.Ink)
+        }
+    }
+}
+
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun SearchScreen(
@@ -1697,28 +1742,32 @@ internal fun SearchScreen(
     onSkillFocusConsumed: () -> Unit = {},
     onMaterial: (String) -> Unit = {},
     fieldGuideSwipeEnabled: Boolean = false,
-    selectedCharmTablesRoot: Boolean = false,
+    selectedRootPage: FieldGuideRootPage = fieldGuidePageForCategory(filter),
     onFieldGuidePageSelected: ((FieldGuideRootPage) -> Unit)? = null,
+    onPrepareWeapons: () -> Unit = {},
+    weaponRepositoryFailed: Boolean = false,
     charmTablesContent: @Composable () -> Unit = {}
 ) {
-    val monstersById = remember(monsters) { monsters.associateBy { it.id } }
-    val smallMonstersById = remember(smallMonsters) { smallMonsters.associateBy { it.id } }
-    val weaponsById = remember(weapons) { weapons.associateBy { it.stableWeaponId } }
-    val displayResults = remember(results, smallMonsters, query) {
+    val needsResultLookups = query.isNotBlank()
+    val monstersById = remember(monsters, needsResultLookups) { if (needsResultLookups) monsters.associateBy { it.id } else emptyMap() }
+    val smallMonstersById = remember(smallMonsters, needsResultLookups) { if (needsResultLookups) smallMonsters.associateBy { it.id } else emptyMap() }
+    val weaponsById = remember(weapons, needsResultLookups) { if (needsResultLookups) weapons.associateBy { it.stableWeaponId } else emptyMap() }
+    val displayResults = remember(results, query) {
         if (query.isNotBlank()) {
-            val smallMonsterResults = filterSmallMonsters(smallMonsters, query).map { monster ->
-                SearchResult(
-                    monster.id,
-                    monster.name,
-                    "${monster.monsterClass} · Small Monster",
-                    EntityType.SMALL_MONSTER
-                )
-            }
-            results.filterNot { it.type == EntityType.SMALL_MONSTER } + smallMonsterResults
+            // SearchCorpus already filters small-monster names off Main; retain the
+            // existing name-only / alphabetical presentation without rescanning data.
+            val normalized = query.trim()
+            results.filterNot { it.type == EntityType.SMALL_MONSTER } + results
+                .filter { it.type == EntityType.SMALL_MONSTER && it.name.contains(normalized, ignoreCase = true) }
+                .sortedBy { it.name.lowercase() }
         } else results
     }
-    val itemResults = remember(materials, query) { itemResultsForQuery(materials, query) }
-    val selectedPage = if (selectedCharmTablesRoot) FieldGuideRootPage.CHARM_TABLES else fieldGuidePageForCategory(filter)
+    val itemResults = remember(results) { results.filter { it.type == EntityType.MATERIAL } }
+    val selectedPage = selectedRootPage
+    val firstPageTimings = remember { mutableSetOf<String>() }
+    LaunchedEffect(selectedPage, query) {
+        if (selectedPage == FieldGuideRootPage.WEAPONS && query.isBlank()) onPrepareWeapons()
+    }
     val selectedPageIndex = fieldGuideCategoryOrder.indexOf(selectedPage).coerceAtLeast(0)
     val pagerState = rememberPagerState(initialPage = selectedPageIndex) { fieldGuideCategoryOrder.size }
     val pageSelection: (FieldGuideRootPage) -> Unit = onFieldGuidePageSelected ?: { page ->
@@ -1754,20 +1803,31 @@ internal fun SearchScreen(
             key = { fieldGuideCategoryOrder[it].id }
         ) { pageIndex ->
             val page = fieldGuideCategoryOrder[pageIndex]
+            val pageComposeStart = remember(page.id) { SystemClock.elapsedRealtimeNanos() }
+            SideEffect {
+                if (BuildConfig.DEBUG && firstPageTimings.add(page.id)) {
+                    val elapsedMs = (SystemClock.elapsedRealtimeNanos() - pageComposeStart) / 1_000_000.0
+                    Log.d("MHP3rdFirstUse", "field-guide-page-first-compose ${page.id} ${"%.2f".format(java.util.Locale.US, elapsedMs)}ms")
+                }
+            }
             val pageFilter = page.entityType
             Box(Modifier.fillMaxSize().testTag("field-guide-page-${page.id}")) {
                 if (page == FieldGuideRootPage.CHARM_TABLES) {
                     charmTablesContent()
                 } else when {
-                pageFilter == EntityType.WEAPON && query.isBlank() && weaponRepository != null -> WeaponsScreen(
-                    repository = weaponRepository,
-                    screenState = weaponScreenState ?: remember { WeaponScreenState() },
-                    onTypeSelected = onWeaponType,
-                    onItem = { material ->
-                        onResult(SearchResult(material.id, material.name, material.description, EntityType.MATERIAL, material.aliases, material.gameItemId))
-                    },
-                    onWeaponOpened = {}
-                )
+                pageFilter == EntityType.WEAPON && query.isBlank() -> {
+                    val preparedWeapons = weaponRepository
+                    if (preparedWeapons == null) FirstUseLoadingContent("Preparing weapon guide…", isError = weaponRepositoryFailed)
+                    else WeaponsScreen(
+                        repository = preparedWeapons,
+                        screenState = weaponScreenState ?: remember { WeaponScreenState() },
+                        onTypeSelected = onWeaponType,
+                        onItem = { material ->
+                            onResult(SearchResult(material.id, material.name, material.description, EntityType.MATERIAL, material.aliases, material.gameItemId))
+                        },
+                        onWeaponOpened = {}
+                    )
+                }
                 pageFilter == EntityType.MONSTER -> MonsterIndex(
                     monsters = filterMonsters(monsters, query),
                     totalCount = monsters.size,
@@ -5608,7 +5668,7 @@ private fun SupplyBoxModal(
                     modifier = Modifier.fillMaxWidth(),
                     tag = "supply-box-modal-search",
                     label = { Text("Search quests") },
-                    trailingIcon = { if (query.isNotEmpty()) IconButton(onClick = { query = "" }) { Icon(Icons.Default.Clear, "Clear search") } }
+                    trailingIcon = { clear -> if (query.isNotEmpty()) IconButton(onClick = clear) { Icon(Icons.Default.Clear, "Clear search") } }
                 )
                 Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(vertical = 7.dp), horizontalArrangement = Arrangement.spacedBy(5.dp)) {
                     representedFilters.forEach { key ->
@@ -6904,7 +6964,7 @@ private fun QuestRewardModal(
                     modifier = Modifier.fillMaxWidth(),
                     tag = "quest-rewards-modal-search",
                     label = { Text("Search quests") },
-                    trailingIcon = { if (query.isNotEmpty()) IconButton(onClick = { query = "" }) { Icon(Icons.Default.Clear, "Clear search") } }
+                    trailingIcon = { clear -> if (query.isNotEmpty()) IconButton(onClick = clear) { Icon(Icons.Default.Clear, "Clear search") } }
                 )
                 Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(vertical = 7.dp), horizontalArrangement = Arrangement.spacedBy(5.dp)) {
                     representedFilters.forEach { key ->
@@ -7209,12 +7269,15 @@ internal fun MonsterScreen(
 @Composable
 private fun CompactMonsterHeader(monster: Monster, isFavorite: Boolean, onBack: () -> Unit, onFavorite: () -> Unit) {
     val context = LocalContext.current
-    val headerArt = remember(context, monster.id) { loadMonsterHeaderArt(context, monster.id) }
+    val headerArt by produceState<ImageBitmap?>(null, context, monster.id) {
+        value = loadMonsterHeaderArt(context, monster.id)
+    }
+    val artwork = headerArt
     ParchmentSurface(Modifier.fillMaxWidth().height(64.dp).testTag("contextual-header")) {
         Box(Modifier.fillMaxSize().testTag("contextual-header-${monster.id}")) {
-            if (headerArt != null) {
+            if (artwork != null) {
                 Image(
-                    painter = BitmapPainter(headerArt),
+                    painter = BitmapPainter(artwork),
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.fillMaxHeight().fillMaxWidth(.64f).align(Alignment.CenterEnd)
@@ -7259,13 +7322,23 @@ private fun CompactMonsterHeader(monster: Monster, isFavorite: Boolean, onBack: 
     }
 }
 
-private fun loadMonsterHeaderArt(context: Context, monsterId: String): ImageBitmap? {
+private suspend fun loadMonsterHeaderArt(context: Context, monsterId: String): ImageBitmap? {
     listOf("webp", "png").forEach { extension ->
-        val bitmap = runCatching {
-            context.assets.open("monster-headers/$monsterId.$extension").use { stream ->
-                BitmapFactory.decodeStream(stream)?.asImageBitmap()
+        val assetPath = "monster-headers/$monsterId.$extension"
+        val bytes = withContext(Dispatchers.IO) {
+            runCatching { context.assets.open(assetPath).use { it.readBytes() } }.getOrNull()
+        } ?: return@forEach
+        val bitmap = withContext(Dispatchers.Default) {
+            val start = SystemClock.elapsedRealtimeNanos()
+            try {
+                BitmapFactory.decodeByteArray(bytes, 0, bytes.size)?.asImageBitmap()
+            } finally {
+                if (BuildConfig.DEBUG) {
+                    val elapsedMs = (SystemClock.elapsedRealtimeNanos() - start) / 1_000_000.0
+                    Log.d("MHP3rdFirstUse", "monster-header-decode $assetPath ${"%.2f".format(java.util.Locale.US, elapsedMs)}ms")
+                }
             }
-        }.getOrNull()
+        }
         if (bitmap != null) return bitmap
     }
     return null

@@ -66,15 +66,13 @@ class WeaponSearchClippingUiTest {
             val toolbarHeight = rule.onNodeWithTag("weapon-search-toolbar").fetchSemanticsNode().boundsInRoot.height
             val fieldHeight = field.fetchSemanticsNode().boundsInRoot.height
             assertTrue("Search field is vertically constrained at UI scale $value", fieldHeight >= toolbarHeight * .95f)
-            rule.onNodeWithText("Search Hammer", useUnmergedTree = true, substring = true).assertIsDisplayed()
-
             field.performClick()
             field.assertIsFocused()
             field.performTextInput("Hammer")
             field.assertTextContains("Hammer")
             rule.onNodeWithTag("weapon-search-clear").performClick()
             rule.runOnIdle { assertEquals("query cleared at UI scale $value", "", query.value) }
-            rule.onNodeWithText("Search Hammer", useUnmergedTree = true, substring = true).assertIsDisplayed()
+            field.assertIsDisplayed().assertTextContains("Search Hammer names")
         }
     }
 }

@@ -19,6 +19,11 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.performTextClearance
 import androidx.compose.ui.test.performTextInput
+import androidx.compose.ui.test.performTextInputSelection
+import androidx.compose.ui.test.performKeyInput
+import androidx.compose.ui.test.pressKey
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.text.TextRange
 import com.waillio.mhp3rdcompanion.data.CharmAssetSource
 import com.waillio.mhp3rdcompanion.data.CharmIdentifyWorkingState
 import com.waillio.mhp3rdcompanion.data.CharmPointOperator
@@ -486,5 +491,54 @@ class CharmResultsPaginationUiTest {
         rule.onNodeWithTag("charm-results-page").assertTextEquals("Page 1 / 2")
         rule.onNodeWithTag("charm-view-all-close").performClick()
         assertTrue(rule.onAllNodesWithTag("charm-view-all-dialog").fetchSemanticsNodes().isEmpty())
+    }
+}
+
+@RunWith(RobolectricTestRunner::class)
+@Config(sdk = [35], qualifiers = "w360dp-h800dp-port-xhdpi")
+@GraphicsMode(GraphicsMode.Mode.NATIVE)
+class SignedPointsInputUiTest {
+    @get:Rule val rule = createComposeRule()
+
+    @OptIn(androidx.compose.ui.test.ExperimentalTestApi::class)
+    @Test
+    fun signedEditorKeepsCursorAndDomainValueAcrossEditsAndRejectsInvalidCharacters() {
+        val domainValue = mutableStateOf("")
+        rule.setContent {
+            CompanionTheme {
+                SignedPointsField("Points", domainValue.value, { domainValue.value = it }, "signed-input-test")
+            }
+        }
+        val field = rule.onNodeWithTag("signed-input-test")
+        field.performTextInput("10")
+        rule.waitForIdle()
+        assertEquals("10", domainValue.value)
+
+        field.performTextClearance()
+        field.performTextInput("-5")
+        rule.waitForIdle()
+        field.assertTextContains("-5", substring = true)
+        assertEquals("-5", domainValue.value)
+
+        field.performTextClearance()
+        field.performTextInput("-10")
+        field.performTextInputSelection(androidx.compose.ui.text.TextRange(2, 3))
+        field.performKeyInput { pressKey(Key.Backspace) }
+        rule.waitForIdle()
+        field.assertTextContains("-1", substring = true)
+        assertEquals("-1", domainValue.value)
+
+        field.performTextInputSelection(TextRange(1))
+        field.performTextInput("0")
+        rule.waitForIdle()
+        field.assertTextContains("-01", substring = true)
+        field.performTextInput("x")
+        rule.waitForIdle()
+        field.assertTextContains("-01", substring = true)
+        assertEquals("-01", domainValue.value)
+        field.performTextInput("2")
+        rule.waitForIdle()
+        field.assertTextContains("-021", substring = true)
+        assertEquals("-021", domainValue.value)
     }
 }

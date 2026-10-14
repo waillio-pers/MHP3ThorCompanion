@@ -20,6 +20,19 @@ internal data class MapNodeCalibration(
     val isDefault: Boolean get() = dxSteps == 0 && dySteps == 0 && exists && note.isBlank()
 }
 
+internal sealed interface MapCalibrationDecodeResult {
+    data object Absent : MapCalibrationDecodeResult
+    data class Valid(val values: Map<String, MapNodeCalibration>) : MapCalibrationDecodeResult
+    /** Valid rows remain usable; malformed rows are skipped as the old decoder did. */
+    data class Malformed(val values: Map<String, MapNodeCalibration>, val skippedRows: Int) : MapCalibrationDecodeResult
+
+    fun safeValues(): Map<String, MapNodeCalibration> = when (this) {
+        Absent -> emptyMap()
+        is Valid -> values
+        is Malformed -> values
+    }
+}
+
 internal object MapCalibrationCodec {
     fun encode(values: Map<String, MapNodeCalibration>): String = values
         .filterValues { !it.isDefault }
@@ -35,20 +48,29 @@ internal object MapCalibrationCodec {
             ).joinToString("\t")
         }
 
-    fun decode(raw: String?): Map<String, MapNodeCalibration> = raw.orEmpty()
-        .lineSequence()
-        .mapNotNull { line ->
+    fun decode(raw: String?): Map<String, MapNodeCalibration> = decodeResult(raw).safeValues()
+
+    fun decodeResult(raw: String?): MapCalibrationDecodeResult {
+        if (raw == null) return MapCalibrationDecodeResult.Absent
+        val parsed = linkedMapOf<String, MapNodeCalibration>()
+        var skipped = 0
+        raw.lineSequence().filter(String::isNotBlank).forEach { line ->
             val parts = line.split('\t')
-            if (parts.size != 5) return@mapNotNull null
-            val dx = parts[1].toIntOrNull() ?: return@mapNotNull null
-            val dy = parts[2].toIntOrNull() ?: return@mapNotNull null
-            val exists = parts[3].toBooleanStrictOrNull() ?: return@mapNotNull null
-            val note = runCatching {
-                String(Base64.getUrlDecoder().decode(parts[4]), Charsets.UTF_8)
-            }.getOrDefault("")
-            parts[0] to MapNodeCalibration(dx, dy, exists, note)
+            val value = runCatching {
+                require(parts.size == 5)
+                require(parts[0].isNotBlank())
+                MapNodeCalibration(
+                    dxSteps = parts[1].toInt(),
+                    dySteps = parts[2].toInt(),
+                    exists = parts[3].toBooleanStrict(),
+                    note = String(Base64.getUrlDecoder().decode(parts[4]), Charsets.UTF_8)
+                )
+            }.getOrNull()
+            if (value == null) skipped++ else parsed[parts[0]] = value
         }
-        .toMap()
+        return if (skipped == 0) MapCalibrationDecodeResult.Valid(parsed)
+        else MapCalibrationDecodeResult.Malformed(parsed, skipped)
+    }
 
     fun export(map: MapDefinition, values: Map<String, MapNodeCalibration>): String {
         val changed = map.nodes.mapIndexedNotNull { index, node ->
@@ -74,8 +96,9 @@ internal object MapCalibrationCodec {
 internal class MapCalibrationStore(context: Context) {
     private val preferences = context.getSharedPreferences("map_calibration_v1", Context.MODE_PRIVATE)
 
-    fun load(mapId: String): Map<String, MapNodeCalibration> =
-        MapCalibrationCodec.decode(preferences.getString(mapId, null))
+    fun loadResult(mapId: String): MapCalibrationDecodeResult = MapCalibrationCodec.decodeResult(preferences.getString(mapId, null))
+
+    fun load(mapId: String): Map<String, MapNodeCalibration> = loadResult(mapId).safeValues()
 
     fun save(mapId: String, values: Map<String, MapNodeCalibration>) {
         preferences.edit().putString(mapId, MapCalibrationCodec.encode(values)).apply()

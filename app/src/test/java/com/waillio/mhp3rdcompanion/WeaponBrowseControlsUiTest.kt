@@ -22,8 +22,7 @@ import org.robolectric.annotation.GraphicsMode
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [35], qualifiers = "w620dp-h540dp-land-xhdpi")
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
-class WeaponBrowseControlsUiTest {
-    @get:Rule val rule = createAndroidComposeRule<MainActivity>()
+class WeaponBrowseControlsUiTest : MainActivityUiTestBase() {
 
     @Test
     fun compactFiltersAndSortSurviveDetailBackAndTreeSwitch() {
@@ -36,6 +35,7 @@ class WeaponBrowseControlsUiTest {
 
         rule.onNodeWithTag("nav-search").performClick()
         rule.onNodeWithTag("field-filter-weapons").performClick()
+        awaitTag("weapons-chooser")
         rule.onNodeWithTag("weapon-type-hammer").performClick()
         rule.onNodeWithTag("weapon-tree").assertIsDisplayed()
         rule.onNodeWithTag("weapon-mode-tree").assertIsDisplayed()
@@ -104,6 +104,7 @@ class WeaponBrowseControlsUiTest {
         val catalog = repository.catalog("HAMMER")
         rule.onNodeWithTag("nav-search").performClick()
         rule.onNodeWithTag("field-filter-weapons").performClick()
+        awaitTag("weapons-chooser")
         rule.onNodeWithTag("weapon-type-hammer").performClick()
         rule.onNodeWithTag("weapon-mode-attack").performClick()
 

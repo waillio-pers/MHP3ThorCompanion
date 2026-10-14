@@ -12,8 +12,7 @@ import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [35], qualifiers = "w360dp-h800dp-port-xhdpi")
-class AdaptiveCompactPortraitUiTest {
-    @get:Rule val rule = createAndroidComposeRule<MainActivity>()
+class AdaptiveCompactPortraitUiTest : MainActivityUiTestBase() {
 
     @Test
     fun compactPhoneChromeSettingsAndAboutRemainReachableAtEveryScaleEndpoint() {

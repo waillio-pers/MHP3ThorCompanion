@@ -13,13 +13,13 @@ import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [35], qualifiers = "w620dp-h540dp-land-xhdpi")
-class MonsterRewardsUiTest {
-    @get:Rule val rule = createAndroidComposeRule<MainActivity>()
+class MonsterRewardsUiTest : MainActivityUiTestBase() {
 
     @Test
     fun monsterFirstGroupShowsMethodOrderAndExactSameRankRows() {
         openMaterial("Agnaktor Claw+")
-        rule.onNodeWithTag("item-monster-rewards-groups").assertExists()
+        awaitTag("item-monster-rewards-groups", useUnmergedTree = true)
+        rule.onNodeWithTag("item-monster-rewards-groups", useUnmergedTree = true).assertExists()
         rule.onNodeWithTag("item-monster-source-group-monster_agnaktor").assertIsDisplayed()
         rule.onNodeWithTag("item-monster-source-method-monster_agnaktor-BODY_CARVE-Body").assertExists()
         rule.onNodeWithTag("item-monster-source-method-monster_agnaktor-CAPTURE-Capture").assertExists()
@@ -42,11 +42,10 @@ class MonsterRewardsUiTest {
 
     private fun openMaterial(name: String) {
         rule.onNodeWithTag("global-search").performTextInput(name)
-        rule.onAllNodesWithTag("result-material-item_agnaktor_claw_plus").fetchSemanticsNodes().firstOrNull()?.let {
-            rule.onNodeWithTag("result-material-item_agnaktor_claw_plus").performClick()
-            return
-        }
-        rule.onNodeWithTag("result-material-item_wyvern_sobs").performClick()
+        val id = if (name == "Agnaktor Claw+") "item_agnaktor_claw_plus" else "item_wyvern_sobs"
+        awaitTag("result-material-$id")
+        rule.onNodeWithTag("result-material-$id").performClick()
+        awaitTag("screen-material")
         rule.onNodeWithTag("screen-material").assertIsDisplayed()
     }
 }

@@ -10,8 +10,7 @@ import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [35], qualifiers = "w620dp-h540dp-land-xhdpi")
-class TrainingRewardsUiTest {
-    @get:Rule val rule = createAndroidComposeRule<MainActivity>()
+class TrainingRewardsUiTest : MainActivityUiTestBase() {
 
     @Test
     fun rawMeatUsesMissionPreviewAndTrainingRewardsModalWithoutMarkerLeak() {
@@ -40,7 +39,10 @@ class TrainingRewardsUiTest {
 
     private fun openMaterial(name: String, id: String) {
         rule.onNodeWithTag("global-search").performTextInput(name)
+        awaitTag("result-material-$id")
         rule.onNodeWithTag("result-material-$id").performClick()
+        awaitTag("item-training-rewards-header")
+        awaitTag("screen-material")
         rule.onNodeWithTag("screen-material").assertIsDisplayed()
     }
 }

@@ -44,6 +44,11 @@ def sha256(content: bytes) -> str:
     return hashlib.sha256(content).hexdigest().upper()
 
 
+def canonical_csv_bytes(content: bytes) -> bytes:
+    """Normalize platform line endings before hashing pinned textual CSV inputs."""
+    return content.replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+
+
 def load_csv(path: Path) -> tuple[list[str], list[dict[str, str]]]:
     with path.open("r", encoding="utf-8-sig", newline="") as stream:
         reader = csv.DictReader(stream)
@@ -65,7 +70,7 @@ def prepare_sources(
     audit_crosswalk: Path,
     production_json: Path,
 ) -> tuple[str, str]:
-    upstream_bytes = upstream_csv.read_bytes()
+    upstream_bytes = canonical_csv_bytes(upstream_csv.read_bytes())
     if sha256(upstream_bytes) != UPSTREAM_CSV_SHA256:
         raise ValueError("Pinned historical MHP3DB CSV SHA-256 mismatch")
 
@@ -125,7 +130,7 @@ def prepare_sources(
 
     write_csv(SOURCE_CSV, fields, standard_rows)
     write_csv(SKILL_CROSSWALK, ["historicalSkill", "stableSkillTreeId", "canonicalTmoLabel", "identityEvidence"], bridge_rows)
-    return sha256(SOURCE_CSV.read_bytes()), sha256(SKILL_CROSSWALK.read_bytes())
+    return sha256(canonical_csv_bytes(SOURCE_CSV.read_bytes())), sha256(canonical_csv_bytes(SKILL_CROSSWALK.read_bytes()))
 
 
 def _load_skill_mapping(path: Path, production: dict[str, Any]) -> tuple[dict[str, str], list[str]]:
@@ -158,10 +163,10 @@ def _parse_skill(value: str, mapping: dict[str, str]) -> tuple[str, int]:
 
 
 def build_asset(source_csv: Path, crosswalk_csv: Path, production_json: Path) -> bytes:
-    input_bytes = source_csv.read_bytes()
+    input_bytes = canonical_csv_bytes(source_csv.read_bytes())
     if sha256(input_bytes) != EXPECTED_CURATED_SOURCE_SHA256:
         raise ValueError("Filtered historical Timeworn CSV SHA-256 mismatch")
-    crosswalk_bytes = crosswalk_csv.read_bytes()
+    crosswalk_bytes = canonical_csv_bytes(crosswalk_csv.read_bytes())
     if sha256(crosswalk_bytes) != EXPECTED_CROSSWALK_SHA256:
         raise ValueError("Canonical skill identity crosswalk SHA-256 mismatch")
     production_bytes = production_json.read_bytes()

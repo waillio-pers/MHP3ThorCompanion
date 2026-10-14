@@ -6,17 +6,20 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CutCornerShape
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.TextFieldLineLimits
+import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.rememberTextFieldState
+import androidx.compose.foundation.text.input.maxLength
 import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,13 +33,14 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.TextRange
-import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.Hyphens
 import androidx.compose.ui.text.style.LineBreak
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
 
 internal object AppColors {
     val Night = Color(0xFF15120E)
@@ -171,9 +175,46 @@ internal fun SectionCard(
     }
 }
 
-/** Shared native text-editing state for every app search field.
- * Keeping TextFieldValue (rather than only its String) preserves caret and
- * selection semantics while the surrounding search results recompose. */
+/** Collects committed editor text without replacing the editor's IME-owned buffer. */
+@Composable
+internal fun ObserveTextFieldState(
+    state: TextFieldState,
+    externalResetKey: Any? = Unit,
+    externalResetText: String? = null,
+    onTextChange: (String) -> Unit
+) {
+    val latestOnTextChange = rememberUpdatedState(onTextChange)
+    // Track the last value sent to the owner. It lets genuine external restores
+    // update the buffer without treating the normal String echo as an edit that
+    // should replace the IME-owned selection/composition.
+    val lastPublishedText = remember(state, externalResetKey) { mutableStateOf(state.text.toString()) }
+    LaunchedEffect(state, externalResetKey) {
+        snapshotFlow { state.text.toString() }
+            .distinctUntilChanged()
+            .collect { text ->
+                if (text != lastPublishedText.value) {
+                    lastPublishedText.value = text
+                    latestOnTextChange.value(text)
+                }
+            }
+    }
+    LaunchedEffect(state, externalResetKey, externalResetText) {
+        val externalText = externalResetText ?: return@LaunchedEffect
+        if (externalText != lastPublishedText.value) {
+            state.replaceTextAndPlaceCursorAtEnd(externalText)
+            lastPublishedText.value = externalText
+        }
+    }
+}
+
+internal fun TextFieldState.replaceTextAndPlaceCursorAtEnd(value: String) {
+    edit {
+        replace(0, length, value)
+        selection = TextRange(value.length)
+    }
+}
+
+/** Shared state-based editor for searches; parent String echoes never reset IME selection/composition. */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun SearchInputField(
@@ -182,39 +223,32 @@ internal fun SearchInputField(
     modifier: Modifier = Modifier,
     tag: String,
     textStyle: TextStyle = AppType.Body,
-    label: @Composable (() -> Unit)? = null,
+    label: @Composable TextFieldLabelScope.() -> Unit = {},
     placeholder: @Composable (() -> Unit)? = null,
     leadingIcon: @Composable (() -> Unit)? = null,
-    trailingIcon: @Composable (() -> Unit)? = null,
+    trailingIcon: @Composable ((clear: () -> Unit) -> Unit)? = null,
     shape: Shape = AppDimens.ButtonShape,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-    keyboardActions: KeyboardActions = KeyboardActions.Default,
+    onImeAction: (() -> Unit)? = null,
+    externalResetKey: Any? = Unit,
     colors: TextFieldColors = OutlinedTextFieldDefaults.colors()
 ) {
-    var fieldValue by rememberSaveable(stateSaver = TextFieldValue.Saver) {
-        mutableStateOf(TextFieldValue(query))
-    }
-    LaunchedEffect(query) {
-        if (query != fieldValue.text) {
-            fieldValue = TextFieldValue(query, selection = TextRange(query.length))
-        }
-    }
+    val fieldState = rememberTextFieldState(initialText = query)
+    ObserveTextFieldState(fieldState, externalResetKey, query, onQueryChange)
     OutlinedTextField(
-        value = fieldValue,
-        onValueChange = { value ->
-            fieldValue = value
-            onQueryChange(value.text)
-        },
+        state = fieldState,
         modifier = modifier.testTag(tag),
-        singleLine = true,
+        lineLimits = TextFieldLineLimits.SingleLine,
         textStyle = textStyle,
         label = label,
         placeholder = placeholder,
         leadingIcon = leadingIcon,
-        trailingIcon = trailingIcon,
+        trailingIcon = trailingIcon?.let { icon -> { icon { fieldState.replaceTextAndPlaceCursorAtEnd("") } } },
         shape = shape,
         keyboardOptions = keyboardOptions,
-        keyboardActions = keyboardActions,
+        onKeyboardAction = { performDefaultAction ->
+            if (onImeAction == null) performDefaultAction() else onImeAction()
+        },
         colors = colors
     )
 }

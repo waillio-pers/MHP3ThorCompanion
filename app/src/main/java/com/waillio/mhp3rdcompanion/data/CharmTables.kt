@@ -1,6 +1,11 @@
 package com.waillio.mhp3rdcompanion.data
 
 import android.content.Context
+import android.os.SystemClock
+import android.util.Log
+import com.waillio.mhp3rdcompanion.BuildConfig
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 
@@ -362,8 +367,30 @@ internal class CharmTableIndex(
 
 internal class CharmTableRepository(private val context: Context, private val skillTrees: List<SkillTree>) {
     private val json = Json { ignoreUnknownKeys = false }
-    val index: CharmTableIndex by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
-        val encoded = context.assets.open("mhp3rd-charms.json").bufferedReader(Charsets.UTF_8).use { it.readText() }
+    @Volatile private var cachedIndex: CharmTableIndex? = null
+
+    val index: CharmTableIndex
+        get() = cachedIndex ?: synchronized(this) {
+            cachedIndex ?: parseAndValidate(
+                context.assets.open("mhp3rd-charms.json").bufferedReader(Charsets.UTF_8).use { it.readText() }
+            ).also { cachedIndex = it }
+        }
+
+    suspend fun loadIndexOffMain(): CharmTableIndex {
+        cachedIndex?.let { return it }
+        val encoded = withContext(Dispatchers.IO) {
+            measure("charm-asset-read") {
+                context.assets.open("mhp3rd-charms.json").bufferedReader(Charsets.UTF_8).use { it.readText() }
+            }
+        }
+        return withContext(Dispatchers.Default) {
+            cachedIndex ?: synchronized(this@CharmTableRepository) {
+                cachedIndex ?: parseAndValidate(encoded).also { cachedIndex = it }
+            }
+        }
+    }
+
+    private fun parseAndValidate(encoded: String): CharmTableIndex = measure("charm-json-decode+index-validation") {
         val asset = json.decodeFromString<CharmTableAsset>(encoded)
         val parsed = CharmTableIndex.fromAsset(asset)
         val canonicalIds = skillTrees.mapTo(hashSetOf()) { it.stableSkillTreeId }
@@ -371,5 +398,17 @@ internal class CharmTableRepository(private val context: Context, private val sk
             "Charm corpus skill crosswalk no longer matches the Companion canonical skill trees"
         }
         parsed
+    }
+
+    private inline fun <T> measure(label: String, block: () -> T): T {
+        val start = SystemClock.elapsedRealtimeNanos()
+        return try {
+            block()
+        } finally {
+            if (BuildConfig.DEBUG) {
+                val elapsedMs = (SystemClock.elapsedRealtimeNanos() - start) / 1_000_000.0
+                Log.d("MHP3rdFirstUse", "$label ${"%.2f".format(java.util.Locale.US, elapsedMs)}ms")
+            }
+        }
     }
 }

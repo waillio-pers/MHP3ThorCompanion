@@ -20,6 +20,9 @@ import androidx.compose.ui.test.click
 import androidx.compose.ui.test.swipeLeft
 import androidx.compose.ui.test.swipeRight
 import com.waillio.mhp3rdcompanion.data.Material
+import com.waillio.mhp3rdcompanion.data.FixtureData
+import com.waillio.mhp3rdcompanion.data.CompanionLogic
+import com.waillio.mhp3rdcompanion.data.EntityType
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
@@ -142,14 +145,14 @@ private fun PagerHarness(enabled: Boolean, initialPage: FieldGuideRootPage, weap
         SearchScreen(
             query = "",
             filter = filter,
-            results = emptyList(),
+            results = CompanionLogic.search(FixtureData(monsters = emptyList(), quests = emptyList(), materials = materials), "", EntityType.MATERIAL),
             materials = materials,
             listState = rememberLazyListState(),
             weaponScreenState = weaponState,
             onFilter = { selected = fieldGuidePageForCategory(it) },
             onResult = {},
             fieldGuideSwipeEnabled = enabled,
-            selectedCharmTablesRoot = selected == FieldGuideRootPage.CHARM_TABLES,
+            selectedRootPage = selected,
             onFieldGuidePageSelected = { selected = it },
             charmTablesContent = { Box(Modifier.fillMaxSize().testTag("charm-page-content")) }
         )

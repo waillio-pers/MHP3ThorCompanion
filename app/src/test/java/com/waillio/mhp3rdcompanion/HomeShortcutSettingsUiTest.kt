@@ -16,8 +16,7 @@ import org.robolectric.annotation.GraphicsMode
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [35], qualifiers = "w360dp-h800dp-port-mdpi")
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
-class HomeShortcutSettingsUiTest {
-    @get:Rule val rule = createAndroidComposeRule<MainActivity>()
+class HomeShortcutSettingsUiTest : MainActivityUiTestBase() {
 
     @Test
     fun defaultsCanBeReorderedClearedAndPersistedAcrossActivityRecreation() {
@@ -76,8 +75,7 @@ class HomeShortcutSettingsUiTest {
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [35], qualifiers = "w827dp-h720dp-land-mdpi")
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
-class HomeShortcutThorLayoutUiTest {
-    @get:Rule val rule = createAndroidComposeRule<MainActivity>()
+class HomeShortcutThorLayoutUiTest : MainActivityUiTestBase() {
 
     @Test
     fun fourHomeShortcutsShareOneRowOnThor() {

@@ -16,8 +16,7 @@ import org.robolectric.annotation.GraphicsMode
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [35], qualifiers = "w620dp-h540dp-land-xhdpi")
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
-class WeaponEcosystemIntegrationTest {
-    @get:Rule val rule = createAndroidComposeRule<MainActivity>()
+class WeaponEcosystemIntegrationTest : MainActivityUiTestBase() {
 
     @Test
     fun productionReverseIndexIsCompleteAndRecipeKindsArePreserved() {
@@ -94,7 +93,9 @@ class WeaponEcosystemIntegrationTest {
         rule.onNodeWithTag("nav-search").performClick()
         rule.onNodeWithTag("field-filter-all").performClick()
         rule.onNodeWithTag("global-search").performTextInput("Old Yukumo L. Bowgun")
+        awaitTag("result-weapon-weapon_light_bowgun_001")
         rule.onNodeWithTag("result-weapon-weapon_light_bowgun_001").assertIsDisplayed().performClick()
+        awaitTag("weapon-detail-title-weapon_light_bowgun_001")
         rule.onNodeWithTag("weapon-detail-title-weapon_light_bowgun_001").assertIsDisplayed()
         rule.activity.onBackPressedDispatcher.onBackPressed()
         rule.waitForIdle()
@@ -107,7 +108,9 @@ class WeaponEcosystemIntegrationTest {
         rule.onNodeWithTag("nav-search").performClick()
         rule.onNodeWithTag("field-filter-all").performClick()
         rule.onNodeWithTag("global-search").performTextInput("Iron Ore")
+        awaitTag("result-material-item_iron_ore")
         rule.onNodeWithTag("result-material-item_iron_ore").performClick()
+        awaitTag("material-used-in-weapons")
         rule.onNodeWithTag("material-used-in-weapons").assertExists()
         rule.onNodeWithTag("material-used-in-weapons-view-all").performScrollTo().performClick()
         rule.onNodeWithTag("screen-used-in-weapons").assertIsDisplayed()
@@ -136,6 +139,7 @@ class WeaponEcosystemIntegrationTest {
         }
         rule.onNodeWithTag("favorite-weapon-weapon_light_bowgun_001").assertIsDisplayed()
         rule.onNodeWithTag("favorite-weapon-weapon_light_bowgun_001").performClick()
+        awaitTag("weapon-detail-title-weapon_light_bowgun_001")
         rule.onNodeWithTag("weapon-detail-title-weapon_light_bowgun_001").assertIsDisplayed()
         rule.waitUntil(timeoutMillis = 5_000) {
             rule.onAllNodesWithContentDescription("Remove from favorites").fetchSemanticsNodes().isNotEmpty()
@@ -148,7 +152,9 @@ class WeaponEcosystemIntegrationTest {
         rule.onNodeWithTag("nav-search").performClick()
         rule.onNodeWithTag("field-filter-all").performClick()
         rule.onNodeWithTag("global-search").performTextInput("Old Yukumo L. Bowgun")
+        awaitTag("result-weapon-weapon_light_bowgun_001")
         rule.onNodeWithTag("result-weapon-weapon_light_bowgun_001").performClick()
+        awaitTag("weapon-lbg-ammo-table")
         rule.onNodeWithTag("weapon-lbg-ammo-table").assertExists()
         rule.onNodeWithTag("weapon-lbg-ammo-group-physical").assertExists()
         rule.onNodeWithTag("ammo-matrix-cell-normal_s-3").assertTextContains("4")

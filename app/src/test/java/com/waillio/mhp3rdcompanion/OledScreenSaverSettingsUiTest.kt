@@ -18,8 +18,7 @@ import org.robolectric.annotation.GraphicsMode
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [35], qualifiers = "w360dp-h800dp-port-mdpi")
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
-class OledScreenSaverSettingsUiTest {
-    @get:Rule val rule = createAndroidComposeRule<MainActivity>()
+class OledScreenSaverSettingsUiTest : MainActivityUiTestBase() {
 
     @Test
     fun durationSelectorMatchesToggleHeight() {

@@ -15,8 +15,7 @@ import org.robolectric.annotation.GraphicsMode
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [35], qualifiers = "w620dp-h540dp-land-xhdpi")
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
-class FieldRedesignUiTest {
-    @get:Rule val rule = createAndroidComposeRule<MainActivity>()
+class FieldRedesignUiTest : MainActivityUiTestBase() {
 
     @Test
     fun ironOreUsesSixCollapsedMapCardsAndProgressiveNodeComposition() {
@@ -40,6 +39,7 @@ class FieldRedesignUiTest {
         openMaterial("Iron Ore", "item_iron_ore")
         rule.onNodeWithTag("field-node-grid-misty_peaks").assertDoesNotExist()
         rule.onNodeWithTag("field-show-map-misty_peaks").performClick()
+        awaitTag("map-detail-misty_peaks")
         rule.onNodeWithTag("map-detail-misty_peaks").assertIsDisplayed()
     }
 
@@ -123,7 +123,9 @@ class FieldRedesignUiTest {
 
     private fun openMaterial(name: String, id: String) {
         rule.onNodeWithTag("global-search").performTextInput(name)
+        awaitTag("result-material-$id")
         rule.onNodeWithTag("result-material-$id").performClick()
+        awaitTag("screen-material")
         rule.onNodeWithTag("screen-material").assertIsDisplayed()
     }
 }

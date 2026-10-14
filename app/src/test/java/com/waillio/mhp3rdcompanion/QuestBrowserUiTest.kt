@@ -15,8 +15,7 @@ import org.robolectric.annotation.GraphicsMode
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [35], qualifiers = "w620dp-h540dp-land-xhdpi")
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
-class QuestBrowserUiTest {
-    @get:Rule val rule = createAndroidComposeRule<MainActivity>()
+class QuestBrowserUiTest : MainActivityUiTestBase() {
 
     @Test
     fun emptyQueryShowsAll354QuestsWithStructuredBadge() {
@@ -74,6 +73,7 @@ class QuestBrowserUiTest {
     @Test
     fun globalSearchQuestResultUsesQuestBadge() {
         rule.onNodeWithTag("global-search").performTextInput("The Brilliant Darkness")
+        awaitTag("result-quest-quest_guild_8_star_38")
         rule.onNodeWithTag("result-quest-quest_guild_8_star_38").assertIsDisplayed()
         rule.onNodeWithTag("quest-badge-quest_guild_8_star_38").assertIsDisplayed()
     }
@@ -81,6 +81,7 @@ class QuestBrowserUiTest {
     @Test
     fun monsterQuestTabAndItemQuestSourceUseQuestBadge() {
         rule.onNodeWithTag("global-search").performTextInput("Rathalos")
+        awaitTag("result-monster-monster_rathalos")
         rule.onNodeWithTag("result-monster-monster_rathalos").performClick()
         rule.onNodeWithTag("monster-tab-3").performClick()
         rule.onNodeWithTag("quests-list").performScrollToNode(hasTestTag("monster-quest-quest_guild_7_star_13"))
@@ -89,7 +90,9 @@ class QuestBrowserUiTest {
         rule.onNodeWithTag("nav-search").performClick()
         rule.onNodeWithTag("field-filter-all").performClick()
         rule.onNodeWithTag("global-search").performTextInput("Blue Mushroom")
+        awaitTag("result-material-item_blue_mushroom")
         rule.onNodeWithTag("result-material-item_blue_mushroom").performClick()
+        awaitTag("item-quest-badge-quest_guild_6_star_21")
         rule.onNodeWithTag("item-quest-badge-quest_guild_6_star_21").performScrollTo().assertIsDisplayed()
     }
 
@@ -107,6 +110,7 @@ class QuestBrowserUiTest {
 
         rule.activityRule.scenario.recreate()
 
+        awaitTag("global-search")
         rule.onNodeWithTag("global-search").assert(
             SemanticsMatcher.expectValue(SemanticsProperties.EditableText, AnnotatedString("a"))
         )

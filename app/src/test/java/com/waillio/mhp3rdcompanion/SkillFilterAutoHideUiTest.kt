@@ -30,8 +30,7 @@ import java.util.concurrent.atomic.AtomicReference
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [35], qualifiers = "w360dp-h800dp-port-mdpi")
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
-class SkillFilterAutoHideUiTest {
-    @get:Rule val rule = createAndroidComposeRule<MainActivity>()
+class SkillFilterAutoHideUiTest : MainActivityUiTestBase() {
 
     @Test
     fun portraitFilterRowHidesAfterDownwardScrollAndReturnsOnUpwardScroll() {
@@ -139,8 +138,7 @@ class AlphabetScrubberGestureUiTest {
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [35], qualifiers = "w827dp-h720dp-land-mdpi")
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
-class SkillFilterThorAutoHideUiTest {
-    @get:Rule val rule = createAndroidComposeRule<MainActivity>()
+class SkillFilterThorAutoHideUiTest : MainActivityUiTestBase() {
 
     @Test
     fun thorFilterBarUsesRealScrollableContentInsteadOfPortraitProfile() {
@@ -161,8 +159,7 @@ class SkillFilterThorAutoHideUiTest {
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [35], qualifiers = "w412dp-h915dp-port-xhdpi")
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
-class SkillAlphabetTallPhoneUiTest {
-    @get:Rule val rule = createAndroidComposeRule<MainActivity>()
+class SkillAlphabetTallPhoneUiTest : MainActivityUiTestBase() {
 
     @Test
     fun tallPhoneShowsFilteredAlphabetAndJumpsToLiveSkill() {

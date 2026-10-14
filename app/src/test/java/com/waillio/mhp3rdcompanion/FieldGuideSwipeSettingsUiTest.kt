@@ -21,8 +21,7 @@ import org.robolectric.annotation.GraphicsMode
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [35], qualifiers = "w360dp-h800dp-port-mdpi")
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
-class FieldGuideSwipeSettingsUiTest {
-    @get:Rule val rule = createAndroidComposeRule<MainActivity>()
+class FieldGuideSwipeSettingsUiTest : MainActivityUiTestBase() {
 
     @Test
     fun settingDefaultsOffTakesEffectImmediatelyPersistsAndSurvivesRecreation() {

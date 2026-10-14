@@ -1,29 +1,82 @@
 package com.waillio.mhp3rdcompanion.data
 
 import android.content.Context
+import android.os.SystemClock
+import android.util.Log
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.util.UUID
 import com.waillio.mhp3rdcompanion.MapSourceCrosswalk
+import com.waillio.mhp3rdcompanion.BuildConfig
 
 private val Context.dataStore by preferencesDataStore("companion_preferences")
 private val fixtureJson = Json { ignoreUnknownKeys = true }
 
 class CompanionRepository(private val context: Context) {
-    internal val questProgression: QuestProgressionData by lazy {
-        val json = context.assets.open("mhp3rd-quest-progression.json").bufferedReader().use { it.readText() }
-        fixtureJson.decodeFromString(json)
+    private val cacheLock = Any()
+    private val generatedLoadMutex = Mutex()
+    @Volatile private var cachedGenerated: GeneratedDataset? = null
+    @Volatile private var cachedData: FixtureData? = null
+    @Volatile private var cachedQuestProgression: QuestProgressionData? = null
+    @Volatile private var cachedFieldIndex: FieldSourceIndex? = null
+
+    private val generated: GeneratedDataset
+        get() = cachedGenerated ?: synchronized(cacheLock) {
+            cachedGenerated ?: measureSync("asset-read+json-decode") {
+                context.assets.open("mhp3rd-data.json").bufferedReader().use { fixtureJson.decodeFromString<GeneratedDataset>(it.readText()) }
+            }.also { cachedGenerated = it }
+        }
+
+    internal val questProgression: QuestProgressionData
+        get() = cachedQuestProgression ?: synchronized(cacheLock) {
+            cachedQuestProgression ?: measureSync("quest-progression-read+decode") {
+                val text = context.assets.open("mhp3rd-quest-progression.json").bufferedReader().use { it.readText() }
+                validateQuestProgressionSchema(fixtureJson.decodeFromString<QuestProgressionData>(text))
+            }.also { cachedQuestProgression = it }
+        }
+
+    val data: FixtureData
+        get() = cachedData ?: synchronized(cacheLock) {
+            cachedData ?: measureSync("runtime-model-projection") { generated.toFixtureData() }.also { cachedData = it }
+        }
+
+    /** Reads packaged bytes on IO, then parses and maps the immutable production model off Main. */
+    internal suspend fun loadDataOffMain(): FixtureData {
+        cachedData?.let { return it }
+        val start = SystemClock.elapsedRealtimeNanos()
+        val source = loadGeneratedOffMain()
+        val prepared = withContext(Dispatchers.Default) {
+            cachedData ?: measureSync("runtime-model-projection") { source.toFixtureData() }.also { cachedData = it }
+        }
+        if (BuildConfig.DEBUG) {
+            val elapsedMs = (SystemClock.elapsedRealtimeNanos() - start) / 1_000_000.0
+            Log.d("MHP3rdFirstUse", "companion-data-first-access ${"%.2f".format(java.util.Locale.US, elapsedMs)}ms")
+        }
+        return prepared
     }
-    private val generated: GeneratedDataset by lazy {
-        val json = context.assets.open("mhp3rd-data.json").bufferedReader().use { it.readText() }
-        fixtureJson.decodeFromString(json)
+
+    internal suspend fun loadQuestProgressionOffMain(): QuestProgressionData {
+        cachedQuestProgression?.let { return it }
+        val text = withContext(Dispatchers.IO) {
+            measureSync("quest-progression-asset-read") {
+                context.assets.open("mhp3rd-quest-progression.json").bufferedReader().use { it.readText() }
+            }
+        }
+        return withContext(Dispatchers.Default) {
+            cachedQuestProgression ?: measureSync("quest-progression-json-decode") {
+                validateQuestProgressionSchema(fixtureJson.decodeFromString<QuestProgressionData>(text))
+            }.also { cachedQuestProgression = it }
+        }
     }
-    val data: FixtureData by lazy { generated.toFixtureData() }
     val regularQuestSupplyItems: List<RegularQuestSupplyItem> by lazy { data.regularQuestSupplyItems }
     val regularQuestSupplyCoverage: List<RegularQuestSupplyCoverage> by lazy { data.regularQuestSupplyCoverage }
     val palicoExpeditions: List<PalicoExpedition> by lazy { data.palicoExpeditions }
@@ -37,42 +90,86 @@ class CompanionRepository(private val context: Context) {
 
     fun regularQuestSupplyCoverageForQuest(questId: String): RegularQuestSupplyCoverageStatus? =
         regularQuestSupplyCoverage.firstOrNull { it.questId == questId }?.status
-    /** Built once from the generated source graph; Compose never scans gatheringDrops. */
-    val fieldIndex: FieldSourceIndex by lazy {
+    /** Built once from the generated source graph on Default when a map is first opened. */
+    internal suspend fun loadFieldIndexOffMain(): FieldSourceIndex {
+        cachedFieldIndex?.let { return it }
+        val source = loadGeneratedOffMain()
+        return withContext(Dispatchers.Default) {
+            cachedFieldIndex ?: buildFieldIndex(source).also { cachedFieldIndex = it }
+        }
+    }
+
+    private suspend fun loadGeneratedOffMain(): GeneratedDataset {
+        cachedGenerated?.let { return it }
+        return generatedLoadMutex.withLock {
+            cachedGenerated ?: run {
+                val text = withContext(Dispatchers.IO) {
+                    measureSync("production-asset-read") {
+                        context.assets.open("mhp3rd-data.json").bufferedReader().use { it.readText() }
+                    }
+                }
+                withContext(Dispatchers.Default) {
+                    cachedGenerated ?: measureSync("production-json-decode") {
+                        fixtureJson.decodeFromString<GeneratedDataset>(text)
+                    }.also { cachedGenerated = it }
+                }
+            }
+        }
+    }
+
+    private fun buildFieldIndex(source: GeneratedDataset): FieldSourceIndex = measureSync("field-source-index-build") {
         FieldSourceIndex.build(
-            generated.gatheringNodes,
-            generated.gatheringDrops,
-            generated.items.mapNotNull { item -> item.gameItemId?.let { it to item.name } }.toMap(),
+            source.gatheringNodes,
+            source.gatheringDrops,
+            source.items.mapNotNull { item -> item.gameItemId?.let { it to item.name } }.toMap(),
             MapSourceCrosswalk.sourceToMarkers,
             MapSourceCrosswalk.specialSourceNodeIds,
             MapSourceCrosswalk.specialSourceReasonByNodeId
         )
     }
 
+    private inline fun <T> measureSync(name: String, block: () -> T): T {
+        val start = SystemClock.elapsedRealtimeNanos()
+        return try {
+            block()
+        } finally {
+            if (BuildConfig.DEBUG) {
+                val elapsedMs = (SystemClock.elapsedRealtimeNanos() - start) / 1_000_000.0
+                Log.d("MHP3rdFirstUse", "$name ${"%.2f".format(java.util.Locale.US, elapsedMs)}ms")
+            }
+        }
+    }
+
     private val favoritesKey = stringPreferencesKey("favorites_v1")
     private val recentKey = stringPreferencesKey("recent_v1")
     private val currentCharmTableKey = stringPreferencesKey("current_charm_table_v1")
     private val charmSavedSearchesKey = stringPreferencesKey("charm_saved_searches_v1")
-    val favorites: Flow<List<FavoriteEntry>> = context.dataStore.data.map {
-        ReferenceEntryCodec.decodeFavorites(it[favoritesKey])
+    internal val favoritesStoredState: Flow<PreferenceDecodeResult<List<FavoriteEntry>>> = context.dataStore.data.map {
+        ReferenceEntryCodec.decodeFavoritesResult(it[favoritesKey])
     }
-    val recent: Flow<List<RecentEntry>> = context.dataStore.data.map {
-        ReferenceEntryCodec.decodeRecent(it[recentKey])
+    internal val recentStoredState: Flow<PreferenceDecodeResult<List<RecentEntry>>> = context.dataStore.data.map {
+        ReferenceEntryCodec.decodeRecentResult(it[recentKey])
     }
-    val currentCharmTable: Flow<Int?> = context.dataStore.data.map { preferences ->
-        preferences[currentCharmTableKey]?.toIntOrNull()?.takeIf { it in 1..12 }
+    val favorites: Flow<List<FavoriteEntry>> = favoritesStoredState.map { it.listOrEmpty() }
+    val recent: Flow<List<RecentEntry>> = recentStoredState.map { it.listOrEmpty() }
+    internal val currentCharmTableStoredState: Flow<PreferenceDecodeResult<Int>> = context.dataStore.data.map { preferences ->
+        val raw = preferences[currentCharmTableKey]
+        when {
+            raw == null -> PreferenceDecodeResult.Absent
+            raw.toIntOrNull()?.let { it in 1..12 } == true -> PreferenceDecodeResult.Valid(raw.toInt())
+            else -> PreferenceDecodeResult.Malformed("Expected an integer Charm Table in 1–12")
+        }
     }
-    internal val charmSavedSearches: Flow<List<CharmSavedSearch>> = context.dataStore.data.map { preferences ->
-        preferences[charmSavedSearchesKey]?.let { encoded ->
-            runCatching { fixtureJson.decodeFromString<List<CharmSavedSearch>>(encoded) }.getOrDefault(emptyList())
-        }.orEmpty()
+    internal val currentCharmTable: Flow<Int?> = currentCharmTableStoredState.map { result ->
+        (result as? PreferenceDecodeResult.Valid)?.value
     }
+    internal val charmSavedSearchesStoredState: Flow<PreferenceDecodeResult<List<CharmSavedSearch>>> = context.dataStore.data.map { preferences ->
+        ReferenceEntryCodec.decodeListResult(preferences[charmSavedSearchesKey], fixtureJson)
+    }
+    internal val charmSavedSearches: Flow<List<CharmSavedSearch>> = charmSavedSearchesStoredState.map { it.listOrEmpty() }
 
-    suspend fun saveFavorites(entries: List<FavoriteEntry>) {
-        context.dataStore.edit { it[favoritesKey] = ReferenceEntryCodec.encodeFavorites(entries) }
-    }
-
-    suspend fun saveRecent(entries: List<RecentEntry>) {
+    /** Legacy-format test/restore writer; production mutations use atomic recordOpened(). */
+    internal suspend fun saveRecent(entries: List<RecentEntry>) {
         context.dataStore.edit { it[recentKey] = ReferenceEntryCodec.encodeRecent(entries) }
     }
 
@@ -84,11 +181,29 @@ class CompanionRepository(private val context: Context) {
         }
     }
 
+    /** Atomic read-modify-write: independent UI snapshots can never drop a favorite action. */
+    internal suspend fun toggleFavorite(type: ReferenceEntityType, id: String, atMillis: Long) {
+        context.dataStore.edit { preferences ->
+            val entries = ReferenceEntryCodec.decodeFavoritesResult(preferences[favoritesKey]).listOrEmpty()
+            preferences[favoritesKey] = ReferenceEntryCodec.encodeFavorites(
+                ReferenceHistoryLogic.toggleFavorite(entries, type, id, atMillis)
+            )
+        }
+    }
+
+    /** Atomic read-modify-write preserves rapid opens and moves duplicates to the front. */
+    internal suspend fun recordOpened(type: ReferenceEntityType, id: String, atMillis: Long) {
+        context.dataStore.edit { preferences ->
+            val entries = ReferenceEntryCodec.decodeRecentResult(preferences[recentKey]).listOrEmpty()
+            preferences[recentKey] = ReferenceEntryCodec.encodeRecent(
+                ReferenceHistoryLogic.recordRecent(entries, type, id, atMillis)
+            )
+        }
+    }
+
     internal suspend fun saveCharmSearch(name: String, criteria: CharmSearchCriteria) {
         context.dataStore.edit { preferences ->
-            val existing = preferences[charmSavedSearchesKey]?.let { encoded ->
-                runCatching { fixtureJson.decodeFromString<List<CharmSavedSearch>>(encoded) }.getOrDefault(emptyList())
-            }.orEmpty()
+            val existing = ReferenceEntryCodec.decodeListResult<CharmSavedSearch>(preferences[charmSavedSearchesKey], fixtureJson).listOrEmpty()
             val updated = addCharmSavedSearch(existing, name, criteria, UUID.randomUUID().toString())
             preferences[charmSavedSearchesKey] = fixtureJson.encodeToString(updated)
         }
@@ -96,9 +211,7 @@ class CompanionRepository(private val context: Context) {
 
     internal suspend fun deleteCharmSearch(id: String) {
         context.dataStore.edit { preferences ->
-            val existing = preferences[charmSavedSearchesKey]?.let { encoded ->
-                runCatching { fixtureJson.decodeFromString<List<CharmSavedSearch>>(encoded) }.getOrDefault(emptyList())
-            }.orEmpty()
+            val existing = ReferenceEntryCodec.decodeListResult<CharmSavedSearch>(preferences[charmSavedSearchesKey], fixtureJson).listOrEmpty()
             preferences[charmSavedSearchesKey] = fixtureJson.encodeToString(deleteCharmSavedSearch(existing, id))
         }
     }

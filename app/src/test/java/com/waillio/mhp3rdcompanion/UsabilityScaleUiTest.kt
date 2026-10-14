@@ -15,8 +15,7 @@ import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [35], qualifiers = "w827dp-h720dp-land-xhdpi")
-class UsabilityScaleUiTest {
-    @get:Rule val rule = createAndroidComposeRule<MainActivity>()
+class UsabilityScaleUiTest : MainActivityUiTestBase() {
     private val data = CompanionRepository(ApplicationProvider.getApplicationContext<Context>()).data
 
     @Test
@@ -87,7 +86,9 @@ class UsabilityScaleUiTest {
         val search = rule.onNodeWithTag("global-search")
         search.performTextClearance()
         search.performTextInput(name)
+        awaitTag("result-material-$id")
         rule.onNodeWithTag("result-material-$id").performScrollTo().performClick()
+        awaitTag("screen-material")
         rule.onNodeWithTag("screen-material").assertIsDisplayed()
     }
 

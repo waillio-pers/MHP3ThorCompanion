@@ -9,6 +9,12 @@ import androidx.activity.viewModels
 import androidx.core.content.edit
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.Column
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -39,6 +45,9 @@ class MainActivity : ComponentActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         enterImmersiveMode()
         setContent {
+            val fixture by viewModel.fixtureState.collectAsStateWithLifecycle()
+            val preferencesLoaded by viewModel.preferencesLoaded.collectAsStateWithLifecycle()
+            val initialLoadFailed by viewModel.initialLoadFailed.collectAsStateWithLifecycle()
             val scaleStep = remember {
                 mutableIntStateOf(
                     getSharedPreferences(UI_SETTINGS_PREFS, MODE_PRIVATE)
@@ -76,37 +85,48 @@ class MainActivity : ComponentActivity() {
                     AdaptiveLayoutRoot {
                         CompanionTheme {
                             Box(Modifier.fillMaxSize()) {
-                                CompanionApp(
-                                    viewModel = viewModel,
-                                    uiScaleStep = scaleStep.intValue,
-                                    homeShortcutSlots = homeShortcutSlots.value,
-                                    screenSaverLastDurationMinutes = screenSaverLastDurationMinutes.intValue,
-                                    onHomeShortcutSlotsChange = { slots ->
-                                        val safeSlots = normalizeHomeShortcutSlots(slots)
-                                        homeShortcutSlots.value = safeSlots
-                                        persistHomeShortcutSlots(preferences, safeSlots)
-                                    },
-                                    fieldGuideSwipeEnabled = fieldGuideSwipeEnabled.value,
-                                    screenSaverTimeoutMinutes = screenSaverTimeoutMinutes.intValue,
-                                    onScreenSaverTimeoutMinutesChange = { minutes ->
-                                        val safeMinutes = normalizeOledScreenSaverTimeoutMinutes(minutes)
-                                        screenSaverTimeoutMinutes.intValue = safeMinutes
-                                        persistOledScreenSaverTimeoutMinutes(preferences, safeMinutes)
-                                        if (safeMinutes > 0) screenSaverLastDurationMinutes.intValue = safeMinutes
-                                        screenSaverController.setTimeoutMinutes(safeMinutes)
-                                    },
-                                    onFieldGuideSwipeEnabledChange = { enabled ->
-                                        fieldGuideSwipeEnabled.value = enabled
-                                        preferences.edit {
-                                            putBoolean(FIELD_GUIDE_SECTION_SWIPE_KEY, enabled)
+                                if (fixture != null && preferencesLoaded) {
+                                    CompanionApp(
+                                        viewModel = viewModel,
+                                        uiScaleStep = scaleStep.intValue,
+                                        homeShortcutSlots = homeShortcutSlots.value,
+                                        screenSaverLastDurationMinutes = screenSaverLastDurationMinutes.intValue,
+                                        onHomeShortcutSlotsChange = { slots ->
+                                            val safeSlots = normalizeHomeShortcutSlots(slots)
+                                            homeShortcutSlots.value = safeSlots
+                                            persistHomeShortcutSlots(preferences, safeSlots)
+                                        },
+                                        fieldGuideSwipeEnabled = fieldGuideSwipeEnabled.value,
+                                        screenSaverTimeoutMinutes = screenSaverTimeoutMinutes.intValue,
+                                        onScreenSaverTimeoutMinutesChange = { minutes ->
+                                            val safeMinutes = normalizeOledScreenSaverTimeoutMinutes(minutes)
+                                            screenSaverTimeoutMinutes.intValue = safeMinutes
+                                            persistOledScreenSaverTimeoutMinutes(preferences, safeMinutes)
+                                            if (safeMinutes > 0) screenSaverLastDurationMinutes.intValue = safeMinutes
+                                            screenSaverController.setTimeoutMinutes(safeMinutes)
+                                        },
+                                        onFieldGuideSwipeEnabledChange = { enabled ->
+                                            fieldGuideSwipeEnabled.value = enabled
+                                            preferences.edit {
+                                                putBoolean(FIELD_GUIDE_SECTION_SWIPE_KEY, enabled)
+                                            }
+                                        },
+                                        onUiScaleStepChange = { step ->
+                                            val safeStep = step.coerceIn(UI_SCALE_MIN_STEP, UI_SCALE_MAX_STEP)
+                                            scaleStep.intValue = safeStep
+                                            preferences.edit { putInt(UI_SCALE_STEP_KEY, safeStep) }
                                         }
-                                    },
-                                    onUiScaleStepChange = { step ->
-                                        val safeStep = step.coerceIn(UI_SCALE_MIN_STEP, UI_SCALE_MAX_STEP)
-                                        scaleStep.intValue = safeStep
-                                        preferences.edit { putInt(UI_SCALE_STEP_KEY, safeStep) }
+                                    )
+                                } else {
+                                    Column(
+                                        Modifier.fillMaxSize().padding(24.dp),
+                                        horizontalAlignment = Alignment.CenterHorizontally,
+                                        verticalArrangement = androidx.compose.foundation.layout.Arrangement.Center
+                                    ) {
+                                        if (initialLoadFailed) Text("Unable to load the companion data. Please restart the app.")
+                                        else CircularProgressIndicator()
                                     }
-                                )
+                                }
                                 if (screenSaverActive) {
                                     OledScreenSaverDialog(onWake = screenSaverController::wake)
                                 }

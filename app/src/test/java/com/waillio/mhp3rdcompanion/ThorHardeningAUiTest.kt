@@ -31,6 +31,7 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
+import java.util.concurrent.atomic.AtomicInteger
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [35], qualifiers = "w620dp-h540dp-land-xhdpi")
@@ -191,26 +192,55 @@ class ThorHardeningAUiTest {
 
     @OptIn(ExperimentalTestApi::class)
     @Test
-    fun sharedSearchFieldPreservesMidStringBackspaceAndInsertion() {
+    fun sharedSearchFieldKeepsImeBufferAcrossCursorEditsAndParentEcho() {
+        val callbackCount = AtomicInteger()
         rule.setContent {
             CompanionTheme {
-                var query by remember { mutableStateOf("abcd") }
+                var query by remember { mutableStateOf("Nargacuga") }
+                var resetToken by remember { mutableStateOf(0) }
                 SearchInputField(
                     query = query,
-                    onQueryChange = { query = it },
+                    onQueryChange = { query = it; callbackCount.incrementAndGet() },
                     modifier = Modifier.width(240.dp).height(48.dp),
-                    tag = "shared-search-test"
+                    tag = "shared-search-test",
+                    externalResetKey = resetToken
                 )
+                androidx.compose.material3.TextButton(onClick = { query = ""; resetToken++ }) {
+                    androidx.compose.material3.Text("External clear")
+                }
             }
         }
         rule.onNodeWithTag("shared-search-test").assertIsDisplayed().assertHeightIsAtLeast(44.dp)
         rule.onNodeWithTag("shared-search-test").performClick()
-        rule.onNodeWithTag("shared-search-test").performTextInputSelection(TextRange(2))
+        rule.onNodeWithTag("shared-search-test").performTextInputSelection(TextRange(9))
+        repeat(3) { rule.onNodeWithTag("shared-search-test").performKeyInput { pressKey(Key.Backspace) } }
+        rule.onNodeWithTag("shared-search-test").assertTextEquals("Nargac")
+
+        rule.onNodeWithTag("shared-search-test").performTextInputSelection(TextRange(2, 4))
         rule.onNodeWithTag("shared-search-test").performKeyInput { pressKey(Key.Backspace) }
-        rule.onNodeWithTag("shared-search-test").assertTextEquals("acd")
-        rule.onNodeWithTag("shared-search-test").performTextInputSelection(TextRange(1))
+        rule.onNodeWithTag("shared-search-test").assertTextEquals("Naac")
+        rule.onNodeWithTag("shared-search-test").performTextInputSelection(TextRange(2))
+        rule.onNodeWithTag("shared-search-test").performTextInput("rg")
+        rule.onNodeWithTag("shared-search-test").assertTextEquals("Nargac")
+
+        rule.onNodeWithTag("shared-search-test").performTextInputSelection(TextRange(0, 3))
+        rule.onNodeWithTag("shared-search-test").performTextInput("NAR")
+        rule.onNodeWithTag("shared-search-test").assertTextEquals("NARgac")
+        // The String query echo and this unrelated recomposition must not restore
+        // the editor to the end or discard its active selection/caret.
+        rule.onNodeWithTag("shared-search-test").performTextInputSelection(TextRange(3))
         rule.onNodeWithTag("shared-search-test").performTextInput("X")
-        rule.onNodeWithTag("shared-search-test").assertTextEquals("aXcd")
+        rule.onNodeWithTag("shared-search-test").assertTextEquals("NARXgac")
+        rule.onNodeWithTag("shared-search-test").performTextInputSelection(TextRange(3, 5))
+        rule.onNodeWithTag("shared-search-test").performTextInput("RG")
+        rule.onNodeWithTag("shared-search-test").assertTextEquals("NARRGac")
+
+        val callbackCountBeforeExternalReset = callbackCount.get()
+        rule.onNodeWithText("External clear").performClick()
+        rule.onNodeWithTag("shared-search-test").assertTextEquals("")
+        assertEquals(callbackCountBeforeExternalReset, callbackCount.get())
+        rule.onNodeWithTag("shared-search-test").performTextInput("Nargacuga")
+        rule.onNodeWithTag("shared-search-test").assertTextEquals("Nargacuga")
     }
 
     @Test

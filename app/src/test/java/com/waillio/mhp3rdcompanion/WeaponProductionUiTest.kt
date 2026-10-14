@@ -21,8 +21,7 @@ import org.robolectric.annotation.GraphicsMode
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [35], qualifiers = "w620dp-h540dp-land-xhdpi")
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
-class WeaponProductionUiTest {
-    @get:Rule val rule = createAndroidComposeRule<MainActivity>()
+class WeaponProductionUiTest : MainActivityUiTestBase() {
 
     @Test
     fun productionCorpusAndGraphInvariantsHold() {
@@ -169,7 +168,9 @@ class WeaponProductionUiTest {
     fun bowChooserTreeAndDetailExposeFirstClassMechanics() {
         openWeapons()
         rule.onNodeWithTag("weapon-type-bow").performClick()
+        awaitTag("weapon-tree")
         rule.onNodeWithTag("weapon-row-weapon_bow_001").performClick()
+        awaitTag("weapon-detail-title-weapon_bow_001")
         rule.onNodeWithTag("weapon-detail-title-weapon_bow_001").assertIsDisplayed()
         rule.onNodeWithTag("weapon-bow-charges").assertIsDisplayed()
         rule.onNodeWithTag("weapon-bow-arc-shot").assertIsDisplayed()
@@ -204,13 +205,17 @@ class WeaponProductionUiTest {
     fun lightAndHeavyBowgunDetailsExposeVariantSpecificMechanics() {
         openWeapons()
         rule.onNodeWithTag("weapon-type-light-bowgun").performClick()
+        awaitTag("weapon-tree")
         rule.onNodeWithTag("weapon-row-weapon_light_bowgun_001").performClick()
+        awaitTag("weapon-lbg-ammo-table")
         rule.onNodeWithTag("weapon-lbg-shared").assertIsDisplayed()
         rule.onNodeWithTag("weapon-lbg-ammo-table").assertIsDisplayed()
         rule.onNodeWithTag("weapon-detail-close").performClick()
         rule.onNodeWithTag("weapons-back").performClick()
         rule.onNodeWithTag("weapon-type-heavy-bowgun").performClick()
+        awaitTag("weapon-tree")
         rule.onNodeWithTag("weapon-row-weapon_heavy_bowgun_001").performClick()
+        awaitTag("weapon-hbg-crouch-fire")
         rule.onNodeWithTag("weapon-hbg-shared").assertIsDisplayed()
         rule.onNodeWithTag("weapon-hbg-crouch-fire").assertIsDisplayed()
     }
@@ -311,6 +316,7 @@ class WeaponProductionUiTest {
         openTree()
         rule.onNodeWithTag("weapon-expand-weapon_great_sword_001").performClick()
         rule.onNodeWithTag("weapon-row-weapon_great_sword_002").performClick()
+        awaitTag("weapon-detail-title-weapon_great_sword_002")
         rule.onNodeWithTag("weapon-detail-overlay").assertIsDisplayed()
         rule.onNodeWithTag("weapon-detail-title-weapon_great_sword_002").assertIsDisplayed()
         rule.onNodeWithTag("weapon-detail-icon-weapon_great_sword_002").assertIsDisplayed()
@@ -323,7 +329,9 @@ class WeaponProductionUiTest {
         openTree()
         rule.onNodeWithTag("weapon-expand-weapon_great_sword_001").performClick()
         rule.onNodeWithTag("weapon-row-weapon_great_sword_002").performClick()
+        awaitTag("weapon-forge-materials-item-183-0")
         rule.onNodeWithTag("weapon-forge-materials-item-183-0").performScrollTo().performClick()
+        awaitTag("screen-material")
         rule.onNodeWithTag("screen-material").assertIsDisplayed()
         rule.onNodeWithText("Back").performClick()
         rule.onNodeWithTag("weapon-detail-overlay").assertIsDisplayed()
@@ -383,6 +391,7 @@ class WeaponProductionUiTest {
     private fun openWeapons() {
         rule.onNodeWithTag("nav-search").performClick()
         rule.onNodeWithTag("field-filter-weapons").performClick()
+        awaitTag("weapons-chooser")
     }
 
     private fun openTree() {

@@ -18,7 +18,6 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -681,6 +680,7 @@ internal fun WeaponSearchField(
         modifier = modifier.heightIn(min = 56.dp),
         tag = "weapon-search",
         textStyle = searchTextStyle,
+        externalResetKey = weaponType,
         placeholder = {
             Text(
                 "Search ${weaponTypeLabel(weaponType)} names",
@@ -690,15 +690,14 @@ internal fun WeaponSearchField(
             )
         },
         leadingIcon = { Icon(Icons.Default.Search, null, tint = AppColors.Gold) },
-        trailingIcon = {
+        trailingIcon = { clear ->
             if (query.isNotEmpty()) {
-                IconButton(onClick = { onQueryChange("") }, modifier = Modifier.testTag("weapon-search-clear")) {
+                IconButton(onClick = clear, modifier = Modifier.testTag("weapon-search-clear")) {
                     Icon(Icons.Default.Close, "Clear weapon search")
                 }
             }
         },
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-        keyboardActions = KeyboardActions.Default,
         shape = AppDimens.ButtonShape,
         colors = OutlinedTextFieldDefaults.colors(
             focusedBorderColor = AppColors.Gold,

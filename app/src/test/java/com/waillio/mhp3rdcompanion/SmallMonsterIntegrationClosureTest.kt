@@ -22,8 +22,7 @@ import org.robolectric.annotation.GraphicsMode
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [35], qualifiers = "w620dp-h540dp-land-xhdpi")
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
-class SmallMonsterIntegrationClosureTest {
-    @get:Rule val rule = createAndroidComposeRule<MainActivity>()
+class SmallMonsterIntegrationClosureTest : MainActivityUiTestBase() {
     private val data = CompanionRepository(ApplicationProvider.getApplicationContext()).data
 
     @Test fun allProductionSmallMonstersAreGloballySearchableWithCanonicalNames() {
@@ -55,14 +54,19 @@ class SmallMonsterIntegrationClosureTest {
     }
 
     @Test fun globalSearchResultUsesAuthenticIconOpensDetailAndRestoresQuery() {
-        rule.onNodeWithTag("global-search").assertTextContains("Item, monster, quest, or weapon")
+        rule.onNodeWithTag("global-search").assert(
+            SemanticsMatcher.expectValue(SemanticsProperties.EditableText, AnnotatedString(""))
+        )
         rule.onNodeWithTag("global-search").performTextInput("Bnahabra")
+        awaitTag("result-small_monster-small_monster_bnahabra")
         rule.onNodeWithTag("result-small_monster-small_monster_bnahabra").assertIsDisplayed()
         rule.onNodeWithTag("small-monster-icon-small_monster_bnahabra", useUnmergedTree = true).assertExists()
         rule.onNodeWithTag("result-small_monster-small_monster_bnahabra").performClick()
+        awaitTag("screen-small-monster")
         rule.onNodeWithTag("screen-small-monster").assertIsDisplayed()
         rule.onNodeWithText("Bnahabra").assertIsDisplayed()
         rule.activity.onBackPressedDispatcher.onBackPressed()
+        awaitTag("global-search")
         rule.onNodeWithTag("global-search").assert(
             SemanticsMatcher.expectValue(SemanticsProperties.EditableText, AnnotatedString("Bnahabra"))
         )
@@ -104,9 +108,11 @@ class SmallMonsterIntegrationClosureTest {
         }
         openGlobalItem("Kelbi Horn", "item_kelbi_horn")
         rule.onNodeWithTag("item-small-monster-source-${kelbiSource.id}").performScrollTo().assertHasClickAction().performClick()
+        awaitTag("screen-small-monster")
         rule.onNodeWithTag("screen-small-monster").assertIsDisplayed()
         rule.onNodeWithText("Kelbi").assertIsDisplayed()
         rule.activity.onBackPressedDispatcher.onBackPressed()
+        awaitTag("screen-material")
         rule.onNodeWithTag("screen-material").assertIsDisplayed()
         rule.onNodeWithText("Kelbi Horn").assertIsDisplayed()
         rule.onNodeWithTag("item-small-monster-source-${kelbiSource.id}").assertExists()
@@ -118,6 +124,7 @@ class SmallMonsterIntegrationClosureTest {
         val item = data.materials.single { it.sources.any { candidate -> candidate.id == source.id } }
         openGlobalItem(item.name, item.id)
         rule.onNodeWithTag("item-small-monster-source-${source.id}").performScrollTo().performClick()
+        awaitTag("screen-small-monster")
         rule.onNodeWithTag("screen-small-monster").assertIsDisplayed()
         rule.onNodeWithText("Jaggi").assertIsDisplayed()
         rule.onNodeWithText("Great Jaggi").assertDoesNotExist()
@@ -158,13 +165,17 @@ class SmallMonsterIntegrationClosureTest {
 
     private fun openGlobalSmallMonster(name: String, id: String) {
         rule.onNodeWithTag("global-search").performTextInput(name)
+        awaitTag("result-small_monster-$id")
         rule.onNodeWithTag("result-small_monster-$id").performClick()
+        awaitTag("screen-small-monster")
         rule.onNodeWithTag("screen-small-monster").assertIsDisplayed()
     }
 
     private fun openGlobalItem(name: String, id: String) {
         rule.onNodeWithTag("global-search").performTextInput(name)
+        awaitTag("result-material-$id")
         rule.onNodeWithTag("result-material-$id").performClick()
+        awaitTag("screen-material")
         rule.onNodeWithTag("screen-material").assertIsDisplayed()
     }
 

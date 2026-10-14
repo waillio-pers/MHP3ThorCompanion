@@ -18,8 +18,7 @@ import org.robolectric.annotation.GraphicsMode
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [35], qualifiers = "w620dp-h540dp-land-xhdpi")
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
-class SmallMonsterUiTest {
-    @get:Rule val rule = createAndroidComposeRule<MainActivity>()
+class SmallMonsterUiTest : MainActivityUiTestBase() {
     private val data = CompanionRepository(ApplicationProvider.getApplicationContext()).data
 
     @Test fun fieldGuideExposesDistinctPopulatedSmallMonsterIndexAndRestoresState() {
@@ -31,10 +30,13 @@ class SmallMonsterUiTest {
         rule.onNodeWithTag("monster-card-monster_great_jaggi").assertDoesNotExist()
 
         rule.onNodeWithTag("global-search").performTextInput("Bnahabra")
+        awaitTag("small-monster-card-small_monster_bnahabra")
         rule.onNodeWithTag("small-monster-index-count").assertDoesNotExist()
         rule.onNodeWithTag("small-monster-card-small_monster_bnahabra").performClick()
+        awaitTag("screen-small-monster")
         rule.onNodeWithTag("screen-small-monster").assertIsDisplayed()
         rule.activity.onBackPressedDispatcher.onBackPressed()
+        awaitTag("global-search")
         rule.onNodeWithTag("global-search").assert(
             SemanticsMatcher.expectValue(SemanticsProperties.EditableText, AnnotatedString("Bnahabra"))
         )
@@ -95,6 +97,7 @@ class SmallMonsterUiTest {
         openSmallMonster("Kelbi", kelbi.id)
         rule.onNodeWithTag("screen-small-monster").performScrollToNode(hasTestTag("small-reward-${reward.id}"))
         rule.onNodeWithTag("small-reward-${reward.id}").performClick()
+        awaitTag("screen-material")
         rule.onNodeWithTag("screen-material").assertIsDisplayed()
         rule.onNodeWithText(item.name).assertIsDisplayed()
         rule.activity.onBackPressedDispatcher.onBackPressed()
@@ -127,7 +130,9 @@ class SmallMonsterUiTest {
     private fun openSmallMonster(name: String, id: String) {
         openSmallIndex()
         rule.onNodeWithTag("global-search").performTextInput(name)
+        awaitTag("small-monster-card-$id")
         rule.onNodeWithTag("small-monster-card-$id").performClick()
+        awaitTag("screen-small-monster")
         rule.onNodeWithTag("screen-small-monster").assertIsDisplayed()
     }
 }

@@ -46,10 +46,31 @@ internal fun normalizeHomeShortcutSlots(slots: List<String?>): List<String?> {
     }
 }
 
-internal fun decodeHomeShortcutSlots(encoded: String?): List<String?> {
-    if (encoded == null) return DEFAULT_HOME_SHORTCUT_SLOTS
-    return normalizeHomeShortcutSlots(encoded.split('|', limit = HOME_SHORTCUT_SLOT_COUNT))
+internal sealed interface HomeShortcutDecodeResult {
+    data object Absent : HomeShortcutDecodeResult
+    data class Valid(val slots: List<String?>) : HomeShortcutDecodeResult
+    data class Malformed(val safeSlots: List<String?>, val reason: String) : HomeShortcutDecodeResult
+
+    fun safeSlots(): List<String?> = when (this) {
+        Absent -> DEFAULT_HOME_SHORTCUT_SLOTS
+        is Valid -> slots
+        is Malformed -> safeSlots
+    }
 }
+
+internal fun decodeHomeShortcutSlotsResult(encoded: String?): HomeShortcutDecodeResult {
+    if (encoded == null) return HomeShortcutDecodeResult.Absent
+    val parts = encoded.split('|', limit = HOME_SHORTCUT_SLOT_COUNT)
+    val validIds = fieldGuideShortcutChoices.mapTo(hashSetOf()) { it.id }
+    val validShape = parts.size == HOME_SHORTCUT_SLOT_COUNT
+    val invalidValues = parts.any { it.isNotBlank() && it !in validIds }
+    val duplicates = parts.filter(String::isNotBlank).let { it.size != it.toSet().size }
+    val safe = normalizeHomeShortcutSlots(parts)
+    return if (validShape && !invalidValues && !duplicates) HomeShortcutDecodeResult.Valid(safe)
+    else HomeShortcutDecodeResult.Malformed(safe, "Expected four unique Field Guide shortcut ids")
+}
+
+internal fun decodeHomeShortcutSlots(encoded: String?): List<String?> = decodeHomeShortcutSlotsResult(encoded).safeSlots()
 
 internal fun readHomeShortcutSlots(preferences: SharedPreferences): List<String?> =
     if (preferences.contains(HOME_SHORTCUTS_KEY)) decodeHomeShortcutSlots(preferences.getString(HOME_SHORTCUTS_KEY, ""))

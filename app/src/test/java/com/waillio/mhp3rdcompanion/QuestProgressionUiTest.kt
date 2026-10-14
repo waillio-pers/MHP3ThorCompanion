@@ -21,8 +21,7 @@ import org.robolectric.annotation.GraphicsMode
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [35], qualifiers = "w620dp-h540dp-land-xhdpi")
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
-class QuestProgressionUiTest {
-    @get:Rule val rule = createAndroidComposeRule<MainActivity>()
+class QuestProgressionUiTest : MainActivityUiTestBase() {
 
     @Test
     fun keyOnlyDefaultsOffAndFiltersToTheSelectedScopeAndStarWhenEnabled() {
@@ -138,8 +137,7 @@ class QuestOutlineStyleTest {
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [35], qualifiers = "w360dp-h800dp-port-mdpi")
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
-class QuestProgressionNarrowPortraitUiTest {
-    @get:Rule val rule = createAndroidComposeRule<MainActivity>()
+class QuestProgressionNarrowPortraitUiTest : MainActivityUiTestBase() {
 
     @Test
     fun keyFilterAndBadgesRemainInsideThePortraitViewport() {

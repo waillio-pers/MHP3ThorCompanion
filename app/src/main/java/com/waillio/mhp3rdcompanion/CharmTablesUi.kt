@@ -26,6 +26,10 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.InputTransformation
+import androidx.compose.foundation.text.input.TextFieldLineLimits
+import androidx.compose.foundation.text.input.rememberTextFieldState
+import androidx.compose.foundation.text.input.maxLength
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -69,8 +73,6 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
@@ -132,6 +134,7 @@ internal fun CharmTablesScreen(
 
     var skill1Id by rememberSaveable { mutableStateOf<String?>(null) }
     var skill1Points by rememberSaveable { mutableStateOf("") }
+    var searchPointsResetGeneration by rememberSaveable { mutableIntStateOf(0) }
     var skill1OperatorName by rememberSaveable { mutableStateOf(CharmPointOperator.GREATER_OR_EQUAL.name) }
     var skill2Id by rememberSaveable { mutableStateOf<String?>(null) }
     var skill2Points by rememberSaveable { mutableStateOf("") }
@@ -224,13 +227,13 @@ internal fun CharmTablesScreen(
                     skill2Choices = skill2Choices,
                     availableClasses = availableClasses,
                     skill1Id = skill1Id,
-                    onSkill1 = { skill1Id = it; if (it == null) skill1Points = "" },
+                    onSkill1 = { skill1Id = it; if (it == null) { skill1Points = ""; searchPointsResetGeneration++ } },
                     skill1Points = skill1Points,
                     onSkill1Points = { skill1Points = filterSignedPoints(it) },
                     skill1Operator = skill1Operator,
                     onSkill1Operator = { skill1OperatorName = it.name },
                     skill2Id = skill2Id,
-                    onSkill2 = { skill2Id = it; if (it == null) skill2Points = "" },
+                    onSkill2 = { skill2Id = it; if (it == null) { skill2Points = ""; searchPointsResetGeneration++ } },
                     skill2Points = skill2Points,
                     onSkill2Points = { skill2Points = filterSignedPoints(it) },
                     skill2Operator = skill2Operator,
@@ -245,7 +248,9 @@ internal fun CharmTablesScreen(
                     onClass = { className = it?.name.orEmpty() },
                     savedSearches = savedSearches,
                     criteria = criteria,
+                    pointsResetKey = searchPointsResetGeneration,
                     onRestoreSearch = { restored ->
+                        searchPointsResetGeneration++
                         skill1Id = restored.skill1Id
                         skill1Points = restored.skill1Points?.toString().orEmpty()
                         skill1OperatorName = restored.skill1Mode.name
@@ -366,6 +371,7 @@ private fun CharmSearchFilters(
     tableMode: CharmTableMode, explicitTable: Int, currentTable: Int?, onTableMode: (CharmTableMode, Int?) -> Unit,
     talismanClass: TalismanClass?, onClass: (TalismanClass?) -> Unit,
     savedSearches: List<CharmSavedSearch>, criteria: CharmSearchCriteria,
+    pointsResetKey: Any,
     onRestoreSearch: (CharmSearchCriteria) -> Unit, onSaveSearch: (String, CharmSearchCriteria) -> Unit, onDeleteSearch: (String) -> Unit
 ) {
     SectionCard(title = "Search", accent = AppColors.Plum, contentPadding = 7.dp, modifier = Modifier.testTag("charm-search-filters")) {
@@ -374,9 +380,9 @@ private fun CharmSearchFilters(
             CharmSlotSelector(slots, criteria.slotMode == CharmSlotMode.EXACT, "charm-search-slots", onSlots, Modifier.weight(1f))
         }
         Spacer(Modifier.height(5.dp))
-        CharmSearchSkillLine("Skill 1", skillTrees, skill1Choices, skill1Id, skillsById[skill1Id]?.displayName, false, onSkill1, skill1Points, onSkill1Points, skill1Operator, onSkill1Operator, "charm-search-skill1")
+        CharmSearchSkillLine("Skill 1", skillTrees, skill1Choices, skill1Id, skillsById[skill1Id]?.displayName, false, onSkill1, skill1Points, onSkill1Points, skill1Operator, onSkill1Operator, "charm-search-skill1", pointsResetKey)
         Spacer(Modifier.height(4.dp))
-        CharmSearchSkillLine("Skill 2", skillTrees, skill2Choices, skill2Id, skillsById[skill2Id]?.displayName, true, onSkill2, skill2Points, onSkill2Points, skill2Operator, onSkill2Operator, "charm-search-skill2")
+        CharmSearchSkillLine("Skill 2", skillTrees, skill2Choices, skill2Id, skillsById[skill2Id]?.displayName, true, onSkill2, skill2Points, onSkill2Points, skill2Operator, onSkill2Operator, "charm-search-skill2", pointsResetKey)
         Spacer(Modifier.height(5.dp))
         TableFilterControl(tableMode, explicitTable, currentTable, onTableMode)
         Spacer(Modifier.height(3.dp))
@@ -397,7 +403,8 @@ private fun CharmSearchSkillLine(
     onPoints: (String) -> Unit,
     operator: CharmPointOperator,
     onOperator: (CharmPointOperator) -> Unit,
-    tag: String
+    tag: String,
+    pointsResetKey: Any
 ) {
     if (selectedId == null) {
         CharmSkillPicker(title, skillTrees, allowedSkillIds, selectedName, allowNone, onSelect, tag)
@@ -407,14 +414,14 @@ private fun CharmSearchSkillLine(
                 Column(verticalArrangement = Arrangement.spacedBy(3.dp)) {
                     CharmSkillPicker(title, skillTrees, allowedSkillIds, selectedName, allowNone, onSelect, tag, Modifier.fillMaxWidth())
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(5.dp), verticalAlignment = Alignment.CenterVertically) {
-                        SignedPointsField("Points", points, onPoints, "$tag-points", Modifier.weight(1f))
+                        SignedPointsField("Points", points, onPoints, "$tag-points", Modifier.weight(1f), externalResetKey = pointsResetKey)
                         OperatorMenu(operator, onOperator, "$tag-points-operator", Modifier.width(64.dp))
                     }
                 }
             } else {
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(4.dp), verticalAlignment = Alignment.CenterVertically) {
                     CharmSkillPicker(title, skillTrees, allowedSkillIds, selectedName, allowNone, onSelect, tag, Modifier.weight(1.3f))
-                    SignedPointsField("Points", points, onPoints, "$tag-points", Modifier.weight(.8f))
+                    SignedPointsField("Points", points, onPoints, "$tag-points", Modifier.weight(.8f), externalResetKey = pointsResetKey)
                     OperatorMenu(operator, onOperator, "$tag-points-operator", Modifier.width(64.dp))
                 }
             }
@@ -560,6 +567,8 @@ private fun SavedSearchesPanel(
     var showSave by rememberSaveable { mutableStateOf(false) }
     var name by rememberSaveable { mutableStateOf("") }
     var editingName by rememberSaveable { mutableStateOf(false) }
+    val nameState = rememberTextFieldState(initialText = name)
+    ObserveTextFieldState(nameState) { name = it.take(48) }
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -568,7 +577,7 @@ private fun SavedSearchesPanel(
             Spacer(Modifier.weight(1f))
             Icon(if (expanded) Icons.Default.ExpandLess else Icons.Default.ExpandMore, contentDescription = if (expanded) "Collapse saved searches" else "Expand saved searches", tint = AppColors.Crimson, modifier = Modifier.size(18.dp))
         }
-        OutlinedButton(onClick = { focusManager.clearFocus(force = true); keyboardController?.hide(); name = defaultCharmSearchName(criteria, skillsById); editingName = false; showSave = true }, modifier = Modifier.heightIn(min = 38.dp).testTag("charm-save-search"), colors = ButtonDefaults.outlinedButtonColors(contentColor = AppColors.Ink), border = BorderStroke(1.dp, AppColors.Plum)) {
+        OutlinedButton(onClick = { focusManager.clearFocus(force = true); keyboardController?.hide(); name = defaultCharmSearchName(criteria, skillsById); nameState.replaceTextAndPlaceCursorAtEnd(name); editingName = false; showSave = true }, modifier = Modifier.heightIn(min = 38.dp).testTag("charm-save-search"), colors = ButtonDefaults.outlinedButtonColors(contentColor = AppColors.Ink), border = BorderStroke(1.dp, AppColors.Plum)) {
             Text("Save search", style = AppType.Metadata)
         }
     }
@@ -598,7 +607,7 @@ private fun SavedSearchesPanel(
                 Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text("Save search", color = AppColors.Ink, style = AppType.SectionTitle)
                     if (editingName) {
-                        OutlinedTextField(value = name, onValueChange = { name = it.take(48) }, label = { Text("Name") }, singleLine = true, modifier = Modifier.fillMaxWidth().testTag("charm-save-search-name"), colors = charmTextFieldColors())
+                        OutlinedTextField(state = nameState, inputTransformation = InputTransformation.maxLength(48), label = { Text("Name") }, lineLimits = TextFieldLineLimits.SingleLine, modifier = Modifier.fillMaxWidth().testTag("charm-save-search-name"), colors = charmTextFieldColors())
                     } else {
                         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                             Text(name, modifier = Modifier.weight(1f).testTag("charm-save-search-name"), color = AppColors.Ink, style = AppType.Body, maxLines = 2, overflow = TextOverflow.Ellipsis)
@@ -607,7 +616,7 @@ private fun SavedSearchesPanel(
                     }
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         OutlinedButton(onClick = { showSave = false; editingName = false }, modifier = Modifier.weight(1f)) { Text("Cancel") }
-                        Button(onClick = { focusManager.clearFocus(force = true); keyboardController?.hide(); onSave(name, criteria); showSave = false; editingName = false }, modifier = Modifier.weight(1f).testTag("charm-save-search-confirm"), colors = ButtonDefaults.buttonColors(containerColor = AppColors.Plum, contentColor = AppColors.Parchment)) { Text("Save") }
+                        Button(onClick = { focusManager.clearFocus(force = true); keyboardController?.hide(); onSave(nameState.text.toString().take(48), criteria); showSave = false; editingName = false }, modifier = Modifier.weight(1f).testTag("charm-save-search-confirm"), colors = ButtonDefaults.buttonColors(containerColor = AppColors.Plum, contentColor = AppColors.Parchment)) { Text("Save") }
                     }
                 }
             }
@@ -719,37 +728,36 @@ private fun CharmHelpDialog(onDismiss: () -> Unit) {
 }
 
 @Composable
-private fun SignedPointsField(
+internal fun SignedPointsField(
     title: String,
     value: String,
     onValue: (String) -> Unit,
     tag: String,
     modifier: Modifier = Modifier,
-    isError: Boolean = false
+    isError: Boolean = false,
+    externalResetKey: Any = Unit
 ) {
-    var fieldValue by remember(value) {
-        mutableStateOf(TextFieldValue(value, selection = TextRange(value.length)))
-    }
+    val fieldState = rememberTextFieldState(initialText = value)
+    ObserveTextFieldState(fieldState, externalResetKey, value, onValue)
     OutlinedTextField(
-        value = fieldValue,
-        onValueChange = { updated ->
-            fieldValue = updated
-            onValue(updated.text)
+        state = fieldState,
+        inputTransformation = InputTransformation {
+            if (!asCharSequence().toString().matches(Regex("-?\\d*"))) revertAllChanges()
         },
         label = { Text(title) },
-        singleLine = true,
+        lineLimits = TextFieldLineLimits.SingleLine,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         trailingIcon = {
             IconButton(
                 onClick = {
+                    val currentText = fieldState.text.toString()
                     val toggled = when {
-                        value.isEmpty() -> "-"
-                        value == "-" -> ""
-                        value.startsWith('-') -> value.drop(1)
-                        else -> "-$value"
+                        currentText.isEmpty() -> "-"
+                        currentText == "-" -> ""
+                        currentText.startsWith('-') -> currentText.drop(1)
+                        else -> "-$currentText"
                     }
-                    fieldValue = TextFieldValue(toggled, selection = TextRange(toggled.length))
-                    onValue(toggled)
+                    fieldState.replaceTextAndPlaceCursorAtEnd(toggled)
                 },
                 modifier = Modifier.size(36.dp).testTag("$tag-sign-toggle")
             ) {
@@ -779,6 +787,7 @@ private fun IdentifyWorkflow(
     val observations = identifyState.observations
     val editingObservation = identifyState.editingObservation
     var formTouched by rememberSaveable { mutableStateOf(false) }
+    var formResetGeneration by rememberSaveable { mutableIntStateOf(0) }
     val formSkill1Id = identifyState.formSkill1Id
     val formSkill2Id = identifyState.formSkill2Id
     val formSkill1Points = identifyState.formSkill1Points
@@ -808,17 +817,19 @@ private fun IdentifyWorkflow(
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(5.dp), verticalAlignment = Alignment.CenterVertically) {
                 CharmSkillPicker("Skill 1", skillTrees, skill1Choices, skillsById[formSkill1Id]?.displayName, false, { value ->
                     formTouched = true
+                    if (value == null) formResetGeneration++
                     onUpdate { state -> state.copy(formSkill1Id = value, formSkill1Points = if (value == null) "" else state.formSkill1Points) }
                 }, "charm-identify-skill1", Modifier.weight(1.35f), isError = formTouched && formSkill1Id !in skill1Choices)
-                SignedPointsField("Points", formSkill1Points, { value -> formTouched = true; onUpdate { state -> state.copy(formSkill1Points = filterSignedPoints(value)) } }, "charm-identify-skill1-points", Modifier.weight(.85f), isError = formTouched && formSkill1Points.toIntOrNull() == null)
+                SignedPointsField("Points", formSkill1Points, { value -> formTouched = true; onUpdate { state -> state.copy(formSkill1Points = filterSignedPoints(value)) } }, "charm-identify-skill1-points", Modifier.weight(.85f), isError = formTouched && formSkill1Points.toIntOrNull() == null, externalResetKey = formResetGeneration)
             }
             Spacer(Modifier.height(4.dp))
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(5.dp), verticalAlignment = Alignment.CenterVertically) {
                 CharmSkillPicker("Skill 2", skillTrees, skill2Choices, skillsById[formSkill2Id]?.displayName, true, { value ->
                     formTouched = true
+                    if (value == null) formResetGeneration++
                     onUpdate { state -> state.copy(formSkill2Id = value, formSkill2Points = if (value == null) "" else state.formSkill2Points) }
                 }, "charm-identify-skill2", Modifier.weight(1.35f), isError = formTouched && formSkill2Id != null && formSkill2Id !in skill2Choices)
-                if (formSkill2Id != null) SignedPointsField("Points", formSkill2Points, { value -> formTouched = true; onUpdate { state -> state.copy(formSkill2Points = filterSignedPoints(value)) } }, "charm-identify-skill2-points", Modifier.weight(.85f), isError = formTouched && formSkill2Points.toIntOrNull() == null)
+                if (formSkill2Id != null) SignedPointsField("Points", formSkill2Points, { value -> formTouched = true; onUpdate { state -> state.copy(formSkill2Points = filterSignedPoints(value)) } }, "charm-identify-skill2-points", Modifier.weight(.85f), isError = formTouched && formSkill2Points.toIntOrNull() == null, externalResetKey = formResetGeneration)
                 else Spacer(Modifier.weight(.85f))
             }
             Spacer(Modifier.height(4.dp))
@@ -828,6 +839,7 @@ private fun IdentifyWorkflow(
                         val charm = liveObservation ?: return@Button
                         val updated = if (editingObservation in observations.indices) observations.toMutableList().also { it[editingObservation] = charm } else observations + charm
                         onUpdate { it.copy(observations = updated, editingObservation = -1, formClass = TalismanClass.QUEEN, formSkill1Id = null, formSkill1Points = "", formSkill2Id = null, formSkill2Points = "", formSlots = null) }
+                        formResetGeneration++
                         formTouched = false
                     },
                     enabled = formComplete,
@@ -835,6 +847,7 @@ private fun IdentifyWorkflow(
                     colors = ButtonDefaults.buttonColors(containerColor = AppColors.Plum, contentColor = AppColors.Parchment)
                 ) { Text(if (editingObservation in observations.indices) "Update pool item" else "Add to pool") }
                 if (editingObservation in observations.indices) OutlinedButton(onClick = {
+                    formResetGeneration++
                     onUpdate { it.copy(editingObservation = -1, formClass = TalismanClass.QUEEN, formSkill1Id = null, formSkill1Points = "", formSkill2Id = null, formSkill2Points = "", formSlots = null) }
                     formTouched = false
                 }, modifier = Modifier.testTag("charm-identify-cancel-edit")) { Text("Cancel") }
@@ -855,6 +868,7 @@ private fun IdentifyWorkflow(
                         position, observation, skillsById,
                         onEdit = {
                             formTouched = true
+                            formResetGeneration++
                             onUpdate { it.copy(
                                 editingObservation = position,
                                 formClass = observation.talismanClass,
@@ -1002,16 +1016,18 @@ private fun CharmSkillPicker(
     }
     if (open) {
         var query by rememberSaveable(tag) { mutableStateOf("") }
-        val matches = remember(skillTrees, allowedSkillIds, query) { filterCharmSkills(skillTrees, query, allowedSkillIds) }
+        val queryState = rememberTextFieldState(initialText = query)
+        ObserveTextFieldState(queryState) { query = it }
+        val queryText = queryState.text.toString()
+        val matches = remember(skillTrees, allowedSkillIds, queryText) { filterCharmSkills(skillTrees, queryText, allowedSkillIds) }
         TrackedDialog(onDismissRequest = { open = false }, properties = DialogProperties(usePlatformDefaultWidth = false)) {
             Surface(color = AppColors.Parchment, shape = AppDimens.CardShape, border = BorderStroke(1.dp, AppColors.Gold), modifier = Modifier.fillMaxWidth(.94f).fillMaxHeight(.82f).widthIn(max = 560.dp)) {
                 Column(Modifier.fillMaxWidth()) {
                     Text(title, color = AppColors.Ink, style = AppType.SectionTitle)
                     OutlinedTextField(
-                        value = query,
-                        onValueChange = { query = it },
+                        state = queryState,
                         label = { Text("Search skills") },
-                        singleLine = true,
+                        lineLimits = TextFieldLineLimits.SingleLine,
                         modifier = Modifier.fillMaxWidth().padding(top = 8.dp).testTag("$tag-picker-search"),
                         colors = charmTextFieldColors()
                     )

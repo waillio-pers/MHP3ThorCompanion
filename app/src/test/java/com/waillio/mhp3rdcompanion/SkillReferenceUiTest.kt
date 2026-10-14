@@ -12,8 +12,7 @@ import org.robolectric.annotation.GraphicsMode
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [35], qualifiers = "w620dp-h540dp-land-xhdpi")
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
-class SkillReferenceUiTest {
-    @get:Rule val rule = createAndroidComposeRule<MainActivity>()
+class SkillReferenceUiTest : MainActivityUiTestBase() {
 
     @Test
     fun fieldGuideSkillsBrowseAndSearch() {
@@ -106,7 +105,9 @@ class SkillReferenceUiTest {
         rule.onNodeWithTag("nav-search").performClick()
         rule.onNodeWithTag("field-filter-material").performScrollTo().performClick()
         rule.onNodeWithTag("global-search").performTextInput("Gambit Jewel 1")
+        awaitTag("result-material-item_gambit_jewel_1")
         rule.onNodeWithTag("result-material-item_gambit_jewel_1").performClick()
+        awaitTag("item-jewel-skills-item_gambit_jewel_1", useUnmergedTree = true)
         rule.onNodeWithTag("item-jewel-skills-item_gambit_jewel_1", useUnmergedTree = true).assertExists()
         rule.onNodeWithText("Punishing Draw", useUnmergedTree = true).assertExists()
         rule.onNodeWithText("Slots required: 1", useUnmergedTree = true).assertExists()
@@ -203,7 +204,9 @@ class SkillReferenceUiTest {
         rule.onNodeWithTag("nav-search").performClick()
         rule.onNodeWithTag("field-filter-material").performScrollTo().performClick()
         rule.onNodeWithTag("global-search").performTextInput(name)
+        awaitTag("result-material-$id")
         rule.onNodeWithTag("result-material-$id").performClick()
+        awaitTag("item-jewel-skills-$id", useUnmergedTree = true)
         rule.onNodeWithTag("item-jewel-skills-$id", useUnmergedTree = true).assertExists()
     }
 

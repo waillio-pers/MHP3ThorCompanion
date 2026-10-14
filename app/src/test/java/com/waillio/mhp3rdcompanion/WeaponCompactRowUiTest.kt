@@ -18,14 +18,14 @@ import org.robolectric.annotation.GraphicsMode
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [35], qualifiers = "w360dp-h800dp-port-xhdpi")
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
-class WeaponCompactRowUiTest {
-    @get:Rule val rule = createAndroidComposeRule<MainActivity>()
+class WeaponCompactRowUiTest : MainActivityUiTestBase() {
 
     @Test
     fun narrowPhoneTreeGivesNamesASeparateStatsLineWithoutDroppingTreeControls() {
         rule.onNodeWithTag("adaptive-profile-compact_portrait").assertExists()
         rule.onNodeWithTag("nav-search").performClick()
         rule.onNodeWithTag("field-filter-weapons").performScrollTo().performClick()
+        awaitTag("weapons-chooser")
         rule.onNodeWithTag("weapon-type-great-sword").performClick()
 
         val rootId = "weapon_great_sword_001"

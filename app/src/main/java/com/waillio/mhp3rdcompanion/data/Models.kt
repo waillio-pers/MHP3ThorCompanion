@@ -1,6 +1,7 @@
 package com.waillio.mhp3rdcompanion.data
 
 import kotlinx.serialization.Serializable
+import kotlinx.coroutines.ensureActive
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.Json
@@ -1815,62 +1816,78 @@ internal fun trainingConditionLabel(condition: String?): String? = condition
         }
     }
 
-object CompanionLogic {
-    fun search(data: FixtureData, query: String, filter: EntityType? = null): List<SearchResult> {
-        val q = query.trim()
-        if (q.isEmpty() && filter !in setOf(EntityType.MATERIAL, EntityType.SMALL_MONSTER, EntityType.QUEST, EntityType.TRAINING, EntityType.WEAPON, EntityType.SKILL)) return emptyList()
-        val candidates = buildList {
-            if (filter == null || filter == EntityType.MATERIAL) addAll(data.materials.map { SearchResult(it.id, it.name, it.description, EntityType.MATERIAL, it.aliases, it.gameItemId) })
-            if (filter == null || filter == EntityType.MONSTER) addAll(data.monsters.map { SearchResult(it.id, it.name, it.subtitle, EntityType.MONSTER) })
-            if (filter == null || filter == EntityType.SMALL_MONSTER) addAll(data.smallMonsters.map {
-                SearchResult(it.id, it.name, "${it.monsterClass} · Small Monster", EntityType.SMALL_MONSTER)
-            })
-            if (filter == null || filter == EntityType.QUEST) addAll(data.quests.map {
-                SearchResult(it.id, it.name, it.subtitle, EntityType.QUEST, listOf(it.objective, it.location).filter { value -> value.isNotBlank() })
-            })
-            if (filter == null || filter == EntityType.TRAINING) addAll(data.trainingQuests.map {
-                SearchResult(
-                    it.id,
-                    it.canonicalDisplayName,
-                    listOfNotNull(
-                        it.trainingClass,
-                        it.stars?.let { stars -> "★$stars" },
-                        it.location.takeIf(String::isNotBlank)
-                    ).joinToString(" · "),
-                    EntityType.TRAINING,
-                    listOf(it.japaneseName, it.objective, it.location).filter { value -> value.isNotBlank() }
-                )
-            })
-            if (filter == null || filter == EntityType.WEAPON) addAll(data.weapons.map { weapon ->
-                SearchResult(
-                    id = weapon.stableWeaponId,
-                    name = weapon.name,
-                    subtitle = "${canonicalWeaponTypeLabel(weapon.weaponType)} · R${weapon.rarity} · ${weapon.attack}",
-                    type = EntityType.WEAPON
-                )
-            })
-            if (filter == null || filter == EntityType.SKILL) addAll(data.skillTrees.map { skill ->
-                SearchResult(
-                    id = skill.stableSkillTreeId,
-                    name = skill.displayName,
-                    subtitle = "${skill.tmoDisplayName} · Skill",
-                    type = EntityType.SKILL,
-                    aliases = listOf(skill.tmoDisplayName, skill.jpName) + skill.thresholds.map { it.activatedSkillName }
-                )
-            })
-        }
-        return candidates.filter { result ->
-            q.isEmpty() || result.name.contains(q, ignoreCase = true) ||
-                result.subtitle.contains(q, ignoreCase = true) ||
-                result.aliases.any { it.contains(q, ignoreCase = true) }
-        }
-            .sortedWith(compareBy<SearchResult>(
-                { !it.name.equals(q, ignoreCase = true) },
-                { !it.name.startsWith(q, ignoreCase = true) },
-                { it.name.lowercase() }
-            ))
+internal class SearchCorpus(data: FixtureData) {
+    private val candidates: List<SearchResult> = buildList {
+        addAll(data.materials.map { SearchResult(it.id, it.name, it.description, EntityType.MATERIAL, it.aliases, it.gameItemId) })
+        addAll(data.monsters.map { SearchResult(it.id, it.name, it.subtitle, EntityType.MONSTER) })
+        addAll(data.smallMonsters.map { SearchResult(it.id, it.name, "${it.monsterClass} · Small Monster", EntityType.SMALL_MONSTER) })
+        addAll(data.quests.map {
+            SearchResult(it.id, it.name, it.subtitle, EntityType.QUEST, listOf(it.objective, it.location).filter(String::isNotBlank))
+        })
+        addAll(data.trainingQuests.map {
+            SearchResult(
+                it.id,
+                it.canonicalDisplayName,
+                listOfNotNull(it.trainingClass, it.stars?.let { stars -> "★$stars" }, it.location.takeIf(String::isNotBlank)).joinToString(" · "),
+                EntityType.TRAINING,
+                listOf(it.japaneseName, it.objective, it.location).filter(String::isNotBlank)
+            )
+        })
+        addAll(data.weapons.map { weapon ->
+            SearchResult(weapon.stableWeaponId, weapon.name, "${canonicalWeaponTypeLabel(weapon.weaponType)} · R${weapon.rarity} · ${weapon.attack}", EntityType.WEAPON)
+        })
+        addAll(data.skillTrees.map { skill ->
+            SearchResult(
+                skill.stableSkillTreeId,
+                skill.displayName,
+                "${skill.tmoDisplayName} · Skill",
+                EntityType.SKILL,
+                aliases = listOf(skill.tmoDisplayName, skill.jpName) + skill.thresholds.map { it.activatedSkillName }
+            )
+        })
     }
 
+    fun search(query: String, filter: EntityType? = null): List<SearchResult> =
+        searchCandidates(query, filter, candidates.asSequence())
+
+    suspend fun searchCancellable(query: String, filter: EntityType? = null): List<SearchResult> {
+        val q = query.trim()
+        if (!hasSearchableInput(q, filter)) return emptyList()
+        val context = kotlinx.coroutines.currentCoroutineContext()
+        val matching = ArrayList<SearchResult>()
+        candidates.forEachIndexed { index, result ->
+            if (index % 128 == 0) context.ensureActive()
+            if ((filter == null || result.type == filter) && matches(result, q)) matching += result
+        }
+        context.ensureActive()
+        return sortMatches(matching, q)
+    }
+
+    private fun searchCandidates(query: String, filter: EntityType?, source: Sequence<SearchResult>): List<SearchResult> {
+        val q = query.trim()
+        if (!hasSearchableInput(q, filter)) return emptyList()
+        return sortMatches(source.filter { (filter == null || it.type == filter) && matches(it, q) }.toList(), q)
+    }
+
+    private fun hasSearchableInput(query: String, filter: EntityType?) = query.isNotEmpty() ||
+        filter in setOf(EntityType.MATERIAL, EntityType.SMALL_MONSTER, EntityType.QUEST, EntityType.TRAINING, EntityType.WEAPON, EntityType.SKILL)
+
+    private fun matches(result: SearchResult, query: String) = query.isEmpty() ||
+        result.name.contains(query, ignoreCase = true) || result.subtitle.contains(query, ignoreCase = true) ||
+        result.aliases.any { it.contains(query, ignoreCase = true) }
+
+    private fun sortMatches(results: List<SearchResult>, query: String) = results.sortedWith(
+        compareBy<SearchResult>(
+            { !it.name.equals(query, ignoreCase = true) },
+            { !it.name.startsWith(query, ignoreCase = true) },
+            { it.name.lowercase() }
+        )
+    )
+}
+
+object CompanionLogic {
+    fun search(data: FixtureData, query: String, filter: EntityType? = null): List<SearchResult> =
+        SearchCorpus(data).search(query, filter)
 }
 
 const val RECENT_HISTORY_LIMIT = 6
@@ -1901,13 +1918,32 @@ object ReferenceHistoryLogic {
             .take(RECENT_HISTORY_LIMIT)
 }
 
-object ReferenceEntryCodec {
-    private val json = Json { ignoreUnknownKeys = true }
+internal object ReferenceEntryCodec {
+    internal val json = Json { ignoreUnknownKeys = true }
     fun encodeFavorites(entries: List<FavoriteEntry>): String = json.encodeToString(entries)
-    fun decodeFavorites(value: String?): List<FavoriteEntry> = decode(value)
+    fun decodeFavorites(value: String?): List<FavoriteEntry> = decodeFavoritesResult(value).listOrEmpty()
+    internal fun decodeFavoritesResult(value: String?): PreferenceDecodeResult<List<FavoriteEntry>> = decodeListResult(value, json)
     fun encodeRecent(entries: List<RecentEntry>): String = json.encodeToString(entries)
-    fun decodeRecent(value: String?): List<RecentEntry> = decode(value)
+    fun decodeRecent(value: String?): List<RecentEntry> = decodeRecentResult(value).listOrEmpty()
+    internal fun decodeRecentResult(value: String?): PreferenceDecodeResult<List<RecentEntry>> = decodeListResult(value, json)
 
-    private inline fun <reified T> decode(value: String?): List<T> =
-        runCatching { json.decodeFromString<List<T>>(value.orEmpty()) }.getOrDefault(emptyList())
+    internal inline fun <reified T> decodeListResult(value: String?, format: Json = json): PreferenceDecodeResult<List<T>> {
+        if (value == null) return PreferenceDecodeResult.Absent
+        return runCatching { format.decodeFromString<List<T>>(value) }
+            .fold(
+                onSuccess = { PreferenceDecodeResult.Valid(it) },
+                onFailure = { PreferenceDecodeResult.Malformed(it.message ?: it::class.simpleName.orEmpty()) }
+            )
+    }
+}
+
+internal sealed interface PreferenceDecodeResult<out T> {
+    data object Absent : PreferenceDecodeResult<Nothing>
+    data class Valid<T>(val value: T) : PreferenceDecodeResult<T>
+    data class Malformed(val reason: String) : PreferenceDecodeResult<Nothing>
+}
+
+internal fun <T> PreferenceDecodeResult<List<T>>.listOrEmpty(): List<T> = when (this) {
+    PreferenceDecodeResult.Absent, is PreferenceDecodeResult.Malformed -> emptyList()
+    is PreferenceDecodeResult.Valid -> value
 }

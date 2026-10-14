@@ -2,6 +2,15 @@ package com.waillio.mhp3rdcompanion.data
 
 import kotlinx.serialization.Serializable
 
+internal const val SUPPORTED_QUEST_PROGRESSION_SCHEMA_VERSION = 1
+
+internal fun validateQuestProgressionSchema(data: QuestProgressionData): QuestProgressionData {
+    require(data.schemaVersion == SUPPORTED_QUEST_PROGRESSION_SCHEMA_VERSION) {
+        "Unsupported quest progression asset schema ${data.schemaVersion}; supported schema is $SUPPORTED_QUEST_PROGRESSION_SCHEMA_VERSION"
+    }
+    return data
+}
+
 @Serializable
 internal data class QuestProgressionData(
     val schemaVersion: Int,

@@ -78,6 +78,18 @@ class FieldGuideDestinationsTest {
         assertTrue(fieldGuideShortcutChoices.all { it != FieldGuideRootPage.ALL })
     }
 
+    @Test
+    fun shortcutDecodeDistinguishesAbsentValidAndMalformedWhileKeepingSafeFallback() {
+        assertTrue(decodeHomeShortcutSlotsResult(null) is HomeShortcutDecodeResult.Absent)
+        assertEquals(
+            HomeShortcutDecodeResult.Valid(listOf("items", null, "quests", null)),
+            decodeHomeShortcutSlotsResult("items||quests|")
+        )
+        val malformed = decodeHomeShortcutSlotsResult("items|unknown|items|quests")
+        assertTrue(malformed is HomeShortcutDecodeResult.Malformed)
+        assertEquals(listOf("items", null, null, "quests"), malformed.safeSlots())
+    }
+
     private fun preferences() = ApplicationProvider.getApplicationContext<Context>()
         .getSharedPreferences("home-shortcuts-test", Context.MODE_PRIVATE)
 }

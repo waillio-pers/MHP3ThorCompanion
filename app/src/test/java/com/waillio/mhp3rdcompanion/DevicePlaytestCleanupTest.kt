@@ -17,8 +17,7 @@ import org.robolectric.annotation.GraphicsMode
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [35], qualifiers = "w620dp-h540dp-land-xhdpi")
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
-class DevicePlaytestCleanupTest {
-    @get:Rule val rule = createAndroidComposeRule<MainActivity>()
+class DevicePlaytestCleanupTest : MainActivityUiTestBase() {
     private val data = CompanionRepository(ApplicationProvider.getApplicationContext()).data
 
     @Test
@@ -90,6 +89,7 @@ class DevicePlaytestCleanupTest {
     @Test
     fun unifiedAndLargeMonsterSearchUseTheSameAuthenticArtwork() {
         rule.onNodeWithTag("global-search").performTextInput("barroth")
+        awaitTag("result-monster-monster_barroth")
         listOf("monster_barroth", "monster_jade_barroth").forEach { id ->
             rule.onNodeWithTag("result-monster-$id").assertIsDisplayed()
             rule.onNodeWithTag("monster-artwork-$id", useUnmergedTree = true).assertExists()
@@ -128,7 +128,9 @@ class DevicePlaytestCleanupTest {
 
     private fun openItem(name: String, id: String) {
         rule.onNodeWithTag("global-search").performTextInput(name)
+        awaitTag("result-material-$id")
         rule.onNodeWithTag("result-material-$id").performClick()
+        awaitTag("screen-material")
         rule.onNodeWithTag("screen-material").assertIsDisplayed()
     }
 }
