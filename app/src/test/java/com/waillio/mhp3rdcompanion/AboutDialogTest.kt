@@ -15,8 +15,7 @@ import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [35], qualifiers = "w827dp-h720dp-land-xhdpi")
-class AboutDialogTest {
-    @get:Rule val rule = createAndroidComposeRule<MainActivity>()
+class AboutDialogTest : MainActivityUiTestBase() {
 
     @Test
     fun aboutShowsBuildMetadataRepositoryCreditsScrollableSourcesAndFanNote() {
