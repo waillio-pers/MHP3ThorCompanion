@@ -2019,6 +2019,100 @@ internal fun SkillsBrowser(
     onFocusConsumed: () -> Unit,
     onMaterial: (String) -> Unit
 ) {
+    var showPalico by rememberSaveable { mutableStateOf(false) }
+    LaunchedEffect(focusSkillTreeId) { if (focusSkillTreeId != null) showPalico = false }
+    Column(Modifier.fillMaxSize()) {
+        Row(
+            Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(horizontal = 2.dp),
+            horizontalArrangement = Arrangement.spacedBy(6.dp)
+        ) {
+            FilterChip(selected = !showPalico, onClick = { showPalico = false },
+                label = { Text("Hunter Skills") }, modifier = Modifier.testTag("hunter-skills-tab"))
+            FilterChip(selected = showPalico, onClick = { showPalico = true },
+                label = { Text("Palico Skills") }, modifier = Modifier.testTag("palico-skills-tab"))
+        }
+        if (showPalico) {
+            PalicoSkillsBrowser(query)
+        } else {
+            HunterSkillsBrowser(skills, query, listState, expandedSkillTreeId, focusSkillTreeId,
+                decorationSkillRelations, materials, onExpandedChange, onFocusConsumed, onMaterial)
+        }
+    }
+}
+
+internal fun palicoUnlockText(unlock: PalicoUnlock): String = when (unlock) {
+    PalicoUnlock.InitiallyAvailable -> "Available from the start"
+    is PalicoUnlock.Level -> "Palico level ${unlock.minimum}"
+    is PalicoUnlock.Affection -> "Affection ${unlock.minimum}"
+    is PalicoUnlock.HuntAny -> "Hunt ${unlock.monsters.joinToString(" or ")} with the Palico you want to train"
+    is PalicoUnlock.All -> unlock.requirements.joinToString(" and ") { palicoUnlockText(it) }
+    PalicoUnlock.Unknown -> "Not yet confirmed"
+}
+
+@Composable
+private fun PalicoSkillsBrowser(query: String) {
+    var category by rememberSaveable { mutableStateOf<String?>(null) }
+    var expanded by rememberSaveable { mutableStateOf<String?>(null) }
+    val visible = remember(query, category) {
+        palicoSkills.filter { (category == null || it.category.name == category) &&
+            (query.isBlank() || it.name.contains(query.trim(), ignoreCase = true) ||
+                it.japaneseName.contains(query.trim(), ignoreCase = true)) }
+            .sortedBy { it.name.lowercase(java.util.Locale.ROOT) }
+    }
+    Column(Modifier.fillMaxSize().testTag("palico-skills-browser")) {
+        Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
+            horizontalArrangement = Arrangement.spacedBy(5.dp)) {
+            FilterChip(selected = category == null, onClick = { category = null }, label = { Text("All") })
+            PalicoSkillCategory.entries.forEach { entry ->
+                FilterChip(selected = category == entry.name, onClick = { category = entry.name },
+                    label = { Text(entry.name.lowercase().replaceFirstChar { it.uppercase() }) })
+            }
+        }
+        LazyColumn(Modifier.fillMaxSize().testTag("palico-skills-list"),
+            verticalArrangement = Arrangement.spacedBy(7.dp), contentPadding = PaddingValues(bottom = 14.dp)) {
+            item {
+                ParchmentSurface(Modifier.fillMaxWidth()) {
+                    Column(Modifier.padding(10.dp)) {
+                        Text("Information is still being checked and may differ from the game.", color = AppColors.Ink, style = AppType.Metadata)
+                        Spacer(Modifier.height(6.dp))
+                        Text("How Palico skills work", color = AppColors.Ink, style = AppType.CardTitle)
+                        Text("Unlock a skill, then spend Otomo points to learn it. Learned skills use memory. For hunt requirements, bring the Palico you want to train.", color = AppColors.Ink, style = AppType.Body)
+                    }
+                }
+            }
+            if (visible.isEmpty()) item { Text("No skills match your search.", color = AppColors.Parchment) }
+            items(visible, key = { it.id }) { skill ->
+                ParchmentSurface(Modifier.fillMaxWidth().clickable {
+                    expanded = if (expanded == skill.id) null else skill.id
+                }.testTag("palico-skill-${skill.id}")) {
+                    Column(Modifier.fillMaxWidth().padding(10.dp)) {
+                        Text(skill.name, color = AppColors.Ink, style = AppType.CardTitle)
+                        Text("${skill.points} Otomo pts · ${skill.memory} Memory", color = AppColors.Ink, style = AppType.Metadata)
+                        Text(skill.effect, color = AppColors.Ink, style = AppType.Body)
+                        if (expanded == skill.id) {
+                            Text("Unlock: ${palicoUnlockText(skill.unlock)}", color = AppColors.Ink,
+                                style = AppType.Body, modifier = Modifier.padding(top = 7.dp).testTag("palico-skill-unlock-${skill.id}"))
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+internal fun HunterSkillsBrowser(
+    skills: List<SkillTree>,
+    query: String,
+    listState: LazyListState,
+    expandedSkillTreeId: String?,
+    focusSkillTreeId: String?,
+    decorationSkillRelations: List<DecorationSkillRelation>,
+    materials: List<Material>,
+    onExpandedChange: (String?) -> Unit,
+    onFocusConsumed: () -> Unit,
+    onMaterial: (String) -> Unit
+) {
     val categories = remember { SkillCategory.values().toList() }
     var categoryMask by rememberSaveable { mutableIntStateOf(0) }
     var showCategoryFilter by rememberSaveable { mutableStateOf(false) }
@@ -2115,7 +2209,7 @@ internal fun SkillsBrowser(
                     contentPadding = PaddingValues(bottom = 14.dp)
                 ) {
                 item(key = "skills-explanation") {
-                    ParchmentSurface(Modifier.fillMaxWidth().testTag("skills-explanation-card")) {
+                    if (query.isBlank()) ParchmentSurface(Modifier.fillMaxWidth().testTag("skills-explanation-card")) {
                         Column(Modifier.padding(10.dp)) {
                             Text("How skills work", color = AppColors.Ink, style = AppType.CardTitle)
                             Text(
