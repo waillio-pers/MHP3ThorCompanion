@@ -265,6 +265,18 @@ data class WeaponRecipeUsageIndex(
     fun uniqueWeaponCount(gameItemId: Int): Int = forItem(gameItemId).map { it.stableWeaponId }.distinct().size
 }
 
+internal fun orderedWeaponUsages(
+    usages: List<WeaponRecipeUsage>,
+    weaponsById: Map<String, Weapon>
+): List<Map.Entry<String, List<WeaponRecipeUsage>>> {
+    val typeOrder = WeaponRepository.PRODUCTION_WEAPON_TYPES.withIndex().associate { it.value to it.index }
+    return usages.groupBy { it.stableWeaponId }.entries.sortedWith(
+        compareBy<Map.Entry<String, List<WeaponRecipeUsage>>> { typeOrder[weaponsById[it.key]?.weaponType] ?: Int.MAX_VALUE }
+            .thenBy(String.CASE_INSENSITIVE_ORDER) { weaponsById[it.key]?.name.orEmpty() }
+            .thenBy { it.key }
+    )
+}
+
 internal fun buildWeaponRecipeUsageIndex(weapons: List<Weapon>): WeaponRecipeUsageIndex {
     val typeOrder = WeaponRepository.PRODUCTION_WEAPON_TYPES.withIndex().associate { it.value to it.index }
     val sourceOrdinalById = weapons.associate { it.stableWeaponId to it.sourceOrdinal }

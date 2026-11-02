@@ -4887,7 +4887,7 @@ private fun UsedInWeaponsCard(
     onWeapon: (String) -> Unit,
     onShowAll: () -> Unit
 ) {
-    val grouped = usages.groupBy { it.stableWeaponId }.entries.toList()
+    val grouped = orderedWeaponUsages(usages, weaponRepository.weaponById)
     SectionCard(
         "Used In Weapons · ${grouped.size}",
         modifier = Modifier.fillMaxWidth().testTag("material-used-in-weapons"),
@@ -4948,7 +4948,7 @@ internal fun UsedInWeaponsScreen(
     onBack: () -> Unit,
     onWeapon: (String) -> Unit
 ) {
-    val grouped = usages.groupBy { it.stableWeaponId }
+    val grouped = orderedWeaponUsages(usages, weaponRepository.weaponById)
     LazyColumn(
         Modifier.fillMaxSize().padding(horizontal = AppDimens.ScreenPadding).testTag("screen-used-in-weapons"),
         verticalArrangement = Arrangement.spacedBy(7.dp),
