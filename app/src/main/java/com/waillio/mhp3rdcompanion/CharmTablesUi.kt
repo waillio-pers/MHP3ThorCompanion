@@ -739,35 +739,37 @@ internal fun SignedPointsField(
 ) {
     val fieldState = rememberTextFieldState(initialText = value)
     ObserveTextFieldState(fieldState, externalResetKey, value, onValue)
-    OutlinedTextField(
-        state = fieldState,
-        inputTransformation = InputTransformation {
-            if (!asCharSequence().toString().matches(Regex("-?\\d*"))) revertAllChanges()
-        },
-        label = { Text(title) },
-        lineLimits = TextFieldLineLimits.SingleLine,
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-        trailingIcon = {
-            IconButton(
-                onClick = {
-                    val currentText = fieldState.text.toString()
-                    val toggled = when {
-                        currentText.isEmpty() -> "-"
-                        currentText == "-" -> ""
-                        currentText.startsWith('-') -> currentText.drop(1)
-                        else -> "-$currentText"
-                    }
-                    fieldState.replaceTextAndPlaceCursorAtEnd(toggled)
-                },
-                modifier = Modifier.size(36.dp).testTag("$tag-sign-toggle")
-            ) {
-                Text("±", modifier = Modifier.semantics { contentDescription = "Toggle negative sign" })
-            }
-        },
-        modifier = modifier.testTag(tag),
-        isError = isError,
-        colors = charmTextFieldColors()
-    )
+    InlineImeInput {
+        OutlinedTextField(
+            state = fieldState,
+            inputTransformation = InputTransformation {
+                if (!asCharSequence().toString().matches(Regex("-?\\d*"))) revertAllChanges()
+            },
+            label = { Text(title) },
+            lineLimits = TextFieldLineLimits.SingleLine,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            trailingIcon = {
+                IconButton(
+                    onClick = {
+                        val currentText = fieldState.text.toString()
+                        val toggled = when {
+                            currentText.isEmpty() -> "-"
+                            currentText == "-" -> ""
+                            currentText.startsWith('-') -> currentText.drop(1)
+                            else -> "-$currentText"
+                        }
+                        fieldState.replaceTextAndPlaceCursorAtEnd(toggled)
+                    },
+                    modifier = Modifier.size(36.dp).testTag("$tag-sign-toggle")
+                ) {
+                    Text("±", modifier = Modifier.semantics { contentDescription = "Toggle negative sign" })
+                }
+            },
+            modifier = modifier.heightIn(min = 56.dp).testTag(tag),
+            isError = isError,
+            colors = charmTextFieldColors()
+        )
+    }
 }
 
 @Composable

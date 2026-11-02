@@ -1,5 +1,7 @@
 package com.waillio.mhp3rdcompanion
 
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputConnection
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -21,6 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -30,6 +33,9 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.platform.InterceptPlatformTextInput
+import androidx.compose.ui.platform.PlatformTextInputInterceptor
+import androidx.compose.ui.platform.PlatformTextInputMethodRequest
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
@@ -214,6 +220,32 @@ internal fun TextFieldState.replaceTextAndPlaceCursorAtEnd(value: String) {
     }
 }
 
+/** Requests that Android keep the app editor active instead of opening a separate IME extract editor. */
+internal fun applyInlineImeFlags(editorInfo: EditorInfo) {
+    editorInfo.imeOptions = editorInfo.imeOptions or
+        EditorInfo.IME_FLAG_NO_EXTRACT_UI or
+        EditorInfo.IME_FLAG_NO_FULLSCREEN
+}
+
+@OptIn(ExperimentalComposeUiApi::class)
+internal val inlineImeInterceptor = PlatformTextInputInterceptor { request, nextHandler ->
+    val inlineRequest = object : PlatformTextInputMethodRequest {
+        override fun createInputConnection(outAttributes: EditorInfo): InputConnection {
+            val connection = request.createInputConnection(outAttributes)
+            applyInlineImeFlags(outAttributes)
+            return connection
+        }
+    }
+    nextHandler.startInputMethod(inlineRequest)
+}
+
+/** Keeps the focused Compose editor connected to the visible app field on landscape IMEs. */
+@OptIn(ExperimentalComposeUiApi::class)
+@Composable
+internal fun InlineImeInput(content: @Composable () -> Unit) {
+    InterceptPlatformTextInput(interceptor = inlineImeInterceptor, content = content)
+}
+
 /** Shared state-based editor for searches; parent String echoes never reset IME selection/composition. */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -235,22 +267,24 @@ internal fun SearchInputField(
 ) {
     val fieldState = rememberTextFieldState(initialText = query)
     ObserveTextFieldState(fieldState, externalResetKey, query, onQueryChange)
-    OutlinedTextField(
-        state = fieldState,
-        modifier = modifier.testTag(tag),
-        lineLimits = TextFieldLineLimits.SingleLine,
-        textStyle = textStyle,
-        label = label,
-        placeholder = placeholder,
-        leadingIcon = leadingIcon,
-        trailingIcon = trailingIcon?.let { icon -> { icon { fieldState.replaceTextAndPlaceCursorAtEnd("") } } },
-        shape = shape,
-        keyboardOptions = keyboardOptions,
-        onKeyboardAction = { performDefaultAction ->
-            if (onImeAction == null) performDefaultAction() else onImeAction()
-        },
-        colors = colors
-    )
+    InlineImeInput {
+        OutlinedTextField(
+            state = fieldState,
+            modifier = modifier.testTag(tag),
+            lineLimits = TextFieldLineLimits.SingleLine,
+            textStyle = textStyle,
+            label = label,
+            placeholder = placeholder,
+            leadingIcon = leadingIcon,
+            trailingIcon = trailingIcon?.let { icon -> { icon { fieldState.replaceTextAndPlaceCursorAtEnd("") } } },
+            shape = shape,
+            keyboardOptions = keyboardOptions,
+            onKeyboardAction = { performDefaultAction ->
+                if (onImeAction == null) performDefaultAction() else onImeAction()
+            },
+            colors = colors
+        )
+    }
 }
 
 /** Consistent hierarchy for short previews that lead to a complete list. */

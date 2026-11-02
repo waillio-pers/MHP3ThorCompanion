@@ -3,6 +3,9 @@ package com.waillio.mhp3rdcompanion
 import android.content.Context
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.TextRange
 import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
@@ -31,6 +34,9 @@ class AdaptiveCompactPortraitUiTest : MainActivityUiTestBase() {
                 rule.onNodeWithTag("settings-button").assertIsDisplayed()
                 val searchBounds = rule.onNodeWithTag("global-search").fetchSemanticsNode().boundsInRoot
                 assertTrue("Phone search field must retain usable width at scale $step", searchBounds.width > 190f)
+                assertTrue("Search field must retain enough vertical room at scale $step", searchBounds.height >= 44f)
+                val settingsBounds = rule.onNodeWithTag("settings-button").fetchSemanticsNode().boundsInRoot
+                assertTrue("Search field and settings control should have matching heights", kotlin.math.abs(searchBounds.height - settingsBounds.height) < 1f)
                 rule.onNodeWithTag("nav-home").assertIsDisplayed()
                 rule.onNodeWithTag("nav-search").assertIsDisplayed()
                 rule.onNodeWithTag("nav-favorites").assertIsDisplayed()
@@ -50,5 +56,17 @@ class AdaptiveCompactPortraitUiTest : MainActivityUiTestBase() {
             rule.runOnUiThread { rule.activity.recreate() }
             rule.waitForIdle()
         }
+    }
+
+    @Test
+    fun globalSearchShowsMidStringEditsAndDeletionWithoutSubmitting() {
+        val search = rule.onNodeWithTag("global-search")
+        search.performTextInput("nargacuga")
+        search.assert(SemanticsMatcher.expectValue(SemanticsProperties.EditableText, AnnotatedString("nargacuga")))
+        search.performTextInputSelection(TextRange(4, 4))
+        search.performTextInput("a")
+        search.assert(SemanticsMatcher.expectValue(SemanticsProperties.EditableText, AnnotatedString("nargaacuga")))
+        search.performTextClearance()
+        search.assert(SemanticsMatcher.expectValue(SemanticsProperties.EditableText, AnnotatedString("")))
     }
 }

@@ -926,13 +926,14 @@ private fun AppTopBar(
         color = AppColors.NightRaised,
         shadowElevation = 5.dp
     ) {
-        val compactPortrait = monsterRewardRowsStacked(LocalAppWindowLayout.current.profile)
+        val profile = LocalAppWindowLayout.current.profile
+        val compactPortrait = monsterRewardRowsStacked(profile)
         if (compactPortrait) {
             Column(
                 Modifier.fillMaxWidth().padding(horizontal = 10.dp, vertical = 6.dp),
                 verticalArrangement = Arrangement.spacedBy(5.dp)
             ) {
-                Row(Modifier.fillMaxWidth().height(52.dp), verticalAlignment = Alignment.CenterVertically) {
+                Row(Modifier.fillMaxWidth().height(56.dp), verticalAlignment = Alignment.CenterVertically) {
                     Column(Modifier.weight(1f)) {
                         Text(stringResource(R.string.app_title), color = AppColors.Gold, style = AppType.AppTitle, maxLines = 1)
                         Text(stringResource(R.string.app_subtitle), color = AppColors.ParchmentDeep, style = AppType.Metadata, maxLines = 1)
@@ -943,18 +944,18 @@ private fun AppTopBar(
             }
         } else {
         Row(
-            Modifier.fillMaxWidth().height(72.dp).padding(horizontal = 14.dp, vertical = 10.dp),
+            Modifier.fillMaxWidth().height(76.dp).padding(horizontal = 14.dp, vertical = 10.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Column(Modifier.width(138.dp)) {
+            val compactLandscape = profile == AppLayoutProfile.COMPACT_LANDSCAPE
+            Column(Modifier.width(if (compactLandscape) 104.dp else 138.dp)) {
                 Text(stringResource(R.string.app_title), color = AppColors.Gold, style = AppType.AppTitle, maxLines = 1)
                 Text(stringResource(R.string.app_subtitle), color = AppColors.ParchmentDeep, style = AppType.Metadata, maxLines = 1)
             }
             IconButton(
                 onClick = onOpenSettings,
                 modifier = Modifier
-                    .padding(start = 3.dp, end = 5.dp)
-                    .size(52.dp)
+                    .size(56.dp)
                     .border(1.dp, AppColors.ParchmentDeep.copy(alpha = .55f), CircleShape)
                     .testTag("settings-button")
             ) {
@@ -965,6 +966,7 @@ private fun AppTopBar(
                     modifier = Modifier.size(22.dp)
                 )
             }
+            Spacer(Modifier.width(6.dp))
             SearchField(
                 value = query,
                 onValueChange = onQueryChange,
@@ -981,7 +983,7 @@ private fun AppTopBar(
 private fun SettingsButton(onOpenSettings: () -> Unit, modifier: Modifier = Modifier) {
     IconButton(
         onClick = onOpenSettings,
-        modifier = modifier.size(52.dp)
+        modifier = modifier.size(56.dp)
             .border(1.dp, AppColors.ParchmentDeep.copy(alpha = .55f), CircleShape)
     ) {
         Icon(Icons.Default.Settings, stringResource(R.string.settings_title), tint = AppColors.Gold, modifier = Modifier.size(22.dp))
@@ -1298,7 +1300,7 @@ private fun SearchField(
         query = value,
         onQueryChange = onValueChange,
         externalResetKey = externalResetKey,
-        modifier = modifier.height(52.dp).onFocusChanged { if (it.isFocused) onFocus() },
+        modifier = modifier.height(56.dp).onFocusChanged { if (it.isFocused) onFocus() },
         tag = "global-search",
         textStyle = AppType.Body,
         placeholder = { Text(stringResource(R.string.search_hint), style = AppType.Body, maxLines = 1) },

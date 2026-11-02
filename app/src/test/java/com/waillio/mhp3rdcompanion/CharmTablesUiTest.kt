@@ -147,8 +147,17 @@ class CharmTablesPhoneUiTest {
         val pointsBounds = rule.onNodeWithTag("charm-search-skill1-points").fetchSemanticsNode().boundsInRoot
         val operatorBounds = rule.onNodeWithTag("charm-search-skill1-points-operator").fetchSemanticsNode().boundsInRoot
         assertTrue("narrow-phone points field remains wide enough for its label", pointsBounds.width > screenWidth * .4f)
+        assertTrue("numeric points editor retains its complete Material height", pointsBounds.height >= 56f)
         assertTrue("operator remains aligned beside the points field", kotlin.math.abs(pointsBounds.center.y - operatorBounds.center.y) < 30f)
-        rule.onNodeWithTag("charm-search-skill1-points").performScrollTo().performTextInput("99")
+        val pointsField = rule.onNodeWithTag("charm-search-skill1-points")
+        pointsField.performScrollTo()
+        pointsField.performTextInput("566")
+        pointsField.assertTextContains("566")
+        pointsField.performTextClearance()
+        pointsField.performTextInput("5")
+        pointsField.assertTextContains("5")
+        pointsField.performTextClearance()
+        pointsField.performTextInput("99")
         rule.onNodeWithTag("charm-search-empty").performScrollTo().assertIsDisplayed()
         rule.onNodeWithTag("charm-search-table").performScrollTo().assertIsDisplayed()
     }
