@@ -104,6 +104,7 @@ class DevicePlaytestCleanupTest : MainActivityUiTestBase() {
         rule.onNodeWithTag("field-filter-all").performClick()
         rule.onNodeWithTag("global-search").performTextClearance()
         rule.onNodeWithTag("global-search").performTextInput("Kelbi")
+        awaitTag("small-monster-icon-small_monster_kelbi", useUnmergedTree = true)
         rule.onNodeWithTag("small-monster-icon-small_monster_kelbi", useUnmergedTree = true).assertExists()
     }
 
