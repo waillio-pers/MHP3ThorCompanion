@@ -1303,6 +1303,7 @@ private fun SearchField(
         modifier = modifier.height(56.dp).onFocusChanged { if (it.isFocused) onFocus() },
         tag = "global-search",
         textStyle = AppType.Body,
+        suppressEmptyLabel = LocalAppWindowLayout.current.profile == AppLayoutProfile.MEDIUM,
         placeholder = { Text(stringResource(R.string.search_hint), style = AppType.Body, maxLines = 1) },
         leadingIcon = { Icon(Icons.Default.Search, null, tint = AppColors.Gold, modifier = Modifier.size(21.dp)) },
         trailingIcon = if (value.isNotEmpty()) {
@@ -2022,20 +2023,18 @@ internal fun SkillsBrowser(
     var showPalico by rememberSaveable { mutableStateOf(false) }
     LaunchedEffect(focusSkillTreeId) { if (focusSkillTreeId != null) showPalico = false }
     Column(Modifier.fillMaxSize()) {
-        Row(
-            Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(horizontal = 2.dp),
-            horizontalArrangement = Arrangement.spacedBy(6.dp)
-        ) {
+        val tabs: @Composable () -> Unit = {
             FilterChip(selected = !showPalico, onClick = { showPalico = false },
-                label = { Text("Hunter Skills") }, modifier = Modifier.testTag("hunter-skills-tab"))
+                label = { Text("Hunter Skills", maxLines = 1) }, modifier = Modifier.testTag("hunter-skills-tab"))
+            Spacer(Modifier.width(4.dp))
             FilterChip(selected = showPalico, onClick = { showPalico = true },
-                label = { Text("Palico Skills") }, modifier = Modifier.testTag("palico-skills-tab"))
+                label = { Text("Palico Skills", maxLines = 1) }, modifier = Modifier.testTag("palico-skills-tab"))
         }
         if (showPalico) {
-            PalicoSkillsBrowser(query)
+            PalicoSkillsBrowser(query, tabs)
         } else {
             HunterSkillsBrowser(skills, query, listState, expandedSkillTreeId, focusSkillTreeId,
-                decorationSkillRelations, materials, onExpandedChange, onFocusConsumed, onMaterial)
+                decorationSkillRelations, materials, onExpandedChange, onFocusConsumed, onMaterial, tabs)
         }
     }
 }
@@ -2050,9 +2049,18 @@ internal fun palicoUnlockText(unlock: PalicoUnlock): String = when (unlock) {
 }
 
 @Composable
-private fun PalicoSkillsBrowser(query: String) {
+private fun PalicoSkillsBrowser(query: String, tabs: @Composable () -> Unit) {
     var category by rememberSaveable { mutableStateOf<String?>(null) }
+    var showCategories by rememberSaveable { mutableStateOf(false) }
     var expanded by rememberSaveable { mutableStateOf<String?>(null) }
+    val listState = rememberLazyListState()
+    var scrubbing by remember { mutableStateOf(false) }
+    var frozenVisibility by remember { mutableStateOf<Boolean?>(null) }
+    LaunchedEffect(listState) {
+        listState.interactionSource.interactions.collect { if (it is DragInteraction.Start) frozenVisibility = null }
+    }
+    val scrollVisibility = rememberLocalFilterToolbarVisibility(listState, paused = scrubbing || frozenVisibility != null)
+    val toolbarVisible = frozenVisibility ?: scrollVisibility
     val visible = remember(query, category) {
         palicoSkills.filter { (category == null || it.category.name == category) &&
             (query.isBlank() || it.name.contains(query.trim(), ignoreCase = true) ||
@@ -2060,15 +2068,41 @@ private fun PalicoSkillsBrowser(query: String) {
             .sortedBy { it.name.lowercase(java.util.Locale.ROOT) }
     }
     Column(Modifier.fillMaxSize().testTag("palico-skills-browser")) {
-        Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
-            horizontalArrangement = Arrangement.spacedBy(5.dp)) {
-            FilterChip(selected = category == null, onClick = { category = null }, label = { Text("All") })
-            PalicoSkillCategory.entries.forEach { entry ->
-                FilterChip(selected = category == entry.name, onClick = { category = entry.name },
-                    label = { Text(entry.name.lowercase().replaceFirstChar { it.uppercase() }) })
+        AnimatedVisibility(visible = toolbarVisible, enter = expandVertically(), exit = shrinkVertically()) {
+            BoxWithConstraints(Modifier.fillMaxWidth()) {
+            Row(Modifier.horizontalScroll(rememberScrollState()).widthIn(min = maxWidth).padding(horizontal = 2.dp, vertical = 5.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                Row(verticalAlignment = Alignment.CenterVertically) { tabs(); Spacer(Modifier.width(6.dp)) }
+                OutlinedButton(onClick = { showCategories = true }, modifier = Modifier.heightIn(min = 36.dp).testTag("palico-category-filter-button"),
+                    border = BorderStroke(1.dp, AppColors.Gold.copy(alpha = .6f)),
+                    colors = ButtonDefaults.outlinedButtonColors(contentColor = AppColors.Gold),
+                    contentPadding = PaddingValues(horizontal = 11.dp, vertical = 5.dp), shape = CutCornerShape(8.dp)) {
+                    Icon(Icons.Default.FilterList, null, modifier = Modifier.size(18.dp))
+                    Spacer(Modifier.width(5.dp))
+                    Text(category?.lowercase()?.replaceFirstChar { it.uppercase() } ?: "Categories", style = AppType.ButtonLabel, maxLines = 1)
+                }
+            }
             }
         }
-        LazyColumn(Modifier.fillMaxSize().testTag("palico-skills-list"),
+        if (showCategories) AlertDialog(
+            modifier = Modifier.dialogUserActivityModifier().testTag("palico-category-filter-dialog"),
+            onDismissRequest = { showCategories = false },
+            title = { DialogWindowActivityTracker(); Text("Filter skills by category", color = AppColors.Ink) },
+            text = { Column(Modifier.heightIn(max = 340.dp).verticalScroll(rememberScrollState())) {
+                PalicoSkillCategory.entries.forEach { entry ->
+                    Row(Modifier.fillMaxWidth().clickable { category = if (category == entry.name) null else entry.name }, verticalAlignment = Alignment.CenterVertically) {
+                        Checkbox(checked = category == entry.name, onCheckedChange = { category = if (it) entry.name else null },
+                            colors = CheckboxDefaults.colors(checkedColor = AppColors.Crimson, uncheckedColor = AppColors.Ink.copy(alpha = .65f), checkmarkColor = AppColors.Parchment))
+                        Text(entry.name.lowercase().replaceFirstChar { it.uppercase() }, color = AppColors.Ink)
+                    }
+                }
+            } },
+            confirmButton = { TextButton(onClick = { showCategories = false }) { Text("Done") } },
+            dismissButton = { TextButton(onClick = { category = null }) { Text("Clear") } },
+            containerColor = AppColors.Parchment
+        )
+        Box(Modifier.fillMaxSize()) {
+        val letters = remember(visible) { visible.mapNotNull { it.name.trim().firstOrNull()?.uppercaseChar() }.distinct().sorted() }
+        LazyColumn(Modifier.fillMaxSize().padding(end = if (letters.isNotEmpty()) 34.dp else 0.dp).testTag("palico-skills-list"), state = listState,
             verticalArrangement = Arrangement.spacedBy(7.dp), contentPadding = PaddingValues(bottom = 14.dp)) {
             item {
                 ParchmentSurface(Modifier.fillMaxWidth()) {
@@ -2086,7 +2120,10 @@ private fun PalicoSkillsBrowser(query: String) {
                     expanded = if (expanded == skill.id) null else skill.id
                 }.testTag("palico-skill-${skill.id}")) {
                     Column(Modifier.fillMaxWidth().padding(10.dp)) {
-                        Text(skill.name, color = AppColors.Ink, style = AppType.CardTitle)
+                        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                            Text(skill.name, color = AppColors.Ink, style = AppType.CardTitle, modifier = Modifier.weight(1f))
+                            Icon(if (expanded == skill.id) Icons.Default.ExpandLess else Icons.Default.ExpandMore, null, tint = AppColors.Crimson, modifier = Modifier.size(20.dp))
+                        }
                         Text("${skill.points} Otomo pts · ${skill.memory} Memory", color = AppColors.Ink, style = AppType.Metadata)
                         Text(skill.effect, color = AppColors.Ink, style = AppType.Body)
                         if (expanded == skill.id) {
@@ -2096,6 +2133,15 @@ private fun PalicoSkillsBrowser(query: String) {
                     }
                 }
             }
+        }
+        if (letters.isNotEmpty()) {
+            val scope = rememberCoroutineScope()
+            val selected by remember(visible, listState) { derivedStateOf { visible.getOrNull((listState.firstVisibleItemIndex - 1).coerceAtLeast(0))?.name?.firstOrNull()?.uppercaseChar() } }
+            AlphabetScrubber(letters = letters, selectedLetter = selected,
+                onDraggingChange = { dragging -> if (dragging) frozenVisibility = scrollVisibility; scrubbing = dragging },
+                onJump = { letter -> visible.indexOfFirst { it.name.trim().firstOrNull()?.uppercaseChar() == letter }.takeIf { it >= 0 }?.let { index -> scope.launch { listState.scrollToItem(index + 1) } } },
+                modifier = Modifier.align(Alignment.CenterEnd).testTag("palico-alphabet-scrubber"))
+        }
         }
     }
 }
@@ -2111,7 +2157,8 @@ internal fun HunterSkillsBrowser(
     materials: List<Material>,
     onExpandedChange: (String?) -> Unit,
     onFocusConsumed: () -> Unit,
-    onMaterial: (String) -> Unit
+    onMaterial: (String) -> Unit,
+    tabs: @Composable () -> Unit
 ) {
     val categories = remember { SkillCategory.values().toList() }
     var categoryMask by rememberSaveable { mutableIntStateOf(0) }
@@ -2164,10 +2211,13 @@ internal fun HunterSkillsBrowser(
             exit = shrinkVertically(),
             modifier = Modifier.testTag("skills-category-filter-row")
         ) {
+            BoxWithConstraints(Modifier.fillMaxWidth()) {
             Row(
-                Modifier.fillMaxWidth().padding(horizontal = 2.dp, vertical = 5.dp),
-                horizontalArrangement = Arrangement.End
+                Modifier.horizontalScroll(rememberScrollState()).widthIn(min = maxWidth).padding(horizontal = 2.dp, vertical = 5.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
+            Row(verticalAlignment = Alignment.CenterVertically) { tabs(); Spacer(Modifier.width(6.dp)) }
             OutlinedButton(
                 onClick = { showCategoryFilter = true },
                 modifier = Modifier.heightIn(min = 36.dp).testTag("skills-category-filter-button"),
@@ -2185,6 +2235,7 @@ internal fun HunterSkillsBrowser(
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.testTag("skills-active-categories")
                 )
+            }
             }
             }
         }

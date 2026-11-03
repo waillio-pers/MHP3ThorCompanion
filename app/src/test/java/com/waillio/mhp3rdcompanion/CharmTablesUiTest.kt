@@ -64,10 +64,50 @@ private object CharmUiFixture {
 }
 
 @RunWith(RobolectricTestRunner::class)
+@Config(sdk = [35], qualifiers = "w827dp-h720dp-land-mdpi")
+class CharmThorDialogUiTest {
+    @get:Rule val rule = createComposeRule()
+
+    @Test fun helpDialogUsesAvailableThorWidth() {
+        rule.setContent {
+            CompanionTheme {
+                CharmTablesScreen(index = CharmUiFixture.index, skillTrees = CharmUiFixture.skills,
+                    currentTable = null, loadingFailed = false, identifyWorkingState = CharmIdentifyWorkingState(),
+                    onUpdateIdentifyWorkingState = {}, onSaveCurrentTable = {})
+            }
+        }
+        rule.onNodeWithTag("charm-help-open").performClick()
+        assertTrue(rule.onNodeWithTag("charm-help-dialog").fetchSemanticsNode().boundsInRoot.width > 520f)
+        rule.onNodeWithTag("charm-help-close").performClick()
+    }
+}
+
+@RunWith(RobolectricTestRunner::class)
 @Config(sdk = [35], qualifiers = "w360dp-h800dp-port-xhdpi")
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 class CharmTablesPhoneUiTest {
     @get:Rule val rule = createComposeRule()
+
+    @Test
+    fun bothSkillPickerSearchesEditAndCloseWithoutChangingSelection() {
+        val identifyState = mutableStateOf(CharmIdentifyWorkingState())
+        rule.setContent {
+            CompanionTheme {
+                CharmTablesScreen(index = CharmUiFixture.index, skillTrees = CharmUiFixture.skills,
+                    currentTable = null, loadingFailed = false, identifyWorkingState = identifyState.value,
+                    onUpdateIdentifyWorkingState = { identifyState.value = it(identifyState.value) },
+                    onSaveCurrentTable = {})
+            }
+        }
+        listOf("charm-search-skill1", "charm-search-skill2").forEach { tag ->
+            rule.onNodeWithTag(tag).performScrollTo().performClick()
+            rule.onNodeWithTag("$tag-picker-search").performTextInput("Att")
+            rule.onNodeWithTag("$tag-picker-search").assertTextContains("Att")
+            rule.onNodeWithTag("$tag-picker-search").performTextClearance()
+            rule.onNodeWithTag("$tag-picker-close").assertIsDisplayed().performClick()
+            rule.onNodeWithTag(tag).assertIsDisplayed()
+        }
+    }
 
     @Test
     fun rarityPickerAndIdentifyPoolRenderApprovedPixelIconsWithoutAddingCommonToTimeworn() {

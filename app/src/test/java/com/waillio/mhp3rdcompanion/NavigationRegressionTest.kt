@@ -273,6 +273,7 @@ class NavigationRegressionTest : MainActivityUiTestBase() {
 
     private fun openMonster(name: String, id: String) {
         rule.onNodeWithTag("global-search").performTextInput(name)
+        awaitTag("result-monster-$id")
         rule.onNodeWithTag("result-monster-$id").performClick()
         rule.onNodeWithTag("screen-monster").assertIsDisplayed()
     }

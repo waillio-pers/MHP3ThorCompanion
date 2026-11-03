@@ -711,8 +711,8 @@ private fun AllCharmResultsDialog(
 @Composable
 private fun CharmHelpDialog(onDismiss: () -> Unit) {
     BackHandler(onBack = onDismiss)
-    TrackedDialog(onDismissRequest = onDismiss) {
-        Surface(Modifier.fillMaxWidth(.9f).widthIn(max = 520.dp).testTag("charm-help-dialog"), color = AppColors.Parchment, shape = AppDimens.CardShape, border = BorderStroke(1.dp, AppColors.Plum)) {
+    TrackedDialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false)) {
+        Surface(Modifier.fillMaxWidth(.94f).widthIn(max = 760.dp).testTag("charm-help-dialog"), color = AppColors.Parchment, shape = AppDimens.CardShape, border = BorderStroke(1.dp, AppColors.Plum)) {
             Column(Modifier.padding(14.dp).verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(7.dp)) {
                 Text("Charm Tables", color = AppColors.Ink, style = AppType.SectionTitle)
                 Text("WHAT ARE CHARM TABLES?", color = AppColors.Crimson, style = AppType.Metadata, fontWeight = FontWeight.Bold)
@@ -1024,15 +1024,22 @@ private fun CharmSkillPicker(
         val matches = remember(skillTrees, allowedSkillIds, queryText) { filterCharmSkills(skillTrees, queryText, allowedSkillIds) }
         TrackedDialog(onDismissRequest = { open = false }, properties = DialogProperties(usePlatformDefaultWidth = false)) {
             Surface(color = AppColors.Parchment, shape = AppDimens.CardShape, border = BorderStroke(1.dp, AppColors.Gold), modifier = Modifier.fillMaxWidth(.94f).fillMaxHeight(.82f).widthIn(max = 560.dp)) {
-                Column(Modifier.fillMaxWidth()) {
-                    Text(title, color = AppColors.Ink, style = AppType.SectionTitle)
-                    OutlinedTextField(
-                        state = queryState,
-                        label = { Text("Search skills") },
-                        lineLimits = TextFieldLineLimits.SingleLine,
-                        modifier = Modifier.fillMaxWidth().padding(top = 8.dp).testTag("$tag-picker-search"),
-                        colors = charmTextFieldColors()
-                    )
+                Column(Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 8.dp)) {
+                    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                        Text(title, color = AppColors.Ink, style = AppType.SectionTitle, modifier = Modifier.weight(1f))
+                        IconButton(onClick = { open = false }, modifier = Modifier.testTag("$tag-picker-close")) {
+                            Icon(Icons.Default.Close, contentDescription = "Close $title", tint = AppColors.Ink)
+                        }
+                    }
+                    InlineImeInput {
+                        OutlinedTextField(
+                            state = queryState,
+                            label = { Text("Search skills") },
+                            lineLimits = TextFieldLineLimits.SingleLine,
+                            modifier = Modifier.fillMaxWidth().padding(top = 4.dp).testTag("$tag-picker-search"),
+                            colors = charmTextFieldColors()
+                        )
+                    }
                     Column(Modifier.weight(1f).padding(horizontal = 4.dp).padding(top = 6.dp).verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(2.dp)) {
                         if (allowNone) {
                             DropdownMenuItem(text = { Text("None / Any Skill 2") }, onClick = { onSelect(null); open = false }, modifier = Modifier.testTag("$tag-picker-none"))
