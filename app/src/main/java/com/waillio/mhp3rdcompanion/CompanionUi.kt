@@ -2110,7 +2110,7 @@ private fun PalicoSkillsBrowser(query: String, tabs: @Composable () -> Unit) {
                         Text("Information is still being checked and may differ from the game.", color = AppColors.Ink, style = AppType.Metadata)
                         Spacer(Modifier.height(6.dp))
                         Text("How Palico skills work", color = AppColors.Ink, style = AppType.CardTitle)
-                        Text("Unlock a skill, then spend Otomo points to learn it. Learned skills use memory. For hunt requirements, bring the Palico you want to train.", color = AppColors.Ink, style = AppType.Body)
+                        Text("Unlock a skill, then spend Yukumo Points to learn it. Learned skills use memory. For hunt requirements, bring the Palico you want to train.", color = AppColors.Ink, style = AppType.Body)
                     }
                 }
             }
@@ -2124,7 +2124,7 @@ private fun PalicoSkillsBrowser(query: String, tabs: @Composable () -> Unit) {
                             Text(skill.name, color = AppColors.Ink, style = AppType.CardTitle, modifier = Modifier.weight(1f))
                             Icon(if (expanded == skill.id) Icons.Default.ExpandLess else Icons.Default.ExpandMore, null, tint = AppColors.Crimson, modifier = Modifier.size(20.dp))
                         }
-                        Text("${skill.points} Otomo pts · ${skill.memory} Memory", color = AppColors.Ink, style = AppType.Metadata)
+                        Text("${skill.points} Yukumo Points · ${skill.memory} Memory", color = AppColors.Ink, style = AppType.Metadata)
                         Text(skill.effect, color = AppColors.Ink, style = AppType.Body)
                         if (expanded == skill.id) {
                             Text("Unlock: ${palicoUnlockText(skill.unlock)}", color = AppColors.Ink,
